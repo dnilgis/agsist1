@@ -735,45 +735,7 @@
 })();
 
 // ── Theme ────────────────────────────────────────────────────────
-function getTheme(){try{return localStorage.getItem('agsist-theme')||'dark'}catch(e){return'dark'}}
-function setTheme(t){
-  document.documentElement.setAttribute('data-theme',t);
-  try{localStorage.setItem('agsist-theme',t)}catch(e){}
-  var lbl=t==='light'?'☀️':'🌙';
-  ['theme-icon','theme-icon-d'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=lbl;});
-}
-setTheme(getTheme());
-function toggleTheme(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');}
-var _tb=document.getElementById('theme-btn');if(_tb)_tb.addEventListener('click',toggleTheme);
-var tbd=document.getElementById('theme-btn-d');if(tbd)tbd.addEventListener('click',toggleTheme);
-
-// ── Sticky nav ───────────────────────────────────────────────────
-window.addEventListener('scroll',function(){
-  document.getElementById('topnav').classList.toggle('scrolled',window.scrollY>10);
-},{passive:true});
-
-// ── Dropdowns ────────────────────────────────────────────────────
-document.querySelectorAll('.nav-dd').forEach(function(dd){
-  dd.querySelector('.nav-btn').addEventListener('click',function(e){
-    e.stopPropagation();
-    var open=dd.classList.contains('open');
-    document.querySelectorAll('.nav-dd').forEach(function(d){d.classList.remove('open');});
-    if(!open)dd.classList.add('open');
-  });
-});
-document.addEventListener('click',function(){document.querySelectorAll('.nav-dd').forEach(function(d){d.classList.remove('open');});});
-document.addEventListener('keydown',function(e){
-  if(e.key==='Escape'){document.querySelectorAll('.nav-dd').forEach(function(d){d.classList.remove('open');});closeDr();}
-});
-
-// ── Mobile drawer ────────────────────────────────────────────────
-var ham=document.getElementById('hamburger'),
-    dr=document.getElementById('drawer'),
-    ov=document.getElementById('draw-ov'),
-    dc=document.getElementById('draw-close');
-function openDr(){dr.classList.add('open');ov.classList.add('vis');ham.classList.add('open');ham.setAttribute('aria-expanded','true');document.body.style.overflow='hidden';}
-function closeDr(){dr.classList.remove('open');ov.classList.remove('vis');ham.classList.remove('open');ham.setAttribute('aria-expanded','false');document.body.style.overflow='';}
-ham.addEventListener('click',openDr);dc.addEventListener('click',closeDr);ov.addEventListener('click',closeDr);
+// Nav, drawer, theme, dropdowns — handled by loader.js after header inject
 
 // ── AGSIST Daily dismiss / expand ───────────────────────────────
 function dismissDaily(){
