@@ -1,0 +1,32 @@
+<!-- ══════════════════════════════════════════════════════════════════════════
+     AGSIST Analytics — Google Analytics 4
+     ── HOW TO UPDATE ────────────────────────────────────────────────────────
+     1. Go to analytics.google.com
+     2. Create a property for agsist.com
+     3. Copy your Measurement ID (format: G-6KXCTD5Z9H)
+     4. Replace BOTH instances of G-6KXCTD5Z9H below
+     5. Commit and push — analytics will activate site-wide instantly
+     ════════════════════════════════════════════════════════════════════════ -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6KXCTD5Z9H"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){ dataLayer.push(arguments); }
+  gtag('js', new Date());
+  gtag('config', 'G-6KXCTD5Z9H', {
+    cookie_flags: 'SameSite=None;Secure',
+    send_page_view: true
+  });
+
+  /* ── Helper: fire custom events from any page ────────────────────────────
+     Usage: agsist.track('button_click', 'engagement', 'spray_check')
+  ── */
+  window.agsist = window.agsist || {};
+  window.agsist.track = function(action, category, label, value) {
+    if(typeof gtag === 'undefined') return;
+    gtag('event', action, {
+      event_category: category || 'engagement',
+      event_label:    label   || document.title,
+      value:          value   || 0
+    });
+  };
+</script>

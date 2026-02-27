@@ -1,5 +1,5 @@
 /**
- * AGSIST Component Loader v1.1
+ * AGSIST Component Loader v1.0
  * ─────────────────────────────────────────────────────────────────────────────
  * Injects shared header, footer, and analytics into every page.
  * Works on static hosting (GitHub Pages) — no server required.
@@ -9,11 +9,6 @@
  *   ... page content ...
  *   <div id="site-footer"></div>
  *   <script src="/components/loader.js"></script>
- *
- * v1.1 fixes:
- *   - Theme toggle now correctly targets id="theme-btn" (was "theme-toggle")
- *   - Drawer wired here so it works on every page, not just index
- *   - theme-btn-d (drawer theme toggle) also wired
  */
 
 (function () {
@@ -44,12 +39,10 @@
         return r.text();
       })
       .then(function (html) {
+        // Replace the placeholder div with injected HTML
         var tmp = document.createElement('div');
         tmp.innerHTML = html;
-        // Replace placeholder with all injected children (skip nav + nav + drawer + overlay)
-        var frag = document.createDocumentFragment();
-        while (tmp.firstChild) frag.appendChild(tmp.firstChild);
-        el.replaceWith(frag);
+        el.replaceWith(tmp.firstElementChild || tmp);
         onDone && onDone();
       })
       .catch(function (e) {
@@ -88,101 +81,16 @@
     });
   }
 
-  // ── Theme helpers ─────────────────────────────────────────────────────────
-  function applyTheme(t) {
-    document.documentElement.setAttribute('data-theme', t);
-    try { localStorage.setItem('agsist-theme', t); } catch (e) {}
-    // Sync moon/sun icons in both nav and drawer buttons
-    ['theme-icon', 'theme-icon-d'].forEach(function (id) {
-      var el = document.getElementById(id);
-      if (el) el.textContent = t === 'dark' ? '🌙' : '☀️';
-    });
-  }
-
-  function toggleTheme() {
-    var cur = document.documentElement.getAttribute('data-theme') || 'dark';
-    applyTheme(cur === 'dark' ? 'light' : 'dark');
-  }
-
-  // ── Theme toggle binding ──────────────────────────────────────────────────
+  // ── Theme toggle binding (called after header injects) ───────────────────
   function bindThemeToggle() {
-    // Main nav button (id="theme-btn")
-    var btn = document.getElementById('theme-btn');
-    if (btn) btn.addEventListener('click', toggleTheme);
-
-    // Drawer theme button (id="theme-btn-d")
-    var btnD = document.getElementById('theme-btn-d');
-    if (btnD) btnD.addEventListener('click', toggleTheme);
-
-    // Sync initial icon state after inject
-    var cur = document.documentElement.getAttribute('data-theme') || 'dark';
-    ['theme-icon', 'theme-icon-d'].forEach(function (id) {
-      var el = document.getElementById(id);
-      if (el) el.textContent = cur === 'dark' ? '🌙' : '☀️';
+    var btn = document.getElementById('theme-toggle');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+      var cur  = document.documentElement.getAttribute('data-theme') || 'dark';
+      var next = cur === 'dark' ? 'light' : 'dark';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('agsist-theme', next); } catch (e) {}
     });
-  }
-
-  // ── Dropdown menus ────────────────────────────────────────────────────────
-  function bindDropdowns() {
-    document.querySelectorAll('.nav-dd').forEach(function (dd) {
-      var btn = dd.querySelector('.nav-btn');
-      if (!btn) return;
-      btn.addEventListener('click', function (e) {
-        e.stopPropagation();
-        var isOpen = dd.classList.contains('open');
-        // Close all others
-        document.querySelectorAll('.nav-dd.open').forEach(function (o) { o.classList.remove('open'); });
-        if (!isOpen) dd.classList.add('open');
-      });
-    });
-    document.addEventListener('click', function () {
-      document.querySelectorAll('.nav-dd.open').forEach(function (dd) { dd.classList.remove('open'); });
-    });
-  }
-
-  // ── Mobile drawer ─────────────────────────────────────────────────────────
-  function bindDrawer() {
-    var ham = document.getElementById('hamburger');
-    var dr  = document.getElementById('drawer');
-    var ov  = document.getElementById('draw-ov');
-    var dc  = document.getElementById('draw-close');
-
-    if (!ham || !dr || !ov) return; // not present on this page
-
-    function openDr()  {
-      dr.classList.add('open');
-      ov.classList.add('vis');
-      ham.classList.add('open');
-      ham.setAttribute('aria-expanded', 'true');
-      dr.setAttribute('aria-hidden', 'false');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeDr() {
-      dr.classList.remove('open');
-      ov.classList.remove('vis');
-      ham.classList.remove('open');
-      ham.setAttribute('aria-expanded', 'false');
-      dr.setAttribute('aria-hidden', 'true');
-      document.body.style.overflow = '';
-    }
-
-    ham.addEventListener('click', openDr);
-    if (dc) dc.addEventListener('click', closeDr);
-    ov.addEventListener('click', closeDr);
-
-    // Close on Escape
-    document.addEventListener('keydown', function (e) {
-      if (e.key === 'Escape' && dr.classList.contains('open')) closeDr();
-    });
-  }
-
-  // ── Scroll: add shadow to nav ─────────────────────────────────────────────
-  function bindScroll() {
-    var nav = document.getElementById('topnav');
-    if (!nav) return;
-    window.addEventListener('scroll', function () {
-      nav.classList.toggle('scrolled', window.scrollY > 10);
-    }, { passive: true });
   }
 
   // ── Boot ──────────────────────────────────────────────────────────────────
@@ -190,9 +98,6 @@
     loadComponent('site-header', '/components/header.html', function () {
       highlightNav();
       bindThemeToggle();
-      bindDropdowns();
-      bindDrawer();
-      bindScroll();
     });
     loadComponent('site-footer', '/components/footer.html', null);
     loadAnalytics();

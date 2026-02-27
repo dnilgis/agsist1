@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111a0a">
+
+  <link rel="stylesheet" href="/components/styles.css">
+  <link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+  <link rel="apple-touch-icon"                    href="/img/apple-touch-icon.png">
+  <link rel="manifest"                            href="/manifest.json">
+
+  <!-- SEO -->
+  <title>Grain Bin Calculator — Free Bushel Capacity & Moisture Shrink Tool | AGSIST</title>
+  <meta name="description" content="Free grain bin calculator for farmers. Calculate bushel capacity, moisture shrink, and storage volume for round and rectangular bins. Corn, soybeans, wheat, and more.">
+  <meta name="keywords"    content="grain bin calculator, bushel capacity calculator, moisture shrink, grain storage calculator, bin volume">
+  <meta name="robots"      content="index, follow, max-snippet:-1, max-image-preview:large">
+  <link rel="canonical"    href="https://agsist.com/pages/grain-bin-calculator">
+
+  <meta property="og:type"         content="website">
+  <meta property="og:site_name"    content="AGSIST">
+  <meta property="og:title"        content="Grain Bin Calculator — AGSIST">
+  <meta property="og:description"  content="Free grain bin calculator. Bushel capacity, moisture shrink, and storage volume for any bin size.">
+  <meta property="og:url"          content="https://agsist.com/pages/grain-bin-calculator">
+  <meta property="og:image"        content="https://agsist.com/img/og/grain-bin-calculator.jpg">
+  <meta property="og:image:width"  content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:site"        content="@agsist">
+  <meta name="twitter:title"       content="Grain Bin Calculator — AGSIST">
+  <meta name="twitter:description" content="Free grain bin calculator. Bushel capacity and moisture shrink for any bin.">
+  <meta name="twitter:image"       content="https://agsist.com/img/og/grain-bin-calculator.jpg">
+
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "Grain Bin Calculator",
+        "description": "Free grain bin storage calculator for bushel capacity and moisture shrink.",
+        "url": "https://agsist.com/pages/grain-bin-calculator",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Web",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home",                "item": "https://agsist.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Tools",               "item": "https://agsist.com/pages/tools" },
+          { "@type": "ListItem", "position": 3, "name": "Grain Bin Calculator","item": "https://agsist.com/pages/grain-bin-calculator" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    /* No number spinners */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type="number"] { -moz-appearance: textfield; }
+
+    /* Bin visualizer */
+    .bin-visual {
+      margin: 16px 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+    .bin-roof {
+      width: 0;
+      height: 0;
+      border-left:  60px solid transparent;
+      border-right: 60px solid transparent;
+      border-bottom: 30px solid var(--gold);
+      opacity: 0.7;
+      transition: border-bottom-width 0.4s;
+    }
+    .bin-body {
+      background: linear-gradient(180deg, rgba(230,176,66,0.25) 0%, rgba(230,176,66,0.08) 100%);
+      border: 2px solid var(--gold);
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      width: 120px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      overflow: hidden;
+      position: relative;
+      transition: height 0.4s;
+    }
+    .bin-fill {
+      width: 100%;
+      background: linear-gradient(180deg, rgba(230,176,66,0.6) 0%, rgba(230,176,66,0.35) 100%);
+      transition: height 0.4s;
+      position: absolute;
+      bottom: 0;
+    }
+    .bin-label {
+      position: relative;
+      z-index: 1;
+      font-size: 0.7rem;
+      color: var(--text);
+      font-weight: 700;
+      padding: 4px;
+      text-align: center;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    }
+
+    /* Reference table */
+    .ref-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; margin-top: 16px; }
+    .ref-table th { background: var(--bg); padding: 8px; text-align: center; color: var(--text-dim); font-size: 0.7rem; text-transform: uppercase; border: 1px solid var(--border); }
+    .ref-table td { padding: 8px; text-align: center; border: 1px solid var(--border); }
+    .ref-table tr:hover td { background: var(--bg); }
+    .ref-table .hl { color: var(--gold); font-weight: 700; }
+
+    @media (max-width: 500px) {
+      .grid-2 { grid-template-columns: 1fr !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <main id="main">
+    <nav class="breadcrumb">
+      <a href="/">Home</a> → <a href="/pages/tools">Tools</a> → Grain Bin Calculator
+    </nav>
+
+    <div class="grid-2">
+
+      <!-- ── INPUT PANEL ──────────────────────────────────────── -->
+      <div class="panel">
+        <div class="panel-head"><h1>🌾 GRAIN BIN CALCULATOR</h1></div>
+        <div class="panel-body">
+
+          <!-- Crop -->
+          <div style="margin-bottom:16px">
+            <label>Crop Type</label>
+            <select id="crop" onchange="calcBin()">
+              <option value="corn">Corn (56 lb/bu)</option>
+              <option value="soybeans">Soybeans (60 lb/bu)</option>
+              <option value="wheat">Wheat (60 lb/bu)</option>
+              <option value="barley">Barley (48 lb/bu)</option>
+              <option value="oats">Oats (32 lb/bu)</option>
+              <option value="sorghum">Sorghum (56 lb/bu)</option>
+            </select>
+          </div>
+
+          <!-- Shape -->
+          <div style="margin-bottom:16px">
+            <label>Bin Shape</label>
+            <select id="shape" onchange="toggleShape(); calcBin()">
+              <option value="round">Round</option>
+              <option value="rect">Rectangular / Flat Storage</option>
+            </select>
+          </div>
+
+          <!-- Round inputs -->
+          <div id="round-inputs">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+              <div>
+                <label>Diameter (ft)</label>
+                <input type="number" id="diameter" value="30" oninput="calcBin()">
+              </div>
+              <div>
+                <label>Eave Height (ft)</label>
+                <input type="number" id="height" value="24" oninput="calcBin()">
+              </div>
+            </div>
+          </div>
+
+          <!-- Rectangular inputs -->
+          <div id="rect-inputs" style="display:none">
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:16px">
+              <div>
+                <label>Length (ft)</label>
+                <input type="number" id="length" value="40" oninput="calcBin()">
+              </div>
+              <div>
+                <label>Width (ft)</label>
+                <input type="number" id="width" value="20" oninput="calcBin()">
+              </div>
+              <div>
+                <label>Depth (ft)</label>
+                <input type="number" id="heightRect" value="10" oninput="calcBin()">
+              </div>
+            </div>
+          </div>
+
+          <!-- Moisture & Pack -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+            <div>
+              <label>Moisture In (%)</label>
+              <input type="number" id="moistIn" value="15.5" step="0.1" oninput="calcBin()">
+            </div>
+            <div>
+              <label>Pack Factor (%)</label>
+              <input type="number" id="pack" value="0" step="0.5" oninput="calcBin()">
+            </div>
+          </div>
+
+          <!-- Bin visualizer -->
+          <div class="bin-visual">
+            <div class="bin-roof" id="bin-roof"></div>
+            <div class="bin-body" id="bin-body" style="height:100px">
+              <div class="bin-fill" id="bin-fill" style="height:50%"></div>
+              <div class="bin-label" id="bin-visual-label">-- bu</div>
+            </div>
+          </div>
+
+          <!-- Quick reference table -->
+          <div style="font-size:0.75rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-top:16px;margin-bottom:6px;font-weight:600">Common Round Bin Capacity</div>
+          <div style="overflow-x:auto">
+            <table class="ref-table">
+              <thead><tr><th>Diameter</th><th>18 ft</th><th>21 ft</th><th>24 ft</th><th>27 ft</th></tr></thead>
+              <tbody>
+                <tr><td>18 ft</td><td class="hl">3,050</td><td>3,561</td><td>4,072</td><td>4,583</td></tr>
+                <tr><td>24 ft</td><td>5,432</td><td class="hl">6,338</td><td>7,244</td><td>8,150</td></tr>
+                <tr><td>30 ft</td><td>8,488</td><td>9,903</td><td class="hl">11,317</td><td>12,732</td></tr>
+                <tr><td>36 ft</td><td>12,222</td><td>14,259</td><td>16,297</td><td class="hl">18,334</td></tr>
+                <tr><td>48 ft</td><td>21,728</td><td>25,350</td><td>28,971</td><td>32,593</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div style="font-size:0.65rem;color:var(--text-dim);margin-top:4px">Bushels at 15.5% moisture, no pack factor. Rows = diameter, columns = eave height.</div>
+        </div>
+      </div>
+
+      <!-- ── RESULTS PANEL ────────────────────────────────────── -->
+      <div class="panel">
+        <div class="panel-head"><h2>RESULTS</h2></div>
+        <div class="panel-body">
+          <div class="result-row"><span class="result-label">Volume</span>          <span class="result-value" id="rVol">--</span></div>
+          <div class="result-row"><span class="result-label">Total Bushels</span>   <span class="result-value highlight" id="rTotal">--</span></div>
+          <div class="result-row"><span class="result-label">Weight (tons)</span>   <span class="result-value" id="rWeight">--</span></div>
+          <div class="result-row"><span class="result-label">Moisture Shrink</span> <span class="result-value" id="rShrink">--</span></div>
+          <div class="result-row"><span class="result-label">Dry Bushels</span>     <span class="result-value" id="rDryBu">--</span></div>
+          <div class="result-row"><span class="result-label">Bushels Lost to Shrink</span><span class="result-value negative" id="rLost">--</span></div>
+
+          <!-- Value at market -->
+          <div style="margin-top:16px;padding:14px;background:var(--bg);border-radius:6px;border:1px solid var(--border)">
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px">
+              <label style="font-size:.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin:0;white-space:nowrap">Market Price ($/bu)</label>
+              <input type="number" id="marketPrice" value="4.50" step="0.01" oninput="calcBin()"
+                style="width:90px;padding:6px 10px;font-size:.9rem;background:var(--surface);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:inherit">
+            </div>
+            <div class="result-row" style="margin:0;padding:6px 0"><span class="result-label">Gross Value (wet)</span><span class="result-value" id="rGrossValue">--</span></div>
+            <div class="result-row" style="margin:0;padding:6px 0"><span class="result-label">Value After Shrink</span><span class="result-value positive" id="rDryValue">--</span></div>
+            <div class="result-row" style="border:none;margin:0;padding:6px 0"><span class="result-label">Shrink Cost</span><span class="result-value negative" id="rShrinkCost">--</span></div>
+          </div>
+
+          <!-- Moisture reference -->
+          <div style="margin-top:20px">
+            <div style="font-size:.75rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;font-weight:600">Safe Storage Moisture Targets</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+              <div style="background:var(--bg);padding:10px;border-radius:6px;border:1px solid var(--border)">
+                <div style="font-size:.7rem;color:var(--text-dim)">Corn — 1 year</div>
+                <div style="font-size:1.1rem;font-weight:700;color:var(--gold)">14%</div>
+              </div>
+              <div style="background:var(--bg);padding:10px;border-radius:6px;border:1px solid var(--border)">
+                <div style="font-size:.7rem;color:var(--text-dim)">Corn — long-term</div>
+                <div style="font-size:1.1rem;font-weight:700;color:var(--gold)">13%</div>
+              </div>
+              <div style="background:var(--bg);padding:10px;border-radius:6px;border:1px solid var(--border)">
+                <div style="font-size:.7rem;color:var(--text-dim)">Soybeans</div>
+                <div style="font-size:1.1rem;font-weight:700;color:var(--gold)">13%</div>
+              </div>
+              <div style="background:var(--bg);padding:10px;border-radius:6px;border:1px solid var(--border)">
+                <div style="font-size:.7rem;color:var(--text-dim)">Wheat</div>
+                <div style="font-size:1.1rem;font-weight:700;color:var(--gold)">13.5%</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Shrink formula note -->
+          <div style="margin-top:16px;padding:12px;background:var(--bg);border-radius:6px;border-left:3px solid var(--gold);font-size:.8rem;color:var(--text-dim)">
+            <strong style="color:var(--text)">Shrink Formula:</strong><br>
+            Shrink % = (Moisture In − Standard Moisture) × 1.3<br>
+            Dry Bu = Total Bu × (1 − Shrink%)
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="/components/loader.js"></script>
+
+  <script>
+  const CROPS = {
+    corn:     { lb: 56, std: 15.5, name: 'Corn' },
+    soybeans: { lb: 60, std: 13.0, name: 'Soybeans' },
+    wheat:    { lb: 60, std: 13.5, name: 'Wheat' },
+    barley:   { lb: 48, std: 14.5, name: 'Barley' },
+    oats:     { lb: 32, std: 14.0, name: 'Oats' },
+    sorghum:  { lb: 56, std: 14.0, name: 'Sorghum' },
+  };
+  const BU_PER_CUFT = 0.8036;
+
+  function toggleShape() {
+    const round = document.getElementById('shape').value === 'round';
+    document.getElementById('round-inputs').style.display = round ? 'block' : 'none';
+    document.getElementById('rect-inputs').style.display  = round ? 'none'  : 'block';
+  }
+
+  function calcBin() {
+    const crop      = document.getElementById('crop').value;
+    const shape     = document.getElementById('shape').value;
+    const { lb: lbPerBu, std: stdMoist } = CROPS[crop];
+    const moistIn   = parseFloat(document.getElementById('moistIn').value) || stdMoist;
+    const pack      = parseFloat(document.getElementById('pack').value)    || 0;
+    const mktPrice  = parseFloat(document.getElementById('marketPrice').value) || 0;
+
+    let vol = 0, heightFt = 0, diamFt = 0;
+    if (shape === 'round') {
+      diamFt   = parseFloat(document.getElementById('diameter').value)   || 0;
+      heightFt = parseFloat(document.getElementById('height').value)     || 0;
+      vol = Math.PI * Math.pow(diamFt / 2, 2) * heightFt;
+    } else {
+      const l  = parseFloat(document.getElementById('length').value)     || 0;
+      const w  = parseFloat(document.getElementById('width').value)      || 0;
+      heightFt = parseFloat(document.getElementById('heightRect').value) || 0;
+      vol = l * w * heightFt;
+    }
+
+    const rawBu      = vol * BU_PER_CUFT;
+    const packedBu   = rawBu * (1 + pack / 100);
+    const shrinkPct  = Math.max(0, (moistIn - stdMoist) * 1.3);
+    const dryBu      = packedBu * (1 - shrinkPct / 100);
+    const lostBu     = packedBu - dryBu;
+    const weightTons = packedBu * lbPerBu / 2000;
+
+    document.getElementById('rVol').textContent       = Math.round(vol).toLocaleString() + ' ft³';
+    document.getElementById('rTotal').textContent     = Math.round(packedBu).toLocaleString() + ' bu';
+    document.getElementById('rWeight').textContent    = weightTons.toFixed(1) + ' tons';
+    document.getElementById('rShrink').textContent    = shrinkPct.toFixed(2) + '%';
+    document.getElementById('rDryBu').textContent     = Math.round(dryBu).toLocaleString() + ' bu';
+    document.getElementById('rLost').textContent      = shrinkPct > 0 ? '-' + Math.round(lostBu).toLocaleString() + ' bu' : '0 bu';
+
+    if (mktPrice > 0) {
+      document.getElementById('rGrossValue').textContent  = '$' + Math.round(packedBu * mktPrice).toLocaleString();
+      document.getElementById('rDryValue').textContent    = '$' + Math.round(dryBu * mktPrice).toLocaleString();
+      document.getElementById('rShrinkCost').textContent  = shrinkPct > 0 ? '-$' + Math.round(lostBu * mktPrice).toLocaleString() : '$0';
+    }
+
+    // Update visualizer
+    updateVisual(diamFt, heightFt, shape, packedBu, moistIn, stdMoist);
+  }
+
+  function updateVisual(diam, h, shape, bu, moistIn, stdMoist) {
+    const body = document.getElementById('bin-body');
+    const fill = document.getElementById('bin-fill');
+    const lbl  = document.getElementById('bin-visual-label');
+    const roof = document.getElementById('bin-roof');
+
+    if (shape === 'round' && diam > 0 && h > 0) {
+      const scale = Math.min(140, Math.max(60, h * 4));
+      body.style.height = scale + 'px';
+      roof.style.borderLeftWidth  = (diam * 2.2) + 'px';
+      roof.style.borderRightWidth = (diam * 2.2) + 'px';
+      roof.style.borderBottomWidth = Math.max(20, diam * 1.5) + 'px';
+      body.style.width = (diam * 4.4) + 'px';
+    }
+
+    const fillPct = Math.min(100, Math.max(0, moistIn > 0 ? 85 : 0));
+    fill.style.height = fillPct + '%';
+    lbl.textContent   = bu > 0 ? Math.round(bu).toLocaleString() + ' bu' : '--';
+  }
+
+  // Init
+  calcBin();
+  </script>
+
+</body>
+</html>
