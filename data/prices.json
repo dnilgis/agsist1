@@ -1,0 +1,22 @@
+{
+  "fetched": "2026-02-27T00:00:00Z",
+  "source": "Barchart OnDemand",
+  "quotes": {
+    "corn":     {"sym":"@C*0",  "label":"Corn",          "unit":"¢/bu",   "type":"grain",     "price":null,"change":null,"pct":null,"open":null,"high":null,"low":null,"time":null},
+    "beans":    {"sym":"@S*0",  "label":"Soybeans",      "unit":"¢/bu",   "type":"grain",     "price":null,"change":null,"pct":null,"open":null,"high":null,"low":null,"time":null},
+    "wheat":    {"sym":"@W*0",  "label":"Wheat (CHI)",   "unit":"¢/bu",   "type":"grain",     "price":null,"change":null,"pct":null,"open":null,"high":null,"low":null,"time":null},
+    "meal":     {"sym":"@SM*0", "label":"Soy Meal",      "unit":"$/ton",  "type":"grain",     "price":null,"change":null,"pct":null,"open":null,"high":null,"low":null,"time":null},
+    "oil":      {"sym":"@BO*0", "label":"Soy Oil",       "unit":"¢/lb",   "type":"grain",     "price":null,"change":null,"pct":null,"open":null,"high":null,"low":null,"time":null},
+    "corn_dec": {"sym":"ZCZ25", "label":"Corn Dec'25",   "unit":"¢/bu",   "type":"grain",     "price":null,"change":null,"pct":null,"open":null,"high":null,"low":null,"time":null},
+    "bean_nov": {"sym":"ZSX25", "label":"Beans Nov'25",  "unit":"¢/bu",   "type":"grain",     "price":null,"change":null,"pct":null,"open":null,"high":null,"low":null,"time":null},
+    "cattle":   {"sym":"@LC*0", "label":"Live Cattle",   "unit":"¢/lb",   "type":"livestock", "price":null,"change":null,"pct":null,"open":null,"high":null,"low":null,"time":null},
+    "feeder":   {"sym":"@FC*0", "label":"Feeder Cattle", "unit":"¢/lb",   "type":"livestock", "price":null,"change":null,"pct":null,"open":null,"high":null,"low":null,"time":null},
+    "hogs":     {"sym":"@LH*0", "label":"Lean Hogs",     "unit":"¢/lb",   "type":"livestock", "price":null,"change":null,"pct":null,"open":null,"high":null,"low":null,"time":null},
+    "crude":    {"sym":"@CL*0", "label":"Crude WTI",     "unit":"$/bbl",  "type":"energy",    "price":null,"change":null,"pct":null,"open":null,"high":null,"low":null,"time":null},
+    "natgas":   {"sym":"@NG*0", "label":"Natural Gas",   "unit":"$/MMBtu","type":"energy",    "price":null,"change":null,"pct":null,"open":null,"high":null,"low":null,"time":null},
+    "gold":     {"sym":"@GC*0", "label":"Gold",          "unit":"$/oz",   "type":"metal",     "price":null,"change":null,"pct":null,"open":null,"high":null,"low":null,"time":null},
+    "silver":   {"sym":"@SI*0", "label":"Silver",        "unit":"$/oz",   "type":"metal",     "price":null,"change":null,"pct":null,"open":null,"high":null,"low":null,"time":null},
+    "dxy":      {"sym":"DXY",   "label":"Dollar Index",  "unit":"pts",    "type":"macro",     "price":null,"change":null,"pct":null,"open":null,"high":null,"low":null,"time":null},
+    "tnx":      {"sym":"^TNX",  "label":"10-Yr Treasury","unit":"%",      "type":"macro",     "price":null,"change":null,"pct":null,"open":null,"high":null,"low":null,"time":null}
+  }
+}
