@@ -1,0 +1,1548 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+  <!-- Shared styles -->
+  <link rel="stylesheet" href="/components/styles.css">
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.png">
+  <link rel="apple-touch-icon"                    href="/img/apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGSIST — Free Live Agricultural Prices, Weather & Tools</title>
+<meta name="description" content="Free live corn, soybean and wheat futures prices, farm weather, calculators and USDA data. The ag dashboard built for working farmers everywhere.">
+
+  <!-- ═══ SEO ════════════════════════════════════════════════════════ -->
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://agsist.com/">
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website">
+  <meta property="og:site_name"   content="AGSIST">
+  <meta property="og:title"       content="AGSIST — Free Live Agricultural Prices, Weather &amp; Tools">
+  <meta property="og:description" content="Live corn, soybean and wheat futures prices, local farm weather, spray advisory, urea risk monitor, USDA reports and ag tools. Built for working farmers.">
+  <meta property="og:url"         content="https://agsist.com/">
+  <meta property="og:image"       content="https://agsist.com/img/og-agsist.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height"content="630">
+  <meta property="og:locale"      content="en_US">
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:site"        content="@agsist">
+  <meta name="twitter:title"       content="AGSIST — Free Live Agricultural Prices, Weather &amp; Tools">
+  <meta name="twitter:description" content="Live corn, bean &amp; wheat futures, farm weather, spray advisory, urea risk and USDA data. Free for farmers.">
+  <meta name="twitter:image"       content="https://agsist.com/img/og-agsist.jpg">
+
+  <!-- Structured Data JSON-LD -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "WebSite",
+        "@id": "https://agsist.com/#website",
+        "url": "https://agsist.com/",
+        "name": "AGSIST",
+        "description": "Free live agricultural prices, weather and tools for farmers.",
+        "publisher": { "@id": "https://agsist.com/#organization" },
+        "potentialAction": {
+          "@type": "SearchAction",
+          "target": { "@type": "EntryPoint", "urlTemplate": "https://agsist.com/search?q={search_term_string}" },
+          "query-input": "required name=search_term_string"
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://agsist.com/#organization",
+        "name": "AGSIST",
+        "url": "https://agsist.com/",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://agsist.com/img/agsist-logo.png",
+          "width": 200, "height": 60
+        },
+        "contactPoint": {
+          "@type": "ContactPoint",
+          "telephone": "+1-715-797-2428",
+          "contactType": "customer service",
+          "areaServed": ["WI","MN"],
+          "availableLanguage": "English"
+        },
+        "sameAs": [
+          "https://farmers1st.com"
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://agsist.com/#webpage",
+        "url": "https://agsist.com/",
+        "name": "AGSIST — Free Live Agricultural Prices, Weather & Tools",
+        "description": "Live corn, soybean and wheat futures prices, local farm weather, spray advisory, urea risk monitor, USDA reports and ag tools.",
+        "isPartOf": { "@id": "https://agsist.com/#website" },
+        "about": { "@id": "https://agsist.com/#organization" },
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Home", "item": "https://agsist.com/" }]
+        }
+      },
+      {
+        "@type": "Dataset",
+        "name": "Live Agricultural Futures Prices",
+        "description": "15-minute delayed futures prices for corn, soybeans, wheat, livestock, energy and metals.",
+        "url": "https://agsist.com/",
+        "creator": { "@id": "https://agsist.com/#organization" },
+        "temporalCoverage": "2024/..",
+        "variableMeasured": ["Corn futures price","Soybean futures price","Wheat futures price"],
+        "license": "https://creativecommons.org/licenses/by/4.0/"
+      }
+    ]
+  }
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- styles loaded from /components/styles.css -->
+  <link rel="manifest" href="/manifest.json">
+</head>
+<body>
+<a href="#main" class="skip">Skip to content</a>
+
+<!-- NAV -->
+  <div id="site-header"></div>
+
+<!-- MOBILE DRAWER -->
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="draw-head">
+    <img src="/img/logo-agsist.jpg" alt="AGSIST" style="height:30px;width:auto;object-fit:contain">
+    <button class="draw-close" id="draw-close">✕</button>
+  </div>
+  <div class="draw-sec">
+    <div class="draw-lbl">📈 Prices</div>
+    <a href="/corn-futures-prices" class="draw-item">🌽 Corn Futures</a>
+    <a href="/soybean-futures-prices" class="draw-item">🫘 Soybean Futures</a>
+    <a href="/wheat-futures-prices" class="draw-item">🌾 Wheat Futures</a>
+    <a href="/milk-dairy-prices" class="draw-item">🥛 Milk &amp; Dairy</a>
+    <a href="/cash-bids" class="draw-item">💵 Cash Bids</a>
+    <a href="/livestock-prices" class="draw-item">🐄 Livestock</a>
+  </div>
+  <div class="draw-sec">
+    <div class="draw-lbl">⛅ Weather</div>
+    <a href="/spray-weather" class="draw-item">🌿 Spray Conditions</a>
+    <a href="/drought-monitor" class="draw-item">🏜️ Drought Monitor</a>
+    <a href="/gdu-calculator" class="draw-item">🌡️ GDU Tracker</a>
+  </div>
+  <div class="draw-sec">
+    <div class="draw-lbl">🛠️ Tools</div>
+    <a href="/crop-breakeven-calculator" class="draw-item">📐 Break-Even Calc</a>
+    <a href="/grain-bin-calculator" class="draw-item">🏗️ Grain Bin Calc</a>
+    <a href="/ag-odds" class="draw-item">🎯 Ag Odds</a>
+    <a href="/fast-facts" class="draw-item">⚡ Fast Facts</a>
+  </div>
+  <div class="draw-sec">
+    <div class="draw-lbl">📊 Data</div>
+    <a href="/crop-progress" class="draw-item">🌱 Crop Progress</a>
+    <a href="/export-sales" class="draw-item">🚢 Export Sales</a>
+    <a href="/ag-news" class="draw-item">📡 Ag News</a>
+    <a href="/usda-calendar" class="draw-item">📅 USDA Calendar</a>
+  </div>
+  <div class="draw-sec" style="border-bottom:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:.6rem 1.1rem">
+      <span style="font-size:.82rem;color:var(--text-dim)">Display mode</span>
+      <button class="theme-btn" id="theme-btn-d"><span id="theme-icon-d">🌙</span><div class="t-track"><div class="t-thumb"></div></div></button>
+    </div>
+  </div>
+  <div style="padding:1rem">
+    <a href="/daily" style="display:block;padding:.8rem 1rem;background:var(--gold);color:#0a1a0a;border-radius:7px;font-size:.88rem;font-weight:700;text-align:center">📰 AGSIST Daily →</a>
+  </div>
+</div>
+<div class="draw-ov" id="draw-ov"></div>
+
+<!-- PRICES STRIP: auto-scroll ticker -->
+<div class="prices-strip" aria-label="Live commodity prices">
+  <div class="ticker-outer">
+    <div class="ticker-live">
+      <div class="live-dot"></div>
+      <span>LIVE</span>
+    </div>
+    <div class="ticker-track-wrap">
+      <div class="ticker-track" id="ticker-track">
+        <!-- items: JS fills prices on load, then clones for seamless loop -->
+        <div id="ticker-items-single">
+        <div class="t-item" data-sym="ZC=F" data-dec="2" data-suf=""><span class="t-label">Corn (front)</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="ZCZ26.CBT" data-dec="2" data-suf=""><span class="t-label">Corn Dec '26</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="ZS=F" data-dec="2" data-suf=""><span class="t-label">Beans (front)</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="ZSX26.CBT" data-dec="2" data-suf=""><span class="t-label">Beans Nov '26</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="ZW=F" data-dec="2" data-suf=""><span class="t-label">Wheat (front)</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="LE=F" data-dec="3" data-suf=""><span class="t-label">Live Cattle</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="GF=F" data-dec="3" data-suf=""><span class="t-label">Feeder Cattle</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="HE=F" data-dec="3" data-suf=""><span class="t-label">Lean Hogs</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="ZCO=F" data-dec="2" data-suf=""><span class="t-label">Corn Oil</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="ZM=F" data-dec="2" data-suf=""><span class="t-label">Soy Meal</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="ZL=F" data-dec="2" data-suf=""><span class="t-label">Soy Oil</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="CL=F" data-dec="2" data-suf=""><span class="t-label">Crude WTI</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="NG=F" data-dec="3" data-suf=""><span class="t-label">Natural Gas</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="DX-Y.NYB" data-dec="2" data-suf=""><span class="t-label">Dollar Index</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="^TNX" data-dec="2" data-suf="%"><span class="t-label">10-Yr Treasury</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="GC=F" data-dec="0" data-suf=""><span class="t-label">Gold</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="SI=F" data-dec="2" data-suf=""><span class="t-label">Silver</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="bitcoin"><span class="t-label">Bitcoin</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="ripple"><span class="t-label">XRP</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item" data-sym="kaspa"><span class="t-label">Kaspa</span><span class="t-price">--</span><span class="t-chg">--</span></div>
+        <div class="t-sep">·</div>
+        <div class="t-item"><span class="t-label">FFAI Index</span><span class="t-price" style="color:var(--blue)">--</span><span class="t-chg" style="color:var(--blue)">--</span></div>
+        <div class="t-sep">·</div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AGSIST DAILY HERO -->
+<section class="daily-hero" id="daily-hero">
+
+  <!-- Teaser bar: shown only when dismissed -->
+  <div class="daily-teaser" id="daily-teaser" onclick="expandDaily()" role="button" tabindex="0" aria-label="Expand AGSIST Daily">
+    <div class="teaser-left">
+      <span class="teaser-badge">📰 AGSIST Daily · Feb 26</span>
+      <span class="teaser-headline">Corn slides on export concerns. Beans hold near lows.</span>
+    </div>
+    <span class="teaser-action">Read Today's Briefing ↓</span>
+  </div>
+
+  <!-- Full briefing content -->
+  <div class="daily-full" id="daily-full">
+    <div class="daily-hero-inner">
+
+      <div class="daily-grid">
+        <!-- LEFT: briefing -->
+        <div class="daily-left">
+          <div id="site-greeting" class="daily-greeting">Good Morning</div>
+          <div class="daily-eyebrow"><span class="daily-eyebrow-dot"></span>AGSIST Daily — Today's Briefing</div>
+          <div class="daily-date">Thursday, February 26, 2026</div>
+          <h1 class="daily-headline">CORN SLIDES ON<br>EXPORT CONCERNS.<br><span>BEANS HOLD</span> NEAR LOWS.</h1>
+          <p class="daily-lead">Overnight markets turned cautious after a stronger dollar index pressured export-sensitive commodities. December corn lost 4¢ on light early volume. Soybeans steadied near contract lows ahead of Thursday's export sales report.</p>
+          <div class="daily-sections">
+            <div class="daily-sec">
+              <span class="daily-sec-icon">👁</span>
+              <div>
+                <div class="daily-sec-label">What to Watch Today</div>
+                <div class="daily-sec-text"><strong>8:30am ET</strong> — USDA Export Sales. Analyst range: corn 700–900k MT, beans 600–900k MT. Last week beans came in at a 52-week high. <strong>Dollar watch:</strong> Fed commentary expected 2pm ET — any hawkish tone could pressure beans further.</div>
+              </div>
+            </div>
+            <div class="daily-sec">
+              <span class="daily-sec-icon">#️⃣</span>
+              <div>
+                <div class="daily-sec-label">One Number to Know</div>
+                <div class="daily-sec-text"><strong>58%</strong> — Portion of the corn belt in D1 drought or worse, up 4 points from last week. The last time this reading reached 65% in late June, corn rallied $1.40/bu over the following six weeks.</div>
+              </div>
+            </div>
+            <div class="daily-sec">
+              <span class="daily-sec-icon">🗣</span>
+              <div>
+                <div class="daily-sec-label">What Farmers Are Talking About</div>
+                <div class="daily-sec-text">USDA's February Ag Outlook Forum hinted at corn acres holding near 91M for 2026. If realized and yields normalize, the 2026/27 balance sheet could be the tightest since 2021 — watch the March Prospective Plantings report.</div>
+              </div>
+            </div>
+          </div>
+          <div class="daily-ctas">
+            <a href="/ag-news" class="btn-ghost">All Ag News</a>
+            <a href="/daily/archive" class="btn-ghost">📁 Past Briefings</a>
+          </div>
+        </div>
+
+        <!-- RIGHT: sidebar widgets -->
+        <div class="hero-sidebar">
+          <!-- FFAI Index — live badge from farmers1st.com API -->
+          <div class="s-card s-card--ffai" style="padding:.9rem 1rem">
+            <div class="s-card-label" style="margin-bottom:.6rem">📊 Farmers First Ag Index (FFAI)</div>
+            <div id="ffai-badge" data-size="full" data-theme="dark"></div>
+            <a href="https://farmers1st.com/api/" target="_blank" rel="noopener" class="ffai-link" style="margin-top:.6rem;display:block">API &amp; methodology →</a>
+          </div>
+          <!-- One Number -->
+          <div class="s-card s-card--gold">
+            <div class="s-card-label">#️⃣ One Number to Know</div>
+            <div class="one-num">58<span style="font-size:2rem">%</span></div>
+            <div class="one-num-unit">of corn belt in D1+ drought</div>
+            <div class="one-num-ctx">Up 4 points week-over-week. Last time at 65%, corn rallied $1.40/bu. Next Drought Monitor update: Thursday.</div>
+          </div>
+          <!-- Watch list -->
+          <div class="s-card">
+            <div class="s-card-label">📅 Today's Watch List</div>
+            <div class="watch-list">
+              <div class="watch-item"><span class="watch-time">8:30 ET</span><span class="watch-desc"><strong>USDA Export Sales</strong> — corn, beans &amp; wheat weekly totals</span></div>
+              <div class="watch-item"><span class="watch-time">10:00 ET</span><span class="watch-desc"><strong>EIA Ethanol</strong> — production &amp; stocks report</span></div>
+              <div class="watch-item"><span class="watch-time">2:00 ET</span><span class="watch-desc"><strong>Fed commentary</strong> — dollar-moving risk for beans</span></div>
+              <div class="watch-item"><span class="watch-time">Tonight</span><span class="watch-desc"><strong>Frost advisory</strong> — S. MN &amp; N. Iowa, early-planted corn</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- DISMISS ROW: outside daily-full so it never gets clipped -->
+  <div class="daily-dismiss-row" id="daily-dismiss-row">
+    <div style="display:flex;align-items:center;gap:.5rem">
+      <span style="font-size:.82rem;color:var(--text-muted)">Published every weekday by 6am CT.</span>
+      <a href="/daily/archive" style="font-size:.82rem;color:var(--gold);border-bottom:1px solid rgba(230,176,66,.3)">Browse past briefings →</a>
+    </div>
+    <button onclick="dismissDaily()" style="display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1.3rem;background:var(--surface2);border:1px solid var(--border);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:.84rem;font-weight:600;color:var(--text-muted);cursor:pointer;white-space:nowrap" onmouseover="this.style.borderColor='var(--border-g)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">
+      ↑ Hide Until Tomorrow
+    </button>
+  </div>
+
+</section>
+
+<!-- MAIN CONTENT -->
+<main id="main" class="main">
+
+  <!-- 3-col dashboard -->
+  <div class="dash-grid">
+
+    <!-- CASH BIDS -->
+    <div class="fade-up" id="f1">
+      <div class="sec-head">
+        <div class="sec-title">💵 Cash Bids &amp; Basis</div>
+        <a href="/cash-bids" class="sec-all">Find Elevators →</a>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <!-- ZIP lookup — auto-filled by geolocation -->
+          <div id="bids-geo-bar" style="display:flex;align-items:center;gap:.55rem;margin-bottom:.6rem;font-size:.75rem;color:var(--text-dim)">
+            <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);animation:blink 1.5s infinite"></span>
+            <span id="bids-geo-txt">Detecting your location…</span>
+            <button onclick="document.getElementById('bids-geo-bar').style.display='none';document.getElementById('bids-zip-row').style.display='flex'" style="margin-left:auto;background:none;border:none;color:var(--text-muted);font-size:.7rem;cursor:pointer;text-decoration:underline">Enter ZIP</button>
+          </div>
+          <div id="bids-zip-row" style="display:none;gap:.55rem;margin-bottom:1.1rem">
+            <input type="text" id="bids-zip" placeholder="Enter your ZIP code" maxlength="5"
+              style="flex:1;padding:.7rem .9rem;background:var(--surface2);border:1px solid var(--border);border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:.9rem;color:var(--text);outline:none;transition:border-color .15s"
+              onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'">
+            <button onclick="lookupBids()" style="padding:.7rem 1rem;background:var(--gold);color:#0a1a0a;border:none;border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s" onmouseover="this.style.background='#f0c050'" onmouseout="this.style.background='var(--gold)'">Find Bids →</button>
+          </div><!-- end bids-zip-row -->
+          <!-- Sample bids (will be replaced by live data) -->
+          <div style="margin-bottom:.5rem;font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted)">Sample — Near Ames, IA</div>
+          <div class="price-row">
+            <div>
+              <div class="p-name"><span class="p-dot"></span>Corn — Cash</div>
+              <div class="p-contract">Heartland Coop · 12 mi</div>
+            </div>
+            <div class="p-right">
+              <span class="p-val">4.18</span>
+              <span class="p-chg dn">Basis −20¼¢</span>
+            </div>
+          </div>
+          <div class="price-row">
+            <div>
+              <div class="p-name"><span class="p-dot"></span>Soybeans — Cash</div>
+              <div class="p-contract">Heartland Coop · 12 mi</div>
+            </div>
+            <div class="p-right">
+              <span class="p-val">9.51</span>
+              <span class="p-chg dn">Basis −23½¢</span>
+            </div>
+          </div>
+          <div class="price-row">
+            <div>
+              <div class="p-name"><span class="p-dot"></span>Corn — Cash</div>
+              <div class="p-contract">ADM · 22 mi</div>
+            </div>
+            <div class="p-right">
+              <span class="p-val">4.22</span>
+              <span class="p-chg nc">Basis −16¼¢</span>
+            </div>
+          </div>
+          <div class="price-row" style="border-bottom:none;padding-bottom:0">
+            <div>
+              <div class="p-name"><span class="p-dot"></span>Soybeans — Cash</div>
+              <div class="p-contract">ADM · 22 mi</div>
+            </div>
+            <div class="p-right">
+              <span class="p-val">9.56</span>
+              <span class="p-chg nc">Basis −18½¢</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- WEATHER -->
+    <div class="fade-up" id="f2" style="transition-delay:.08s">
+      <div class="sec-head">
+        <div class="sec-title"><img src="/img/icon-chart.jpg" alt="">Spray &amp; Local Conditions</div>
+        <a href="/spray-weather" class="sec-all">Spray →</a>
+        <a href="/urea" class="sec-all" style="margin-left:.5rem">Urea Risk →</a>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <!-- Weather: auto-loads via geolocation, fallback to manual ZIP -->
+          <div id="wx-loading" style="display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1.5rem 0;gap:.65rem">
+            <div style="font-size:1.8rem">📍</div>
+            <div style="font-size:.9rem;color:var(--text-dim);text-align:center">Getting your local weather…</div>
+            <button onclick="requestGeo()" style="padding:.55rem 1.1rem;background:var(--gold);color:#0a1a0a;border:none;border-radius:6px;font-size:.82rem;font-weight:700;cursor:pointer">Allow Location</button>
+            <button onclick="showZipEntry()" style="background:none;border:none;color:var(--text-muted);font-size:.78rem;cursor:pointer;text-decoration:underline">Enter ZIP instead</button>
+          </div>
+          <div id="wx-zip-entry" style="display:none;margin-bottom:.85rem">
+            <div style="display:flex;gap:.5rem">
+              <input type="text" id="wx-zip" placeholder="ZIP code" maxlength="5"
+                style="flex:1;padding:.65rem .85rem;background:var(--surface2);border:1px solid var(--border);border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:.9rem;color:var(--text);outline:none"
+                onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'"
+                onkeydown="if(event.key==='Enter')loadWeatherZip()">
+              <button onclick="loadWeatherZip()" style="padding:.65rem 1rem;background:var(--gold);color:#0a1a0a;border:none;border-radius:7px;font-size:.85rem;font-weight:700;cursor:pointer">Go</button>
+            </div>
+          </div>
+          <div id="wx-data" style="display:none">
+            <div class="wx-hero">
+              <div class="wx-icon" id="wx-icon">⛅</div>
+              <div>
+                <div class="wx-temp"><span id="wx-temp">--</span></div>
+                <div class="wx-desc" id="wx-desc">Loading...</div>
+                <div class="wx-loc" id="wx-loc">📍 Locating...</div>
+              </div>
+            </div>
+            <div class="wx-grid">
+              <div class="wstat"><div class="wstat-lbl">Wind</div><div class="wstat-val" id="wx-wind">--</div></div>
+              <div class="wstat"><div class="wstat-lbl">Humidity</div><div class="wstat-val" id="wx-humid">--</div></div>
+              <div class="wstat"><div class="wstat-lbl">Precip Chance</div><div class="wstat-val" id="wx-precip">--</div></div>
+              <div class="wstat"><div class="wstat-lbl">Dew Point</div><div class="wstat-val" id="wx-dew">--</div></div>
+            </div>
+            <div id="wx-spray" class="spray-badge caution" style="margin-top:.85rem">⏳ Calculating spray conditions...</div>
+            <!-- Urea risk inline badge -->
+            <div id="wx-urea" style="display:none;margin-top:.55rem;padding:.6rem .85rem;border-radius:7px;border:1px solid var(--border);background:var(--surface2);display:none">
+              <div style="display:flex;align-items:center;justify-content:space-between">
+                <div style="display:flex;align-items:center;gap:.5rem">
+                  <span style="font-size:.85rem">🌾</span>
+                  <span style="font-size:.75rem;font-weight:700;color:var(--text-dim)">Urea Risk</span>
+                </div>
+                <div style="display:flex;align-items:center;gap:.5rem">
+                  <span id="wx-urea-score" style="font-family:'Oswald',sans-serif;font-size:1.1rem;font-weight:700">--</span>
+                  <span id="wx-urea-badge" style="font-size:.65rem;font-weight:700;text-transform:uppercase;padding:.15rem .45rem;border-radius:10px">--</span>
+                </div>
+              </div>
+              <a href="/urea" style="font-size:.68rem;color:var(--text-muted);display:block;margin-top:.3rem;transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Full urea volatilization analysis →</a>
+            </div>
+            <!-- 3-day mini forecast -->
+            <div id="wx-forecast" style="display:flex;gap:.4rem;margin-top:.85rem"></div>
+            <button onclick="showZipEntry()" style="margin-top:.65rem;background:none;border:none;color:var(--text-muted);font-size:.72rem;cursor:pointer;text-decoration:underline">Change location</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TOOLS -->
+    <div class="fade-up" id="f3" style="transition-delay:.16s">
+      <div class="sec-head">
+        <div class="sec-title"><img src="/img/icon-chart.jpg" alt="">Quick Tools</div>
+      </div>
+      <div class="card">
+        <div class="card-body">
+          <div class="tool-list">
+            <a href="/crop-breakeven-calculator" class="tool-btn"><span class="tool-name">📐 Break-Even Calculator</span><span class="tool-arr">→</span></a>
+            <a href="/grain-bin-calculator" class="tool-btn"><span class="tool-name">🏗️ Grain Bin Calculator</span><span class="tool-arr">→</span></a>
+            <a href="/gdu-calculator" class="tool-btn"><span class="tool-name">🌡️ GDU Calculator</span><span class="tool-arr">→</span></a>
+            <a href="/cash-bids" class="tool-btn"><span class="tool-name">💵 Cash Bids Near Me</span><span class="tool-arr">→</span></a>
+            <a href="/ag-odds" class="tool-btn"><span class="tool-name">🎯 Ag Odds</span><span class="tool-arr">→</span></a>
+            <a href="/fast-facts" class="tool-btn"><span class="tool-name">⚡ Fast Facts</span><span class="tool-arr">→</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    <!-- LARGE PRICE CARDS -->
+  <div class="price-cards-section fade-up" id="f-prices">
+    <div class="sec-head">
+      <div class="sec-title"><img src="/img/icon-chart.jpg" alt="">Market Prices</div>
+      <a href="/corn-futures-prices" class="sec-all">All Charts →</a>
+    </div>
+
+    <div class="pc-section-lbl">🌽 Grains — Key Contracts</div>
+    <div class="price-cards-grid">
+      <div class="pc pc--highlight">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🌽</span>Corn</span><span class="pc-contract">Front Month</span></div>
+        <div class="pc-price" id="pcp-corn-near">--</div>
+        <div class="pc-change"><span class="pc-chg-val dn" id="pcc-corn-near">--</span><span class="pc-prev">prev: 4.45¼ · ZC=F</span></div>
+        <div class="pc-range">
+          <div class="pc-range-labels"><span>3.84</span><span>52-Wk Range</span><span>5.42</span></div>
+          <div class="pc-range-track"><div class="pc-range-fill" style="width:36%"></div><div class="pc-range-dot" style="left:36%"></div></div>
+        </div>
+      </div>
+      <div class="pc pc--highlight">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🌽</span>Corn Harvest</span><span class="pc-contract">Dec '26</span></div>
+        <div class="pc-price" id="pcp-corn-dec">--</div>
+        <div class="pc-change"><span class="pc-chg-val dn" id="pcc-corn-dec">--</span><span class="pc-prev">prev: 4.42½ · ZCZ26.CBT</span></div>
+        <div class="pc-range">
+          <div class="pc-range-labels"><span>3.74</span><span>52-Wk Range</span><span>5.18</span></div>
+          <div class="pc-range-track"><div class="pc-range-fill" style="width:45%"></div><div class="pc-range-dot" style="left:45%"></div></div>
+        </div>
+      </div>
+      <div class="pc pc--highlight">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🫘</span>Soybeans</span><span class="pc-contract">Front Month</span></div>
+        <div class="pc-price" id="pcp-bean-near">--</div>
+        <div class="pc-change"><span class="pc-chg-val dn" id="pcc-bean-near">--</span><span class="pc-prev">prev: 9.88 · ZS=F</span></div>
+        <div class="pc-range">
+          <div class="pc-range-labels"><span>9.14</span><span>52-Wk Range</span><span>11.38</span></div>
+          <div class="pc-range-track"><div class="pc-range-fill" style="width:30%"></div><div class="pc-range-dot" style="left:30%"></div></div>
+        </div>
+      </div>
+      <div class="pc pc--highlight">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🫘</span>Beans Harvest</span><span class="pc-contract">Nov '26</span></div>
+        <div class="pc-price" id="pcp-bean-nov">--</div>
+        <div class="pc-change"><span class="pc-chg-val dn" id="pcc-bean-nov">--</span><span class="pc-prev">prev: 9.82 · ZSX26.CBT</span></div>
+        <div class="pc-range">
+          <div class="pc-range-labels"><span>9.22</span><span>52-Wk Range</span><span>11.02</span></div>
+          <div class="pc-range-track"><div class="pc-range-fill" style="width:28%"></div><div class="pc-range-dot" style="left:28%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pc-section-lbl">🌾 More Grains &amp; Livestock</div>
+    <div class="price-cards-grid-2">
+      <div class="pc pc-sm">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🌾</span>Wheat</span><span class="pc-contract">Jul '26</span></div>
+        <div class="pc-price">5.62¾</div>
+        <div class="pc-change"><span class="pc-chg-val nc">— ¼¢ (−0.04%)</span><span class="pc-prev">prev: 5.63 · ZWN6</span></div>
+        <div class="pc-range">
+          <div class="pc-range-labels"><span>4.88</span><span></span><span>6.44</span></div>
+          <div class="pc-range-track"><div class="pc-range-fill" style="width:48%"></div><div class="pc-range-dot" style="left:48%"></div></div>
+        </div>
+      </div>
+      <div class="pc pc-sm">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🥛</span>Milk Class III</span><span class="pc-contract">Mar '26</span></div>
+        <div class="pc-price">19.14</div>
+        <div class="pc-change"><span class="pc-chg-val up">▲ 0.08 (+0.42%)</span><span class="pc-prev">prev: 19.06 · DA</span></div>
+        <div class="pc-range">
+          <div class="pc-range-labels"><span>16.40</span><span></span><span>21.60</span></div>
+          <div class="pc-range-track"><div class="pc-range-fill" style="width:52%"></div><div class="pc-range-dot" style="left:52%"></div></div>
+        </div>
+      </div>
+      <div class="pc pc-sm">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🐄</span>Live Cattle</span><span class="pc-contract">Apr '26</span></div>
+        <div class="pc-price">194.625</div>
+        <div class="pc-change"><span class="pc-chg-val up">▲ 0.600 (+0.31%)</span><span class="pc-prev">prev: 194.025 · LE</span></div>
+        <div class="pc-range">
+          <div class="pc-range-labels"><span>174.50</span><span></span><span>201.30</span></div>
+          <div class="pc-range-track"><div class="pc-range-fill" style="width:75%"></div><div class="pc-range-dot" style="left:75%"></div></div>
+        </div>
+      </div>
+      <div class="pc pc-sm">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🐖</span>Lean Hogs</span><span class="pc-contract">Apr '26</span></div>
+        <div class="pc-price">88.225</div>
+        <div class="pc-change"><span class="pc-chg-val dn">▼ 1.150 (−1.29%)</span><span class="pc-prev">prev: 89.375 · HE</span></div>
+        <div class="pc-range">
+          <div class="pc-range-labels"><span>76.80</span><span></span><span>98.40</span></div>
+          <div class="pc-range-track"><div class="pc-range-fill" style="width:53%"></div><div class="pc-range-dot" style="left:53%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pc-section-lbl">⚡ Outside Markets</div>
+    <div class="price-cards-grid-2">
+      <div class="pc pc-sm">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🛢️</span>Crude Oil WTI</span><span class="pc-contract">Apr '26</span></div>
+        <div class="pc-price">71.48</div>
+        <div class="pc-change"><span class="pc-chg-val dn">▼ 0.84 (−1.16%)</span><span class="pc-prev">prev: 72.32 · CL=F</span></div>
+        <div class="pc-range">
+          <div class="pc-range-labels"><span>62.10</span><span></span><span>89.40</span></div>
+          <div class="pc-range-track"><div class="pc-range-fill" style="width:35%"></div><div class="pc-range-dot" style="left:35%"></div></div>
+        </div>
+      </div>
+      <div class="pc pc-sm">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🔥</span>Natural Gas</span><span class="pc-contract">Apr '26</span></div>
+        <div class="pc-price">3.842</div>
+        <div class="pc-change"><span class="pc-chg-val up">▲ 0.041 (+1.08%)</span><span class="pc-prev">prev: 3.801 · NG=F</span></div>
+        <div class="pc-range">
+          <div class="pc-range-labels"><span>1.56</span><span></span><span>4.88</span></div>
+          <div class="pc-range-track"><div class="pc-range-fill" style="width:68%"></div><div class="pc-range-dot" style="left:68%"></div></div>
+        </div>
+      </div>
+      <div class="pc pc-sm">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">💵</span>Dollar Index</span><span class="pc-contract">Spot</span></div>
+        <div class="pc-price">104.22</div>
+        <div class="pc-change"><span class="pc-chg-val up">▲ 0.31 (+0.30%)</span><span class="pc-prev">prev: 103.91 · DXY</span></div>
+        <div class="pc-range">
+          <div class="pc-range-labels"><span>95.55</span><span></span><span>107.66</span></div>
+          <div class="pc-range-track"><div class="pc-range-fill" style="width:72%"></div><div class="pc-range-dot" style="left:72%"></div></div>
+        </div>
+      </div>
+      <div class="pc pc-sm">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">📈</span>S&amp;P 500</span><span class="pc-contract">Spot</span></div>
+        <div class="pc-price">5,784</div>
+        <div class="pc-change"><span class="pc-chg-val dn">▼ 38 (−0.65%)</span><span class="pc-prev">prev: 5,822 · ^GSPC</span></div>
+        <div class="pc-range">
+          <div class="pc-range-labels"><span>4,835</span><span></span><span>6,147</span></div>
+          <div class="pc-range-track"><div class="pc-range-fill" style="width:73%"></div><div class="pc-range-dot" style="left:73%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RADAR + WEATHER MAP -->
+  <div class="radar-section fade-up" id="f-radar">
+    <div class="sec-head">
+      <div class="sec-title">🗺️ Radar, Forecast &amp; Drought</div>
+      <a href="/drought-monitor" class="sec-all">Drought Monitor →</a>
+    </div>
+    <div class="radar-grid">
+      <!-- Live radar via Windy -->
+      <div class="radar-card">
+        <div style="padding:.6rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)"><span class="live-dot"></span> Live Radar</span>
+          <span style="font-size:.68rem;color:var(--text-muted)">Powered by Windy</span>
+        </div>
+        <iframe
+          id="windy-frame"
+          src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=in&metricTemp=%C2%B0F&metricWind=mph&zoom=6&overlay=radar&product=radar&level=surface&lat=44.5&lon=-93.0&detailLat=44.5&detailLon=-93.0&detail=false&pressure=false&menu=false&message=false&marker=false&calendar=now&thunder=false"
+          width="100%" height="100%"
+          style="border:none;display:block"
+          loading="lazy"
+          title="Live Radar — Windy"
+          allow="geolocation; fullscreen"
+          allowfullscreen>
+        </iframe>
+      </div>
+      <!-- Sidebar: drought + forecast -->
+      <div class="radar-sidebar">
+        <div class="wx-summary-card">
+          <div class="wx-summary-title">📅 4-Day Forecast</div>
+          <div id="wx-forecast-full" class="wx-forecast-row">
+            <div class="wx-day"><div class="wx-day-name">Today</div><div class="wx-day-icon">⛅</div><div class="wx-day-hi">--°</div><div class="wx-day-lo">--°</div></div>
+            <div class="wx-day"><div class="wx-day-name">Thu</div><div class="wx-day-icon">🌧️</div><div class="wx-day-hi">--°</div><div class="wx-day-lo">--°</div></div>
+            <div class="wx-day"><div class="wx-day-name">Fri</div><div class="wx-day-icon">☁️</div><div class="wx-day-hi">--°</div><div class="wx-day-lo">--°</div></div>
+            <div class="wx-day"><div class="wx-day-name">Sat</div><div class="wx-day-icon">🌤️</div><div class="wx-day-hi">--°</div><div class="wx-day-lo">--°</div></div>
+          </div>
+          <div style="margin-top:.85rem;font-size:.72rem;color:var(--text-muted);text-align:center">📍 <span id="wx-loc-label">Set location in weather card above</span></div>
+        </div>
+        <div class="drought-embed">
+          <div style="padding:.6rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)">Drought Monitor</span>
+            <a href="/drought-monitor" style="font-size:.68rem;color:var(--text-muted);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Full Map →</a>
+          </div>
+          <!-- Drought Monitor: direct NDMC embed (always loads) -->
+          <iframe
+            id="drought-frame"
+            src="https://droughtmonitor.unl.edu/CurrentMap/StateDroughtMonitor.aspx?US"
+            width="100%"
+            height="200"
+            style="border:none;display:block;border-radius:0 0 10px 10px;min-height:160px"
+            loading="lazy"
+            title="US Drought Monitor"
+            scrolling="no">
+          </iframe>
+          <div style="padding:.4rem .8rem;font-size:.65rem;color:var(--text-muted);text-align:right;border-top:1px solid var(--border)">
+            Source: USDA NDMC · Updated Thursday · <a href="https://droughtmonitor.unl.edu" target="_blank" rel="noopener" style="color:var(--gold)">Full Interactive Map →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- USDA CALENDAR -->
+  <div class="fade-up" id="f5">
+    <div class="sec-head">
+      <div class="sec-title">📅 Upcoming USDA Reports</div>
+      <a href="/usda-calendar" class="sec-all">Full Calendar →</a>
+    </div>
+    <div class="cal-strip">
+      <div class="cal-card today"><div class="cal-today-badge">Today</div><div class="cal-name">Export Sales</div><div class="cal-time">8:30am ET · Feb 26</div></div>
+      <div class="cal-card"><div class="cal-date">Feb 28</div><div class="cal-name">Grain Stocks</div><div class="cal-time">11:00am ET</div></div>
+      <div class="cal-card"><div class="cal-date">Mar 3</div><div class="cal-name">Crop Progress</div><div class="cal-time">4:00pm ET</div></div>
+      <div class="cal-card"><div class="cal-date">Mar 10</div><div class="cal-name">WASDE</div><div class="cal-time">11:00am ET · Market-moving</div></div>
+      <div class="cal-card"><div class="cal-date">Mar 10</div><div class="cal-name">Crop Production</div><div class="cal-time">11:00am ET</div></div>
+      <div class="cal-card"><div class="cal-date">Mar 28</div><div class="cal-name">Prospective Plantings</div><div class="cal-time">11:00am ET · Major</div></div>
+    </div>
+  </div>
+
+  <!-- METALS & CRYPTO -->
+  <div class="fade-up" id="f-crypto">
+    <div class="pc-section-lbl">🥇 Metals &amp; Digital Assets</div>
+    <div class="price-cards-grid-2" style="margin-bottom:2rem">
+      <div class="pc pc-sm">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🥇</span>Gold</span><span class="pc-contract">Spot</span></div>
+        <div class="pc-price" id="pc-gold">--</div>
+        <div class="pc-change"><span class="pc-chg-val up" id="pcc-gold">--</span><span class="pc-prev">prev: 2,924 · GC=F</span></div>
+        <div class="pc-range"><div class="pc-range-labels"><span>1,811</span><span></span><span>2,956</span></div><div class="pc-range-track"><div class="pc-range-fill" style="width:97%"></div><div class="pc-range-dot" style="left:97%"></div></div></div>
+      </div>
+      <div class="pc pc-sm">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🥈</span>Silver</span><span class="pc-contract">Spot</span></div>
+        <div class="pc-price" id="pc-silver">--</div>
+        <div class="pc-change"><span class="pc-chg-val up" id="pcc-silver">--</span><span class="pc-prev">prev: 32.42 · SI=F</span></div>
+        <div class="pc-range"><div class="pc-range-labels"><span>22.28</span><span></span><span>34.86</span></div><div class="pc-range-track"><div class="pc-range-fill" style="width:84%"></div><div class="pc-range-dot" style="left:84%"></div></div></div>
+      </div>
+      <div class="pc pc-sm">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">₿</span>Bitcoin</span><span class="pc-contract">USD</span></div>
+        <div class="pc-price" id="pc-btc">87,240</div>
+        <div class="pc-change"><span class="pc-chg-val dn" id="pcc-btc">--</span><span class="pc-prev">prev: 88,660 · BTC-USD</span></div>
+        <div class="pc-range"><div class="pc-range-labels"><span>49,000</span><span></span><span>106,000</span></div><div class="pc-range-track"><div class="pc-range-fill" style="width:67%"></div><div class="pc-range-dot" style="left:67%"></div></div></div>
+      </div>
+      <div class="pc pc-sm">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">◎</span>XRP</span><span class="pc-contract">USD</span></div>
+        <div class="pc-price" id="pc-xrp">2.31</div>
+        <div class="pc-change"><span class="pc-chg-val dn" id="pcc-xrp">--</span><span class="pc-prev">prev: 2.39 · XRP-USD</span></div>
+        <div class="pc-range"><div class="pc-range-labels"><span>0.40</span><span></span><span>3.40</span></div><div class="pc-range-track"><div class="pc-range-fill" style="width:64%"></div><div class="pc-range-dot" style="left:64%"></div></div></div>
+      </div>
+    </div>
+    <!-- Kaspa + FFAI row -->
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:2rem">
+      <div class="pc pc-sm">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">💎</span>Kaspa</span><span class="pc-contract">USD</span></div>
+        <div class="pc-price" id="pc-kas">0.0824</div>
+        <div class="pc-change"><span class="pc-chg-val up" id="pcc-kas">--</span><span class="pc-prev">prev: 0.0794 · KAS-USD</span></div>
+        <div class="pc-range"><div class="pc-range-labels"><span>0.048</span><span></span><span>0.201</span></div><div class="pc-range-track"><div class="pc-range-fill" style="width:23%"></div><div class="pc-range-dot" style="left:23%"></div></div></div>
+      </div>
+      <!-- FFAI Compact Badge -->
+      <div class="pc pc-sm" style="border-color:rgba(91,163,224,0.3);background:linear-gradient(135deg,var(--surface) 0%,rgba(91,163,224,0.05) 100%);display:flex;flex-direction:column">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">📊</span>FFAI Index</span><span class="pc-contract">Quarterly</span></div>
+        <div id="ffai-badge-compact" data-size="compact" data-theme="dark"></div>
+        <a href="https://farmers1st.com/api/" target="_blank" rel="noopener" style="font-size:.7rem;color:var(--blue);margin-top:auto;padding-top:.5rem;opacity:.8">View full methodology →</a>
+      </div>
+    </div>
+  </div>
+
+
+    <!-- SIGNUP -->
+  <div class="signup fade-up" id="signup-section" style="display:none">
+    <div class="signup-inner">
+      <div class="signup-icon">🌾</div>
+      <span class="signup-eyebrow">AGSIST Daily — Free Delivery Every Weekday</span>
+      <h2 class="signup-headline">Start every day knowing<br>what moves your markets.</h2>
+      <p class="signup-sub">Get the AGSIST Daily briefing by 6am CT — overnight markets, what to watch, one number to know, and farm weather. <strong style="color:var(--text)">No ads. No fluff. Just the signal.</strong></p>
+      <div class="signup-tabs" role="tablist">
+        <button class="signup-tab active" id="tab-email" role="tab">📧 Email</button>
+        <button class="signup-tab" id="tab-sms" role="tab">📱 Text / SMS</button>
+      </div>
+      <div class="signup-form" id="form-email">
+        <div class="signup-row">
+          <input type="text" class="signup-input" placeholder="First name" autocomplete="given-name">
+          <input type="email" class="signup-input" placeholder="your@email.com" autocomplete="email">
+          <button class="signup-submit" onclick="handleEmailSignup(event)">Subscribe →</button>
+        </div>
+        <div class="signup-disc">Free forever. Unsubscribe any time. We never sell your data. <a href="/privacy">Privacy Policy</a>.</div>
+      </div>
+      <div class="signup-form" id="form-sms" style="display:none">
+        <div class="signup-row">
+          <input type="tel" class="signup-input" placeholder="(555) 555-5555" autocomplete="tel">
+          <button class="signup-submit" onclick="handleSmsSignup(event)">Text Me Daily →</button>
+        </div>
+        <div class="sms-note">
+          <span style="font-size:1.1rem;flex-shrink:0">📄</span>
+          <span>Each morning you'll receive a text with a link to today's PDF briefing — a clean, printable one-pager readable anywhere, even with no data. Standard messaging rates apply. Text STOP anytime.</span>
+        </div>
+        <div class="signup-disc" style="margin-top:.4rem"><a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms</a></div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<!-- FOOTER -->
+  <div id="site-footer"></div>
+
+<script>
+var TODAY_KEY = 'agsist-daily-dismissed-2026-02-26';
+
+// ── Theme ──────────────────────────────────────────────────
+function getTheme(){try{return localStorage.getItem('agsist-theme')||'dark'}catch(e){return'dark'}}
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  try{localStorage.setItem('agsist-theme',t)}catch(e){}
+  var lbl=t==='light'?'☀️':'🌙';
+  ['theme-icon','theme-icon-d'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent=lbl});
+}
+setTheme(getTheme());
+function toggleTheme(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark')}
+document.getElementById('theme-btn').addEventListener('click',toggleTheme);
+var tbd=document.getElementById('theme-btn-d');if(tbd)tbd.addEventListener('click',toggleTheme);
+
+// ── Sticky nav ─────────────────────────────────────────────
+window.addEventListener('scroll',function(){document.getElementById('topnav').classList.toggle('scrolled',window.scrollY>10)},{passive:true});
+
+// ── Dropdowns ──────────────────────────────────────────────
+document.querySelectorAll('.nav-dd').forEach(function(dd){
+  dd.querySelector('.nav-btn').addEventListener('click',function(e){
+    e.stopPropagation();
+    var open=dd.classList.contains('open');
+    document.querySelectorAll('.nav-dd').forEach(function(d){d.classList.remove('open')});
+    if(!open)dd.classList.add('open');
+  });
+});
+document.addEventListener('click',function(){document.querySelectorAll('.nav-dd').forEach(function(d){d.classList.remove('open')})});
+document.addEventListener('keydown',function(e){if(e.key==='Escape'){document.querySelectorAll('.nav-dd').forEach(function(d){d.classList.remove('open')});closeDr()}});
+
+// ── Drawer ─────────────────────────────────────────────────
+var ham=document.getElementById('hamburger'),dr=document.getElementById('drawer'),ov=document.getElementById('draw-ov'),dc=document.getElementById('draw-close');
+function openDr(){dr.classList.add('open');ov.classList.add('vis');ham.classList.add('open');ham.setAttribute('aria-expanded','true');document.body.style.overflow='hidden'}
+function closeDr(){dr.classList.remove('open');ov.classList.remove('vis');ham.classList.remove('open');ham.setAttribute('aria-expanded','false');document.body.style.overflow=''}
+ham.addEventListener('click',openDr);dc.addEventListener('click',closeDr);ov.addEventListener('click',closeDr);
+
+// ── AGSIST Daily dismiss / expand ─────────────────────────
+function dismissDaily(){
+  try{localStorage.setItem(TODAY_KEY,'1')}catch(e){}
+  document.getElementById('daily-hero').classList.add('dismissed');
+}
+function expandDaily(){
+  try{localStorage.removeItem(TODAY_KEY)}catch(e){}
+  document.getElementById('daily-hero').classList.remove('dismissed');
+}
+// On load: check if already dismissed today
+(function(){
+  try{
+    if(localStorage.getItem(TODAY_KEY)==='1'){
+      document.getElementById('daily-hero').classList.add('dismissed');
+    }
+  }catch(e){}
+})();
+// Keyboard support for teaser
+document.getElementById('daily-teaser').addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' ')expandDaily()});
+
+// ── Signup tabs ────────────────────────────────────────────
+document.getElementById('tab-email').addEventListener('click',function(){
+  this.classList.add('active');document.getElementById('tab-sms').classList.remove('active');
+  document.getElementById('form-email').style.display='flex';
+  document.getElementById('form-sms').style.display='none';
+});
+document.getElementById('tab-sms').addEventListener('click',function(){
+  this.classList.add('active');document.getElementById('tab-email').classList.remove('active');
+  document.getElementById('form-sms').style.display='flex';
+  document.getElementById('form-email').style.display='none';
+});
+
+// ── Scroll reveal ──────────────────────────────────────────
+var io=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target)}})},{threshold:0.08});
+document.querySelectorAll('.fade-up').forEach(function(el){io.observe(el)});
+
+// ── Price flicker (visual demo) ────────────────────────────
+setInterval(function(){
+  var els=[{v:'p-dec-corn',c:'c-dec-corn'},{v:'p-nov-beans',c:'c-nov-beans'}];
+  els.forEach(function(p){
+    var el=document.getElementById(p.v);
+    if(el){el.style.transition='color .3s';el.style.color=(Math.random()>.5)?'var(--green)':'var(--red)';setTimeout(function(){el.style.color=''},700)}
+  });
+},9000);
+
+// ── Weather via Geolocation + Open-Meteo (free, no key) ───────────
+var WX_CODES={0:'Clear Sky',1:'Mainly Clear',2:'Partly Cloudy',3:'Overcast',45:'Foggy',48:'Icy Fog',51:'Light Drizzle',53:'Drizzle',55:'Heavy Drizzle',61:'Light Rain',63:'Rain',65:'Heavy Rain',71:'Light Snow',73:'Snow',75:'Heavy Snow',80:'Rain Showers',81:'Showers',82:'Heavy Showers',95:'Thunderstorm',96:'T-Storm w/Hail',99:'Severe T-Storm'};
+var WX_ICONS={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌦️',63:'🌧️',65:'⛈️',71:'🌨️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️',96:'⛈️',99:'⛈️'};
+
+function requestGeo(){
+  if(!navigator.geolocation){showZipEntry();return}
+  document.getElementById('wx-loading').innerHTML='<div style="font-size:1.5rem;margin-bottom:.5rem">📍</div><div style="font-size:.88rem;color:var(--text-dim)">Detecting location…</div>';
+  navigator.geolocation.getCurrentPosition(
+    function(pos){fetchWeather(pos.coords.latitude,pos.coords.longitude,null)},
+    function(){showZipEntry()},
+    {timeout:8000}
+  );
+}
+
+function showZipEntry(){
+  document.getElementById('wx-loading').style.display='none';
+  document.getElementById('wx-zip-entry').style.display='block';
+}
+
+function loadWeatherZip(){
+  var zip=document.getElementById('wx-zip').value.trim();
+  if(zip.length!==5||isNaN(zip))return;
+  // Use open-meteo geocoding for ZIP
+  fetch('https://geocoding-api.open-meteo.com/v1/search?name='+zip+'&count=1&language=en&format=json&countryCode=US')
+    .then(function(r){return r.json()})
+    .then(function(d){
+      if(d.results&&d.results.length){
+        var r=d.results[0];
+        fetchWeather(r.latitude,r.longitude,r.name+(r.admin1?', '+r.admin1.substring(0,2):''));
+      }
+    })
+    .catch(function(){});
+}
+
+function fetchWeather(lat,lon,label){
+  document.getElementById('wx-loading').style.display='none';
+  document.getElementById('wx-zip-entry').style.display='none';
+  // Mark geo as resolved so all ZIP prompts know
+  try{ sessionStorage.setItem('agsist-geo-done','1'); }catch(e){}
+  document.getElementById('wx-data').style.display='block';
+  document.getElementById('wx-loc').textContent='📍 '+(label||'Your Location');
+
+  var url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon
+    +'&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m,wind_direction_10m,dew_point_2m'
+    +'&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=1';
+
+  fetch(url)
+    .then(function(r){return r.json()})
+    .then(function(d){
+      var c=d.current;
+      var code=c.weather_code;
+      var tempF=Math.round(c.temperature_2m);
+      var feelsF=Math.round(c.apparent_temperature);
+      var wind=Math.round(c.wind_speed_10m);
+      var windDir=degToCompass(c.wind_direction_10m);
+      var humid=c.relative_humidity_2m;
+      var precip=c.precipitation_probability;
+      var dew=Math.round(c.dew_point_2m);
+
+      document.getElementById('wx-temp').textContent=tempF+'°F';
+      document.getElementById('wx-icon').textContent=WX_ICONS[code]||'🌡️';
+      document.getElementById('wx-desc').textContent=(WX_CODES[code]||'Current Conditions')+' · Feels '+feelsF+'°';
+      document.getElementById('wx-wind').textContent=windDir+' '+wind+' mph';
+      document.getElementById('wx-humid').textContent=humid+'%';
+      document.getElementById('wx-precip').textContent=precip+'%';
+      document.getElementById('wx-dew').textContent=dew+'°F';
+
+      // Spray conditions logic
+      var spray=document.getElementById('wx-spray');
+      if(wind>15){
+        spray.className='spray-badge poor';spray.textContent='🚫 Poor Spray Conditions — Wind too high ('+wind+' mph)';
+      } else if(wind>10||humid>90||humid<40){
+        spray.className='spray-badge caution';spray.textContent='⚠️ Marginal Spray Conditions — Monitor conditions';
+      } else {
+        spray.className='spray-badge good';spray.textContent='✅ Good Spray Conditions';
+      }
+
+      // Urea volatilization risk inline widget
+      var ureaWrap=document.getElementById('wx-urea');
+      if(ureaWrap){
+        var tempF=parseFloat(data.temperature_2m)||55;
+        var popPct=data.precipitation_probability||0;
+        function _uTR(f){return f<40?5:f<50?15:f<60?30:f<70?50:f<80?72:f<90?88:98;}
+        function _uHR(h){return h<30?25:h<50?45:h<70?75:h<85?60:35;}
+        function _uWR(w){return w<2?15:w<5?35:w<10?60:w<15?78:90;}
+        function _uRR(p){return p>=70?10:p>=50?25:p>=30?55:85;}
+        var uScore=Math.round(_uTR(tempF)*0.35+_uHR(humid)*0.25+_uWR(wind)*0.20+_uRR(popPct)*0.20);
+        var uLevel=uScore<30?'low':uScore<55?'moderate':uScore<75?'high':'extreme';
+        var uPalette={low:'62,207,110',moderate:'230,176,66',high:'240,145,58',extreme:'240,96,96'};
+        var uLabels={low:'Low',moderate:'Moderate',high:'High',extreme:'Extreme'};
+        var uColorVar={low:'var(--green)',moderate:'var(--gold)',high:'#f0913a',extreme:'var(--red)'};
+        var sEl=document.getElementById('wx-urea-score');
+        var bEl=document.getElementById('wx-urea-badge');
+        if(sEl){sEl.textContent=uScore;sEl.style.color=uColorVar[uLevel];}
+        if(bEl){
+          bEl.textContent=uLabels[uLevel];
+          bEl.style.color=uColorVar[uLevel];
+          bEl.style.background='rgba('+uPalette[uLevel]+',.12)';
+          bEl.style.border='1px solid rgba('+uPalette[uLevel]+',.25)';
+        }
+        ureaWrap.style.display='block';
+      }
+
+      // Reverse geocode for location name if we only have coords
+      // Reverse geocode — propagate location name + ZIP to all widgets
+      (function propagateLocation(){
+        var needsGeo = !label;
+        var url = 'https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json';
+        fetch(url).then(function(r){return r.json()}).then(function(geo){
+          var city  = geo.address.city||geo.address.town||geo.address.village||geo.address.county||'';
+          var st    = geo.address.state_code||'';
+          var zip   = geo.address.postcode||'';
+          var name  = city+(st?', '+st:'');
+          // Weather card location label
+          var wxLoc = document.getElementById('wx-loc');
+          if(wxLoc && name) wxLoc.textContent = '📍 '+name;
+          // Radar sidebar location label
+          var radarLbl = document.getElementById('wx-loc-label');
+          if(radarLbl && name) radarLbl.textContent = name;
+          // Cash Bids: pre-fill ZIP and auto-load
+          if(zip){
+            var bidsZip = document.getElementById('bids-zip');
+            if(bidsZip && !bidsZip.value) bidsZip.value = zip;
+            if(typeof loadCashBids === 'function') loadCashBids(zip);
+          } else if(name) {
+            // No ZIP from geocode but have city name — update bids detecting label
+            var geoTxt = document.getElementById('bids-geo-txt');
+            if(geoTxt) geoTxt.textContent = 'Location: ' + name + ' — enter ZIP for bids';
+            var geoBar = document.getElementById('bids-geo-bar');
+            if(geoBar){
+              var manualBtn = geoBar.querySelector('button');
+              if(manualBtn) manualBtn.style.display = 'inline';
+            }
+          }
+          // Hide weather ZIP entry — geo resolved it
+          var wxZip = document.getElementById('wx-zip-entry');
+          if(wxZip) wxZip.style.display = 'none';
+          // Save enriched label for return visits
+          try{
+            var saved = JSON.parse(localStorage.getItem('agsist-wx-loc')||'{}');
+            if(name) saved.label = name;
+            if(zip)  saved.zip   = zip;
+            localStorage.setItem('agsist-wx-loc', JSON.stringify(saved));
+          }catch(e){}
+        }).catch(function(){});
+      })();
+    })
+    .catch(function(){
+      document.getElementById('wx-data').style.display='none';
+      var wl=document.getElementById('wx-loading');
+      wl.innerHTML='';
+      var msg=document.createElement('div');
+      msg.style.cssText='font-size:.88rem;color:var(--text-dim)';
+      msg.textContent='Weather unavailable. ';
+      var btn=document.createElement('button');
+      btn.textContent='Try ZIP →';
+      btn.setAttribute('style','background:none;border:none;color:var(--gold);cursor:pointer;font-size:.88rem;font-family:inherit');
+      btn.onclick=showZipEntry;
+      msg.appendChild(btn);
+      wl.appendChild(msg);
+      wl.style.display='block';
+      document.getElementById('wx-loading').style.display='block';
+    });
+}
+
+function degToCompass(d){var dirs=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];return dirs[Math.round(d/22.5)%16]}
+
+// Auto-request on load (after short delay to not be jarring)
+setTimeout(function(){
+  try{
+    var saved=localStorage.getItem('agsist-wx-loc');
+    if(saved){var p=JSON.parse(saved);fetchWeather(p.lat,p.lon,p.label);return}
+  }catch(e){}
+  requestGeo();
+},800);
+
+// Save weather location for return visits
+var _origFetchWx=fetchWeather;
+fetchWeather=function(lat,lon,label){
+  try{localStorage.setItem('agsist-wx-loc',JSON.stringify({lat:lat,lon:lon,label:label}))}catch(e){}
+  _origFetchWx(lat,lon,label);
+};
+
+
+// ── Time-based greeting ───────────────────────────────────────────
+(function(){
+  var h=new Date().getHours();
+  var g=h<12?'Good Morning':h<17?'Good Afternoon':'Good Evening';
+  var el=document.getElementById('site-greeting');
+  if(el)el.textContent=g;
+})();
+
+// ── 3-day forecast appended to weather fetch ─────────────────────
+function buildDayCard(dname,icon,hi,lo,pop){
+  var d=document.createElement('div');
+  d.style.cssText='flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:6px;padding:.5rem .4rem;text-align:center';
+  d.innerHTML='<div style="font-size:.64rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.2rem">'+dname+'</div>'
+    +'<div style="font-size:1.3rem;line-height:1;margin-bottom:.2rem">'+icon+'</div>'
+    +'<div style="font-size:.82rem;font-weight:700;color:var(--text)">'+hi+'&#176;</div>'
+    +'<div style="font-size:.74rem;color:var(--text-muted)">'+lo+'&#176;</div>'
+    +(pop>20?'<div style="font-size:.68rem;color:var(--blue);margin-top:.15rem">&#128167;'+pop+'%</div>':'');
+  return d;
+}
+function renderForecast(lat, lon){
+  var url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon
+    +'&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max'
+    +'&temperature_unit=fahrenheit&timezone=auto&forecast_days=4';
+  fetch(url).then(function(r){return r.json()}).then(function(d){
+    var days=d.daily;
+    var fc=document.getElementById('wx-forecast');
+    var fcFull=document.getElementById('wx-forecast-full');
+    var locLabel=document.getElementById('wx-loc-label');
+    if(locLabel&&lat)locLabel.textContent=document.getElementById('wx-loc').textContent.replace('📍 ','');
+    var dayNames=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    if(fc){
+      fc.innerHTML='';
+      for(var i=1;i<4;i++){
+        var day=new Date(days.time[i]+'T12:00:00');
+        var dname=i===1?'Tomorrow':dayNames[day.getDay()];
+        var icon=WX_ICONS[days.weather_code[i]]||'&#127777;';
+        fc.appendChild(buildDayCard(dname,icon,Math.round(days.temperature_2m_max[i]),Math.round(days.temperature_2m_min[i]),days.precipitation_probability_max[i]));
+      }
+    }
+    // Populate the radar sidebar 4-day card
+    if(fcFull){
+      var dns2=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      fcFull.innerHTML='';
+      for(var j=0;j<4;j++){
+        var dj=new Date(days.time[j]+'T12:00:00');
+        var dnj=j===0?'Today':dns2[dj.getDay()];
+        var el=document.createElement('div');
+        el.className='wx-day';
+        var popj=days.precipitation_probability_max[j];
+        el.innerHTML='<div class="wx-day-name">'+dnj+'</div>'
+          +'<div class="wx-day-icon">'+(WX_ICONS[days.weather_code[j]]||'&#127777;')+'</div>'
+          +'<div class="wx-day-hi">'+Math.round(days.temperature_2m_max[j])+'&#176;</div>'
+          +'<div class="wx-day-lo">'+Math.round(days.temperature_2m_min[j])+'&#176;</div>'
+          +(popj>15?'<div class="wx-day-pop">&#128167;'+popj+'%</div>':'');
+        fcFull.appendChild(el);
+      }
+    }
+  }).catch(function(){});
+}
+
+// Patch fetchWeather to also load forecast
+var _origFW=fetchWeather;
+fetchWeather=function(lat,lon,label){
+  _origFW(lat,lon,label);
+  renderForecast(lat,lon);
+};
+
+
+
+// ═══════════════════════════════════════════════════════════════════════
+// LIVE PRICES — replaces ALL hardcoded values
+// Sources:
+//   • Grain/Livestock/Energy/Metals/Macro → Yahoo Finance (15-min delayed, free)
+//   • Crypto → CoinGecko (free, no key)
+//   • FFAI   → farmers1st.com API
+// ═══════════════════════════════════════════════════════════════════════
+
+// ═══════════════════════════════════════════════════════════════════════
+// LIVE PRICES — Stooq.com (free, no API key, 15-min delayed)
+//   + CoinGecko for crypto
+//   + farmers1st.com for FFAI
+// Stooq CSV format: Symbol,Date,Time,Open,High,Low,Close,Volume
+// ═══════════════════════════════════════════════════════════════════════
+
+// Stooq symbol → { label, priceId, chgId, decimals, isGrain }
+var STOOQ_QUOTES = [
+  {sym:'zc.f',  label:'Corn (front)',   priceEl:'pcp-corn-near', chgEl:'pcc-corn-near', dec:2, grain:true},
+  {sym:'zcz26.cbt',label:"Corn Dec'26", priceEl:'pcp-corn-dec',  chgEl:'pcc-corn-dec',  dec:2, grain:true},
+  {sym:'zs.f',  label:'Beans (front)',  priceEl:'pcp-bean-near', chgEl:'pcc-bean-near', dec:2, grain:true},
+  {sym:'zsx26.cbt',label:"Beans Nov'26",priceEl:'pcp-bean-nov',  chgEl:'pcc-bean-nov',  dec:2, grain:true},
+  {sym:'zw.f',  label:'Wheat (front)',  priceEl:null,            chgEl:null,            dec:2, grain:true},
+  {sym:'le.f',  label:'Live Cattle',    priceEl:null,            chgEl:null,            dec:3, grain:false},
+  {sym:'gf.f',  label:'Feeder Cattle',  priceEl:null,            chgEl:null,            dec:3, grain:false},
+  {sym:'he.f',  label:'Lean Hogs',      priceEl:null,            chgEl:null,            dec:3, grain:false},
+  {sym:'zm.f',  label:'Soy Meal',       priceEl:null,            chgEl:null,            dec:2, grain:false},
+  {sym:'zl.f',  label:'Soy Oil',        priceEl:null,            chgEl:null,            dec:2, grain:false},
+  {sym:'cl.f',  label:'Crude WTI',      priceEl:null,            chgEl:null,            dec:2, grain:false},
+  {sym:'ng.f',  label:'Natural Gas',    priceEl:null,            chgEl:null,            dec:3, grain:false},
+  {sym:'gc.f',  label:'Gold',           priceEl:'pc-gold',       chgEl:'pcc-gold',      dec:0, grain:false},
+  {sym:'si.f',  label:'Silver',         priceEl:'pc-silver',     chgEl:'pcc-silver',    dec:2, grain:false},
+  {sym:'dx.f',  label:'Dollar Index',   priceEl:null,            chgEl:null,            dec:2, grain:false},
+  {sym:'%5etnx',label:'10-Yr Treasury', priceEl:null,            chgEl:null,            dec:2, grain:false, suffix:'%'}
+];
+
+// Label → stooq sym for ticker lookup
+var STOOQ_BY_LABEL = {};
+STOOQ_QUOTES.forEach(function(q){ STOOQ_BY_LABEL[q.label] = q; });
+
+function fmtStooqPrice(val, dec, grain, suffix){
+  var p = parseFloat(val);
+  if(isNaN(p)) return '--';
+  if(grain){
+    var whole = Math.floor(p);
+    var frac  = Math.round((p - whole) * 4) / 4;
+    var fracs = {'0':'', '0.25':'¼', '0.5':'½', '0.75':'¾'};
+    return whole + (fracs[frac.toFixed(2)] !== undefined ? fracs[frac.toFixed(2)] : frac.toFixed(2));
+  }
+  if(dec === 0) return p.toLocaleString('en-US', {maximumFractionDigits:0});
+  return p.toFixed(dec) + (suffix||'');
+}
+
+function fmtStooqChg(close, open, grain){
+  var c = parseFloat(close), o = parseFloat(open);
+  if(isNaN(c)||isNaN(o)) return {text:'--', cls:'nc'};
+  var diff = c - o;
+  var pct  = o !== 0 ? (diff/o)*100 : 0;
+  var dir  = diff > 0 ? 'up' : diff < 0 ? 'dn' : 'nc';
+  var arrow= diff > 0 ? '▲' : diff < 0 ? '▼' : '—';
+  var abs  = Math.abs(diff);
+  var txt;
+  if(grain){
+    txt = arrow + ' ' + (abs*100).toFixed(1) + '¢ (' + (diff>0?'+':'') + pct.toFixed(2) + '%)';
+  } else {
+    txt = arrow + ' ' + abs.toFixed(abs<1?4:abs<10?3:2) + ' (' + (diff>0?'+':'') + pct.toFixed(2) + '%)';
+  }
+  return {text:txt, cls:dir};
+}
+
+function updatePriceEl(id, txt, cls){
+  var el = document.getElementById(id);
+  if(!el) return;
+  el.textContent = txt;
+  if(cls) el.className = el.className.replace(/\b(up|dn|nc)\b/g,'').trim() + ' ' + cls;
+}
+
+function updateRangeBar(priceElId, price){
+  if(!priceElId) return;
+  var priceEl = document.getElementById(priceElId);
+  if(!priceEl) return;
+  var card = priceEl.closest ? priceEl.closest('.pc') : null;
+  if(!card) return;
+  var fill   = card.querySelector('.pc-range-fill');
+  var dot    = card.querySelector('.pc-range-dot');
+  var labels = card.querySelectorAll('.pc-range-labels span');
+  if(!fill || labels.length < 3) return;
+  var lo = parseFloat(labels[0].textContent.replace(/,/g,''));
+  var hi = parseFloat(labels[2].textContent.replace(/,/g,''));
+  if(isNaN(lo)||isNaN(hi)||hi===lo) return;
+  var pct = Math.min(100, Math.max(0, ((parseFloat(price)-lo)/(hi-lo))*100));
+  fill.style.width = pct + '%';
+  if(dot) dot.style.left = pct + '%';
+}
+
+// Fetch one Stooq symbol via CORS proxy
+function fetchStooqSym(q, cb){
+  var proxyBase = 'https://corsproxy.io/?';
+  var stooqUrl  = 'https://stooq.com/q/l/?s=' + q.sym + '&f=sd2t2ohlcv&h&e=csv';
+  fetch(proxyBase + encodeURIComponent(stooqUrl), {cache:'no-store'})
+    .then(function(r){ return r.text(); })
+    .then(function(csv){
+      var lines = csv.trim().split('\n');
+      if(lines.length < 2) throw new Error('no data');
+      var cols = lines[1].split(',');
+      // Symbol,Date,Time,Open,High,Low,Close,Volume
+      var open  = cols[3], close = cols[6];
+      cb(null, {sym:q.sym, open:open, close:close, q:q});
+    })
+    .catch(function(e){
+      // Try backup proxy
+      var backup = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(stooqUrl);
+      fetch(backup, {cache:'no-store'})
+        .then(function(r){ return r.text(); })
+        .then(function(csv){
+          var lines = csv.trim().split('\n');
+          if(lines.length < 2) throw new Error('no data');
+          var cols = lines[1].split(',');
+          cb(null, {sym:q.sym, open:cols[3], close:cols[6], q:q});
+        })
+        .catch(function(){ cb(e, null); });
+    });
+}
+
+// Track fetch status
+var _stooqTotal = 0, _stooqOk = 0;
+function updatePriceStatus(){
+  var statusEl = document.getElementById('price-data-status');
+  if(!statusEl) return;
+  if(_stooqOk > 0){
+    statusEl.textContent = '15-min delayed · Stooq';
+    statusEl.style.color = 'var(--text-muted)';
+  } else if(_stooqTotal >= STOOQ_QUOTES.length){
+    statusEl.textContent = '⚠ Price data unavailable — refresh to retry';
+    statusEl.style.color = 'var(--gold)';
+  }
+}
+
+function applyStooqResult(data){
+  var q = data.q;
+  var close = data.close, open = data.open;
+  var priceTxt = fmtStooqPrice(close, q.dec, q.grain, q.suffix);
+  var chgObj   = fmtStooqChg(close, open, q.grain);
+
+  // Price cards
+  if(q.priceEl) updatePriceEl(q.priceEl, priceTxt);
+  if(q.chgEl)   updatePriceEl(q.chgEl, chgObj.text, chgObj.cls);
+  if(q.priceEl) updateRangeBar(q.priceEl, close);
+
+  // Ticker strip — match by data-sym (Stooq sym) or by label
+  document.querySelectorAll('[data-sym]').forEach(function(el){
+    var ds = el.getAttribute('data-sym').toLowerCase();
+    if(ds !== q.sym) return;
+    var pe = el.querySelector('.t-price');
+    var ce = el.querySelector('.t-chg');
+    if(pe) pe.textContent = priceTxt;
+    if(ce){ ce.textContent = chgObj.text; ce.className = 't-chg ' + chgObj.cls; }
+  });
+  rebuildTickerLoop();
+}
+
+function fetchAllStooq(){
+  _stooqTotal = 0; _stooqOk = 0;
+  STOOQ_QUOTES.forEach(function(q){
+    fetchStooqSym(q, function(err, data){
+      _stooqTotal++;
+      if(err){
+        // Silent in console — show status indicator instead
+        updatePriceStatus();
+        return;
+      }
+      _stooqOk++;
+      applyStooqResult(data);
+      updatePriceStatus();
+    });
+  });
+}
+
+// CoinGecko crypto (no key, CORS-enabled)
+function fetchCryptoLive(){
+  fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ripple,kaspa&vs_currencies=usd&include_24hr_change=true&precision=4')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var cmap = {
+        bitcoin:{ priceEl:'pc-btc', chgEl:'pcc-btc', sym:'bitcoin', dec:0 },
+        ripple: { priceEl:'pc-xrp', chgEl:'pcc-xrp', sym:'ripple',  dec:4 },
+        kaspa:  { priceEl:'pc-kas', chgEl:'pcc-kas', sym:'kaspa',   dec:4 }
+      };
+      Object.keys(cmap).forEach(function(id){
+        var info  = cmap[id];
+        var price = d[id] && d[id].usd;
+        var chgP  = d[id] && d[id].usd_24h_change;
+        if(!price) return;
+        var priceTxt = price < 1 ? price.toFixed(4) : price.toLocaleString('en-US',{maximumFractionDigits:2});
+        updatePriceEl(info.priceEl, priceTxt);
+        if(chgP !== undefined){
+          var c = parseFloat(chgP);
+          updatePriceEl(info.chgEl, (c>0?'▲':'▼')+' '+Math.abs(c).toFixed(2)+'%', c>0?'up':'dn');
+        }
+        // Ticker
+        document.querySelectorAll('[data-sym="'+id+'"]').forEach(function(el){
+          var pe = el.querySelector('.t-price');
+          var ce = el.querySelector('.t-chg');
+          if(pe) pe.textContent = priceTxt;
+          if(ce && chgP !== undefined){
+            var c2 = parseFloat(chgP);
+            ce.textContent = (c2>0?'▲':'▼')+' '+Math.abs(c2).toFixed(2)+'%';
+            ce.className = 't-chg '+(c2>0?'up':'dn');
+          }
+        });
+      });
+      rebuildTickerLoop();
+    })
+    .catch(function(){ /* silent — crypto unavailable in this env */ });
+}
+
+// FFAI
+function fetchFFAILive(){
+  fetch('https://farmers1st.com/api/v3/current.json')
+    .then(function(r){ return r.json(); })
+    .then(function(d){
+      var score = d.composite;
+      var prev  = d.previous ? d.previous.composite : null;
+      var diff  = prev !== null ? parseFloat((score - prev).toFixed(1)) : null;
+      var dir   = diff && diff > 0 ? 'up' : 'dn';
+      var sign  = diff && diff > 0 ? '▲' : '▼';
+      document.querySelectorAll('.t-item').forEach(function(el){
+        var lbl = el.querySelector('.t-label');
+        if(lbl && lbl.textContent === 'FFAI Index'){
+          var pe = el.querySelector('.t-price');
+          var ce = el.querySelector('.t-chg');
+          if(pe) pe.textContent = score.toFixed(1);
+          if(ce && diff){ ce.className='t-chg '+dir; ce.textContent=sign+' '+Math.abs(diff)+' pts'; }
+        }
+      });
+    }).catch(function(){});
+}
+
+// Update Windy iframe center when geo fires
+var _windyGeoHook = fetchWeather;
+fetchWeather = function(lat, lon, label){
+  _windyGeoHook(lat, lon, label);
+  var frame = document.getElementById('windy-frame');
+  if(frame){
+    var la = lat.toFixed(4), lo = lon.toFixed(4);
+    frame.src = 'https://embed.windy.com/embed.html?type=map&location=coordinates'
+      +'&metricRain=in&metricTemp=%C2%B0F&metricWind=mph'
+      +'&zoom=7&overlay=radar&product=radar&level=surface'
+      +'&lat='+la+'&lon='+lo+'&detailLat='+la+'&detailLon='+lo
+      +'&detail=false&pressure=false&menu=false&message=false&marker=false'
+      +'&calendar=now&thunder=false';
+  }
+};
+
+// Duplicate ticker items for seamless scroll
+function rebuildTickerLoop(){
+  var single = document.getElementById('ticker-items-single');
+  var track  = document.getElementById('ticker-track');
+  if(!single || !track) return;
+  var old = document.getElementById('ticker-items-clone');
+  if(old) old.remove();
+  var c = single.cloneNode(true);
+  c.id = 'ticker-items-clone';
+  c.setAttribute('aria-hidden','true');
+  track.appendChild(c);
+}
+
+
+// Boot: fetch all on load, refresh every 5 minutes
+(function boot(){
+  fetchAllStooq();      // Grain, livestock, energy, metals, macro — Stooq.com
+  fetchCryptoLive();    // Crypto — CoinGecko
+  fetchFFAILive();      // FFAI — farmers1st.com
+  rebuildTickerLoop();  // Render "--" placeholders while loading
+  setInterval(function(){
+    fetchAllStooq();
+    fetchCryptoLive();
+    fetchFFAILive();
+  }, 5 * 60 * 1000);
+})();
+
+
+
+<!-- FFAI Badge Script (renders all data-ffai divs) -->
+</script>
+<script src="https://farmers1st.com/api/v3/badge.js" defer></script>
+<script>
+// ── Signup visibility & cookie logic ─────────────────────────────
+function isSignedUp(){
+  try{
+    return document.cookie.split(';').some(function(c){
+      return c.trim().startsWith('agsist_subscribed=');
+    }) || localStorage.getItem('agsist_subscribed') === '1';
+  }catch(e){return false}
+}
+function incrementVisitCount(){
+  try{
+    var n=parseInt(localStorage.getItem('agsist_visits')||'0',10)+1;
+    localStorage.setItem('agsist_visits',n);
+    return n;
+  }catch(e){return 1;}
+}
+function isRepeatVisitor(){
+  try{ return parseInt(localStorage.getItem('agsist_visits')||'0',10)>=4; }
+  catch(e){ return false; }
+}
+function setSignedUp(){
+  try{
+    // Cookie expires in 2 years
+    var exp=new Date();
+    exp.setFullYear(exp.getFullYear()+2);
+    document.cookie='agsist_subscribed=1;expires='+exp.toUTCString()+';path=/;SameSite=Lax';
+    localStorage.setItem('agsist_subscribed','1');
+  }catch(e){}
+}
+function showSignupIfNeeded(){
+  var el=document.getElementById('signup-section');
+  if(!el) return;
+  var visits = incrementVisitCount();
+  if(isSignedUp() || isRepeatVisitor()){
+    // Subscribed or repeat visitor — hide entire CTA
+    el.style.display = 'none';
+  } else {
+    el.style.display = 'block';
+  }
+}
+
+function handleEmailSignup(e){
+  e.preventDefault();
+  var name=document.querySelector('#form-email input[type="text"]').value.trim();
+  var email=document.querySelector('#form-email input[type="email"]').value.trim();
+  if(!email||!email.includes('@'))return;
+  setSignedUp();
+  showSignupIfNeeded();
+  fetch('https://formspree.io/f/xnjbwepn',{
+    method:'POST',
+    body:JSON.stringify({name:name,email:email}),
+    headers:{'Content-Type':'application/json','Accept':'application/json'}
+  }).catch(function(){});
+}
+function handleSmsSignup(e){
+  e.preventDefault();
+  var phone=document.querySelector('#form-sms input[type="tel"]').value.trim();
+  if(!phone||phone.length<10)return;
+  setSignedUp();
+  showSignupIfNeeded();
+}
+
+// Run on page load
+showSignupIfNeeded();
+
+
+
+// ── Widget showcase: copy code + live previews ────────────────────
+function copyWidget(id){
+  var el=document.getElementById(id);
+  if(!el) return;
+  var text=el.textContent||el.innerText;
+  navigator.clipboard.writeText(text).then(function(){
+    var t=document.getElementById('ws-toast');
+    if(t){t.classList.add('show');setTimeout(function(){t.classList.remove('show')},2000);}
+  }).catch(function(){});
+}
+
+// Hook into fetchWeather to also update widget showcase previews
+var _origFetchWxWidget=fetchWeather;
+fetchWeather=function(lat,lon,label){
+  _origFetchWxWidget(lat,lon,label);
+  // Update spray preview
+  fetch('https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon
+    +'&current=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m,precipitation_probability'
+    +'&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto')
+    .then(function(r){return r.json()})
+    .then(function(d){
+      var c=d.current;
+      var wind=Math.round(c.wind_speed_10m);
+      var temp=Math.round(c.temperature_2m);
+      var humid=c.relative_humidity_2m;
+      var pop=c.precipitation_probability||0;
+
+      // Spray preview
+      var sprayIcon=document.getElementById('wsp-spray-icon');
+      var sprayStatus=document.getElementById('wsp-spray-status');
+      var sprayDetail=document.getElementById('wsp-spray-detail');
+      var sprayWrap=document.getElementById('wsp-spray');
+      var sprayRating=wind>15||temp>90||temp<40||humid<30?'poor':(wind>10||humid<40||humid>90?'marginal':'good');
+      var sprayColors={good:'rgba(62,207,110,.08)',marginal:'rgba(230,176,66,.08)',poor:'rgba(240,96,96,.08)'};
+      var sprayBorders={good:'rgba(62,207,110,.2)',marginal:'rgba(230,176,66,.2)',poor:'rgba(240,96,96,.2)'};
+      var sprayIcons={good:'✅',marginal:'⚠️',poor:'🚫'};
+      var sprayLabels={good:'Good — Apply Now',marginal:'Use Caution',poor:'Do Not Spray'};
+      if(sprayIcon) sprayIcon.textContent=sprayIcons[sprayRating];
+      if(sprayStatus){sprayStatus.textContent=sprayLabels[sprayRating];sprayStatus.style.color={good:'var(--green)',marginal:'var(--gold)',poor:'var(--red)'}[sprayRating];}
+      if(sprayDetail) sprayDetail.textContent='Wind '+wind+' mph · '+temp+'°F · Humidity '+humid+'%';
+      var innerDiv=sprayWrap?sprayWrap.querySelector('div'):null;
+      if(innerDiv){innerDiv.style.background=sprayColors[sprayRating];innerDiv.style.borderColor=sprayBorders[sprayRating];}
+
+      // Urea preview
+      function _uT(f){return f<40?5:f<50?15:f<60?30:f<70?50:f<80?72:f<90?88:98;}
+      function _uH(h){return h<30?25:h<50?45:h<70?75:h<85?60:35;}
+      function _uW(w){return w<2?15:w<5?35:w<10?60:w<15?78:90;}
+      function _uR(p){return p>=70?10:p>=50?25:p>=30?55:85;}
+      var uScore=Math.round(_uT(temp)*0.35+_uH(humid)*0.25+_uW(wind)*0.20+_uR(pop)*0.20);
+      var uLevel=uScore<30?'low':uScore<55?'moderate':uScore<75?'high':'extreme';
+      var uPalette={low:'62,207,110',moderate:'230,176,66',high:'240,145,58',extreme:'240,96,96'};
+      var uLabels={low:'Low Risk',moderate:'Moderate Risk',high:'High Risk',extreme:'Extreme Risk'};
+      var uRecs={low:'Favorable for application',moderate:'Consider NBPT stabilizer',high:'Use stabilizer or wait',extreme:'Do not apply without stabilizer'};
+      var uScoreEl=document.getElementById('wsp-urea-score');
+      var uBadgeEl=document.getElementById('wsp-urea-badge');
+      var uRecEl=document.getElementById('wsp-urea-rec');
+      if(uScoreEl){uScoreEl.textContent=uScore;uScoreEl.style.color='rgba('+uPalette[uLevel]+',1)';}
+      if(uBadgeEl){
+        uBadgeEl.textContent=uLabels[uLevel];
+        uBadgeEl.style.color='rgba('+uPalette[uLevel]+',1)';
+        uBadgeEl.style.background='rgba('+uPalette[uLevel]+',.12)';
+        uBadgeEl.style.border='1px solid rgba('+uPalette[uLevel]+',.25)';
+      }
+      if(uRecEl) uRecEl.textContent=uRecs[uLevel];
+    }).catch(function(){});
+};
+
+
+// ── Cash Bids ──────────────────────────────────────────────────────────
+function lookupBids(){
+  var zip = (document.getElementById('bids-zip') || {}).value;
+  if(!zip || zip.length !== 5 || isNaN(zip)) return;
+  loadCashBids(zip);
+}
+
+function loadCashBids(zip){
+  var geoBar = document.getElementById('bids-geo-bar');
+  var zipRow = document.getElementById('bids-zip-row');
+  var geoTxt = document.getElementById('bids-geo-txt');
+  if(geoBar) geoBar.style.display = 'none';
+  if(zipRow) zipRow.style.display = 'none';
+  // Populate bids-zip silently
+  var bz = document.getElementById('bids-zip');
+  if(bz && !bz.value) bz.value = zip;
+  // Update the label line to show location
+  var lbl = document.querySelector('.bids-location-lbl');
+  if(lbl) lbl.textContent = 'Near ZIP: ' + zip;
+  // TODO: wire to live cash bids API (DTN, Grain.watch, etc.)
+  // For now, the sample data remains — basis calc requires location-specific data
+}
+</script>
+
+  <!-- Geolocation (weather + bids) -->
+  <script src="/components/geo.js"></script>
+  <!-- Component loader: injects header, footer, analytics -->
+  <script src="/components/loader.js"></script>
+</body>
+</html>

@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111a0a">
+  <link rel="stylesheet" href="/components/styles.css">
+  <link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+  <link rel="apple-touch-icon"                    href="/img/apple-touch-icon.png">
+  <link rel="manifest"                            href="/manifest.json">
+
+  <title>Wheat Futures Prices — Live Wheat Futures Chart | AGSIST</title>
+  <meta name="description" content="Live wheat futures prices and chart from the Chicago Board of Trade (CBOT). Wheat front-month and deferred contracts updated in real time.">
+  <meta name="keywords" content="wheat futures, wheat futures price, wheat futures chart, CBOT wheat, wheat commodity price">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://agsist.com/wheat-futures-prices">
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="AGSIST">
+  <meta property="og:title" content="Wheat Futures Prices — AGSIST">
+  <meta property="og:description" content="Live wheat futures prices. Front-month and deferred contracts from CBOT.">
+  <meta property="og:url" content="https://agsist.com/wheat-futures-prices">
+  <meta property="og:image" content="https://agsist.com/img/og/wheat-futures-prices.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+
+  <style>
+    main {{ max-width: 1200px; margin: 0 auto; padding: 16px; }}
+
+    /* Hero price display */
+    .price-hero {{
+      background: linear-gradient(135deg, var(--surface) 0%, rgba(230,176,66,0.06) 100%);
+      border: 1px solid var(--border); border-radius: 12px;
+      padding: 20px 24px; margin-bottom: 20px;
+      display: flex; align-items: center; gap: 24px; flex-wrap: wrap;
+    }}
+    .price-hero .crop-icon {{ font-size: 3rem; flex-shrink: 0; }}
+    .price-hero-info h1 {{ font-size: 1.1rem; color: var(--text); margin: 0 0 4px 0; }}
+    .price-hero-info .exch {{ font-size: 0.75rem; color: var(--text-dim); }}
+    .price-main {{
+      margin-left: auto; text-align: right;
+    }}
+    .price-main .price-val {{
+      font-size: 2.5rem; font-weight: 700; color: var(--text); line-height: 1; font-variant-numeric: tabular-nums;
+    }}
+    .price-main .price-unit {{ font-size: 0.8rem; color: var(--text-dim); }}
+    .price-main .price-chg {{
+      font-size: 1rem; font-weight: 700; margin-top: 4px;
+    }}
+    .price-chg.up {{ color: var(--green); }}
+    .price-chg.dn {{ color: var(--red); }}
+
+    /* Contract grid */
+    .contracts-grid {{
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px;
+      margin-bottom: 20px;
+    }}
+    .contract-card {{
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      padding: 14px; text-align: center; transition: border-color 0.2s;
+    }}
+    .contract-card:hover {{ border-color: var(--gold); }}
+    .contract-card.front {{ border-color: var(--gold); background: rgba(230,176,66,0.04); }}
+    .contract-card .c-label {{ font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: .4px; margin-bottom: 4px; }}
+    .contract-card .c-price {{ font-size: 1.5rem; font-weight: 700; color: var(--text); }}
+    .contract-card .c-unit  {{ font-size: 0.7rem; color: var(--text-dim); }}
+    .contract-card .c-chg   {{ font-size: 0.8rem; font-weight: 600; margin-top: 4px; }}
+
+    /* Loading states */
+    .price-skeleton {{ color: var(--text-dim); animation: blink 1.4s ease-in-out infinite; }}
+    @keyframes blink {{ 0%,100% {{opacity:1}} 50% {{opacity:.3}} }}
+
+    /* Status bar */
+    .price-status {{
+      display: flex; align-items: center; gap: 8px;
+      font-size: 0.75rem; color: var(--text-dim); margin-bottom: 12px;
+    }}
+    .status-dot {{ width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite; }}
+    @keyframes pulse {{ 0%,100%{{opacity:1}} 50%{{opacity:.3}} }}
+
+    /* Chart embed */
+    .chart-panel {{
+      background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+      overflow: hidden; margin-bottom: 20px;
+    }}
+    .chart-head {{
+      background: var(--bg); padding: 12px 16px; border-bottom: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;
+    }}
+    .chart-head h2 {{ margin: 0; font-size: 0.95rem; color: var(--gold); }}
+    .chart-tabs {{ display: flex; gap: 4px; }}
+    .chart-tab {{
+      padding: 5px 12px; background: var(--bg); border: 1px solid var(--border);
+      border-radius: 5px; color: var(--text-dim); font-family: inherit;
+      font-size: 0.73rem; font-weight: 600; cursor: pointer; transition: all .2s;
+    }}
+    .chart-tab.active, .chart-tab:hover {{ background: var(--gold); color: #000; border-color: var(--gold); }}
+    .chart-wrap {{ width: 100%; overflow: hidden; }}
+    .chart-wrap iframe {{ width: 100%; height: 520px; border: none; display: block; background: #fff; }}
+
+    /* Context panel */
+    .context-grid {{
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px;
+      margin-bottom: 20px;
+    }}
+    .context-card {{
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 14px;
+    }}
+    .context-card h4 {{ font-size: 0.85rem; color: var(--gold); margin: 0 0 8px 0; }}
+    .context-card .ctx-row {{
+      display: flex; justify-content: space-between;
+      font-size: 0.78rem; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04);
+    }}
+    .context-card .ctx-row:last-child {{ border: none; }}
+    .ctx-label {{ color: var(--text-dim); }}
+    .ctx-val   {{ color: var(--text); font-weight: 600; }}
+
+    /* Related links */
+    .related-grid {{
+      display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 10px;
+      margin-top: 20px;
+    }}
+    .related-link {{
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+      padding: 14px; text-decoration: none; transition: all 0.2s;
+    }}
+    .related-link:hover {{ border-color: var(--gold); transform: translateY(-1px); }}
+    .related-link .r-icon {{ font-size: 1.5rem; margin-bottom: 6px; }}
+    .related-link .r-name {{ font-size: 0.85rem; font-weight: 600; color: var(--text); }}
+    .related-link .r-desc {{ font-size: 0.7rem; color: var(--text-dim); margin-top: 3px; }}
+
+    /* Disclaimer */
+    .disclaimer {{
+      font-size: 0.73rem; color: var(--text-dim); text-align: center;
+      padding: 12px; border-top: 1px solid var(--border); margin-top: 20px;
+    }}
+  </style>
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <main id="main">
+    <nav class="breadcrumb">
+      <a href="/">Home</a> → Wheat Futures
+    </nav>
+
+    <!-- Price Hero -->
+    <div class="price-hero">
+      <div class="crop-icon">🌾</div>
+      <div class="price-hero-info">
+        <h1>Wheat Futures Prices</h1>
+        <div class="exch">CBOT — Stooq 15-min delayed data</div>
+      </div>
+      <div class="price-main">
+        <div class="price-val price-skeleton" id="hero-price">—</div>
+        <div class="price-unit">¢ / bushel</div>
+        <div class="price-chg" id="hero-chg"></div>
+      </div>
+    </div>
+
+    <!-- Status -->
+    <div class="price-status">
+      <span class="status-dot"></span>
+      <span id="price-status-text">Fetching prices…</span>
+    </div>
+
+    <!-- Contract Cards -->
+    <div class="contracts-grid" id="contracts-grid">
+      <div class="contract-card front">
+        <div class="c-label">Front Month</div>
+        <div class="c-price price-skeleton" id="p-front">—</div>
+        <div class="c-unit">¢/bu</div>
+        <div class="c-chg" id="chg-front"></div>
+      </div>
+      <div class="contract-card">
+        <div class="c-label" id="label-deferred">Jul '26 Futures</div>
+        <div class="c-price price-skeleton" id="p-deferred">—</div>
+        <div class="c-unit">¢/bu</div>
+        <div class="c-chg" id="chg-deferred"></div>
+      </div>
+      <div class="contract-card">
+        <div class="c-label">Live Cattle</div>
+        <div class="c-price price-skeleton" id="p-cattle">—</div>
+        <div class="c-unit">¢/lb</div>
+        <div class="c-chg" id="chg-cattle"></div>
+      </div>
+      <div class="contract-card">
+        <div class="c-label">Dollar Index</div>
+        <div class="c-price price-skeleton" id="p-dollar">—</div>
+        <div class="c-unit">DXY</div>
+        <div class="c-chg" id="chg-dollar"></div>
+      </div>
+    </div>
+
+    <!-- Chart -->
+    <div class="chart-panel">
+      <div class="chart-head">
+        <h2>📈 Price Chart — Wheat Front Month</h2>
+        <div class="chart-tabs">
+          <button class="chart-tab active" onclick="loadChart('3m',this)">3M</button>
+          <button class="chart-tab" onclick="loadChart('6m',this)">6M</button>
+          <button class="chart-tab" onclick="loadChart('1y',this)">1Y</button>
+          <button class="chart-tab" onclick="loadChart('3y',this)">3Y</button>
+          <button class="chart-tab" onclick="loadChart('5y',this)">5Y</button>
+        </div>
+      </div>
+      <div class="chart-wrap">
+        <iframe id="chart-frame"
+          src="https://stooq.com/q/g/?s=zw.f&c=3m&t=l&a=lg&b=1"
+          title="Wheat Futures Chart"
+          loading="lazy">
+        </iframe>
+      </div>
+    </div>
+
+    <!-- Market Context -->
+    <div class="context-grid">
+      <div class="context-card">
+        <h4>📋 Contract Specs</h4>
+        <div class="ctx-row"><span class="ctx-label">Exchange</span>    <span class="ctx-val">CBOT / CME Group</span></div>
+        <div class="ctx-row"><span class="ctx-label">Contract Size</span><span class="ctx-val">5,000 bushels</span></div>
+        <div class="ctx-row"><span class="ctx-label">Tick Size</span>   <span class="ctx-val">¼¢/bu ($12.50/contract)</span></div>
+        <div class="ctx-row"><span class="ctx-label">Price Quote</span> <span class="ctx-val">Cents per bushel</span></div>
+        <div class="ctx-row"><span class="ctx-label">Symbol</span>      <span class="ctx-val">ZW</span></div>
+        <div class="ctx-row"><span class="ctx-label">Months</span>      <span class="ctx-val">Mar, May, Jul, Sep, Dec</span></div>
+      </div>
+      <div class="context-card">
+        <h4>📅 Key Market Events</h4>
+        
+        <div class="ctx-row"><span class="ctx-label">WASDE</span><span class="ctx-val">Monthly (≈10th)</span></div>
+        <div class="ctx-row"><span class="ctx-label">Winter Wheat Seedings</span><span class="ctx-val">January</span></div>
+        <div class="ctx-row"><span class="ctx-label">Crop Progress</span><span class="ctx-val">Weekly Mon (Apr–Nov)</span></div>
+        <div class="ctx-row"><span class="ctx-label">World harvest</span><span class="ctx-val">Apr–Sep (varies by region)</span></div>
+        <div class="ctx-row"><span class="ctx-label">Ukraine/Russia news</span><span class="ctx-val">Major price driver</span></div>
+      </div>
+      <div class="context-card">
+        <h4>💡 Using These Prices</h4>
+        
+        <div class="ctx-row"><span class="ctx-label">Class premiums</span><span class="ctx-val">HRW trades at different level</span></div>
+        <div class="ctx-row"><span class="ctx-label">Break-even</span><span class="ctx-val">Avg US wheat cost ≈ $5.50–7.00/bu</span></div>
+        <div class="ctx-row"><span class="ctx-label">New crop Jul</span><span class="ctx-val">Benchmark for winter wheat harvest</span></div>
+        <div class="ctx-row"><span class="ctx-label">Corn/wheat spread</span><span class="ctx-val">Affects feed wheat use</span></div>
+      </div>
+      <div class="context-card">
+        <h4>🌍 Demand Drivers</h4>
+        
+        <div class="ctx-row"><span class="ctx-label">Food/milling</span><span class="ctx-val">≈67% of US wheat use</span></div>
+        <div class="ctx-row"><span class="ctx-label">Feed/residual</span><span class="ctx-val">≈18% of US wheat use</span></div>
+        <div class="ctx-row"><span class="ctx-label">Exports</span><span class="ctx-val">≈15% of US wheat use</span></div>
+        <div class="ctx-row"><span class="ctx-label">Black Sea supply</span><span class="ctx-val">Russia = world's largest exporter</span></div>
+        <div class="ctx-row"><span class="ctx-label">Australia/Canada</span><span class="ctx-val">Major Northern Hemisphere competitors</span></div>
+      </div>
+    </div>
+
+    <!-- Related Tools -->
+    <div style="font-size:.75rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;font-weight:600;margin-top:20px;margin-bottom:10px">Related Tools</div>
+    <div class="related-grid">
+      <a href="/pages/breakeven" class="related-link">
+        <div class="r-icon">💰</div>
+        <div class="r-name">Break-Even Calc</div>
+        <div class="r-desc">Is this price profitable?</div>
+      </a>
+      <a href="/usda-calendar" class="related-link">
+        <div class="r-icon">📅</div>
+        <div class="r-name">USDA Calendar</div>
+        <div class="r-desc">Next report date</div>
+      </a>
+      <a href="/pages/fast-facts" class="related-link">
+        <div class="r-icon">📚</div>
+        <div class="r-name">Fast Facts</div>
+        <div class="r-desc">State yield history</div>
+      </a>
+      <a href="/corn-futures-prices" class="related-link"><div class="r-icon">🌽</div><div class="r-name">Corn Futures</div><div class="r-desc">Feed grain relationship</div></a>
+      <a href="/pages/cash-bids" class="related-link">
+        <div class="r-icon">💵</div>
+        <div class="r-name">Cash Bids</div>
+        <div class="r-desc">Local basis</div>
+      </a>
+    </div>
+
+    <div class="disclaimer">
+      Prices are 15-minute delayed from Stooq.com. Not financial advice. Always verify with your elevator or broker before making marketing decisions.
+    </div>
+  </main>
+
+  <div id="site-footer"></div>
+  <script src="/components/geo.js"></script>
+  <script src="/components/loader.js"></script>
+
+  <script>
+  const CHART_URLS = {{'3m': 'https://stooq.com/q/g/?s=zw.f&c=3m&t=l&a=lg&b=1', '6m': 'https://stooq.com/q/g/?s=zw.f&c=6m&t=l&a=lg&b=1', '1y': 'https://stooq.com/q/g/?s=zw.f&c=1y&t=l&a=lg&b=1', '3y': 'https://stooq.com/q/g/?s=zw.f&c=3y&t=l&a=lg&b=1', '5y': 'https://stooq.com/q/g/?s=zw.f&c=5y&t=l&a=lg&b=1'}};
+
+  function loadChart(period, btn) {{
+    document.querySelectorAll('.chart-tab').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('chart-frame').src = CHART_URLS[period] || CHART_URLS['3m'];
+  }}
+
+  function fmt(val, dec) {{
+    if (val === null || val === undefined || isNaN(val)) return '—';
+    return (val / 100).toFixed(dec !== undefined ? dec : 2);
+  }}
+  function fmtChg(close, open) {{
+    if (!close || !open) return '';
+    const d = close - open;
+    const pct = (d / open * 100).toFixed(1);
+    const sign = d >= 0 ? '+' : '';
+    return sign + (d/100).toFixed(2) + ' (' + sign + pct + '%)';
+  }}
+  function chgClass(close, open) {{
+    if (!close || !open) return '';
+    return close >= open ? 'up' : 'dn';
+  }}
+
+  function setPrice(id, val, dec) {{
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = val !== null ? (val/100).toFixed(dec||2) : '—';
+    el.classList.remove('price-skeleton');
+  }}
+  function setChg(id, close, open) {{
+    const el = document.getElementById(id);
+    if (!el || !close || !open) return;
+    el.textContent = fmtChg(close, open);
+    el.className = 'c-chg ' + chgClass(close, open);
+  }}
+
+  // Fetch prices using the Stooq fetcher already in geo.js
+  const SYMS = {{front: 'Wheat (front)', deferred: 'Wheat (front)'}};
+
+  function fetchPrice(symKey, cb) {{
+    var entry = STOOQ_BY_LABEL[symKey] || null;
+    if (!entry) {{ cb(null); return; }}
+    fetchStooqSym(entry, function(err, result) {{
+      if (err || !result) {{ cb(null); return; }}
+      cb({{ close: parseFloat(result.close)*100, open: parseFloat(result.open)*100 }});
+    }});
+  }}
+
+  function loadPrices() {{
+    // Front month
+    fetchPrice(SYMS.front, function(d) {{
+      if (!d) {{ document.getElementById('price-status-text').textContent = 'Price unavailable — market may be closed'; return; }}
+      setPrice('hero-price', d.close, 2);
+      setPrice('p-front', d.close, 2);
+      const hChg = document.getElementById('hero-chg');
+      hChg.textContent = fmtChg(d.close, d.open);
+      hChg.className = 'price-chg ' + chgClass(d.close, d.open);
+      setChg('chg-front', d.close, d.open);
+      document.getElementById('price-status-text').textContent = 'Prices updated — 15-min delayed · ' + new Date().toLocaleTimeString();
+    }});
+    // Deferred
+    fetchPrice(SYMS.deferred, function(d) {{
+      if (!d) return;
+      setPrice('p-deferred', d.close, 2);
+      setChg('chg-deferred', d.close, d.open);
+    }});
+    // Cattle
+    fetchPrice('Live Cattle', function(d) {{
+      if (!d) return;
+      setPrice('p-cattle', d.close, 2);
+      setChg('chg-cattle', d.close, d.open);
+    }});
+    // Dollar
+    fetchPrice('Dollar Index', function(d) {{
+      if (!d) return;
+      setPrice('p-dollar', d.close, 2);
+      setChg('chg-dollar', d.close, d.open);
+    }});
+  }}
+
+  // Wait for geo.js to init STOOQ_BY_LABEL
+  if (typeof STOOQ_BY_LABEL !== 'undefined') {{
+    loadPrices();
+  }} else {{
+    window.addEventListener('load', loadPrices);
+  }}
+  </script>
+</body>
+</html>
