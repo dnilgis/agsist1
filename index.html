@@ -880,7 +880,7 @@ function handleSmsSignup(e){
   if(!phone||phone.replace(/\D/g,'').length<10) return;
   setSignedUp();
   showSignupSuccess('form-sms','📱','You\'re on the list!',
-    'Each morning you'll get a text link to the daily PDF briefing. Reply STOP anytime.');
+    'Each morning you\'ll get a text link to the daily PDF briefing. Reply STOP anytime.');
   var tabs=document.getElementById('signup-section').querySelector('.signup-tabs');
   if(tabs) tabs.style.display='none';
   fetch('https://formspree.io/f/xnjbwepn',{
