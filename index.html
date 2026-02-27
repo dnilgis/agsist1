@@ -862,7 +862,7 @@ function handleEmailSignup(e){
   var email=document.querySelector('#form-email input[type="email"]').value.trim();
   if(!email||!email.includes('@')) return;
   setSignedUp();
-  showSignupSuccess('form-email','✅','You're subscribed!',
+  showSignupSuccess('form-email','✅','You\'re subscribed!',
     'AGSIST Daily arrives by 6am CT on weekdays. Check your spam folder once.');
   // Hide tabs so it looks clean
   var tabs=document.getElementById('signup-section').querySelector('.signup-tabs');
@@ -879,7 +879,7 @@ function handleSmsSignup(e){
   var phone=document.querySelector('#form-sms input[type="tel"]').value.trim();
   if(!phone||phone.replace(/\D/g,'').length<10) return;
   setSignedUp();
-  showSignupSuccess('form-sms','📱','You're on the list!',
+  showSignupSuccess('form-sms','📱','You\'re on the list!',
     'Each morning you'll get a text link to the daily PDF briefing. Reply STOP anytime.');
   var tabs=document.getElementById('signup-section').querySelector('.signup-tabs');
   if(tabs) tabs.style.display='none';
