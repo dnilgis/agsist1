@@ -1,0 +1,10 @@
+# AGSIST robots.txt
+User-agent: *
+Allow: /
+
+# Block non-public paths
+Disallow: /api/
+Disallow: /dev/
+
+# Sitemaps
+Sitemap: https://agsist.com/sitemap.xml

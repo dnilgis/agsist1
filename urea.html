@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+  <link rel="stylesheet" href="/components/styles.css">
+  <link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+  <link rel="apple-touch-icon"                    href="/img/apple-touch-icon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Urea Volatilization Risk Monitor — AGSIST</title>
+<meta name="description" content="Real-time urea nitrogen volatilization risk based on local temperature, humidity, wind, soil moisture, and forecast conditions. Know before you spread.">
+
+  <!-- ═══ SEO ════════════════════════════════════════════════════════ -->
+  <meta name="robots"   content="index, follow">
+  <meta name="keywords" content="urea volatilization, nitrogen loss, NBPT, urea stabilizer, surface applied urea risk">
+  <link rel="canonical" href="https://agsist.com/urea">
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="website">
+  <meta property="og:site_name"   content="AGSIST">
+  <meta property="og:title"       content="Urea Volatilization Risk Monitor — AGSIST">
+  <meta property="og:description" content="Real-time N-loss risk score from local temp, wind, humidity and rain. Free urea volatilization tool for farmers.">
+  <meta property="og:url"         content="https://agsist.com/urea">
+  <meta property="og:image"       content="https://agsist.com/img/og/urea.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height"content="630">
+  <meta property="og:locale"      content="en_US">
+
+  <!-- Twitter / X Card -->
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:site"        content="@agsist">
+  <meta name="twitter:title"       content="Urea Volatilization Risk Monitor — AGSIST">
+  <meta name="twitter:description" content="Real-time N-loss risk score from local temp, wind, humidity and rain. Free urea volatilization tool for farmers.">
+  <meta name="twitter:image"       content="https://agsist.com/img/og/urea.jpg">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "AGSIST Urea Volatilization Risk Monitor",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Web",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "url": "https://agsist.com/urea",
+        "isPartOf": { "@id": "https://agsist.com/#website" }
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://agsist.com/urea#webpage",
+        "url": "https://agsist.com/urea",
+        "name": "Urea Volatilization Risk Monitor — Real-Time N-Loss Score | AGSIST",
+        "description": "Real-time urea volatilization risk score based on local temperature, wind, humidity and rain forecast. Know before you spread — free for farmers.",
+        "isPartOf": { "@id": "https://agsist.com/#website" },
+        "breadcrumb": {
+          "@type": "BreadcrumbList",
+          "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Home", "item": "https://agsist.com/" },
+{ "@type": "ListItem", "position": 2, "name": "Urea Risk Monitor", "item": "https://agsist.com/urea" }]
+        }
+      },
+      {
+        "@type": "Organization",
+        "@id": "https://agsist.com/#organization",
+        "name": "AGSIST",
+        "url": "https://agsist.com/"
+      }
+    ]
+  }
+  </script>
+
+  <!-- Analytics loaded by /components/loader.js → /components/analytics.html -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">  <link rel="manifest" href="/manifest.json">
+</head>
+<body>
+
+<!-- NAV -->
+  <div id="site-header"></div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-eyebrow"><span class="live-dot"></span>Real-Time Risk Assessment</div>
+      <h1 class="hero-title">Urea <span>Volatilization</span><br>Risk Monitor</h1>
+      <p class="hero-sub">Nitrogen lost to the air is money left in the field. Surface-applied urea can lose 20–40% of its nitrogen within 72 hours under the wrong conditions. Know your risk before you spread.</p>
+    </div>
+    <!-- RISK GAUGE -->
+    <div class="risk-panel" id="risk-panel">
+      <div class="risk-panel-lbl"><span class="live-dot"></span>Current Risk Level</div>
+      <div class="gauge-wrap">
+        <svg class="gauge-svg" viewBox="0 0 180 100">
+          <!-- Track: half-circle -->
+          <path class="gauge-track" d="M 15 95 A 75 75 0 0 1 165 95"/>
+          <!-- Fill -->
+          <path class="gauge-fill" id="gauge-fill" d="M 15 95 A 75 75 0 0 1 165 95" stroke="var(--risk-mod)" stroke-dasharray="236" stroke-dashoffset="118"/>
+        </svg>
+        <div class="gauge-score">
+          <div class="gauge-num" id="gauge-num" style="color:var(--risk-mod)">--</div>
+          <div class="gauge-unit">/ 100</div>
+        </div>
+      </div>
+      <div class="risk-badge moderate" id="risk-badge">⏳ Loading...</div>
+      <div class="risk-verdict" id="risk-verdict">Getting your local conditions…</div>
+      <div class="risk-location" id="risk-location">📍 Detecting location</div>
+    </div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- Location setup (shown until location granted) -->
+  <div class="loc-setup" id="loc-setup">
+    <h3>🌍 Set Your Location</h3>
+    <p>Urea risk is highly location-specific — temperature, humidity, wind, and incoming rain all interact. Allow location access for real-time local conditions.</p>
+    <div class="loc-btn-row">
+      <button class="btn-primary" onclick="requestGeo()">📍 Use My Location</button>
+      <button class="btn-secondary" onclick="document.getElementById('zip-row').style.display='flex'">Enter ZIP Instead</button>
+    </div>
+    <div class="zip-row" id="zip-row">
+      <input type="text" class="zip-input" id="urea-zip" placeholder="ZIP code" maxlength="5" onkeydown="if(event.key==='Enter')loadZip()">
+      <button class="btn-primary" onclick="loadZip()">Go →</button>
+    </div>
+  </div>
+
+  <div class="page-grid">
+    <!-- LEFT: factor breakdown + education -->
+    <div>
+
+      <!-- Factor breakdown -->
+      <div id="factor-section" style="display:none">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.9rem">
+          <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)">Risk Factor Breakdown</div>
+          <button onclick="document.getElementById('zip-row').style.display='flex';document.getElementById('loc-setup').style.display='block'" style="font-size:.72rem;color:var(--text-muted);background:none;border:none;text-decoration:underline">Change location</button>
+        </div>
+        <div class="factors-grid">
+          <div class="factor" id="f-temp">
+            <div class="factor-head">
+              <div class="factor-title"><span class="factor-icon">🌡️</span>Temperature</div>
+              <span class="factor-score mod" id="fs-temp">MODERATE</span>
+            </div>
+            <div class="factor-val" id="fv-temp">--°F</div>
+            <div class="factor-desc" id="fd-temp">Urease enzyme activity doubles with every 18°F rise. Above 70°F, volatilization accelerates rapidly.</div>
+            <div class="factor-bar"><div class="factor-bar-fill" id="fb-temp" style="width:0%;background:var(--risk-mod)"></div></div>
+          </div>
+          <div class="factor" id="f-humid">
+            <div class="factor-head">
+              <div class="factor-title"><span class="factor-icon">💧</span>Surface Moisture</div>
+              <span class="factor-score low" id="fs-humid">LOW</span>
+            </div>
+            <div class="factor-val" id="fv-humid">--%</div>
+            <div class="factor-desc" id="fd-humid">Moist (not wet) soil surfaces accelerate urease activity. Dry soils slow dissolution; very wet soils dilute and move urea into soil.</div>
+            <div class="factor-bar"><div class="factor-bar-fill" id="fb-humid" style="width:0%;background:var(--risk-low)"></div></div>
+          </div>
+          <div class="factor" id="f-wind">
+            <div class="factor-head">
+              <div class="factor-title"><span class="factor-icon">💨</span>Wind Speed</div>
+              <span class="factor-score low" id="fs-wind">LOW</span>
+            </div>
+            <div class="factor-val" id="fv-wind">-- mph</div>
+            <div class="factor-desc" id="fd-wind">Wind disperses the ammonia concentration gradient above the soil, pulling more N into the air. A calm 2 mph wind can double volatilization vs still air.</div>
+            <div class="factor-bar"><div class="factor-bar-fill" id="fb-wind" style="width:0%;background:var(--risk-low)"></div></div>
+          </div>
+          <div class="factor" id="f-rain">
+            <div class="factor-head">
+              <div class="factor-title"><span class="factor-icon">🌧️</span>Rain Forecast</div>
+              <span class="factor-score low" id="fs-rain">LOW</span>
+            </div>
+            <div class="factor-val" id="fv-rain">--</div>
+            <div class="factor-desc" id="fd-rain">½ inch within 24–48h of application incorporates urea and shuts down volatilization. Less than ¼ inch can wet the surface and accelerate loss without incorporation.</div>
+            <div class="factor-bar"><div class="factor-bar-fill" id="fb-rain" style="width:0%;background:var(--risk-low)"></div></div>
+          </div>
+          <div class="factor" id="f-soil">
+            <div class="factor-head">
+              <div class="factor-title"><span class="factor-icon">🌱</span>Soil pH</div>
+              <span class="factor-score mod" id="fs-soil">NOTE</span>
+            </div>
+            <div class="factor-val" id="fv-soil">6.8+</div>
+            <div class="factor-desc">Higher soil pH dramatically increases urease enzyme activity. At pH 7.0, volatilization risk doubles vs pH 6.0. Above pH 7.5, losses can exceed 30% in warm, moist conditions.</div>
+            <div class="factor-bar"><div class="factor-bar-fill" id="fb-soil" style="width:55%;background:var(--risk-mod)"></div></div>
+          </div>
+          <div class="factor" id="f-residue">
+            <div class="factor-head">
+              <div class="factor-title"><span class="factor-icon">🌾</span>Crop Residue</div>
+              <span class="factor-score high" id="fs-residue">HIGH</span>
+            </div>
+            <div class="factor-val">High</div>
+            <div class="factor-desc">Crop residue contains urease enzyme. No-till or heavy residue surfaces can lose 2–3x more N than bare soil because urea sits in contact with urease-rich plant material.</div>
+            <div class="factor-bar"><div class="factor-bar-fill" style="width:75%;background:var(--risk-high)"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- EDUCATION: The Chemistry -->
+      <div class="edu-section fade-up" id="edu1">
+        <div class="edu-head">⚗️ Why Urea Volatilizes — The Science</div>
+
+        <div class="chem-box">
+          <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.85rem">The Volatilization Reaction</div>
+          <div class="chem-eq">
+            <span class="molecule">CO(NH₂)₂</span>
+            <span class="arrow">+ H₂O</span>
+            <span style="color:var(--text-muted)">──urease──▶</span>
+            <span class="molecule">2NH₃</span>
+            <span class="arrow">+</span>
+            <span class="molecule">CO₂</span>
+          </div>
+          <div class="chem-eq" style="margin-top:.4rem">
+            <span class="molecule">NH₃</span>
+            <span class="arrow">(dissolved)</span>
+            <span style="color:var(--text-muted)">⇌</span>
+            <span class="loss">NH₃↑</span>
+            <span style="color:var(--text-muted);font-size:.85rem">(escapes to atmosphere)</span>
+          </div>
+          <div class="chem-note">Urease enzyme (present in soil and crop residue) converts urea to ammonia. At the soil surface, that ammonia gas escapes rather than converting to the plant-available ammonium (NH₄⁺) ion. You paid for nitrogen — this is what loses it.</div>
+        </div>
+
+        <div class="edu-grid">
+          <div class="edu-card">
+            <div class="edu-card-icon">🌡️</div>
+            <div class="edu-card-title">Temperature: The Accelerator</div>
+            <div class="edu-card-text">Urease enzyme activity roughly doubles for every 18°F (10°C) increase. At 50°F you have days to incorporate. At 80°F you may have only hours. The relationship is exponential, not linear — warm spring days are deceptively dangerous.</div>
+            <div class="edu-card-risk" style="background:rgba(240,145,58,.12);color:var(--risk-high)">High impact above 65°F</div>
+          </div>
+          <div class="edu-card">
+            <div class="edu-card-icon">💧</div>
+            <div class="edu-card-title">Moisture: The Double-Edged Sword</div>
+            <div class="edu-card-text">Dry soil slows urea dissolution but won't stop volatilization once humidity is high. Moist (not saturated) soil maximizes urease contact. The danger zone is 0.1–0.4 inches of rain after application — enough to dissolve urea but not enough to move it into the soil.</div>
+            <div class="edu-card-risk" style="background:rgba(230,176,66,.12);color:var(--risk-mod)">Most misunderstood risk factor</div>
+          </div>
+          <div class="edu-card">
+            <div class="edu-card-icon">💨</div>
+            <div class="edu-card-title">Wind: The Silent Thief</div>
+            <div class="edu-card-text">Ammonia gas builds up in a thin layer above the soil surface. Wind constantly removes this layer, maintaining the concentration gradient that drives more N into the air. Even calm 3–5 mph winds keep volatilization moving. Still nights with dew can actually slow losses temporarily.</div>
+            <div class="edu-card-risk" style="background:rgba(240,145,58,.12);color:var(--risk-high)">Amplifies all other factors</div>
+          </div>
+          <div class="edu-card">
+            <div class="edu-card-icon">🌱</div>
+            <div class="edu-card-title">Soil pH: The Multiplier</div>
+            <div class="edu-card-text">Alkaline soils (pH 7+) favor the ammonia gas form over the stable ammonium ion. At pH 7.5, you may lose 30–50% of surface-applied urea in warm, moist conditions. In the corn belt, many fields after years of lime applications are sitting in this danger zone.</div>
+            <div class="edu-card-risk" style="background:rgba(240,96,96,.12);color:var(--risk-extreme)">pH 7.5+ = extreme risk</div>
+          </div>
+          <div class="edu-card">
+            <div class="edu-card-icon">🌾</div>
+            <div class="edu-card-title">Crop Residue: Hidden Urease</div>
+            <div class="edu-card-text">Corn stalks, soybean stubble, and surface residue are rich in urease enzyme. No-till fields can lose 2–3x more N than conventionally tilled ground. The urea granule sitting on a corn stalk fragment is in direct contact with urease — it never even reaches the soil.</div>
+            <div class="edu-card-risk" style="background:rgba(240,145,58,.12);color:var(--risk-high)">No-till = highest risk surface</div>
+          </div>
+          <div class="edu-card">
+            <div class="edu-card-icon">📅</div>
+            <div class="edu-card-title">Time Window Is Everything</div>
+            <div class="edu-card-text">80% of volatilization loss happens in the first 72 hours after application. After 4–5 days, remaining urea has typically hydrolyzed and moved into soil or been incorporated by dew cycles. The application decision window — not the field conditions days later — is what matters.</div>
+            <div class="edu-card-risk" style="background:rgba(230,176,66,.12);color:var(--risk-mod)">72-hour decision window</div>
+          </div>
+        </div>
+
+        <!-- Stabilizer section -->
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.5rem;margin-bottom:1.5rem">
+          <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--orange);margin-bottom:.85rem">🛡️ The Urease Inhibitor Solution</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+            <div>
+              <div style="font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.5rem">How NBPT Works</div>
+              <div style="font-size:.85rem;color:var(--text-dim);line-height:1.75">NBPT (N-butyl thiophosphoric triamide) — the active ingredient in Agrotain and generic stabilizers — temporarily blocks urease enzyme activity. This buys 10–14 days of protection: enough time for incorporation rain or irrigation.</div>
+            </div>
+            <div>
+              <div style="font-size:.95rem;font-weight:700;color:var(--text);margin-bottom:.5rem">When It's Worth It</div>
+              <div style="font-size:.85rem;color:var(--text-dim);line-height:1.75">At $8–12/acre, stabilizer pays for itself if it prevents more than ~10 lbs N loss per acre. At any risk level above MODERATE on this tool, the economics strongly favor treatment — especially with today's nitrogen prices.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- RIGHT SIDEBAR -->
+    <div class="sidebar fade-up" id="edu2">
+
+      <!-- Recommendation -->
+      <div class="s-card">
+        <div class="s-card-title">📋 Recommendation</div>
+        <div id="rec-box" class="rec-box moderate">
+          <div class="rec-head moderate" id="rec-head">Awaiting Location</div>
+          <div class="rec-text" id="rec-text">Set your location above to get a real-time application recommendation based on your local conditions.</div>
+        </div>
+        <div id="rec-detail" style="font-size:.8rem;color:var(--text-dim);line-height:1.7;display:none"></div>
+      </div>
+
+      <!-- 5-day risk forecast -->
+      <div class="s-card">
+        <div class="s-card-title">📅 5-Day Volatilization Forecast</div>
+        <div class="forecast-strip" id="fc-strip">
+          <div class="fc-day"><div class="fc-day-name">Today</div><div class="fc-day-icon">⏳</div><div class="fc-day-risk moderate">--</div></div>
+          <div class="fc-day"><div class="fc-day-name">Thu</div><div class="fc-day-icon">⏳</div><div class="fc-day-risk moderate">--</div></div>
+          <div class="fc-day"><div class="fc-day-name">Fri</div><div class="fc-day-icon">⏳</div><div class="fc-day-risk moderate">--</div></div>
+          <div class="fc-day"><div class="fc-day-name">Sat</div><div class="fc-day-icon">⏳</div><div class="fc-day-risk moderate">--</div></div>
+          <div class="fc-day"><div class="fc-day-name">Sun</div><div class="fc-day-icon">⏳</div><div class="fc-day-risk moderate">--</div></div>
+        </div>
+        <div style="font-size:.7rem;color:var(--text-muted);margin-top:.65rem;line-height:1.6">Risk calculated from forecast temperature, precipitation, humidity, and wind speed at your location. Best application window shown in green.</div>
+      </div>
+
+      <!-- Quick rules -->
+      <div class="s-card">
+        <div class="s-card-title">⚡ Quick Rules of Thumb</div>
+        <div style="display:flex;flex-direction:column;gap:.55rem">
+          <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.82rem"><span style="color:var(--green);flex-shrink:0;font-size:.9rem">✓</span><span style="color:var(--text-dim)"><strong style="color:var(--text)">Apply before ½"+ rain</strong> — incorporation within 48h stops volatilization</span></div>
+          <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.82rem"><span style="color:var(--red);flex-shrink:0;font-size:.9rem">✗</span><span style="color:var(--text-dim)"><strong style="color:var(--text)">Avoid 70°F+ days</strong> without stabilizer — urease runs hot</span></div>
+          <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.82rem"><span style="color:var(--red);flex-shrink:0;font-size:.9rem">✗</span><span style="color:var(--text-dim)"><strong style="color:var(--text)">Never rely on ¼" or less</strong> rain for incorporation — it accelerates loss</span></div>
+          <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.82rem"><span style="color:var(--orange);flex-shrink:0;font-size:.9rem">⚠</span><span style="color:var(--text-dim)"><strong style="color:var(--text)">No-till fields</strong> always warrant stabilizer — assume double the loss vs tilled ground</span></div>
+          <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.82rem"><span style="color:var(--orange);flex-shrink:0;font-size:.9rem">⚠</span><span style="color:var(--text-dim)"><strong style="color:var(--text)">pH above 7.0</strong> — add stabilizer to every application, period</span></div>
+          <div style="display:flex;gap:.6rem;align-items:flex-start;font-size:.82rem"><span style="color:var(--green);flex-shrink:0;font-size:.9rem">✓</span><span style="color:var(--text-dim)"><strong style="color:var(--text)">Cool mornings (under 50°F)</strong> are your lowest-risk application window</span></div>
+        </div>
+      </div>
+
+      <!-- Stabilizer CTA -->
+      <div class="stabilizer-cta">
+        <div class="stab-badge">💰 ROI Calculator</div>
+        <div class="stab-title">Is Stabilizer Worth It Today?</div>
+        <div class="stab-text">At current nitrogen prices, losing 15 lbs N/acre to volatilization costs $8–14/acre. Stabilizer runs $8–12/acre. Do the math — then ask your agronomist.</div>
+        <a href="/breakeven" style="display:inline-block;padding:.6rem 1.2rem;background:var(--orange);color:#fff;border-radius:6px;font-size:.82rem;font-weight:700;transition:background .15s" onmouseover="this.style.background='#e07828'" onmouseout="this.style.background='var(--orange)'">Open Break-Even Calc →</a>
+      </div>
+
+    </div>
+  </div>
+
+</main>
+
+  <div id="site-footer"></div>
+
+<script>
+// ── Theme ──────────────────────────────────────────────────────────
+function getTheme(){try{return localStorage.getItem('agsist-theme')||'dark'}catch(e){return'dark'}}
+function setTheme(t){
+  document.documentElement.setAttribute('data-theme',t);
+  try{localStorage.setItem('agsist-theme',t)}catch(e){}
+  document.getElementById('theme-icon').textContent=t==='light'?'☀️':'🌙';
+}
+setTheme(getTheme());
+var _tb=document.getElementById('theme-btn');if(_tb)_tb.addEventListener('click',function(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');});
+
+// ── Scroll reveal ──────────────────────────────────────────────────
+var io=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('vis');io.unobserve(x.target)}})},{threshold:.08});
+document.querySelectorAll('.fade-up').forEach(function(el){io.observe(el)});
+
+// ── RISK SCORING ENGINE ────────────────────────────────────────────
+var WX_ICONS={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌦️',63:'🌧️',65:'⛈️',71:'🌨️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️'};
+
+function tempRisk(f){
+  // Returns 0-100 risk score for temperature
+  if(f<40) return 5;
+  if(f<50) return 15;
+  if(f<60) return 30;
+  if(f<70) return 50;
+  if(f<80) return 72;
+  if(f<90) return 88;
+  return 98;
+}
+function humidRisk(h){
+  // Moderate humidity (50-80%) = highest risk (moist surface)
+  if(h<30) return 25;   // dry - slow dissolution
+  if(h<50) return 45;
+  if(h<70) return 75;   // sweet spot for volatilization
+  if(h<85) return 60;   // wetter, some dilution
+  return 35;            // very wet, urea moves into soil
+}
+function windRisk(mph){
+  if(mph<2) return 15;
+  if(mph<5) return 35;
+  if(mph<10) return 60;
+  if(mph<15) return 78;
+  return 90;
+}
+function rainRisk(pop24h, pop48h){
+  // Dangerous zone: <30% precip (no incorporation coming)
+  // Very low risk: >70% chance of >0.5" in 24h (incorporation likely)
+  if(pop24h>=70) return 10;  // incorporation expected - good
+  if(pop24h>=50) return 25;
+  if(pop24h>=30) return 55;  // some rain possible - "light rain" danger zone
+  return 85;                 // no rain coming - full exposure
+}
+function compositeScore(tR,hR,wR,rR){
+  // Weighted: temp 35%, humidity 25%, wind 20%, rain 20%
+  return Math.round(tR*0.35 + hR*0.25 + wR*0.20 + rR*0.20);
+}
+function scoreToLevel(s){
+  if(s<30) return 'low';
+  if(s<55) return 'moderate';
+  if(s<75) return 'high';
+  return 'extreme';
+}
+function scoreToLabel(s){
+  var l=scoreToLevel(s);
+  return l.charAt(0).toUpperCase()+l.slice(1)+' Risk';
+}
+function riskColor(level){
+  return {low:'var(--risk-low)',moderate:'var(--risk-mod)',high:'var(--risk-high)',extreme:'var(--risk-extreme)'}[level]||'var(--risk-mod)';
+}
+function levelIcon(level){
+  return {low:'✅',moderate:'⚠️',high:'🔶',extreme:'🚨'}[level]||'⚠️';
+}
+
+function setFactor(id, val, desc, score, pct){
+  var level=scoreToLevel(score);
+  var labels={low:'Low',moderate:'Moderate',high:'High',extreme:'Extreme'};
+  var el=document.getElementById('fv-'+id);
+  var dl=document.getElementById('fd-'+id);
+  var sl=document.getElementById('fs-'+id);
+  var bl=document.getElementById('fb-'+id);
+  if(el) el.textContent=val;
+  if(dl) dl.textContent=desc;
+  if(sl){sl.textContent=labels[level];sl.className='factor-score '+level.substring(0,3);}
+  if(bl){bl.style.width=pct+'%';bl.style.background=riskColor(level);}
+  var fc=document.getElementById('f-'+id);
+  if(fc) fc.style.borderColor=(score>60?riskColor(level).replace('var(','').replace(')',''):'');
+}
+
+function updateGauge(score){
+  var level=scoreToLevel(score);
+  var color=riskColor(level);
+  var circumference=236;
+  var offset=circumference-(circumference*score/100);
+  var fill=document.getElementById('gauge-fill');
+  var num=document.getElementById('gauge-num');
+  var badge=document.getElementById('risk-badge');
+  var verdict=document.getElementById('risk-verdict');
+  if(fill){fill.style.strokeDashoffset=offset;fill.style.stroke=color;}
+  if(num){num.textContent=score;num.style.color=color;}
+  if(badge){
+    badge.className='risk-badge '+level;
+    badge.textContent=levelIcon(level)+' '+scoreToLabel(score);
+  }
+  var verdicts={
+    low:'Conditions are favorable for surface urea application. Minimal nitrogen loss expected in the next 24–48 hours.',
+    moderate:'Moderate volatilization risk. Consider stabilizer or wait for a better window. Monitor forecast closely.',
+    high:'High loss risk. Do not apply without NBPT stabilizer. Look for a cooler or wetter window in the coming days.',
+    extreme:'Extreme risk — do not apply surface urea. Losses of 30–40%+ are likely. Wait for conditions to change or use injection.'
+  };
+  if(verdict) verdict.textContent=verdicts[level];
+
+  // Update recommendation
+  var rb=document.getElementById('rec-box');
+  var rh=document.getElementById('rec-head');
+  var rt=document.getElementById('rec-text');
+  if(rb) rb.className='rec-box '+level;
+  if(rh){rh.className='rec-head '+level; rh.textContent={low:'✅ Good Window',moderate:'⚠️ Use Caution',high:'🔶 High Risk — Use Stabilizer',extreme:'🚨 Do Not Apply'}[level];}
+  var recs={
+    low:'Conditions are favorable. Apply urea normally. Watch the 48-hour forecast — if temperatures rise above 65°F or rain of less than ½" is expected, reassess.',
+    moderate:'Risk is present but manageable. Best practice: apply NBPT-coated urea or treat with Agrotain. If forecast shows ½"+ rain within 48 hours, standard urea is acceptable.',
+    high:'Significant nitrogen loss likely without protection. Use NBPT stabilizer. Alternatively, delay application and monitor the 5-day forecast for a lower-risk window.',
+    extreme:'Do not surface-apply urea under current conditions. Consider injection, UAN via coulter, or delay. If application cannot wait, NBPT stabilizer is mandatory — but even then, losses will be elevated.'
+  };
+  if(rt) rt.textContent=recs[level];
+}
+
+function buildForecastStrip(dailyData, lat, lon){
+  var strip=document.getElementById('fc-strip');
+  if(!strip||!dailyData) return;
+  var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  var today=new Date();
+  strip.innerHTML='';
+  for(var i=0;i<5;i++){
+    var date=new Date(dailyData.time[i]+'T12:00:00');
+    var name=i===0?'Today':days[date.getDay()];
+    var tMax=dailyData.temperature_2m_max[i];
+    var tMin=dailyData.temperature_2m_min[i];
+    var tAvg=(tMax+tMin)/2;
+    var pop=dailyData.precipitation_probability_max[i]||0;
+    var code=dailyData.weather_code[i];
+    var tR=tempRisk(tAvg);
+    var rR=rainRisk(pop, pop);
+    // Simple daily composite (no wind/humidity in daily)
+    var dayScore=Math.round(tR*0.5+rR*0.5);
+    var level=scoreToLevel(dayScore);
+    var el=document.createElement('div');
+    el.className='fc-day';
+    el.innerHTML='<div class="fc-day-name">'+name+'</div>'
+      +'<div class="fc-day-icon">'+(WX_ICONS[code]||'🌡️')+'</div>'
+      +'<div class="fc-day-risk '+level+'">'+level.toUpperCase().substring(0,3)+'</div>'
+      +'<div class="fc-day-temp">'+Math.round(tMax)+'°/'+Math.round(tMin)+'°</div>';
+    el.title=levelIcon(level)+' '+scoreToLabel(dayScore)+' — '+Math.round(tMax)+'°F high, '+pop+'% rain';
+    strip.appendChild(el);
+  }
+}
+
+function loadWeather(lat, lon, label){
+  document.getElementById('loc-setup').style.display='none';
+  document.getElementById('factor-section').style.display='block';
+  document.getElementById('risk-location').textContent='📍 '+(label||'Your Location');
+
+  var url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon
+    +'&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation_probability,weather_code,wind_speed_10m'
+    +'&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max,precipitation_sum'
+    +'&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=5';
+
+  fetch(url).then(function(r){return r.json()}).then(function(d){
+    var c=d.current;
+    var tempF=Math.round(c.temperature_2m);
+    var humid=c.relative_humidity_2m;
+    var wind=Math.round(c.wind_speed_10m);
+    var pop=c.precipitation_probability||0;
+
+    var tR=tempRisk(tempF);
+    var hR=humidRisk(humid);
+    var wR=windRisk(wind);
+    var rR=rainRisk(pop, d.daily?d.daily.precipitation_probability_max[1]:pop);
+    var total=compositeScore(tR,hR,wR,rR);
+
+    updateGauge(total);
+
+    // Temperature factor
+    var tDesc=tempF<50?'Low urease activity. Safe to apply without stabilizer if other conditions are favorable.':
+              tempF<65?'Moderate enzyme activity. Consider stabilizer, especially on no-till or high-pH fields.':
+              tempF<80?'High enzyme activity. Stabilizer strongly recommended. Losses can begin within hours.':
+              'Extreme enzyme activity. Urease is running at near-peak efficiency. Do not apply without stabilizer.';
+    setFactor('temp', tempF+'°F', tDesc, tR, tR);
+
+    // Humidity factor
+    var hDesc=humid<40?'Dry conditions slow urea dissolution. Lower immediate risk but watch for rain.':
+              humid<65?'Optimal volatilization zone. Urease has ideal moisture to work. Risk is elevated.':
+              humid<85?'Moist air. Surface moisture present. Conditions favor rapid hydrolysis.':
+              'High humidity. Surface likely wet. Risk of urea movement into soil is higher, reducing loss somewhat.';
+    setFactor('humid', humid+'% RH', hDesc, hR, hR);
+
+    // Wind factor
+    var wDesc=wind<5?'Light wind. Ammonia gradient building above soil surface. Not ideal but manageable.':
+              wind<10?'Moderate wind dispersing ammonia concentration. Volatilization rate elevated.':
+              wind<15?'Significant wind. Continuously removing ammonia from the surface. High loss rate.':
+              'Strong wind. Maximum ammonia dispersal. Losses will be elevated regardless of other factors.';
+    setFactor('wind', wind+' mph', wDesc, wR, wR);
+
+    // Rain factor
+    var rDesc=pop<20?'No significant rain in forecast. Urea will remain on surface exposed to volatilization for full 72-hour window.':
+              pop<50?'Some rain possible. If <¼ inch, may activate urea without incorporation — the worst-case scenario.':
+              pop<70?'Rain likely. If ½"+ arrives within 48h, incorporation will occur. Monitor amounts carefully.':
+              'High rain probability. If forecast verifies, urea will be incorporated. Best timing window.';
+    setFactor('rain', pop+'% chance', rDesc, rR, rR);
+
+    buildForecastStrip(d.daily, lat, lon);
+
+    // Reverse geocode for name
+    if(!label){
+      fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json')
+        .then(function(r){return r.json()})
+        .then(function(geo){
+          var city=geo.address.city||geo.address.town||geo.address.village||geo.address.county||'';
+          var st=geo.address.state_code||'';
+          if(city) document.getElementById('risk-location').textContent='📍 '+city+(st?', '+st:'');
+        }).catch(function(){});
+    }
+  }).catch(function(e){
+    document.getElementById('risk-verdict').textContent='Weather data unavailable. Check your connection.';
+  });
+}
+
+function requestGeo(){
+  if(!navigator.geolocation){document.getElementById('zip-row').style.display='flex';return;}
+  document.getElementById('risk-verdict').textContent='Detecting your location…';
+  navigator.geolocation.getCurrentPosition(
+    function(p){loadWeather(p.coords.latitude,p.coords.longitude,null);},
+    function(){document.getElementById('zip-row').style.display='flex';document.getElementById('loc-setup').style.display='block';},
+    {timeout:8000}
+  );
+}
+
+function loadZip(){
+  var zip=document.getElementById('urea-zip').value.trim();
+  if(zip.length!==5||isNaN(zip))return;
+  fetch('https://geocoding-api.open-meteo.com/v1/search?name='+zip+'&count=1&language=en&format=json&countryCode=US')
+    .then(function(r){return r.json()})
+    .then(function(d){
+      if(d.results&&d.results.length){
+        var r=d.results[0];
+        loadWeather(r.latitude,r.longitude,(r.name+(r.admin1?', '+r.admin1.substring(0,2):'')));
+      }
+    }).catch(function(){});
+}
+
+// Auto-request on load
+setTimeout(function(){
+  try{
+    var saved=localStorage.getItem('agsist-wx-loc');
+    if(saved){var p=JSON.parse(saved);loadWeather(p.lat,p.lon,p.label);return;}
+  }catch(e){}
+  requestGeo();
+},600);
+</script>
+
+  <script src="/components/loader.js"></script>
+</body>
+</html>

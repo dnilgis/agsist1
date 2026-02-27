@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111a0a">
+
+  <!-- Shared stylesheet -->
+  <link rel="stylesheet" href="/components/styles.css">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+  <link rel="apple-touch-icon"                    href="/img/apple-touch-icon.png">
+  <link rel="manifest"                            href="/manifest.json">
+
+  <!-- SEO -->
+  <title>Break-Even Calculator — Free Farm Cost Analysis | AGSIST</title>
+  <meta name="description" content="Free break-even calculator for corn, soybean, and wheat farmers. Calculate cost per bushel, profit margins, target prices, and farm-level P&L. Includes sensitivity analysis.">
+  <meta name="keywords"    content="break even calculator, farm cost calculator, cost per bushel, farming profit calculator, crop break even price">
+  <meta name="robots"      content="index, follow, max-snippet:-1, max-image-preview:large">
+  <link rel="canonical"    href="https://agsist.com/pages/breakeven">
+
+  <!-- Open Graph -->
+  <meta property="og:type"         content="website">
+  <meta property="og:site_name"    content="AGSIST">
+  <meta property="og:title"        content="Break-Even Calculator — AGSIST">
+  <meta property="og:description"  content="Free farm break-even calculator. Cost per bushel, profit/loss, and what-if sensitivity analysis for corn, soybeans, and wheat.">
+  <meta property="og:url"          content="https://agsist.com/breakeven">
+  <meta property="og:image"        content="https://agsist.com/img/og/breakeven.jpg">
+  <meta property="og:image:width"  content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:site"        content="@agsist">
+  <meta name="twitter:title"       content="Break-Even Calculator — AGSIST">
+  <meta name="twitter:description" content="Free farm break-even calculator. Cost per bushel, profit/loss, and sensitivity analysis.">
+  <meta name="twitter:image"       content="https://agsist.com/img/og/breakeven.jpg">
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "SoftwareApplication",
+        "name": "Break-Even Calculator",
+        "description": "Calculate break-even price and profit margins for corn, soybeans, and wheat.",
+        "url": "https://agsist.com/pages/breakeven",
+        "applicationCategory": "UtilitiesApplication",
+        "operatingSystem": "Web",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
+      },
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home",      "item": "https://agsist.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Tools",     "item": "https://agsist.com/pages/tools" },
+          { "@type": "ListItem", "position": 3, "name": "Break-Even","item": "https://agsist.com/pages/breakeven" }
+        ]
+      }
+    ]
+  }
+  </script>
+
+  <style>
+    html, body { overflow-x: hidden; width: 100%; }
+    .panel { overflow: visible; }
+    .panel-body { overflow-x: hidden; }
+
+    /* No number spinners */
+    input[type="number"]::-webkit-inner-spin-button,
+    input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+    input[type="number"] { -moz-appearance: textfield; }
+
+    /* ── HINT TOOLTIPS ─────────────────────────────────────────── */
+    .input-wrap { position: relative; }
+    .input-wrap label { display: flex; align-items: center; gap: 6px; }
+    .hint-icon {
+      display: inline-flex; align-items: center; justify-content: center;
+      width: 18px; height: 18px; border-radius: 50%;
+      background: var(--border); color: var(--text-dim);
+      font-size: 0.65rem; font-weight: 700; cursor: pointer;
+      transition: all 0.2s; flex-shrink: 0;
+      user-select: none; -webkit-tap-highlight-color: transparent;
+    }
+    .hint-icon:hover, .hint-icon.active { background: var(--gold); color: #000; }
+    .hint-popup {
+      display: none; margin-top: 8px;
+      background: var(--surface); border: 1px solid var(--gold);
+      border-radius: 8px; padding: 12px 14px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+      animation: hintIn 0.15s ease-out;
+    }
+    .hint-popup.hint-open { display: block; }
+    @keyframes hintIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+    .hint-title { font-size: 0.7rem; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .hint-list { list-style: none; padding: 0; margin: 0; }
+    .hint-list li { font-size: 0.75rem; color: var(--text); padding: 2px 0; line-height: 1.5; }
+    .hint-list li::before { content: '☐ '; color: var(--text-dim); }
+    .hint-note { font-size: 0.7rem; color: var(--text-dim); margin-top: 6px; font-style: italic; border-top: 1px solid var(--border); padding-top: 6px; }
+
+    /* ── LIVE PRICE BANNER ─────────────────────────────────────── */
+    .live-price-bar {
+      display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+      padding: 10px 14px; margin-bottom: 16px;
+      background: rgba(230,176,66,0.06); border: 1px solid rgba(230,176,66,0.2);
+      border-radius: 6px; font-size: 0.8rem;
+    }
+    .live-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
+    .live-price-bar .price-tag { font-weight: 700; color: var(--gold); }
+    .live-price-bar button {
+      background: var(--gold); color: #000; border: none; padding: 4px 12px;
+      border-radius: 4px; font-family: inherit; font-size: 0.75rem; font-weight: 600;
+      cursor: pointer; transition: opacity 0.2s;
+    }
+    .live-price-bar button:hover { opacity: 0.8; }
+
+    /* ── COST BREAKDOWN BAR ────────────────────────────────────── */
+    .cost-breakdown { margin-top: 16px; }
+    .cost-breakdown-title { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 600; }
+    .cost-bar { display: flex; height: 28px; border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+    .cost-bar-seg { transition: width 0.4s ease; min-width: 2px; position: relative; cursor: pointer; }
+    .cost-bar-seg:hover { filter: brightness(1.3); }
+    .cost-bar-seg .seg-tip {
+      display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
+      background: var(--surface); border: 1px solid var(--border); border-radius: 4px;
+      padding: 4px 8px; font-size: 0.7rem; white-space: nowrap; z-index: 500;
+    }
+    @media (hover: hover) { .cost-bar-seg:hover .seg-tip { display: block; } }
+    .cost-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+    .cost-legend-item { display: flex; align-items: center; gap: 5px; font-size: 0.7rem; color: var(--text-dim); }
+    .cost-legend-dot { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+
+    /* ── SENSITIVITY TABLE ─────────────────────────────────────── */
+    .sensitivity { margin-top: 20px; }
+    .sensitivity-title { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; font-weight: 600; }
+    .sens-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
+    .sens-table th { background: var(--surface); color: var(--text-dim); padding: 6px 8px; font-weight: 600; text-align: center; border: 1px solid var(--border); }
+    .sens-table td { padding: 6px 8px; text-align: center; border: 1px solid var(--border); font-weight: 600; }
+    .sens-table .corner { background: var(--bg); color: var(--text-dim); font-size: 0.65rem; }
+    .sens-table .row-head { background: var(--surface); color: var(--text-dim); font-weight: 600; text-align: right; padding-right: 10px; }
+    .sens-positive { color: var(--green); }
+    .sens-negative { color: var(--red); }
+    .sens-zero { color: var(--text-dim); }
+    .sens-current { background: rgba(230,176,66,0.12) !important; outline: 1px solid var(--gold); }
+
+    /* ── PROFIT GAUGE ──────────────────────────────────────────── */
+    .profit-gauge { margin-top: 16px; padding: 14px; background: var(--bg); border-radius: 6px; border: 1px solid var(--border); }
+    .profit-gauge-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .profit-gauge-bar { height: 8px; background: var(--border); border-radius: 4px; position: relative; }
+    .profit-gauge-fill { height: 100%; border-radius: 4px; transition: width 0.4s, background 0.4s; }
+    .profit-gauge-marker { position: absolute; top: -4px; width: 3px; height: 16px; background: var(--text); border-radius: 2px; transition: left 0.4s; }
+    .profit-gauge-labels { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-dim); margin-top: 4px; }
+
+    /* ── ACTION BUTTONS ────────────────────────────────────────── */
+    .action-bar { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+    .btn { display: inline-flex; align-items: center; gap: 6px; padding: 10px 18px; border-radius: 6px; font-family: inherit; font-size: 0.8rem; font-weight: 600; cursor: pointer; transition: all 0.2s; border: 1px solid var(--border); }
+    .btn-primary { background: var(--gold); color: #000; border-color: var(--gold); }
+    .btn-primary:hover { opacity: 0.85; }
+    .btn-secondary { background: var(--surface); color: var(--text-dim); }
+    .btn-secondary:hover { color: var(--text); border-color: var(--text); }
+
+    /* ── PRINT ─────────────────────────────────────────────────── */
+    @media print {
+      @page { size: letter landscape; margin: 0.4in 0.5in; }
+      *, *::before, *::after { background: transparent !important; box-shadow: none !important; }
+      body { color: #000 !important; font-size: 8.5pt !important; }
+      #site-header, #site-footer, .action-bar, .hint-popup, .hint-icon, .live-price-bar, .profit-gauge, .cost-breakdown { display: none !important; }
+      main { max-width: 100% !important; padding: 0 !important; }
+      .grid-2 { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 14px !important; }
+      .panel { border: 1.5pt solid #000 !important; }
+      .print-header { display: flex !important; justify-content: space-between; border-bottom: 2pt solid #000; margin-bottom: 10px; padding-bottom: 8px; }
+      .print-footer { display: block !important; text-align: center; margin-top: 8px; border-top: 1pt solid #666; font-size: 6.5pt; color: #888 !important; }
+    }
+    @media not print { .print-header, .print-footer { display: none; } }
+
+    @media (max-width: 500px) {
+      .sens-table { font-size: 0.65rem; }
+      .sens-table th, .sens-table td { padding: 4px 5px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div id="site-header"></div>
+
+  <!-- Print header (hidden on screen) -->
+  <div class="print-header">
+    <div><div style="font-size:18pt;font-weight:700;">AGSIST</div><div style="font-size:8pt;">Break-Even Analysis Report</div></div>
+    <div style="text-align:right;"><div style="font-size:8pt;">agsist.com</div><div id="print-date" style="font-size:7.5pt;"></div></div>
+  </div>
+
+  <main id="main">
+    <nav class="breadcrumb">
+      <a href="/">Home</a> → <a href="/tools">Tools</a> → Break-Even Calculator
+    </nav>
+
+    <div class="grid-2">
+
+      <!-- ── INPUT PANEL ──────────────────────────────────────── -->
+      <div class="panel">
+        <div class="panel-head"><h1>💰 BREAK-EVEN CALCULATOR</h1></div>
+        <div class="panel-body">
+
+          <!-- Live price banner -->
+          <div class="live-price-bar" id="live-bar" style="display:none">
+            <span class="live-dot"></span>
+            <span>Live <span id="live-crop-name">Corn</span>:</span>
+            <span class="price-tag" id="live-price-val">--</span>
+            <button onclick="useLivePrice()">Use this price</button>
+          </div>
+
+          <!-- Crop & Yield -->
+          <div style="margin-bottom:20px">
+            <label>CROP & YIELD</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px">
+              <div class="input-wrap">
+                <label style="font-size:.75rem">Crop</label>
+                <select id="crop" onchange="onCropChange()">
+                  <option value="corn">Corn</option>
+                  <option value="soybeans">Soybeans</option>
+                  <option value="wheat">Wheat</option>
+                </select>
+              </div>
+              <div class="input-wrap">
+                <label style="font-size:.75rem">Expected Yield (bu/ac) <span class="hint-icon">?</span></label>
+                <input type="number" id="yield" value="180" inputmode="numeric" oninput="calcBreakeven()">
+                <div class="hint-popup" inert>
+                  <div class="hint-title">⚡ Yield Checklist</div>
+                  <ul class="hint-list">
+                    <li>Your APH (Actual Production History)</li>
+                    <li>County average vs. your field history</li>
+                    <li>Trend-adjusted yield for this year</li>
+                    <li>Soil type & drainage quality</li>
+                    <li>Planting date impact on potential</li>
+                  </ul>
+                  <div class="hint-note">Conservative estimates protect your plan.</div>
+                </div>
+              </div>
+            </div>
+            <div class="input-wrap">
+              <label style="font-size:.75rem">Market Price ($/bu) <span class="hint-icon">?</span></label>
+              <input type="number" id="price" value="4.50" step="0.01" inputmode="decimal" oninput="calcBreakeven()">
+              <div class="hint-popup" inert>
+                <div class="hint-title">💲 Price Considerations</div>
+                <ul class="hint-list">
+                  <li>Current futures contract price</li>
+                  <li>Local basis adjustment (+/- from futures)</li>
+                  <li>Forward contract commitments</li>
+                  <li>Harvest vs. spring delivery basis</li>
+                  <li>On-farm storage premium potential</li>
+                </ul>
+                <div class="hint-note">Use the live price above if available.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Input Costs -->
+          <div style="margin-bottom:20px">
+            <label>INPUT COSTS ($/ac)</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div class="input-wrap">
+                <label style="font-size:.75rem">Seed <span class="hint-icon">?</span></label>
+                <input type="number" id="seed" value="125" inputmode="numeric" oninput="calcBreakeven()">
+                <div class="hint-popup" inert>
+                  <div class="hint-title">🌱 Don't Forget</div>
+                  <ul class="hint-list">
+                    <li>Base seed cost per bag</li>
+                    <li>Seed treatment (fungicide/insecticide)</li>
+                    <li>Technology / trait license fees</li>
+                    <li>Replant seed reserve</li>
+                    <li>Inoculant (soybeans)</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="input-wrap">
+                <label style="font-size:.75rem">Fertilizer <span class="hint-icon">?</span></label>
+                <input type="number" id="fertilizer" value="175" inputmode="numeric" oninput="calcBreakeven()">
+                <div class="hint-popup" inert>
+                  <div class="hint-title">🧪 Don't Forget</div>
+                  <ul class="hint-list">
+                    <li>Nitrogen (anhydrous, urea, or UAN)</li>
+                    <li>Phosphorus (MAP/DAP)</li>
+                    <li>Potash (K₂O)</li>
+                    <li>Lime application (amortized)</li>
+                    <li>Sulfur & micronutrients</li>
+                    <li>Application / spreading fees</li>
+                  </ul>
+                  <div class="hint-note">Soil test recommendations should drive rates.</div>
+                </div>
+              </div>
+              <div class="input-wrap">
+                <label style="font-size:.75rem">Chemicals <span class="hint-icon">?</span></label>
+                <input type="number" id="chemicals" value="65" inputmode="numeric" oninput="calcBreakeven()">
+                <div class="hint-popup" inert>
+                  <div class="hint-title">🧴 Don't Forget</div>
+                  <ul class="hint-list">
+                    <li>Pre-emerge herbicides</li>
+                    <li>Post-emerge herbicides</li>
+                    <li>Fungicide applications</li>
+                    <li>Insecticide (foliar or in-furrow)</li>
+                    <li>Adjuvants & surfactants</li>
+                    <li>Custom application fees</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="input-wrap">
+                <label style="font-size:.75rem">Crop Insurance <span class="hint-icon">?</span></label>
+                <input type="number" id="insurance" value="35" inputmode="numeric" oninput="calcBreakeven()">
+                <div class="hint-popup" inert>
+                  <div class="hint-title">🛡️ Don't Forget</div>
+                  <ul class="hint-list">
+                    <li>Net premium (after federal subsidy)</li>
+                    <li>Hail / wind endorsement</li>
+                    <li>Replant provision cost</li>
+                    <li>SCO or ECO add-on premiums</li>
+                    <li>Private hail policy</li>
+                  </ul>
+                  <div class="hint-note">Ask your agent about ECO — heavily subsidized.</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Operating Costs -->
+          <div style="margin-bottom:20px">
+            <label>OPERATING COSTS ($/ac)</label>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div class="input-wrap">
+                <label style="font-size:.75rem">Machinery <span class="hint-icon">?</span></label>
+                <input type="number" id="machinery" value="85" inputmode="numeric" oninput="calcBreakeven()">
+                <div class="hint-popup" inert>
+                  <div class="hint-title">🚜 Don't Forget</div>
+                  <ul class="hint-list">
+                    <li>Fuel & lube (all field passes)</li>
+                    <li>Repairs & maintenance</li>
+                    <li>Depreciation (annual / per-acre)</li>
+                    <li>Custom hire (planting, spraying, harvest)</li>
+                    <li>Hauling / trucking costs</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="input-wrap">
+                <label style="font-size:.75rem">Labor <span class="hint-icon">?</span></label>
+                <input type="number" id="labor" value="35" inputmode="numeric" oninput="calcBreakeven()">
+                <div class="hint-popup" inert>
+                  <div class="hint-title">👷 Don't Forget</div>
+                  <ul class="hint-list">
+                    <li>Hired labor (hourly × hours/ac)</li>
+                    <li>Owner/operator time value</li>
+                    <li>Seasonal help</li>
+                    <li>Benefits & payroll taxes</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="input-wrap">
+                <label style="font-size:.75rem">Land Rent/Cost <span class="hint-icon">?</span></label>
+                <input type="number" id="land" value="250" inputmode="numeric" oninput="calcBreakeven()">
+                <div class="hint-popup" inert>
+                  <div class="hint-title">🏡 Don't Forget</div>
+                  <ul class="hint-list">
+                    <li>Cash rent (or flex rent estimate)</li>
+                    <li>Property tax (if owned)</li>
+                    <li>Drainage tile payments</li>
+                    <li>Opportunity cost of owned land</li>
+                  </ul>
+                  <div class="hint-note">USDA NASS publishes county-level cash rent averages.</div>
+                </div>
+              </div>
+              <div class="input-wrap">
+                <label style="font-size:.75rem">Overhead <span class="hint-icon">?</span></label>
+                <input type="number" id="overhead" value="38" inputmode="numeric" oninput="calcBreakeven()">
+                <div class="hint-popup" inert>
+                  <div class="hint-title">📋 Don't Forget</div>
+                  <ul class="hint-list">
+                    <li>Interest on operating loan</li>
+                    <li>Crop drying costs</li>
+                    <li>Storage / bin costs</li>
+                    <li>Marketing & basis fees</li>
+                    <li>Farm liability insurance</li>
+                    <li>Accounting & legal fees</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cost Breakdown Bar -->
+          <div class="cost-breakdown">
+            <div class="cost-breakdown-title">Cost Breakdown</div>
+            <div class="cost-bar" id="cost-bar"></div>
+            <div class="cost-legend" id="cost-legend"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── RESULTS PANEL ────────────────────────────────────── -->
+      <div class="panel">
+        <div class="panel-head"><h2>RESULTS</h2></div>
+        <div class="panel-body">
+          <div class="result-row"><span class="result-label">Total Cost/Acre</span>     <span class="result-value" id="totalCost">$808/ac</span></div>
+          <div class="result-row"><span class="result-label">Cost/Bushel</span>          <span class="result-value" id="costPerBu">$4.49/bu</span></div>
+          <div class="result-row"><span class="result-label">Break-Even Price</span>     <span class="result-value highlight" id="breakeven">$4.49/bu</span></div>
+          <div class="result-row"><span class="result-label">Gross Revenue/Acre</span>   <span class="result-value" id="revenue">$810/ac</span></div>
+          <div class="result-row"><span class="result-label">Net Profit/Loss</span>      <span class="result-value" id="profit">+$2/ac</span></div>
+          <div class="result-row"><span class="result-label">Return on Investment</span> <span class="result-value" id="roi">0.2%</span></div>
+          <div class="result-row"><span class="result-label">Yield Needed @ Market</span><span class="result-value" id="yieldNeeded">180 bu/ac</span></div>
+
+          <!-- Acres multiplier -->
+          <div style="margin-top:14px;padding:12px;background:var(--bg);border-radius:6px;border:1px solid var(--border)">
+            <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap">
+              <div style="display:flex;align-items:center;gap:8px">
+                <label style="font-size:.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px;margin:0;white-space:nowrap">Total Acres</label>
+                <input type="number" id="acres" value="500" inputmode="numeric" oninput="calcBreakeven()"
+                  style="width:80px;padding:4px 8px;font-size:.85rem;background:var(--surface);border:1px solid var(--border);border-radius:4px;color:var(--text);font-family:inherit">
+              </div>
+              <div style="text-align:right">
+                <div style="font-size:.65rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.5px">Farm Total Profit/Loss</div>
+                <div id="farmTotal" style="font-size:1.2rem;font-weight:700">--</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Margin gauge -->
+          <div class="profit-gauge">
+            <div class="profit-gauge-label">Margin Indicator</div>
+            <div class="profit-gauge-bar">
+              <div class="profit-gauge-fill" id="gauge-fill" style="width:50%;background:var(--text-dim)"></div>
+              <div class="profit-gauge-marker" id="gauge-marker" style="left:50%"></div>
+            </div>
+            <div class="profit-gauge-labels"><span>-$200/ac</span><span style="color:var(--text)">Break-Even</span><span>+$200/ac</span></div>
+          </div>
+
+          <!-- Sensitivity table -->
+          <div class="sensitivity">
+            <div class="sensitivity-title">What-If: Profit/Loss per Acre</div>
+            <div style="overflow-x:auto;-webkit-overflow-scrolling:touch">
+              <table class="sens-table" id="sens-table"></table>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="action-bar">
+            <button class="btn btn-primary"   onclick="printReport()">🖨️ Print Report</button>
+            <button class="btn btn-secondary" onclick="resetDefaults()">↺ Reset</button>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /grid-2 -->
+  </main>
+
+  <!-- Print footer -->
+  <div class="print-footer">
+    Generated by AGSIST — agsist.com — Free Agricultural Dashboard<br>
+    For informational purposes only. Not financial advice. Verify all inputs with your local data.
+  </div>
+
+  <div id="site-footer"></div>
+  <script src="/components/loader.js"></script>
+
+  <script>
+  /* ── DEFAULTS BY CROP ───────────────────────────────────────── */
+  const CROP_DEFAULTS = {
+    corn:     { yield:180, price:4.50, seed:125, fertilizer:175, chemicals:65,  insurance:35, machinery:85, labor:35, land:250, overhead:38 },
+    soybeans: { yield:55,  price:10.50,seed:75,  fertilizer:45,  chemicals:55,  insurance:30, machinery:65, labor:30, land:250, overhead:32 },
+    wheat:    { yield:70,  price:5.50, seed:40,  fertilizer:110, chemicals:50,  insurance:25, machinery:70, labor:30, land:200, overhead:30 }
+  };
+  const COST_COLORS = { seed:'#4ade80', fertilizer:'#3b82f6', chemicals:'#8b5cf6', insurance:'#f59e0b', machinery:'#ef4444', labor:'#ec4899', land:'#06b6d4', overhead:'#9a9aa6' };
+  const COST_LABELS = { seed:'Seed', fertilizer:'Fertilizer', chemicals:'Chemicals', insurance:'Insurance', machinery:'Machinery', labor:'Labor', land:'Land', overhead:'Overhead' };
+  const COST_KEYS   = ['seed','fertilizer','chemicals','insurance','machinery','labor','land','overhead'];
+
+  /* ── CROP CHANGE ────────────────────────────────────────────── */
+  function onCropChange() {
+    const d = CROP_DEFAULTS[document.getElementById('crop').value];
+    Object.keys(d).forEach(k => { const el = document.getElementById(k); if(el) el.value = d[k]; });
+    calcBreakeven();
+  }
+  function resetDefaults() { onCropChange(); }
+
+  /* ── MAIN CALCULATION ───────────────────────────────────────── */
+  function calcBreakeven() {
+    const yldVal = parseFloat(document.getElementById('yield').value) || 0;
+    const price  = parseFloat(document.getElementById('price').value) || 0;
+    const costs  = {};
+    COST_KEYS.forEach(k => costs[k] = parseFloat(document.getElementById(k).value) || 0);
+    const totalCost  = Object.values(costs).reduce((a,b)=>a+b, 0);
+    const costPerBu  = yldVal > 0 ? totalCost / yldVal : 0;
+    const revenue    = yldVal * price;
+    const profit     = revenue - totalCost;
+    const yldNeeded  = price > 0 ? totalCost / price : 0;
+    const roiPct     = totalCost > 0 ? profit / totalCost * 100 : 0;
+    const acres      = parseFloat(document.getElementById('acres').value) || 0;
+
+    document.getElementById('totalCost').textContent  = '$' + Math.round(totalCost).toLocaleString() + '/ac';
+    document.getElementById('costPerBu').textContent  = '$' + costPerBu.toFixed(2) + '/bu';
+    document.getElementById('yieldNeeded').textContent= Math.round(yldNeeded) + ' bu/ac';
+    document.getElementById('revenue').textContent    = '$' + Math.round(revenue).toLocaleString() + '/ac';
+
+    const beEl = document.getElementById('breakeven');
+    beEl.textContent = '$' + costPerBu.toFixed(2) + '/bu';
+    beEl.className = 'result-value ' + (price > costPerBu && costPerBu > 0 ? 'positive' : price < costPerBu && costPerBu > 0 ? 'negative' : 'highlight');
+    beEl.style.fontSize = '1.3rem';
+
+    const profEl = document.getElementById('profit');
+    profEl.textContent = (profit >= 0 ? '+$' : '-$') + Math.abs(Math.round(profit)).toLocaleString() + '/ac';
+    profEl.className = 'result-value ' + (profit >= 0 ? 'positive' : 'negative');
+
+    const roiEl = document.getElementById('roi');
+    roiEl.textContent = (roiPct >= 0 ? '+' : '') + roiPct.toFixed(1) + '%';
+    roiEl.className = 'result-value ' + (roiPct >= 0 ? 'positive' : 'negative');
+
+    const farmEl = document.getElementById('farmTotal');
+    const farmTotal = profit * acres;
+    farmEl.textContent = (farmTotal >= 0 ? '+$' : '-$') + Math.abs(Math.round(farmTotal)).toLocaleString();
+    farmEl.style.color = farmTotal >= 0 ? 'var(--green)' : 'var(--red)';
+
+    updateCostBar(costs, totalCost);
+    updateGauge(profit);
+    updateSensitivity(costs, yldVal, price, totalCost);
+  }
+
+  /* ── COST BAR ───────────────────────────────────────────────── */
+  function updateCostBar(costs, total) {
+    if (total <= 0) return;
+    let barHTML = '', legendHTML = '';
+    COST_KEYS.forEach(k => {
+      const pct = costs[k] / total * 100;
+      if (pct < 0.5) return;
+      barHTML   += `<div class="cost-bar-seg" style="width:${pct.toFixed(1)}%;background:${COST_COLORS[k]}"><span class="seg-tip">${COST_LABELS[k]}: $${Math.round(costs[k])}/ac (${pct.toFixed(0)}%)</span></div>`;
+      legendHTML += `<span class="cost-legend-item"><span class="cost-legend-dot" style="background:${COST_COLORS[k]}"></span>${COST_LABELS[k]} ${pct.toFixed(0)}%</span>`;
+    });
+    document.getElementById('cost-bar').innerHTML   = barHTML;
+    document.getElementById('cost-legend').innerHTML = legendHTML;
+  }
+
+  /* ── GAUGE ──────────────────────────────────────────────────── */
+  function updateGauge(profit) {
+    const pct = ((Math.max(-200, Math.min(200, profit)) + 200) / 400 * 100);
+    document.getElementById('gauge-marker').style.left = pct + '%';
+    const fill = document.getElementById('gauge-fill');
+    fill.style.width = pct + '%';
+    fill.style.background = profit >= 0
+      ? `linear-gradient(90deg, var(--border) 50%, var(--green) ${pct}%)`
+      : `linear-gradient(90deg, var(--red) 0%, var(--border) ${pct}%)`;
+  }
+
+  /* ── SENSITIVITY TABLE ──────────────────────────────────────── */
+  function updateSensitivity(costs, baseYield, basePrice, totalCost) {
+    if (baseYield <= 0 || basePrice <= 0) return;
+    const crop = document.getElementById('crop').value;
+    const ySteps = (crop==='corn'     ? [-30,-20,-10,0,10,20]  :
+                    crop==='soybeans' ? [-10,-7,-3,0,3,7]       :
+                                       [-15,-10,-5,0,5,10]).map(d => Math.round(baseYield + d));
+    const pSteps = (crop==='corn'     ? [-0.60,-0.40,-0.20,0,0.20,0.40]     :
+                    crop==='soybeans' ? [-1.50,-1.00,-0.50,0,0.50,1.00]     :
+                                       [-0.75,-0.50,-0.25,0,0.25,0.50]).map(d => +(basePrice+d).toFixed(2));
+    let html = '<tr><th class="corner">Yield ↓ / Price →</th>' + pSteps.map(p=>`<th>$${p.toFixed(2)}</th>`).join('') + '</tr>';
+    ySteps.forEach(y => {
+      html += `<tr><td class="row-head">${y} bu</td>`;
+      pSteps.forEach(p => {
+        const prof = (y*p) - totalCost;
+        const cls  = prof>5 ? 'sens-positive' : prof<-5 ? 'sens-negative' : 'sens-zero';
+        const cur  = y===Math.round(baseYield) && Math.abs(p-basePrice)<0.01;
+        html += `<td class="${cls}${cur?' sens-current':''}">${prof>=0?'+$'+Math.round(prof):'-$'+Math.abs(Math.round(prof))}</td>`;
+      });
+      html += '</tr>';
+    });
+    document.getElementById('sens-table').innerHTML = html;
+  }
+
+  /* ── PRINT ──────────────────────────────────────────────────── */
+  function printReport() {
+    document.getElementById('print-date').textContent = new Date().toLocaleDateString('en-US',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+    setTimeout(() => window.print(), 100);
+  }
+
+  /* ── HINT TOGGLES ───────────────────────────────────────────── */
+  (function(){
+    function closeAll() {
+      document.querySelectorAll('.hint-popup.hint-open').forEach(p => { p.classList.remove('hint-open'); p.setAttribute('inert',''); });
+      document.querySelectorAll('.hint-icon.active').forEach(i => i.classList.remove('active'));
+    }
+    document.querySelectorAll('.hint-icon').forEach(icon => {
+      icon.addEventListener('click', function(e) {
+        e.preventDefault(); e.stopPropagation();
+        const popup = this.closest('.input-wrap').querySelector('.hint-popup');
+        if (!popup) return;
+        const wasOpen = popup.classList.contains('hint-open');
+        closeAll();
+        if (!wasOpen) { popup.classList.add('hint-open'); popup.removeAttribute('inert'); this.classList.add('active'); }
+      });
+    });
+    document.addEventListener('click', e => { if (!e.target.closest('.hint-icon') && !e.target.closest('.hint-popup')) closeAll(); });
+  })();
+
+  /* ── LIVE PRICE FETCH from market data ─────────────────────── */
+  async function fetchLivePrices() {
+    try {
+      const r = await fetch('/data/markets.json');
+      if (!r.ok) return;
+      const data = await r.json();
+      window._liveMarket = data;
+      updateLiveBar();
+    } catch(e) { /* silent — live prices optional */ }
+  }
+  function updateLiveBar() {
+    if (!window._liveMarket) return;
+    const crop = document.getElementById('crop').value;
+    const g = window._liveMarket.grains?.[crop];
+    if (!g || !g.price) { document.getElementById('live-bar').style.display='none'; return; }
+    const pricePer = (g.price / 100).toFixed(2);
+    document.getElementById('live-price-val').textContent  = '$' + pricePer + '/bu';
+    document.getElementById('live-crop-name').textContent  = crop.charAt(0).toUpperCase() + crop.slice(1);
+    document.getElementById('live-bar').style.display      = 'flex';
+    document.getElementById('live-bar').dataset.price      = pricePer;
+  }
+  function useLivePrice() {
+    const p = document.getElementById('live-bar').dataset.price;
+    if (p) { document.getElementById('price').value = p; calcBreakeven(); }
+  }
+
+  /* ── MOBILE: tap cost segment to show tooltip ───────────────── */
+  document.addEventListener('click', function(e) {
+    const seg = e.target.closest('.cost-bar-seg');
+    if (!seg) return;
+    const tip = seg.querySelector('.seg-tip');
+    if (!tip) return;
+    e.stopPropagation();
+    document.querySelectorAll('.seg-tip.seg-open').forEach(t => { if(t!==tip) t.classList.remove('seg-open'); });
+    tip.classList.toggle('seg-open');
+    if (tip.classList.contains('seg-open')) setTimeout(() => tip.classList.remove('seg-open'), 3000);
+  });
+
+  /* ── MOBILE: scroll input above keyboard on focus ───────────── */
+  if (window.matchMedia('(hover: none)').matches) {
+    document.querySelectorAll('input[type="number"], select').forEach(function(input) {
+      input.addEventListener('focus', function() {
+        closeAllHints();
+        setTimeout(() => input.scrollIntoView({ behavior:'smooth', block:'center' }), 300);
+      });
+    });
+  }
+
+  /* ── INIT ───────────────────────────────────────────────────── */
+  calcBreakeven();
+  fetchLivePrices();
+  </script>
+
+</body>
+</html>

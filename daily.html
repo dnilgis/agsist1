@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/components/styles.css">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<title>AGSIST Daily — Morning Market Briefing</title>
+<meta name="description" content="Daily morning market briefing for corn, soybean, and grain farmers. Prices, weather, USDA reports, and agronomic alerts — free, weekdays by 6am CT.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://agsist.com/daily">
+<meta property="og:title" content="AGSIST Daily — Morning Market Briefing">
+<meta property="og:description" content="Free morning briefing for grain farmers. Corn, soybeans, wheat prices + weather + USDA — delivered by 6am CT.">
+<meta property="og:url" content="https://agsist.com/daily">
+<meta property="og:image" content="https://agsist.com/img/og/agsist.jpg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AGSIST">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="manifest" href="/manifest.json">
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6KXCTD5Z9H"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-6KXCTD5Z9H');</script>
+</head>
+<body>
+<div id="site-header"></div>
+<main id="main" tabindex="-1">
+
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Home</a> → AGSIST Daily
+  </nav>
+
+  <section class="section">
+    <div class="section-inner" style="max-width:780px">
+
+      <!-- Hero -->
+      <div style="text-align:center;padding:2.5rem 1rem 2rem">
+        <div style="font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem">Free · Weekdays · 6am CT</div>
+        <h1 style="font-family:'Oswald',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--text);margin-bottom:.75rem;letter-spacing:.02em">AGSIST Daily</h1>
+        <p style="font-size:1rem;color:var(--text-dim);line-height:1.75;max-width:560px;margin:0 auto 2rem">Your morning briefing before the open. Overnight corn &amp; soybean moves, weather that matters to your field, any USDA reports, and one agronomic note. Read in under 3 minutes.</p>
+
+        <!-- Subscribe CTA -->
+        <div style="background:var(--surface);border:1px solid var(--border-g);border-radius:14px;padding:2rem;max-width:480px;margin:0 auto 2.5rem">
+          <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Get It Delivered</div>
+          <div style="display:flex;gap:.6rem;margin-bottom:.6rem">
+            <input id="daily-email" type="email" placeholder="your@email.com"
+              style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.65rem .9rem;color:var(--text);font-family:inherit;font-size:.92rem"
+              onkeydown="if(event.key==='Enter')subscribeDailyEmail()">
+            <button onclick="subscribeDailyEmail()" style="background:var(--gold);color:#0a1a0a;border:none;border-radius:8px;padding:.65rem 1.1rem;font-weight:700;font-size:.85rem;cursor:pointer;white-space:nowrap">Subscribe →</button>
+          </div>
+          <div id="daily-signup-msg" style="font-size:.76rem;color:var(--text-muted)">Free forever. Unsubscribe anytime. No spam — just grain markets.</div>
+        </div>
+      </div>
+
+      <!-- What's in each issue -->
+      <div class="sec-head">
+        <div class="sec-title">📰 What's In Each Issue</div>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.85rem;margin-bottom:2rem">
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.1rem">
+          <div style="font-size:1.2rem;margin-bottom:.35rem">📈</div>
+          <div style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:.2rem">Overnight Prices</div>
+          <div style="font-size:.76rem;color:var(--text-muted);line-height:1.55">Corn, soybeans, wheat, live cattle — overnight moves with context on why</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.1rem">
+          <div style="font-size:1.2rem;margin-bottom:.35rem">🌩️</div>
+          <div style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:.2rem">Field Weather</div>
+          <div style="font-size:.76rem;color:var(--text-muted);line-height:1.55">Rain chances, spray windows, temperature outlook — what matters this week</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.1rem">
+          <div style="font-size:1.2rem;margin-bottom:.35rem">📋</div>
+          <div style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:.2rem">USDA Reports</div>
+          <div style="font-size:.76rem;color:var(--text-muted);line-height:1.55">Export sales, crop progress, WASDE — day-of alerts and what to watch for</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.1rem">
+          <div style="font-size:1.2rem;margin-bottom:.35rem">🌱</div>
+          <div style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:.2rem">Agronomic Note</div>
+          <div style="font-size:.76rem;color:var(--text-muted);line-height:1.55">One timely insight — spray timing, scouting reminders, input decisions</div>
+        </div>
+      </div>
+
+      <!-- Archive / Previous Issues -->
+      <div class="sec-head">
+        <div class="sec-title">📁 Previous Issues</div>
+      </div>
+      <div id="daily-archive" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:2rem;text-align:center;color:var(--text-muted)">
+        <div style="font-size:1.6rem;margin-bottom:.5rem">📬</div>
+        <div style="font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:.3rem">Archive Coming Soon</div>
+        <div style="font-size:.8rem;line-height:1.6">Past issues will be browseable here once publishing begins.<br>Subscribe above to get the first one when it drops.</div>
+      </div>
+
+    </div>
+  </section>
+</main>
+<div id="site-footer"></div>
+<script src="/components/loader.js"></script>
+<script>
+function subscribeDailyEmail() {
+  var email = document.getElementById('daily-email').value.trim();
+  if (!email || !email.includes('@')) {
+    document.getElementById('daily-signup-msg').textContent = 'Please enter a valid email address.';
+    document.getElementById('daily-signup-msg').style.color = 'var(--red)';
+    return;
+  }
+  fetch('https://formspree.io/f/xnjbwepn', {
+    method: 'POST',
+    body: JSON.stringify({ email: email, source: 'daily-page' }),
+    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
+  }).then(function() {
+    document.getElementById('daily-email').style.display = 'none';
+    document.querySelector('#daily-email + button').style.display = 'none';
+    document.getElementById('daily-signup-msg').textContent = '✅ You\'re on the list! First issue arrives at 6am CT on the next market day.';
+    document.getElementById('daily-signup-msg').style.color = 'var(--green)';
+    document.getElementById('daily-signup-msg').style.fontSize = '.88rem';
+    try { localStorage.setItem('agsist_subscribed','1'); } catch(e) {}
+  }).catch(function() {
+    document.getElementById('daily-signup-msg').textContent = 'Signup failed — please try again or email us at info@farmers1st.com';
+    document.getElementById('daily-signup-msg').style.color = 'var(--gold)';
+  });
+}
+</script>
+</body>
+</html>

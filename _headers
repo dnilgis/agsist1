@@ -1,0 +1,10 @@
+# AGSIST Security Headers
+# These apply when served through Cloudflare (recommended) or Netlify.
+# GitHub Pages ignores this file but keeping it ready is good practice.
+
+/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), payment=()
+  X-XSS-Protection: 1; mode=block

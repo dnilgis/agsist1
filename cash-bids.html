@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/components/styles.css">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
+<title>Cash Bids — Local Grain Prices — AGSIST</title>
+<meta name="description" content="Live local cash grain bids near you. Compare corn, soybean, and wheat elevator prices and basis levels across locations.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://agsist.com/cash-bids">
+<meta property="og:title" content="Cash Bids — Local Grain Prices — AGSIST">
+<meta property="og:description" content="Live local corn, soybean, and wheat elevator prices near you. Compare basis across locations.">
+<meta property="og:url" content="https://agsist.com/cash-bids">
+<meta property="og:image" content="https://agsist.com/img/og/agsist.jpg">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AGSIST">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="manifest" href="/manifest.json">
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6KXCTD5Z9H"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-6KXCTD5Z9H');</script>
+</head>
+<body>
+<div id="site-header"></div>
+<main id="main" tabindex="-1">
+
+  <nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="/">Home</a> → Cash Bids
+  </nav>
+
+  <section class="section">
+    <div class="section-inner">
+      <div class="sec-head">
+        <div class="sec-title">💵 Local Cash Bids</div>
+      </div>
+
+      <!-- ZIP lookup -->
+      <div class="card" style="max-width:520px;margin:0 auto 1.5rem;padding:1.5rem">
+        <div style="font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem">Enter Your ZIP Code</div>
+        <div style="display:flex;gap:.6rem">
+          <input id="bids-zip" type="tel" inputmode="numeric" maxlength="5" placeholder="ZIP Code"
+            style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.65rem .9rem;color:var(--text);font-family:inherit;font-size:.95rem"
+            onkeydown="if(event.key==='Enter')lookupBids()">
+          <button onclick="lookupBids()" class="tool-btn" style="padding:.65rem 1.2rem;background:var(--gold);color:#0a1a0a;border:none;border-radius:8px;font-weight:700;font-size:.88rem;cursor:pointer">Search</button>
+        </div>
+        <!-- Geo detection bar -->
+        <div id="bids-geo-bar" style="margin-top:.65rem;font-size:.76rem;color:var(--text-muted)">
+          <span id="bids-geo-txt">📍 Detecting your location…</span>
+          <button onclick="document.getElementById('bids-geo-bar').style.display='none';document.getElementById('bids-zip-row').style.display='flex'" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:.76rem;margin-left:.4rem">Enter ZIP manually</button>
+        </div>
+      </div>
+
+      <!-- Bids results area -->
+      <div class="card" style="max-width:720px;margin:0 auto">
+        <div id="bids-list-area">
+          <div style="text-align:center;padding:2rem 1rem;color:var(--text-muted);font-size:.88rem">
+            <div style="font-size:1.8rem;margin-bottom:.5rem">📍</div>
+            Enter your ZIP above to see live cash bids from nearby elevators.
+          </div>
+        </div>
+
+        <!-- Commodity filter -->
+        <div id="bids-filters" style="display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);display:flex;gap:.4rem;flex-wrap:wrap">
+          <button class="tool-btn active" onclick="filterBids('all',this)">All</button>
+          <button class="tool-btn" onclick="filterBids('corn',this)">🌽 Corn</button>
+          <button class="tool-btn" onclick="filterBids('soybeans',this)">🫘 Soybeans</button>
+          <button class="tool-btn" onclick="filterBids('wheat',this)">🌾 Wheat</button>
+        </div>
+
+        <div style="margin-top:1rem;font-size:.7rem;color:var(--text-muted)">
+          Prices from Barchart OnDemand · Basis = cash minus nearby futures
+        </div>
+      </div>
+
+      <!-- Info cards -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.85rem;max-width:720px;margin:1.5rem auto 0">
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.1rem">
+          <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem">What Is Basis?</div>
+          <div style="font-size:.82rem;color:var(--text-dim);line-height:1.6">Basis is the difference between your local cash price and the nearest CME futures contract. A negative basis (e.g. −20¢) means local cash is 20 cents below futures.</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.1rem">
+          <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem">Why Basis Matters</div>
+          <div style="font-size:.82rem;color:var(--text-dim);line-height:1.6">Stronger (less negative) basis means more local demand. Track basis trends over time to decide when to sell and whether to use basis contracts.</div>
+        </div>
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.1rem">
+          <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem">Compare Elevators</div>
+          <div style="font-size:.82rem;color:var(--text-dim);line-height:1.6">Even a 5¢ difference in basis at elevators 20 miles apart can be significant. Use this tool before delivery decisions.</div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</main>
+<div id="site-footer"></div>
+<script src="/components/geo.js"></script>
+<script src="/components/loader.js"></script>
+<script>
+function filterBids(type, btn) {
+  document.querySelectorAll('#bids-filters .tool-btn').forEach(function(b){ b.classList.remove('active'); });
+  btn.classList.add('active');
+  // TODO: filter bids-list-area rows by commodity when live data is wired
+}
+</script>
+</body>
+</html>
