@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
   <link rel="stylesheet" href="/components/styles.css">
+  <link rel="stylesheet" href="/css/urea.css">
   <link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
   <link rel="apple-touch-icon"                    href="/img/apple-touch-icon.png">
@@ -70,13 +71,10 @@
   }
   </script>
 
-  <!-- Analytics loaded by /components/loader.js → /components/analytics.html -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">  <link rel="manifest" href="/manifest.json">
+  <link rel="manifest" href="/manifest.json">
 </head>
 <body>
 
-<!-- NAV -->
   <div id="site-header"></div>
 
 <!-- HERO -->
@@ -92,9 +90,7 @@
       <div class="risk-panel-lbl"><span class="live-dot"></span>Current Risk Level</div>
       <div class="gauge-wrap">
         <svg class="gauge-svg" viewBox="0 0 180 100">
-          <!-- Track: half-circle -->
           <path class="gauge-track" d="M 15 95 A 75 75 0 0 1 165 95"/>
-          <!-- Fill -->
           <path class="gauge-fill" id="gauge-fill" d="M 15 95 A 75 75 0 0 1 165 95" stroke="var(--risk-mod)" stroke-dasharray="236" stroke-dashoffset="118"/>
         </svg>
         <div class="gauge-score">
@@ -185,7 +181,7 @@
           <div class="factor" id="f-residue">
             <div class="factor-head">
               <div class="factor-title"><span class="factor-icon">🌾</span>Crop Residue</div>
-              <span class="factor-score high" id="fs-residue">HIGH</span>
+              <span class="factor-score hig" id="fs-residue">HIGH</span>
             </div>
             <div class="factor-val">High</div>
             <div class="factor-desc">Crop residue contains urease enzyme. No-till or heavy residue surfaces can lose 2–3x more N than bare soil because urea sits in contact with urease-rich plant material.</div>
@@ -329,17 +325,10 @@
 
   <div id="site-footer"></div>
 
-<script>
-// ── Theme ──────────────────────────────────────────────────────────
-function getTheme(){try{return localStorage.getItem('agsist-theme')||'dark'}catch(e){return'dark'}}
-function setTheme(t){
-  document.documentElement.setAttribute('data-theme',t);
-  try{localStorage.setItem('agsist-theme',t)}catch(e){}
-  document.getElementById('theme-icon').textContent=t==='light'?'☀️':'🌙';
-}
-setTheme(getTheme());
-var _tb=document.getElementById('theme-btn');if(_tb)_tb.addEventListener('click',function(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');});
+  <!-- loader.js BEFORE page script so initNav() fires first -->
+  <script src="/components/loader.js"></script>
 
+<script>
 // ── Scroll reveal ──────────────────────────────────────────────────
 var io=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('vis');io.unobserve(x.target)}})},{threshold:.08});
 document.querySelectorAll('.fade-up').forEach(function(el){io.observe(el)});
@@ -348,7 +337,6 @@ document.querySelectorAll('.fade-up').forEach(function(el){io.observe(el)});
 var WX_ICONS={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌦️',63:'🌧️',65:'⛈️',71:'🌨️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️'};
 
 function tempRisk(f){
-  // Returns 0-100 risk score for temperature
   if(f<40) return 5;
   if(f<50) return 15;
   if(f<60) return 30;
@@ -358,12 +346,11 @@ function tempRisk(f){
   return 98;
 }
 function humidRisk(h){
-  // Moderate humidity (50-80%) = highest risk (moist surface)
-  if(h<30) return 25;   // dry - slow dissolution
+  if(h<30) return 25;
   if(h<50) return 45;
-  if(h<70) return 75;   // sweet spot for volatilization
-  if(h<85) return 60;   // wetter, some dilution
-  return 35;            // very wet, urea moves into soil
+  if(h<70) return 75;
+  if(h<85) return 60;
+  return 35;
 }
 function windRisk(mph){
   if(mph<2) return 15;
@@ -373,15 +360,12 @@ function windRisk(mph){
   return 90;
 }
 function rainRisk(pop24h, pop48h){
-  // Dangerous zone: <30% precip (no incorporation coming)
-  // Very low risk: >70% chance of >0.5" in 24h (incorporation likely)
-  if(pop24h>=70) return 10;  // incorporation expected - good
+  if(pop24h>=70) return 10;
   if(pop24h>=50) return 25;
-  if(pop24h>=30) return 55;  // some rain possible - "light rain" danger zone
-  return 85;                 // no rain coming - full exposure
+  if(pop24h>=30) return 55;
+  return 85;
 }
 function compositeScore(tR,hR,wR,rR){
-  // Weighted: temp 35%, humidity 25%, wind 20%, rain 20%
   return Math.round(tR*0.35 + hR*0.25 + wR*0.20 + rR*0.20);
 }
 function scoreToLevel(s){
@@ -404,16 +388,15 @@ function levelIcon(level){
 function setFactor(id, val, desc, score, pct){
   var level=scoreToLevel(score);
   var labels={low:'Low',moderate:'Moderate',high:'High',extreme:'Extreme'};
+  var labelAbbr={low:'low',moderate:'mod',high:'hig',extreme:'ext'};
   var el=document.getElementById('fv-'+id);
   var dl=document.getElementById('fd-'+id);
   var sl=document.getElementById('fs-'+id);
   var bl=document.getElementById('fb-'+id);
   if(el) el.textContent=val;
   if(dl) dl.textContent=desc;
-  if(sl){sl.textContent=labels[level];sl.className='factor-score '+level.substring(0,3);}
+  if(sl){sl.textContent=labels[level];sl.className='factor-score '+labelAbbr[level];}
   if(bl){bl.style.width=pct+'%';bl.style.background=riskColor(level);}
-  var fc=document.getElementById('f-'+id);
-  if(fc) fc.style.borderColor=(score>60?riskColor(level).replace('var(','').replace(')',''):'');
 }
 
 function updateGauge(score){
@@ -439,7 +422,6 @@ function updateGauge(score){
   };
   if(verdict) verdict.textContent=verdicts[level];
 
-  // Update recommendation
   var rb=document.getElementById('rec-box');
   var rh=document.getElementById('rec-head');
   var rt=document.getElementById('rec-text');
@@ -454,11 +436,10 @@ function updateGauge(score){
   if(rt) rt.textContent=recs[level];
 }
 
-function buildForecastStrip(dailyData, lat, lon){
+function buildForecastStrip(dailyData){
   var strip=document.getElementById('fc-strip');
   if(!strip||!dailyData) return;
   var days=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-  var today=new Date();
   strip.innerHTML='';
   for(var i=0;i<5;i++){
     var date=new Date(dailyData.time[i]+'T12:00:00');
@@ -470,7 +451,6 @@ function buildForecastStrip(dailyData, lat, lon){
     var code=dailyData.weather_code[i];
     var tR=tempRisk(tAvg);
     var rR=rainRisk(pop, pop);
-    // Simple daily composite (no wind/humidity in daily)
     var dayScore=Math.round(tR*0.5+rR*0.5);
     var level=scoreToLevel(dayScore);
     var el=document.createElement('div');
@@ -509,37 +489,32 @@ function loadWeather(lat, lon, label){
 
     updateGauge(total);
 
-    // Temperature factor
     var tDesc=tempF<50?'Low urease activity. Safe to apply without stabilizer if other conditions are favorable.':
               tempF<65?'Moderate enzyme activity. Consider stabilizer, especially on no-till or high-pH fields.':
               tempF<80?'High enzyme activity. Stabilizer strongly recommended. Losses can begin within hours.':
               'Extreme enzyme activity. Urease is running at near-peak efficiency. Do not apply without stabilizer.';
     setFactor('temp', tempF+'°F', tDesc, tR, tR);
 
-    // Humidity factor
     var hDesc=humid<40?'Dry conditions slow urea dissolution. Lower immediate risk but watch for rain.':
               humid<65?'Optimal volatilization zone. Urease has ideal moisture to work. Risk is elevated.':
               humid<85?'Moist air. Surface moisture present. Conditions favor rapid hydrolysis.':
               'High humidity. Surface likely wet. Risk of urea movement into soil is higher, reducing loss somewhat.';
     setFactor('humid', humid+'% RH', hDesc, hR, hR);
 
-    // Wind factor
     var wDesc=wind<5?'Light wind. Ammonia gradient building above soil surface. Not ideal but manageable.':
               wind<10?'Moderate wind dispersing ammonia concentration. Volatilization rate elevated.':
               wind<15?'Significant wind. Continuously removing ammonia from the surface. High loss rate.':
               'Strong wind. Maximum ammonia dispersal. Losses will be elevated regardless of other factors.';
     setFactor('wind', wind+' mph', wDesc, wR, wR);
 
-    // Rain factor
     var rDesc=pop<20?'No significant rain in forecast. Urea will remain on surface exposed to volatilization for full 72-hour window.':
-              pop<50?'Some rain possible. If <¼ inch, may activate urea without incorporation — the worst-case scenario.':
-              pop<70?'Rain likely. If ½"+ arrives within 48h, incorporation will occur. Monitor amounts carefully.':
+              pop<50?'Some rain possible. If less than a quarter inch, may activate urea without incorporation.':
+              pop<70?'Rain likely. If half inch or more arrives within 48h, incorporation will occur. Monitor amounts carefully.':
               'High rain probability. If forecast verifies, urea will be incorporated. Best timing window.';
     setFactor('rain', pop+'% chance', rDesc, rR, rR);
 
-    buildForecastStrip(d.daily, lat, lon);
+    buildForecastStrip(d.daily);
 
-    // Reverse geocode for name
     if(!label){
       fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json')
         .then(function(r){return r.json()})
@@ -549,7 +524,7 @@ function loadWeather(lat, lon, label){
           if(city) document.getElementById('risk-location').textContent='📍 '+city+(st?', '+st:'');
         }).catch(function(){});
     }
-  }).catch(function(e){
+  }).catch(function(){
     document.getElementById('risk-verdict').textContent='Weather data unavailable. Check your connection.';
   });
 }
@@ -577,7 +552,6 @@ function loadZip(){
     }).catch(function(){});
 }
 
-// Auto-request on load
 setTimeout(function(){
   try{
     var saved=localStorage.getItem('agsist-wx-loc');
@@ -587,6 +561,5 @@ setTimeout(function(){
 },600);
 </script>
 
-  <script src="/components/loader.js"></script>
 </body>
 </html>

@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
   <link rel="stylesheet" href="/components/styles.css">
+  <link rel="stylesheet" href="/css/spray.css">
   <link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
   <link rel="apple-touch-icon"                    href="/img/apple-touch-icon.png">
@@ -70,9 +71,7 @@
   }
   </script>
 
-  <!-- Analytics loaded by /components/loader.js → /components/analytics.html -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">  <link rel="manifest" href="/manifest.json">
+  <link rel="manifest" href="/manifest.json">
 </head>
 <body>
 
@@ -300,13 +299,10 @@
 
   <div id="site-footer"></div>
 
-<script>
-// ── Theme ──────────────────────────────────────────────────────────
-function getTheme(){try{return localStorage.getItem('agsist-theme')||'dark'}catch(e){return'dark'}}
-function setTheme(t){document.documentElement.setAttribute('data-theme',t);try{localStorage.setItem('agsist-theme',t)}catch(e){}document.getElementById('theme-icon').textContent=t==='light'?'☀️':'🌙';}
-setTheme(getTheme());
-var _tb=document.getElementById('theme-btn');if(_tb)_tb.addEventListener('click',function(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');});
+  <!-- loader.js BEFORE page script so initNav() fires first -->
+  <script src="/components/loader.js"></script>
 
+<script>
 // ── Scroll reveal ──────────────────────────────────────────────────
 var io=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('vis');io.unobserve(x.target)}})},{threshold:.08});
 document.querySelectorAll('.fade-up').forEach(function(el){io.observe(el)});
@@ -316,8 +312,8 @@ var WX={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'
 
 // ── SPRAY SCORING ──────────────────────────────────────────────────
 function windRating(mph){
-  if(mph<1) return 'marginal';       // too calm - inversion risk
-  if(mph<=3) return 'marginal';      // very light - drift risk
+  if(mph<1) return 'marginal';
+  if(mph<=3) return 'marginal';
   if(mph<=10) return 'good';
   if(mph<=15) return 'marginal';
   return 'poor';
@@ -336,7 +332,6 @@ function humidRating(h){
   return 'marginal';
 }
 function inversionRisk(wind, hour, cloudCover){
-  // Inversion likely: calm winds + clear sky + dawn/dusk hours
   var dawn = hour >= 4 && hour <= 8;
   var dusk = hour >= 18 && hour <= 22;
   var calm = wind < 5;
@@ -348,7 +343,7 @@ function inversionRisk(wind, hour, cloudCover){
 }
 function dewRisk(temp, dew){
   var gap = temp - dew;
-  if(gap < 3) return 'poor';  // dew forming or imminent
+  if(gap < 3) return 'poor';
   if(gap < 7) return 'marginal';
   return 'good';
 }
@@ -394,12 +389,11 @@ function setFcard(id, val, desc, rating, barPct){
 
 function degToCompass(d){var dirs=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];return dirs[Math.round(d/22.5)%16];}
 
-function buildHourly(hourly, inversionHour){
+function buildHourly(hourly){
   var strip=document.getElementById('hourly-strip');
   if(!strip||!hourly) return;
   strip.innerHTML='';
   var now=new Date();
-  var nowH=now.getHours();
   var count=0;
   for(var i=0;i<hourly.time.length&&count<24;i++){
     var t=new Date(hourly.time[i]);
@@ -435,7 +429,6 @@ function buildDayStrip(daily){
   for(var i=0;i<5;i++){
     var d=new Date(daily.time[i]+'T12:00:00');
     var name=i===0?'Today':dnames[d.getDay()];
-    var windAvg=((daily.wind_speed_10m_max[i]||0)+(daily.wind_speed_10m_max[i]||0))/2;
     var wR=windRating(daily.wind_speed_10m_max[i]||8);
     var tR=tempRating(daily.temperature_2m_max[i]||70);
     var overall=wR==='poor'||tR==='poor'?'poor':(wR==='marginal'||tR==='marginal'?'marginal':'good');
@@ -478,7 +471,6 @@ function loadWeather(lat, lon, label){
     var dR=dewRisk(temp,dew);
     var overall=overallRating(wR,tR,hR,iR,dR);
 
-    // Update hero
     var si=document.getElementById('st-icon');
     var sm=document.getElementById('st-main');
     var ss=document.getElementById('st-sub');
@@ -486,33 +478,28 @@ function loadWeather(lat, lon, label){
     if(sm){sm.textContent=rMainText[overall];sm.className='status-main '+overall;}
     if(ss) ss.textContent=rSubs[overall];
 
-    // Wind factor
     var windDesc=wind<3?'Too calm — fine droplets may hang and drift with any slight air movement. Possible inversion conditions.':
                  wind<=10?'Within the ideal window. Maintain awareness of downwind sensitive areas.':
                  wind<=15?'Getting high — mechanical drift risk is elevated. Consider larger nozzle size or waiting.':
                  'Too high for safe application. Significant off-target drift likely.';
     setFcard('wind', wind+' mph', windDesc, wR, Math.min(100,wind*6));
 
-    // Direction
     var compass=degToCompass(dir);
     var dirDesc='Wind from the '+compass+' ('+Math.round(dir)+'°). Consider what is downwind — neighboring fields, waterways, or non-target crops. Always be aware of what is in the direction the wind is blowing.';
     setFcard('dir', compass+' ('+Math.round(dir)+'°)', dirDesc, 'marginal', 50);
 
-    // Temperature
     var tempDesc=temp<50?'Too cold for most products. Slow uptake and plant stress risk.':
                  temp<=75?'Ideal temperature range. Good efficacy and low volatilization risk.':
                  temp<=85?'Warm but acceptable. Watch for dicamba/2,4-D label restrictions.':
                  'High temperature. Volatilization risk elevated for dicamba and ester formulations. Check your label.';
     setFcard('temp', temp+'°F', tempDesc, tR, Math.min(100,Math.max(0,(temp-40)*3)));
 
-    // Humidity
     var humidDesc=humid<40?'Very dry. Fine droplets evaporate rapidly in flight. Use larger nozzle to maintain target delivery.':
                   humid<60?'Low-moderate humidity. Watch droplet size selection.':
                   humid<=90?'Ideal humidity range. Good droplet persistence.':
                   'Very humid. Leaf surfaces may be wet, reducing contact herbicide efficacy.';
     setFcard('humid', humid+'% RH', humidDesc, hR, humid);
 
-    // Inversion
     var invDesc=iR==='poor'?'High inversion risk. Calm winds + stable atmosphere detected. Fine spray droplets will trap near the ground and drift unpredictably.':
                 iR==='marginal'?'Some inversion indicators present. Watch for smoke/dust behavior. Avoid fine droplets.':
                 'Low inversion risk. Atmosphere appears to be mixing adequately.';
@@ -526,14 +513,12 @@ function loadWeather(lat, lon, label){
     var invBarEl=document.getElementById('fc-inv-bar');
     if(invBarEl){invBarEl.style.width=(iR==='poor'?85:iR==='marginal'?50:20)+'%';invBarEl.style.background=iR==='poor'?'var(--red)':iR==='marginal'?'var(--gold)':'var(--green)';}
 
-    // Dew risk
     var dewGap=temp-dew;
     var dewDesc=dewGap<3?'Dew forming or imminent. Spray onto wet leaves reduces contact herbicide efficacy significantly.':
                 dewGap<7?'Dew point is close. Leaves may be damp. Check crop canopy before applying contact products.':
                 'Good margin between temperature and dew point. Low dew formation risk.';
     setFcard('dew', dew+'°F dew pt', dewDesc, dR, Math.max(0,100-dewGap*8));
 
-    // Recommendation
     var rb=document.getElementById('rec-box');
     var rh=document.getElementById('rec-head');
     var rt=document.getElementById('rec-text');
@@ -589,6 +574,5 @@ setTimeout(function(){
 },600);
 </script>
 
-  <script src="/components/loader.js"></script>
 </body>
 </html>

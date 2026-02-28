@@ -1,0 +1,168 @@
+<!-- AGSIST Nav Header — injected by loader.js into #site-header -->
+<nav class="nav" id="topnav">
+  <div class="nav-inner">
+    <a href="/" class="nav-logo" aria-label="AGSIST Home">
+      <img src="/img/logo-agsist.jpg" alt="AGSIST">
+    </a>
+    <div class="nav-menu">
+
+      <div class="nav-dd" id="dd-prices">
+        <button class="nav-btn">
+          <!-- Pixel bar-chart icon -->
+          <svg class="nav-svg-icon" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="1" y="9" width="3" height="6"/>
+            <rect x="5" y="5" width="3" height="10"/>
+            <rect x="9" y="2" width="3" height="13"/>
+            <rect x="13" y="6" width="2" height="9"/>
+            <rect x="0" y="14" width="16" height="1" opacity=".35"/>
+          </svg>
+          Prices<svg class="chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="nav-panel">
+          <a href="/corn-futures-prices">🌽 Corn Futures</a>
+          <a href="/soybean-futures-prices">🫘 Soybean Futures</a>
+          <a href="/wheat-futures-prices">🌾 Wheat Futures</a>
+          <a href="/cash-bids">💵 Cash Bids</a>
+          <div class="nav-panel-div"></div>
+          <a href="/markets" class="all">All Markets →</a>
+        </div>
+      </div>
+
+      <div class="nav-dd" id="dd-weather">
+        <button class="nav-btn">
+          <!-- Pixel sun + cloud icon -->
+          <svg class="nav-svg-icon" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="6" y="0" width="2" height="2" opacity=".6"/>
+            <rect x="6" y="12" width="2" height="2" opacity=".5"/>
+            <rect x="0" y="6" width="2" height="2" opacity=".6"/>
+            <rect x="12" y="6" width="2" height="2" opacity=".5"/>
+            <rect x="2" y="2" width="2" height="2" opacity=".45"/>
+            <rect x="10" y="2" width="2" height="2" opacity=".45"/>
+            <rect x="5" y="4" width="4" height="4"/>
+            <rect x="4" y="10" width="10" height="2" rx="1"/>
+            <rect x="3" y="12" width="12" height="2" rx="1" opacity=".85"/>
+          </svg>
+          Weather<svg class="chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="nav-panel">
+          <a href="/spray">🌿 Spray Conditions</a>
+          <a href="/drought-monitor">🏜️ Drought Monitor</a>
+          <a href="/gdu-calculator">🌡️ GDU Tracker</a>
+        </div>
+      </div>
+
+      <div class="nav-dd" id="dd-tools">
+        <button class="nav-btn">
+          <!-- Pixel wrench icon -->
+          <svg class="nav-svg-icon" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="1" y="1" width="4" height="2"/>
+            <rect x="1" y="1" width="2" height="6"/>
+            <rect x="1" y="5" width="4" height="2"/>
+            <rect x="3" y="3" width="9" height="2"/>
+            <rect x="10" y="2" width="2" height="4" opacity=".8"/>
+            <rect x="7" y="7" width="2" height="2"/>
+            <rect x="9" y="9" width="2" height="2"/>
+            <rect x="11" y="11" width="3" height="3" rx="1"/>
+          </svg>
+          Tools<svg class="chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="nav-panel">
+          <a href="/breakeven">📐 Break-Even Calc</a>
+          <a href="/grain-bin-calculator">🏗️ Grain Bin Calc</a>
+          <a href="/gdu-calculator">🌡️ GDU Calculator</a>
+          <a href="/fast-facts">⚡ Fast Facts</a>
+        </div>
+      </div>
+
+      <!-- Daily: simple link, no dropdown -->
+      <a href="/daily" class="nav-btn" style="text-decoration:none">Daily</a>
+
+      <!-- Data: dropdown only -->
+      <div class="nav-dd" id="dd-data">
+        <button class="nav-btn">
+          <!-- Pixel database / stacked layers icon -->
+          <svg class="nav-svg-icon" viewBox="0 0 16 16" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="1" y="2" width="14" height="2" rx="1"/>
+            <rect x="2" y="2" width="12" height="4" rx="1" opacity=".6"/>
+            <rect x="1" y="7" width="14" height="2" rx="1"/>
+            <rect x="2" y="7" width="12" height="4" rx="1" opacity=".75"/>
+            <rect x="1" y="12" width="14" height="2" rx="1"/>
+            <rect x="2" y="12" width="12" height="3" rx="1" opacity=".9"/>
+          </svg>
+          Data<svg class="chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="nav-panel">
+          <a href="/usda-quick-stats">📋 USDA Quick Stats</a>
+          <a href="/usda-calendar">📅 USDA Calendar</a>
+          <a href="/data-sources">🔗 Data Sources</a>
+          <div class="nav-panel-div"></div>
+          <a href="/developer" class="all">Developer API →</a>
+        </div>
+      </div>
+
+    </div>
+    <div class="nav-actions">
+      <button class="theme-btn" id="theme-btn" aria-label="Toggle theme">
+        <span id="theme-icon">🌙</span>
+        <div class="t-track"><div class="t-thumb"></div></div>
+      </button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu" aria-expanded="false">
+        <span class="h-bar"></span><span class="h-bar"></span><span class="h-bar"></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ MOBILE DRAWER ══════════════════════════════════════════════
+     Lives here so every page gets it via loader.js injection.
+     All nav init (hamburger, drawer open/close, theme toggle)
+     runs in loader.js initNav() after this HTML is injected.
+═══════════════════════════════════════════════════════════════════ -->
+<div class="drawer" id="drawer" aria-hidden="true" role="dialog" aria-label="Site navigation">
+  <div class="draw-head">
+    <img src="/img/logo-agsist.jpg" alt="AGSIST" style="height:30px;width:auto;object-fit:contain">
+    <button class="draw-close" id="draw-close" aria-label="Close menu">✕</button>
+  </div>
+  <div class="draw-sec">
+    <div class="draw-lbl">📈 Prices</div>
+    <a href="/corn-futures-prices" class="draw-item">🌽 Corn Futures</a>
+    <a href="/soybean-futures-prices" class="draw-item">🫘 Soybean Futures</a>
+    <a href="/wheat-futures-prices" class="draw-item">🌾 Wheat Futures</a>
+    <a href="/cash-bids" class="draw-item">💵 Cash Bids</a>
+  </div>
+  <div class="draw-sec">
+    <div class="draw-lbl">⛅ Weather</div>
+    <a href="/spray" class="draw-item">🌿 Spray Conditions</a>
+    <a href="/drought-monitor" class="draw-item">🏜️ Drought Monitor</a>
+    <a href="/gdu-calculator" class="draw-item">🌡️ GDU Tracker</a>
+  </div>
+  <div class="draw-sec">
+    <div class="draw-lbl">🛠️ Tools</div>
+    <a href="/breakeven" class="draw-item">📐 Break-Even Calc</a>
+    <a href="/grain-bin-calculator" class="draw-item">🏗️ Grain Bin Calc</a>
+    <a href="/fast-facts" class="draw-item">⚡ Fast Facts</a>
+  </div>
+  <div class="draw-sec">
+    <div class="draw-lbl">📊 Data & Daily</div>
+    <a href="/daily" class="draw-item">📰 AGSIST Daily</a>
+    <a href="/usda-calendar" class="draw-item">📅 USDA Calendar</a>
+    <a href="/usda-quick-stats" class="draw-item">📋 USDA Quick Stats</a>
+    <a href="/data-sources" class="draw-item">🔗 Data Sources</a>
+  </div>
+  <div class="draw-sec">
+    <div class="draw-lbl">Company</div>
+    <a href="/about" class="draw-item">About</a>
+    <a href="/contact" class="draw-item">Contact</a>
+    <a href="/developer" class="draw-item">Developer API</a>
+  </div>
+  <div class="draw-sec" style="border-bottom:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:.6rem 1.1rem">
+      <span style="font-size:.82rem;color:var(--text-dim)">Display mode</span>
+      <button class="theme-btn" id="theme-btn-d" aria-label="Toggle theme">
+        <span id="theme-icon-d">🌙</span>
+        <div class="t-track"><div class="t-thumb"></div></div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="draw-ov" id="draw-ov" aria-hidden="true"></div>
