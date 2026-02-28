@@ -138,7 +138,6 @@
       <div class="live-dot" aria-hidden="true"></div>
       <span>LIVE</span>
     </div>
-    <button class="ticker-pause" id="ticker-pause" aria-label="Pause ticker" title="Pause/resume ticker">⏸</button>
     <div class="ticker-track-wrap">
       <div class="ticker-track" id="ticker-track" aria-live="off">
         <div id="ticker-items-single">
@@ -790,38 +789,60 @@
     }
   } catch(e) {}
 
-  // ── Ticker pause button ─────────────────────────────────────
-  var tickerPause = document.getElementById('ticker-pause');
+  // ── Ticker: ensure clone exists for seamless loop ───────────────
+  // geo.js rebuildTickerLoop() creates the clone, but if it hasn't
+  // run yet (or geo.js fails to load), we create it ourselves.
   var tickerTrack = document.getElementById('ticker-track');
-  if (tickerPause && tickerTrack) {
-    tickerPause.addEventListener('click', function() {
-      var isPaused = tickerTrack.classList.toggle('paused');
-      tickerPause.textContent = isPaused ? '▶' : '⏸';
-      tickerPause.setAttribute('aria-label', isPaused ? 'Resume ticker' : 'Pause ticker');
-    });
+
+  function ensureTickerClone() {
+    var single = document.getElementById('ticker-items-single');
+    if (!single || !tickerTrack) return;
+    var existing = document.getElementById('ticker-items-clone');
+    if (existing) return; // geo.js already handled it
+    var clone = single.cloneNode(true);
+    clone.id = 'ticker-items-clone';
+    clone.setAttribute('aria-hidden', 'true');
+    tickerTrack.appendChild(clone);
+    // Restart animation cleanly
+    tickerTrack.style.animation = 'none';
+    tickerTrack.offsetHeight; // force reflow
+    tickerTrack.style.animation = '';
   }
 
   // ── Ticker dynamic speed ──────────────────────────────────────
-  // After geo.js rebuilds the ticker clone, set animation duration
-  // proportional to content width for consistent scroll speed.
-  // Target: ~40px/sec (readable but not sluggish)
+  // Set animation duration proportional to content width for
+  // consistent scroll speed. Target: ~45px/sec
   function setTickerSpeed() {
     var single = document.getElementById('ticker-items-single');
-    var track  = document.getElementById('ticker-track');
-    if (!single || !track) return;
+    if (!single || !tickerTrack) return;
     var contentWidth = single.scrollWidth || single.offsetWidth;
-    if (contentWidth < 100) return; // not loaded yet
-    var speed = 40; // pixels per second
-    var duration = Math.max(20, Math.round(contentWidth / speed));
-    track.style.animationDuration = duration + 's';
+    if (contentWidth < 100) return; // not populated yet
+    var speed = 45; // pixels per second
+    var duration = Math.max(15, Math.round(contentWidth / speed));
+    tickerTrack.style.animationDuration = duration + 's';
   }
-  // Run after geo.js rebuilds (observe DOM changes on ticker-track)
+
+  // Watch for geo.js rebuilds (it replaces the clone)
   if (tickerTrack && typeof MutationObserver !== 'undefined') {
-    var tickerObs = new MutationObserver(function() { setTimeout(setTickerSpeed, 150); });
+    var tickerObs = new MutationObserver(function() {
+      setTimeout(setTickerSpeed, 150);
+    });
     tickerObs.observe(tickerTrack, { childList: true });
   }
-  // Also run on initial load + window resize
-  window.addEventListener('load', function() { setTimeout(setTickerSpeed, 500); });
+
+  // Fallback: if geo.js hasn't created clone after 1s, do it ourselves
+  setTimeout(function() {
+    ensureTickerClone();
+    setTickerSpeed();
+  }, 1000);
+
+  // Also recalc on load + resize
+  window.addEventListener('load', function() {
+    setTimeout(function() {
+      ensureTickerClone();
+      setTickerSpeed();
+    }, 600);
+  });
   window.addEventListener('resize', setTickerSpeed);
 
   // ── Drought image — dynamic URL with fallback chain ───────────
