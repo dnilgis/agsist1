@@ -2,102 +2,579 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-  <link rel="stylesheet" href="/components/styles.css">
-  <link rel="stylesheet" href="/css/spray.css">
-  <link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
-  <link rel="apple-touch-icon"                    href="/img/apple-touch-icon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Spray Advisory — AGSIST</title>
-<meta name="description" content="Real-time spray advisory with wind, temperature, humidity, inversion risk, and hourly spray window forecast. Know when to spray and when to wait.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6KXCTD5Z9H"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-6KXCTD5Z9H');</script>
+<link rel="stylesheet" href="/components/styles.css">
+<link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+<link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 
-  <!-- ═══ SEO ════════════════════════════════════════════════════════ -->
-  <meta name="robots"   content="index, follow">
-  <meta name="keywords" content="spray advisory, when to spray herbicide, spray conditions, thermal inversion, herbicide drift">
-  <link rel="canonical" href="https://agsist.com/spray">
+<title>Spray Advisory — Wind, Temp, Inversion Risk & 24-Hour Window | AGSIST</title>
+<meta name="description" content="Real-time spray advisory: wind speed, temperature, humidity, thermal inversion risk, and a 24-hour spray window forecast. Know exactly when to spray and when to wait — free for farmers.">
+<meta name="robots" content="index, follow">
+<meta name="keywords" content="spray advisory, when to spray herbicide, spray conditions today, thermal inversion risk, herbicide drift, dicamba spray conditions, 2,4-D spray window, pesticide application timing">
+<link rel="canonical" href="https://agsist.com/spray">
 
-  <!-- Open Graph -->
-  <meta property="og:type"        content="website">
-  <meta property="og:site_name"   content="AGSIST">
-  <meta property="og:title"       content="Spray Advisory — AGSIST">
-  <meta property="og:description" content="Wind, temp, humidity, inversion risk and 24-hour spray window. Free real-time spray advisory for farmers.">
-  <meta property="og:url"         content="https://agsist.com/spray">
-  <meta property="og:image"       content="https://agsist.com/img/og/spray.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height"content="630">
-  <meta property="og:locale"      content="en_US">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="AGSIST">
+<meta property="og:title" content="Spray Advisory — Wind, Temp, Inversion Risk & Spray Window | AGSIST">
+<meta property="og:description" content="Real-time spray advisory with wind, temperature, humidity, thermal inversion risk and 24-hour window forecast. Free for farmers.">
+<meta property="og:url" content="https://agsist.com/spray">
+<meta property="og:image" content="https://agsist.com/img/og/spray.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="en_US">
 
-  <!-- Twitter / X Card -->
-  <meta name="twitter:card"        content="summary_large_image">
-  <meta name="twitter:site"        content="@agsist">
-  <meta name="twitter:title"       content="Spray Advisory — AGSIST">
-  <meta name="twitter:description" content="Wind, temp, humidity, inversion risk and 24-hour spray window. Free real-time spray advisory for farmers.">
-  <meta name="twitter:image"       content="https://agsist.com/img/og/spray.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@agsist">
+<meta name="twitter:title" content="Spray Advisory — AGSIST">
+<meta name="twitter:description" content="Wind, temp, humidity, inversion risk and 24-hour spray window. Free real-time spray advisory for farmers.">
+<meta name="twitter:image" content="https://agsist.com/img/og/spray.jpg">
 
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "SoftwareApplication",
-        "name": "AGSIST Spray Advisory",
-        "applicationCategory": "UtilitiesApplication",
-        "operatingSystem": "Web",
-        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
-        "url": "https://agsist.com/spray",
-        "isPartOf": { "@id": "https://agsist.com/#website" }
-      },
-      {
-        "@type": "WebPage",
-        "@id": "https://agsist.com/spray#webpage",
-        "url": "https://agsist.com/spray",
-        "name": "Spray Advisory — Wind, Temp, Inversion Risk & Spray Window | AGSIST",
-        "description": "Real-time spray advisory with wind speed, temperature, humidity, thermal inversion risk and 24-hour spray window forecast. Know when to spray — free for farmers.",
-        "isPartOf": { "@id": "https://agsist.com/#website" },
-        "breadcrumb": {
-          "@type": "BreadcrumbList",
-          "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Home", "item": "https://agsist.com/" },
-{ "@type": "ListItem", "position": 2, "name": "Spray Advisory", "item": "https://agsist.com/spray" }]
-        }
-      },
-      {
-        "@type": "Organization",
-        "@id": "https://agsist.com/#organization",
-        "name": "AGSIST",
-        "url": "https://agsist.com/"
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "AGSIST Spray Advisory",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "url": "https://agsist.com/spray",
+      "description": "Real-time spray timing advisory with wind, temperature, humidity, inversion risk and 24-hour window forecast.",
+      "isPartOf": { "@id": "https://agsist.com/#website" }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://agsist.com/spray#webpage",
+      "url": "https://agsist.com/spray",
+      "name": "Spray Advisory — Wind, Temp, Inversion Risk & Spray Window | AGSIST",
+      "description": "Real-time spray advisory with wind speed, temperature, humidity, thermal inversion risk and 24-hour spray window forecast. Know when to spray — free for farmers.",
+      "isPartOf": { "@id": "https://agsist.com/#website" },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://agsist.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Spray Advisory", "item": "https://agsist.com/spray" }
+        ]
       }
-    ]
-  }
-  </script>
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What wind speed is safe for spraying herbicide?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The ideal spray window is 3–10 mph. Below 3 mph, thermal inversions can trap fine droplets and cause unpredictable drift. Above 10 mph, mechanical drift risk is elevated." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is a thermal inversion and why does it matter for spraying?",
+          "acceptedAnswer": { "@type": "Answer", "text": "A thermal inversion occurs when warm air sits above cooler air near the ground, trapping fine spray droplets in a stable air layer. These droplets can drift miles before settling. Inversions are common on calm, clear evenings and early mornings." }
+        },
+        {
+          "@type": "Question",
+          "name": "What temperature is too hot to spray dicamba?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Most dicamba labels restrict applications at or above 85–90°F due to volatilization risk. Always read your specific product label as restrictions vary by formulation." }
+        }
+      ]
+    }
+  ]
+}
+</script>
+<link rel="manifest" href="/manifest.json">
 
-  <link rel="manifest" href="/manifest.json">
+<style>
+/* ═══════════════════════════════════════════════
+   SPRAY.CSS — Page-specific styles
+   Depends on: /components/styles.css for base vars
+═══════════════════════════════════════════════ */
+
+/* ── Hero ────────────────────────────────────── */
+.hero {
+  background: linear-gradient(160deg, var(--surface2) 0%, var(--bg) 60%);
+  border-bottom: 1px solid var(--border);
+  padding: 3rem 1.25rem 2.5rem;
+}
+.hero-inner {
+  max-width: 1060px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 2.5rem;
+  align-items: center;
+}
+@media (max-width: 720px) {
+  .hero-inner { grid-template-columns: 1fr; }
+}
+.hero-eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--green);
+  margin-bottom: .85rem;
+  padding: .3rem .75rem;
+  background: rgba(62,207,110,.08);
+  border: 1px solid rgba(62,207,110,.18);
+  border-radius: 20px;
+}
+.hero-title {
+  font-size: clamp(1.75rem, 4vw, 2.8rem);
+  font-weight: 900;
+  line-height: 1.12;
+  margin: 0 0 .9rem;
+  color: var(--text);
+  letter-spacing: -.02em;
+}
+.hero-title span { color: var(--green); }
+.hero-sub {
+  font-size: .92rem;
+  color: var(--text-dim);
+  line-height: 1.75;
+  max-width: 480px;
+  margin: 0;
+}
+
+/* ── Status panel (hero right) ───────────────── */
+.status-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 1.5rem 1.25rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.status-panel::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--green);
+  transition: background .4s;
+}
+.status-panel.marginal::before { background: var(--gold); }
+.status-panel.poor::before { background: var(--red); }
+.status-lbl {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .62rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: .85rem;
+}
+.status-icon { font-size: 2.4rem; margin-bottom: .4rem; line-height: 1; }
+.status-main {
+  font-size: 1.35rem;
+  font-weight: 800;
+  margin-bottom: .35rem;
+  line-height: 1.2;
+}
+.status-main.good { color: var(--green); }
+.status-main.marginal { color: var(--gold); }
+.status-main.poor { color: var(--red); }
+.status-sub {
+  font-size: .8rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: .75rem;
+}
+.status-loc {
+  font-size: .72rem;
+  color: var(--text-muted);
+  font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── Main layout ─────────────────────────────── */
+.main {
+  max-width: 1060px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+.pg {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 1.75rem;
+  align-items: start;
+}
+@media (max-width: 860px) {
+  .pg { grid-template-columns: 1fr; }
+  .sidebar { order: -1; }
+}
+
+/* ── Location setup ──────────────────────────── */
+.loc-setup {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+.loc-setup h3 { font-size: 1.05rem; font-weight: 700; margin: 0 0 .5rem; }
+.loc-setup p  { font-size: .85rem; color: var(--text-dim); line-height: 1.65; margin: 0 0 1.25rem; }
+.btn-g {
+  padding: .65rem 1.35rem;
+  background: var(--green);
+  color: #0a1a0a;
+  border: none;
+  border-radius: 8px;
+  font-size: .85rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity .15s;
+}
+.btn-g:hover { opacity: .88; }
+.btn-q {
+  padding: .65rem 1.35rem;
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-size: .85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color .15s;
+}
+.btn-q:hover { border-color: var(--text-muted); }
+.zip-row {
+  display: none;
+  gap: .5rem;
+  margin-top: 1rem;
+  justify-content: center;
+}
+.zip-in {
+  padding: .65rem .9rem;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: .9rem;
+  color: var(--text);
+  outline: none;
+  width: 140px;
+}
+.zip-in:focus { border-color: var(--green); }
+
+/* ── Factor cards ────────────────────────────── */
+.factors {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .85rem;
+  margin-bottom: 1.25rem;
+}
+@media (max-width: 580px) { .factors { grid-template-columns: 1fr; } }
+.fcard {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 1rem 1rem .85rem;
+  transition: border-color .2s;
+}
+.fcard-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .55rem;
+  gap: .5rem;
+}
+.fcard-name {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.fcard-icon { font-size: .95rem; }
+.fchip {
+  font-size: .6rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .07em;
+  padding: .2rem .55rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
+.fchip.good     { background: rgba(62,207,110,.12); color: var(--green); }
+.fchip.marginal { background: rgba(230,176,66,.12); color: var(--gold); }
+.fchip.poor     { background: rgba(240,96,96,.12);  color: var(--red); }
+.fcard-val {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: .4rem;
+  line-height: 1;
+}
+.fcard-desc {
+  font-size: .77rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: .65rem;
+}
+.fcard-bar {
+  height: 4px;
+  background: var(--surface3);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.fcard-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  transition: width .8s cubic-bezier(.4,0,.2,1);
+}
+
+/* ── Hourly strip ────────────────────────────── */
+.window-head {
+  font-size: .75rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: .85rem;
+  letter-spacing: .04em;
+}
+.hourly-scroll {
+  display: flex;
+  gap: .45rem;
+  overflow-x: auto;
+  padding-bottom: .35rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+.hourly-scroll::-webkit-scrollbar { height: 3px; }
+.hourly-scroll::-webkit-scrollbar-track { background: var(--surface3); border-radius: 2px; }
+.hourly-scroll::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+.hr-item {
+  flex-shrink: 0;
+  scroll-snap-align: start;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: .5rem .55rem;
+  text-align: center;
+  min-width: 60px;
+  cursor: default;
+  transition: border-color .15s;
+}
+.hr-item:hover { border-color: var(--text-muted); }
+.hr-item.good     { border-top: 2px solid var(--green); }
+.hr-item.marginal { border-top: 2px solid var(--gold); }
+.hr-item.poor     { border-top: 2px solid var(--red); }
+.hr-time  { font-size: .62rem; color: var(--text-muted); margin-bottom: .25rem; }
+.hr-icon  { font-size: .95rem; margin-bottom: .2rem; }
+.hr-wind  { font-size: .7rem; font-family: 'JetBrains Mono', monospace; color: var(--text-dim); margin-bottom: .25rem; }
+.hr-badge {
+  font-size: .55rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  padding: .15rem .4rem;
+  border-radius: 3px;
+}
+.hr-badge.good     { background: rgba(62,207,110,.15); color: var(--green); }
+.hr-badge.marginal { background: rgba(230,176,66,.15); color: var(--gold); }
+.hr-badge.poor     { background: rgba(240,96,96,.15);  color: var(--red); }
+
+/* ── Education grid ──────────────────────────── */
+.edu { margin-top: 2rem; }
+.edu-title {
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 1.1rem;
+}
+.edu-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .85rem;
+  margin-bottom: 1.5rem;
+}
+@media (max-width: 580px) { .edu-grid { grid-template-columns: 1fr; } }
+.edu-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 1.1rem;
+}
+.edu-card-icon  { font-size: 1.4rem; margin-bottom: .5rem; }
+.edu-card-title { font-size: .85rem; font-weight: 700; color: var(--text); margin-bottom: .4rem; }
+.edu-card-text  { font-size: .8rem; color: var(--text-dim); line-height: 1.7; margin-bottom: .65rem; }
+.edu-card-tip   { font-size: .72rem; font-weight: 700; padding: .3rem .7rem; border-radius: 5px; display: inline-block; }
+
+/* ── Thermal inversion diagram ───────────────── */
+.inv-box {
+  background: var(--surface);
+  border: 1px solid rgba(240,96,96,.2);
+  border-radius: 12px;
+  padding: 1.4rem;
+}
+.inv-title {
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 1.1rem;
+}
+.inv-diagram { display: flex; flex-direction: column; gap: .25rem; }
+.inv-layer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: .6rem .75rem;
+  border-radius: 6px;
+}
+.inv-layer-warm  { background: rgba(240,145,58,.1);  border: 1px solid rgba(240,145,58,.2); }
+.inv-layer-cool  { background: rgba(91,163,224,.08); border: 1px dashed rgba(91,163,224,.25); }
+.inv-layer-ground{ background: rgba(62,207,110,.07); border: 1px solid rgba(62,207,110,.15); }
+.inv-arrow {
+  position: absolute;
+  right: .75rem;
+  font-size: .75rem;
+  color: var(--text-muted);
+}
+@media (max-width: 580px) {
+  .inv-box > div { grid-template-columns: 1fr !important; }
+}
+
+/* ── Sidebar ─────────────────────────────────── */
+.sidebar { display: flex; flex-direction: column; gap: 1rem; }
+.sc {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 1.1rem;
+}
+.sc-title {
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: .85rem;
+}
+
+/* ── Recommendation box ──────────────────────── */
+.rec {
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: .75rem;
+}
+.rec.good     { background: rgba(62,207,110,.07);  border: 1px solid rgba(62,207,110,.2); }
+.rec.marginal { background: rgba(230,176,66,.07);  border: 1px solid rgba(230,176,66,.2); }
+.rec.poor     { background: rgba(240,96,96,.07);   border: 1px solid rgba(240,96,96,.2); }
+.rec-h {
+  font-size: .9rem;
+  font-weight: 700;
+  margin-bottom: .4rem;
+}
+.rec-h.good     { color: var(--green); }
+.rec-h.marginal { color: var(--gold); }
+.rec-h.poor     { color: var(--red); }
+.rec-t { font-size: .8rem; color: var(--text-dim); line-height: 1.65; }
+
+/* ── Day strip ───────────────────────────────── */
+.day-strip {
+  display: flex;
+  gap: .4rem;
+}
+.day-item {
+  flex: 1;
+  text-align: center;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: .5rem .25rem;
+}
+.day-name  { font-size: .62rem; color: var(--text-muted); margin-bottom: .2rem; font-weight: 700; }
+.day-icon  { font-size: 1rem; margin-bottom: .2rem; }
+.day-rating {
+  font-size: .58rem;
+  font-weight: 700;
+  padding: .15rem .3rem;
+  border-radius: 3px;
+  margin-bottom: .2rem;
+}
+.day-rating.good     { background: rgba(62,207,110,.15); color: var(--green); }
+.day-rating.marginal { background: rgba(230,176,66,.15); color: var(--gold); }
+.day-rating.poor     { background: rgba(240,96,96,.15);  color: var(--red); }
+.day-wind { font-size: .6rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace; }
+
+/* ── Cross-link card ─────────────────────────── */
+.cross-link {
+  display: flex;
+  align-items: center;
+  gap: .85rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 11px;
+  padding: 1rem;
+  text-decoration: none;
+  color: inherit;
+  transition: border-color .15s, background .15s;
+}
+.cross-link:hover { border-color: var(--gold); background: var(--surface2); }
+.cross-link-icon  { font-size: 1.5rem; flex-shrink: 0; }
+.cross-link-title { font-size: .82rem; font-weight: 700; color: var(--text); margin-bottom: .2rem; }
+.cross-link-text  { font-size: .75rem; color: var(--text-dim); line-height: 1.5; }
+.cross-link-arrow { font-size: 1rem; color: var(--text-muted); margin-left: auto; flex-shrink: 0; }
+
+/* ── Live dot ────────────────────────────────── */
+.live-dot {
+  display: inline-block;
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--green);
+  animation: pulse 1.8s infinite;
+}
+@keyframes pulse {
+  0%,100% { opacity: 1; transform: scale(1); }
+  50%      { opacity: .5; transform: scale(.8); }
+}
+
+/* ── Fade-up animation ───────────────────────── */
+.fade-up { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+.fade-up.vis { opacity: 1; transform: none; }
+</style>
 </head>
 <body>
+<a href="#main" class="skip">Skip to content</a>
+<div id="site-header"></div>
 
-  <div id="site-header"></div>
-
+<!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
     <div>
       <div class="hero-eyebrow"><span class="live-dot"></span>Real-Time Spray Advisory</div>
       <h1 class="hero-title">Is It <span>Safe to Spray</span><br>Right Now?</h1>
-      <p class="hero-sub">Wind speed, temperature, humidity, thermal inversion risk, and a 24-hour window forecast — everything you need before you start the boom.</p>
+      <p class="hero-sub">Wind speed, temperature, humidity, thermal inversion risk, and a 24-hour window forecast — everything you need before you start the boom. Free. No account. No app.</p>
     </div>
     <div class="status-panel" id="status-panel">
       <div class="status-lbl"><span class="live-dot"></span>Current Spray Status</div>
       <div class="status-icon" id="st-icon">📍</div>
       <div class="status-main marginal" id="st-main">Detecting…</div>
       <div class="status-sub" id="st-sub">Getting your local conditions</div>
-      <div class="status-loc" id="st-loc">📍 Locating</div>
+      <div class="status-loc" id="st-loc">📍 Locating…</div>
     </div>
   </div>
 </section>
 
-<main class="main">
+<main id="main" class="main">
+
+  <!-- Location setup -->
   <div class="loc-setup" id="loc-setup">
     <h3>🌍 Set Your Location</h3>
-    <p>Spray conditions vary significantly by location. Share your location for accurate wind, temperature, humidity, and inversion risk at your field.</p>
+    <p>Spray conditions vary significantly by location. Share your location or enter a ZIP for accurate wind, temperature, humidity, and inversion risk at your field.</p>
     <div style="display:flex;gap:.65rem;justify-content:center;flex-wrap:wrap">
       <button class="btn-g" onclick="requestGeo()">📍 Use My Location</button>
       <button class="btn-q" onclick="document.getElementById('spray-zip-row').style.display='flex'">Enter ZIP Instead</button>
@@ -110,138 +587,166 @@
 
   <div class="pg">
     <div>
-      <!-- FACTOR BREAKDOWN -->
+
+      <!-- FACTOR BREAKDOWN (hidden until location set) -->
       <div id="factor-section" style="display:none">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.85rem">
           <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--text-muted)">Factor Breakdown</div>
-          <button onclick="document.getElementById('loc-setup').style.display='block'" style="font-size:.72rem;color:var(--text-muted);background:none;border:none;text-decoration:underline">Change location</button>
+          <button onclick="document.getElementById('loc-setup').style.display='block'" style="font-size:.72rem;color:var(--text-muted);background:none;border:none;text-decoration:underline;cursor:pointer">Change location</button>
         </div>
+
         <div class="factors">
+          <!-- Wind -->
           <div class="fcard" id="fc-wind">
-            <div class="fcard-head"><div class="fcard-name"><span class="fcard-icon">💨</span>Wind Speed</div><span class="fchip good" id="fc-wind-chip">Good</span></div>
+            <div class="fcard-head">
+              <div class="fcard-name"><span class="fcard-icon">💨</span>Wind Speed</div>
+              <span class="fchip good" id="fc-wind-chip">Good</span>
+            </div>
             <div class="fcard-val" id="fc-wind-val">-- mph</div>
-            <div class="fcard-desc" id="fc-wind-desc">Ideal spray window: 3–10 mph. Light wind prevents spray from settling; too much causes drift and off-target damage.</div>
+            <div class="fcard-desc" id="fc-wind-desc">Ideal: 3–10 mph. Below 3 mph, inversion risk rises. Above 10 mph, mechanical drift moves spray off-target.</div>
             <div class="fcard-bar"><div class="fcard-bar-fill" id="fc-wind-bar" style="width:0%;background:var(--green)"></div></div>
           </div>
+          <!-- Wind direction -->
           <div class="fcard" id="fc-dir">
-            <div class="fcard-head"><div class="fcard-name"><span class="fcard-icon">🧭</span>Wind Direction</div><span class="fchip good" id="fc-dir-chip">Note</span></div>
-            <div class="fcard-val" id="fc-dir-val">-- °</div>
-            <div class="fcard-desc" id="fc-dir-desc">Always be aware of what is downwind — neighboring fields, waterways, residential areas, and sensitive crops. Direction determines where your spray goes.</div>
+            <div class="fcard-head">
+              <div class="fcard-name"><span class="fcard-icon">🧭</span>Wind Direction</div>
+              <span class="fchip marginal" id="fc-dir-chip">Note</span>
+            </div>
+            <div class="fcard-val" id="fc-dir-val">--°</div>
+            <div class="fcard-desc" id="fc-dir-desc">Always check what's downwind — neighboring fields, waterways, residential areas, and sensitive crops. Direction determines where your spray goes.</div>
             <div class="fcard-bar"><div class="fcard-bar-fill" id="fc-dir-bar" style="width:50%;background:var(--gold)"></div></div>
           </div>
+          <!-- Temperature -->
           <div class="fcard" id="fc-temp">
-            <div class="fcard-head"><div class="fcard-name"><span class="fcard-icon">🌡️</span>Temperature</div><span class="fchip good" id="fc-temp-chip">Good</span></div>
+            <div class="fcard-head">
+              <div class="fcard-name"><span class="fcard-icon">🌡️</span>Temperature</div>
+              <span class="fchip good" id="fc-temp-chip">Good</span>
+            </div>
             <div class="fcard-val" id="fc-temp-val">--°F</div>
-            <div class="fcard-desc" id="fc-temp-desc">Spray when temps are between 50–85°F. Extreme heat causes rapid volatilization of some products; cold slows uptake and risks frost injury.</div>
+            <div class="fcard-desc" id="fc-temp-desc">Spray between 50–85°F. Heat causes volatilization of dicamba/2,4-D; cold slows uptake and risks frost injury.</div>
             <div class="fcard-bar"><div class="fcard-bar-fill" id="fc-temp-bar" style="width:0%;background:var(--green)"></div></div>
           </div>
+          <!-- Humidity -->
           <div class="fcard" id="fc-humid">
-            <div class="fcard-head"><div class="fcard-name"><span class="fcard-icon">💧</span>Humidity</div><span class="fchip good" id="fc-humid-chip">Good</span></div>
+            <div class="fcard-head">
+              <div class="fcard-name"><span class="fcard-icon">💧</span>Humidity</div>
+              <span class="fchip good" id="fc-humid-chip">Good</span>
+            </div>
             <div class="fcard-val" id="fc-humid-val">--%</div>
-            <div class="fcard-desc" id="fc-humid-desc">Target 40–90% RH. Below 40%, droplets evaporate before reaching the leaf — especially with smaller nozzle sizes. Above 90%, disease risk rises.</div>
+            <div class="fcard-desc" id="fc-humid-desc">Target 40–90% RH. Below 40%, droplets evaporate before reaching the leaf. Above 90%, disease risk and spray runoff increases.</div>
             <div class="fcard-bar"><div class="fcard-bar-fill" id="fc-humid-bar" style="width:0%;background:var(--green)"></div></div>
           </div>
+          <!-- Inversion -->
           <div class="fcard" id="fc-inv">
-            <div class="fcard-head"><div class="fcard-name"><span class="fcard-icon">🌫️</span>Thermal Inversion</div><span class="fchip marginal" id="fc-inv-chip">Low Risk</span></div>
+            <div class="fcard-head">
+              <div class="fcard-name"><span class="fcard-icon">🌫️</span>Thermal Inversion</div>
+              <span class="fchip marginal" id="fc-inv-chip">Low Risk</span>
+            </div>
             <div class="fcard-val" id="fc-inv-val">Low</div>
             <div class="fcard-desc" id="fc-inv-desc">Inversions trap fine spray droplets near the ground, causing them to drift unpredictably — sometimes miles. Highest risk: calm, clear evenings and early mornings.</div>
             <div class="fcard-bar"><div class="fcard-bar-fill" id="fc-inv-bar" style="width:25%;background:var(--gold)"></div></div>
           </div>
+          <!-- Dew -->
           <div class="fcard" id="fc-dew">
-            <div class="fcard-head"><div class="fcard-name"><span class="fcard-icon">🌿</span>Dew Point / Dew Risk</div><span class="fchip good" id="fc-dew-chip">Good</span></div>
-            <div class="fcard-val" id="fc-dew-val">--°F</div>
-            <div class="fcard-desc" id="fc-dew-desc">If temp approaches dew point, dew formation is imminent. Spraying onto wet leaves reduces efficacy of contact herbicides and increases disease splash risk.</div>
+            <div class="fcard-head">
+              <div class="fcard-name"><span class="fcard-icon">🌿</span>Dew Point Risk</div>
+              <span class="fchip good" id="fc-dew-chip">Good</span>
+            </div>
+            <div class="fcard-val" id="fc-dew-val">--°F dew</div>
+            <div class="fcard-desc" id="fc-dew-desc">If temp approaches dew point, dew formation is imminent. Spraying onto wet leaves reduces efficacy of contact herbicides.</div>
             <div class="fcard-bar"><div class="fcard-bar-fill" id="fc-dew-bar" style="width:0%;background:var(--green)"></div></div>
           </div>
         </div>
 
         <!-- HOURLY WINDOW -->
-        <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem;margin-bottom:1.25rem">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:1.1rem;margin-bottom:1.25rem">
           <div class="window-head">⏱️ 24-Hour Spray Window</div>
           <div class="hourly-scroll" id="hourly-strip">
             <div style="color:var(--text-muted);font-size:.82rem;padding:.5rem">Loading forecast…</div>
           </div>
-          <div style="font-size:.7rem;color:var(--text-muted);margin-top:.6rem">Green = good window · Gold = marginal · Red = do not spray · Scroll to see full 24h</div>
+          <div style="font-size:.68rem;color:var(--text-muted);margin-top:.6rem;line-height:1.5">
+            🟢 Good window &nbsp;·&nbsp; 🟡 Marginal — proceed with care &nbsp;·&nbsp; 🔴 Do not spray &nbsp;·&nbsp; Scroll to see full 24h
+          </div>
         </div>
       </div>
 
       <!-- EDUCATION -->
       <div class="edu fade-up" id="edu1">
-        <div class="edu-title">🎓 Why These Factors Matter</div>
+        <div class="edu-title">🎓 Why These Conditions Matter — The Full Picture</div>
 
         <div class="edu-grid">
           <div class="edu-card">
             <div class="edu-card-icon">💨</div>
             <div class="edu-card-title">The Wind Window: 3–10 mph</div>
-            <div class="edu-card-text">Calm conditions (under 3 mph) allow fine droplets to hang in the air and drift unpredictably with any slight air movement. Over 10 mph, mechanical drift moves droplets off-target — potentially to neighboring fields, waterways, or sensitive crops. The 3–10 mph window is your safe zone.</div>
-            <div class="edu-card-tip" style="background:rgba(62,207,110,.12);color:var(--green)">Ideal: 3–10 mph</div>
+            <div class="edu-card-text">Calm conditions under 3 mph allow fine droplets to hang in the air and drift unpredictably with any slight movement. Over 10 mph, mechanical drift carries droplets off-target — potentially into neighboring fields, waterways, or sensitive crops. The 3–10 mph range is your safe zone. Below that is as dangerous as too high.</div>
+            <div class="edu-card-tip" style="background:rgba(62,207,110,.12);color:var(--green)">Ideal: 3–10 mph · Consistent direction</div>
           </div>
           <div class="edu-card">
             <div class="edu-card-icon">🌡️</div>
-            <div class="edu-card-title">Temperature & Volatilization</div>
-            <div class="edu-card-text">Heat causes some herbicide active ingredients (particularly 2,4-D, dicamba, and clopyralid) to volatilize from the leaf surface hours after application, drifting to sensitive plants. Above 85°F, this off-gassing risk increases significantly. Dicamba labels specifically restrict applications above certain temperatures for this reason.</div>
-            <div class="edu-card-tip" style="background:rgba(230,176,66,.12);color:var(--gold)">Critical for dicamba/2,4-D</div>
+            <div class="edu-card-title">Temperature &amp; Volatilization</div>
+            <div class="edu-card-text">Heat causes certain active ingredients — particularly dicamba, 2,4-D ester, and clopyralid — to volatilize off the leaf surface hours after application, drifting as a gas to sensitive plants. Above 85°F this off-gassing risk increases sharply. Dicamba labels now specifically restrict applications above certain temperature thresholds for exactly this reason.</div>
+            <div class="edu-card-tip" style="background:rgba(230,176,66,.12);color:var(--gold)">Critical above 85°F for dicamba/2,4-D</div>
           </div>
           <div class="edu-card">
             <div class="edu-card-icon">💧</div>
-            <div class="edu-card-title">Humidity & Droplet Evaporation</div>
-            <div class="edu-card-text">In low humidity (under 40%), fine spray droplets evaporate rapidly in flight, creating very small particles that drift further and deliver less active ingredient to the target. This is why spray nozzle selection matters — larger droplets are more resistant to evaporation, but may reduce coverage on canopy.</div>
-            <div class="edu-card-tip" style="background:rgba(240,96,96,.12);color:var(--red)">Risk below 40% RH</div>
+            <div class="edu-card-title">Humidity &amp; Droplet Evaporation</div>
+            <div class="edu-card-text">In low humidity (under 40%), fine spray droplets evaporate rapidly in flight, creating very small particles that drift farther and deliver less active ingredient to the target. This is why nozzle selection matters — larger droplets resist evaporation, but may reduce canopy penetration. Match nozzle size to the conditions, not just the label rate.</div>
+            <div class="edu-card-tip" style="background:rgba(240,96,96,.12);color:var(--red)">Below 40% RH — use larger nozzles</div>
           </div>
           <div class="edu-card">
             <div class="edu-card-icon">🌫️</div>
             <div class="edu-card-title">Thermal Inversions — The Hidden Danger</div>
-            <div class="edu-card-text">A thermal inversion occurs when warm air sits above cooler air near the ground, trapping fine droplets in a stable layer. These droplets can drift in any direction — sometimes miles — before settling. Inversions are invisible to the naked eye. Watch for dust following a tractor, smoke rising then flattening, or early morning mist clinging to low areas.</div>
-            <div class="edu-card-tip" style="background:rgba(240,96,96,.12);color:var(--red)">Can drift miles — no visible warning</div>
+            <div class="edu-card-text">A thermal inversion forms when warm air sits above cooler air near the ground, trapping spray droplets in a stable, non-mixing layer. These droplets can drift in any direction for miles before settling. Inversions are invisible. Common indicators: smoke rising then flattening horizontally, dust from a tractor that hangs and moves sideways, early morning mist clinging to low spots and drainage areas.</div>
+            <div class="edu-card-tip" style="background:rgba(240,96,96,.12);color:var(--red)">Can drift miles — no label override</div>
           </div>
           <div class="edu-card">
             <div class="edu-card-icon">⏰</div>
-            <div class="edu-card-title">Best Times of Day</div>
-            <div class="edu-card-text">Mid-morning (9am–noon) is typically the best spray window: inversions have broken, temperatures are moderate, winds are picking up, and dew has dried. Evening applications carry inversion risk as the atmosphere stabilizes after sunset. Pre-dawn applications can be effective but require checking if overnight inversions have cleared.</div>
-            <div class="edu-card-tip" style="background:rgba(62,207,110,.12);color:var(--green)">Best: 9am – noon</div>
+            <div class="edu-card-title">Best Times of Day to Spray</div>
+            <div class="edu-card-text">Mid-morning (9am–noon) is typically the best spray window: overnight inversions have broken, temperatures are still moderate, winds are picking up from heating, and morning dew has dried from leaves. Evening applications carry high inversion risk as the atmosphere stabilizes after sunset. Early morning can work but requires confirming overnight inversions have fully cleared.</div>
+            <div class="edu-card-tip" style="background:rgba(62,207,110,.12);color:var(--green)">Best window: 9am–noon in most conditions</div>
           </div>
           <div class="edu-card">
             <div class="edu-card-icon">🏷️</div>
-            <div class="edu-card-title">Label is the Law</div>
-            <div class="edu-card-text">Every pesticide label specifies wind speed limits, temperature restrictions, and buffer distances. This tool provides general guidance — but the product label is the legal requirement. Dicamba-resistant soybean labels are particularly strict: read the specific requirements for the product you're applying.</div>
-            <div class="edu-card-tip" style="background:rgba(91,163,224,.12);color:var(--blue)">Label supersedes all guidance</div>
+            <div class="edu-card-title">The Label is the Law — Always</div>
+            <div class="edu-card-text">Every pesticide label specifies wind speed limits, temperature restrictions, and mandatory buffer distances. This tool provides agronomically sound general guidance — but the product label is the legal requirement and the final word. Modern dicamba-resistant soybean labels are particularly strict with wind speed, temperature, and buffer zone requirements. Read the label for the specific product you are applying, every time.</div>
+            <div class="edu-card-tip" style="background:rgba(91,163,224,.12);color:var(--blue)">Label requirements supersede all general guidance</div>
           </div>
         </div>
 
-        <!-- Inversion diagram -->
+        <!-- Thermal inversion diagram -->
         <div class="inv-box">
-          <div class="inv-title">🌫️ Understanding Thermal Inversions</div>
+          <div class="inv-title">🌫️ Understanding Thermal Inversions — The Invisible Drift Risk</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
             <div>
-              <div style="font-size:.82rem;color:var(--text-dim);line-height:1.7;margin-bottom:.85rem">A thermal inversion traps fine spray droplets in a shallow, stable air layer. Because there's no vertical mixing, those droplets ride any horizontal air movement — potentially drifting miles before settling.</div>
+              <div style="font-size:.82rem;color:var(--text-dim);line-height:1.75;margin-bottom:.85rem">A thermal inversion traps fine spray droplets in a shallow, stable air layer close to the ground. Because there's no vertical mixing, those droplets ride horizontal air movement — potentially drifting miles before settling on sensitive crops, waterways, or residences.</div>
               <div class="inv-diagram">
                 <div class="inv-layer inv-layer-warm" style="margin-bottom:.3rem">
-                  <span style="font-size:.72rem;font-weight:700;color:var(--orange)">WARM AIR (inverted)</span>
-                  <span style="font-size:.68rem;color:var(--text-muted);margin-left:auto">~75°F · Rising</span>
+                  <span style="font-size:.72rem;font-weight:700;color:var(--orange)">WARM AIR (inverted layer)</span>
+                  <span style="font-size:.68rem;color:var(--text-muted);margin-left:auto">~75°F · Capping lid</span>
                   <span class="inv-arrow">↑ lid</span>
                 </div>
                 <div class="inv-layer inv-layer-cool" style="padding:1rem .75rem;margin-bottom:.3rem">
                   <div>
-                    <div style="font-size:.72rem;font-weight:700;color:var(--blue)">TRAPPED COOL AIR + DROPLETS</div>
-                    <div style="font-size:.65rem;color:var(--text-muted);margin-top:.15rem">Fine spray particles trapped · drift sideways</div>
+                    <div style="font-size:.72rem;font-weight:700;color:var(--blue)">TRAPPED COOL AIR + SPRAY DROPLETS</div>
+                    <div style="font-size:.65rem;color:var(--text-muted);margin-top:.15rem">Fine particles trapped · drift unpredictably in any direction</div>
                   </div>
                   <span class="inv-arrow" style="right:1.5rem">↔ drift</span>
                 </div>
                 <div class="inv-layer inv-layer-ground">
-                  <span style="font-size:.72rem;font-weight:700;color:var(--green)">GROUND SURFACE (cool)</span>
-                  <span style="font-size:.68rem;color:var(--text-muted);margin-left:auto">~62°F</span>
+                  <span style="font-size:.72rem;font-weight:700;color:var(--green)">GROUND SURFACE (cooled)</span>
+                  <span style="font-size:.68rem;color:var(--text-muted);margin-left:auto">~58–65°F</span>
                 </div>
               </div>
             </div>
             <div>
-              <div style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:.6rem">How to Detect an Inversion</div>
-              <div style="display:flex;flex-direction:column;gap:.5rem">
-                <div style="display:flex;gap:.5rem;font-size:.8rem"><span style="color:var(--gold)">→</span><span style="color:var(--text-dim)"><strong style="color:var(--text)">Smoke test:</strong> Release a smoke candle. If smoke rises then flattens horizontally, inversion is present.</span></div>
-                <div style="display:flex;gap:.5rem;font-size:.8rem"><span style="color:var(--gold)">→</span><span style="color:var(--text-dim)"><strong style="color:var(--text)">Dust:</strong> Dust from a passing tractor that hangs and moves sideways rather than rising.</span></div>
-                <div style="display:flex;gap:.5rem;font-size:.8rem"><span style="color:var(--gold)">→</span><span style="color:var(--text-dim)"><strong style="color:var(--text)">Ground fog:</strong> Low mist clinging to low spots and drainage areas.</span></div>
-                <div style="display:flex;gap:.5rem;font-size:.8rem"><span style="color:var(--gold)">→</span><span style="color:var(--text-dim)"><strong style="color:var(--text)">Still, clear evenings:</strong> Any calm, clear sunset creates near-surface inversion conditions.</span></div>
+              <div style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:.65rem">How to Detect an Inversion in the Field</div>
+              <div style="display:flex;flex-direction:column;gap:.6rem">
+                <div style="display:flex;gap:.5rem;font-size:.8rem"><span style="color:var(--gold)">→</span><span style="color:var(--text-dim)"><strong style="color:var(--text)">Smoke test:</strong> Release a smoke candle or observe chimney smoke. If it rises then flattens and moves horizontally, an inversion is present — do not spray.</span></div>
+                <div style="display:flex;gap:.5rem;font-size:.8rem"><span style="color:var(--gold)">→</span><span style="color:var(--text-dim)"><strong style="color:var(--text)">Tractor dust:</strong> Dust that hangs and moves sideways rather than rising is a clear inversion sign.</span></div>
+                <div style="display:flex;gap:.5rem;font-size:.8rem"><span style="color:var(--gold)">→</span><span style="color:var(--text-dim)"><strong style="color:var(--text)">Ground fog:</strong> Low mist clinging to drainage areas and low-lying ground indicates stable, non-mixing air.</span></div>
+                <div style="display:flex;gap:.5rem;font-size:.8rem"><span style="color:var(--gold)">→</span><span style="color:var(--text-dim)"><strong style="color:var(--text)">Time of day:</strong> Any calm, clear evening after sunset creates near-surface inversion conditions. Don't need to see it to know it's there.</span></div>
               </div>
-              <div style="margin-top:.85rem;padding:.65rem .8rem;background:rgba(240,96,96,.07);border:1px solid rgba(240,96,96,.18);border-radius:6px;font-size:.78rem;color:var(--text-dim)">⛔ <strong style="color:var(--red)">Do not spray</strong> when any inversion indicators are present, regardless of what the wind speed shows.</div>
+              <div style="margin-top:.85rem;padding:.65rem .85rem;background:rgba(240,96,96,.07);border:1px solid rgba(240,96,96,.18);border-radius:7px;font-size:.78rem;color:var(--text-dim);line-height:1.6">⛔ <strong style="color:var(--red)">Do not spray</strong> when any inversion indicator is present, regardless of what the wind meter reads. The wind speed alone cannot tell you an inversion exists.</div>
             </div>
           </div>
         </div>
@@ -251,74 +756,79 @@
 
     <!-- SIDEBAR -->
     <div class="sidebar fade-up" id="edu2">
+
+      <!-- Recommendation -->
       <div class="sc">
         <div class="sc-title">📋 Recommendation</div>
         <div class="rec marginal" id="rec-box">
           <div class="rec-h marginal" id="rec-head">Awaiting Location</div>
-          <div class="rec-t" id="rec-text">Set your location to receive a real-time spray recommendation for your field.</div>
+          <div class="rec-t" id="rec-text">Set your location above to receive a real-time spray recommendation for your field conditions.</div>
         </div>
       </div>
 
+      <!-- 5-day outlook -->
       <div class="sc">
-        <div class="sc-title">📅 5-Day Outlook</div>
+        <div class="sc-title">📅 5-Day Spray Outlook</div>
         <div class="day-strip" id="day-strip">
-          <div class="day-item"><div class="day-name">Today</div><div class="day-icon">⏳</div><div class="day-rating marginal">--</div></div>
-          <div class="day-item"><div class="day-name">Thu</div><div class="day-icon">⏳</div><div class="day-rating marginal">--</div></div>
-          <div class="day-item"><div class="day-name">Fri</div><div class="day-icon">⏳</div><div class="day-rating marginal">--</div></div>
-          <div class="day-item"><div class="day-name">Sat</div><div class="day-icon">⏳</div><div class="day-rating marginal">--</div></div>
-          <div class="day-item"><div class="day-name">Sun</div><div class="day-icon">⏳</div><div class="day-rating marginal">--</div></div>
+          <div class="day-item"><div class="day-name">Today</div><div class="day-icon">⏳</div><div class="day-rating marginal">--</div><div class="day-wind">--</div></div>
+          <div class="day-item"><div class="day-name">Day 2</div><div class="day-icon">⏳</div><div class="day-rating marginal">--</div><div class="day-wind">--</div></div>
+          <div class="day-item"><div class="day-name">Day 3</div><div class="day-icon">⏳</div><div class="day-rating marginal">--</div><div class="day-wind">--</div></div>
+          <div class="day-item"><div class="day-name">Day 4</div><div class="day-icon">⏳</div><div class="day-rating marginal">--</div><div class="day-wind">--</div></div>
+          <div class="day-item"><div class="day-name">Day 5</div><div class="day-icon">⏳</div><div class="day-rating marginal">--</div><div class="day-wind">--</div></div>
         </div>
-        <div style="font-size:.7rem;color:var(--text-muted);margin-top:.6rem">Based on forecast wind speed, temperature, and humidity. Verify conditions day-of before applying.</div>
+        <div style="font-size:.68rem;color:var(--text-muted);margin-top:.6rem;line-height:1.6">Based on forecast wind, temp, and humidity. Always verify conditions on the day of application before starting.</div>
       </div>
 
+      <!-- Pre-spray checklist -->
       <div class="sc">
-        <div class="sc-title">⚡ Quick Checklist</div>
+        <div class="sc-title">✅ Pre-Spray Checklist</div>
         <div style="display:flex;flex-direction:column;gap:.5rem">
-          <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.8rem;cursor:pointer"><input type="checkbox" style="margin-top:.2rem;accent-color:var(--green)"><span style="color:var(--text-dim)">Wind 3–10 mph, direction away from sensitive areas</span></label>
-          <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.8rem;cursor:pointer"><input type="checkbox" style="margin-top:.2rem;accent-color:var(--green)"><span style="color:var(--text-dim)">Temperature 50–85°F (check product label)</span></label>
-          <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.8rem;cursor:pointer"><input type="checkbox" style="margin-top:.2rem;accent-color:var(--green)"><span style="color:var(--text-dim)">Humidity above 40% (adjust nozzle size if dry)</span></label>
-          <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.8rem;cursor:pointer"><input type="checkbox" style="margin-top:.2rem;accent-color:var(--green)"><span style="color:var(--text-dim)">No inversion indicators present</span></label>
-          <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.8rem;cursor:pointer"><input type="checkbox" style="margin-top:.2rem;accent-color:var(--green)"><span style="color:var(--text-dim)">Leaves are dry (no dew or recent rain)</span></label>
-          <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.8rem;cursor:pointer"><input type="checkbox" style="margin-top:.2rem;accent-color:var(--green)"><span style="color:var(--text-dim)">Re-read product label restrictions today</span></label>
-          <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.8rem;cursor:pointer"><input type="checkbox" style="margin-top:.2rem;accent-color:var(--green)"><span style="color:var(--text-dim)">Notified neighbors if applying near property lines</span></label>
+          <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.8rem;cursor:pointer"><input type="checkbox" style="margin-top:.2rem;accent-color:var(--green);flex-shrink:0"><span style="color:var(--text-dim)">Wind 3–10 mph, consistent direction away from sensitive areas</span></label>
+          <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.8rem;cursor:pointer"><input type="checkbox" style="margin-top:.2rem;accent-color:var(--green);flex-shrink:0"><span style="color:var(--text-dim)">Temperature 50–85°F (check specific product label)</span></label>
+          <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.8rem;cursor:pointer"><input type="checkbox" style="margin-top:.2rem;accent-color:var(--green);flex-shrink:0"><span style="color:var(--text-dim)">Humidity above 40% RH (adjust nozzle if dry)</span></label>
+          <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.8rem;cursor:pointer"><input type="checkbox" style="margin-top:.2rem;accent-color:var(--green);flex-shrink:0"><span style="color:var(--text-dim)">No inversion indicators — smoke, hanging dust, ground fog</span></label>
+          <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.8rem;cursor:pointer"><input type="checkbox" style="margin-top:.2rem;accent-color:var(--green);flex-shrink:0"><span style="color:var(--text-dim)">Leaves are dry — no dew, no recent rain on canopy</span></label>
+          <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.8rem;cursor:pointer"><input type="checkbox" style="margin-top:.2rem;accent-color:var(--green);flex-shrink:0"><span style="color:var(--text-dim)">Re-read product label restrictions before starting today</span></label>
+          <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.8rem;cursor:pointer"><input type="checkbox" style="margin-top:.2rem;accent-color:var(--green);flex-shrink:0"><span style="color:var(--text-dim)">Notified neighbors / checked buffer zones if near property lines</span></label>
+          <label style="display:flex;align-items:flex-start;gap:.5rem;font-size:.8rem;cursor:pointer"><input type="checkbox" style="margin-top:.2rem;accent-color:var(--green);flex-shrink:0"><span style="color:var(--text-dim)">Equipment calibrated — nozzles clean, pressure checked</span></label>
         </div>
       </div>
 
-      <!-- Cross-link to Urea Monitor -->
+      <!-- Cross-link to Urea -->
       <a href="/urea" class="cross-link">
         <span class="cross-link-icon">🌾</span>
         <div>
           <div class="cross-link-title">Planning to Apply Urea?</div>
-          <div class="cross-link-text">Check volatilization risk before you spread — temperature and wind conditions affect N loss just as much as they affect spray.</div>
+          <div class="cross-link-text">Temperature and wind conditions affect nitrogen loss just as much as spray drift. Check volatilization risk before you spread.</div>
         </div>
         <span class="cross-link-arrow">→</span>
       </a>
     </div>
+
   </div>
 </main>
 
-  <div id="site-footer"></div>
-
-  <!-- loader.js BEFORE page script so initNav() fires first -->
-  <script src="/components/loader.js"></script>
+<div id="site-footer"></div>
+<script src="/components/loader.js"></script>
 
 <script>
 // ── Scroll reveal ──────────────────────────────────────────────────
-var io=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('vis');io.unobserve(x.target)}})},{threshold:.08});
-document.querySelectorAll('.fade-up').forEach(function(el){io.observe(el)});
+var io=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('vis');io.unobserve(x.target);}});},{threshold:.08});
+document.querySelectorAll('.fade-up').forEach(function(el){io.observe(el);});
 
 // ── WX ICONS ───────────────────────────────────────────────────────
-var WX={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌦️',63:'🌧️',65:'⛈️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️'};
+var WX={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌦️',63:'🌧️',65:'⛈️',71:'🌨️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️'};
 
 // ── SPRAY SCORING ──────────────────────────────────────────────────
 function windRating(mph){
-  if(mph<1) return 'marginal';
+  if(mph<1) return 'poor';
   if(mph<=3) return 'marginal';
   if(mph<=10) return 'good';
   if(mph<=15) return 'marginal';
   return 'poor';
 }
 function tempRating(f){
+  if(f<32) return 'poor';
   if(f<40) return 'poor';
   if(f<50) return 'marginal';
   if(f<=85) return 'good';
@@ -331,48 +841,44 @@ function humidRating(h){
   if(h<=90) return 'good';
   return 'marginal';
 }
-function inversionRisk(wind, hour, cloudCover){
-  var dawn = hour >= 4 && hour <= 8;
-  var dusk = hour >= 18 && hour <= 22;
-  var calm = wind < 5;
-  var clear = cloudCover < 30;
-  if(calm && clear && (dawn || dusk)) return 'poor';
-  if(calm && (dawn || dusk)) return 'marginal';
-  if(calm && clear) return 'marginal';
+function inversionRisk(wind,hour,cloud){
+  var dawn=hour>=4&&hour<=8;
+  var dusk=hour>=18&&hour<=22;
+  var calm=wind<5;
+  var clear=cloud<30;
+  if(calm&&clear&&(dawn||dusk)) return 'poor';
+  if(calm&&(dawn||dusk)) return 'marginal';
+  if(calm&&clear) return 'marginal';
   return 'good';
 }
-function dewRisk(temp, dew){
-  var gap = temp - dew;
-  if(gap < 3) return 'poor';
-  if(gap < 7) return 'marginal';
+function dewRisk(temp,dew){
+  var gap=temp-dew;
+  if(gap<3) return 'poor';
+  if(gap<7) return 'marginal';
   return 'good';
 }
-function overallRating(windR, tempR, humidR, invR, dewR){
-  var ratings = [windR, tempR, humidR, invR, dewR];
-  if(ratings.indexOf('poor') !== -1) return 'poor';
-  if(ratings.indexOf('marginal') !== -1) return 'marginal';
+function overallRating(wR,tR,hR,iR,dR){
+  var r=[wR,tR,hR,iR,dR];
+  if(r.indexOf('poor')!==-1) return 'poor';
+  if(r.indexOf('marginal')!==-1) return 'marginal';
   return 'good';
 }
 function ratingToWord(r){return {good:'Good',marginal:'Marginal',poor:'Poor'}[r]||r;}
 
 var rIcons={good:'✅',marginal:'⚠️',poor:'🚫'};
-var rMainText={
-  good:'Good — Apply Now',
-  marginal:'Marginal — Use Caution',
-  poor:'Poor — Do Not Spray'
-};
+var rMainText={good:'Good — Safe to Apply',marginal:'Marginal — Use Caution',poor:'Poor — Do Not Spray'};
 var rSubs={
-  good:'Conditions are within acceptable spray parameters. Monitor wind direction for sensitive nearby areas.',
-  marginal:'One or more factors are outside ideal range. Review the breakdown below and check your product label before proceeding.',
-  poor:'Conditions are unfavorable for spray application. Risk of drift, volatilization, or reduced efficacy is high.'
+  good:'Conditions are within acceptable spray parameters. Monitor wind direction and watch for inversion indicators.',
+  marginal:'One or more factors are outside the ideal range. Review the breakdown below and check your product label before proceeding.',
+  poor:'Conditions are unfavorable for spray application. Risk of drift, volatilization, or reduced efficacy is significant.'
 };
 var rRec={
-  good:'Conditions are currently favorable. Ensure wind is directed away from sensitive areas, double-check the product label restrictions, and run through the checklist before starting.',
-  marginal:'One or more conditions are borderline. If wind is marginal (under 3 mph or over 10 mph), consider waiting. If temperature is near the limit, check your specific product label — dicamba and 2,4-D have stricter requirements.',
-  poor:'Do not apply under current conditions. Check the hourly forecast for a better window today, or plan for tomorrow.'
+  good:'Conditions are currently favorable. Ensure wind is directed away from sensitive areas, double-check your product label restrictions, and run through the checklist before starting the boom.',
+  marginal:'One or more conditions are borderline. If wind is under 3 mph, possible inversion — wait and watch for mixing. If wind is over 10 mph, mechanical drift risk is elevated. If temperature is near the limit, check your specific label — dicamba and 2,4-D ester have the strictest requirements.',
+  poor:'Do not apply under current conditions. Check the 24-hour hourly forecast for a better window today, or plan for a different day. Risk of off-target movement is too high to proceed.'
 };
 
-function setFcard(id, val, desc, rating, barPct){
+function setFcard(id,val,desc,rating,barPct){
   var chip=document.getElementById('fc-'+id+'-chip');
   var valEl=document.getElementById('fc-'+id+'-val');
   var descEl=document.getElementById('fc-'+id+'-desc');
@@ -383,11 +889,17 @@ function setFcard(id, val, desc, rating, barPct){
   if(descEl) descEl.textContent=desc;
   var barColors={good:'var(--green)',marginal:'var(--gold)',poor:'var(--red)'};
   if(barEl){barEl.style.width=barPct+'%';barEl.style.background=barColors[rating];}
-  if(cardEl && rating==='poor') cardEl.style.borderColor='rgba(240,96,96,.25)';
-  else if(cardEl && rating==='good') cardEl.style.borderColor='rgba(62,207,110,.18)';
+  if(cardEl){
+    if(rating==='poor') cardEl.style.borderColor='rgba(240,96,96,.25)';
+    else if(rating==='good') cardEl.style.borderColor='rgba(62,207,110,.18)';
+    else cardEl.style.borderColor='rgba(230,176,66,.2)';
+  }
 }
 
-function degToCompass(d){var dirs=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];return dirs[Math.round(d/22.5)%16];}
+function degToCompass(d){
+  var dirs=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+  return dirs[Math.round(d/22.5)%16];
+}
 
 function buildHourly(hourly){
   var strip=document.getElementById('hourly-strip');
@@ -431,18 +943,18 @@ function buildDayStrip(daily){
     var name=i===0?'Today':dnames[d.getDay()];
     var wR=windRating(daily.wind_speed_10m_max[i]||8);
     var tR=tempRating(daily.temperature_2m_max[i]||70);
-    var overall=wR==='poor'||tR==='poor'?'poor':(wR==='marginal'||tR==='marginal'?'marginal':'good');
+    var overall=(wR==='poor'||tR==='poor')?'poor':((wR==='marginal'||tR==='marginal')?'marginal':'good');
     var el=document.createElement('div');
     el.className='day-item';
     el.innerHTML='<div class="day-name">'+name+'</div>'
       +'<div class="day-icon">'+(WX[daily.weather_code[i]]||'🌡️')+'</div>'
       +'<div class="day-rating '+overall+'">'+ratingToWord(overall).substring(0,3).toUpperCase()+'</div>'
-      +'<div class="day-wind">'+(daily.wind_speed_10m_max[i]||'--')+' mph</div>';
+      +'<div class="day-wind">'+(daily.wind_speed_10m_max[i]?Math.round(daily.wind_speed_10m_max[i]):'--')+' mph</div>';
     strip.appendChild(el);
   }
 }
 
-function loadWeather(lat, lon, label){
+function loadWeather(lat,lon,label){
   document.getElementById('loc-setup').style.display='none';
   document.getElementById('factor-section').style.display='block';
   document.getElementById('st-loc').textContent='📍 '+(label||'Your Location');
@@ -453,7 +965,7 @@ function loadWeather(lat, lon, label){
     +'&daily=weather_code,temperature_2m_max,wind_speed_10m_max,precipitation_probability_max'
     +'&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=5';
 
-  fetch(url).then(function(r){return r.json()}).then(function(d){
+  fetch(url).then(function(r){return r.json();}).then(function(d){
     var c=d.current;
     var wind=Math.round(c.wind_speed_10m);
     var dir=c.wind_direction_10m;
@@ -461,8 +973,7 @@ function loadWeather(lat, lon, label){
     var humid=c.relative_humidity_2m;
     var dew=Math.round(c.dew_point_2m);
     var cloud=c.cloud_cover||0;
-    var now=new Date();
-    var hour=now.getHours();
+    var hour=new Date().getHours();
 
     var wR=windRating(wind);
     var tR=tempRating(temp);
@@ -474,36 +985,46 @@ function loadWeather(lat, lon, label){
     var si=document.getElementById('st-icon');
     var sm=document.getElementById('st-main');
     var ss=document.getElementById('st-sub');
+    var sp=document.getElementById('status-panel');
     if(si) si.textContent=rIcons[overall];
     if(sm){sm.textContent=rMainText[overall];sm.className='status-main '+overall;}
     if(ss) ss.textContent=rSubs[overall];
+    if(sp) sp.className='status-panel '+overall;
 
-    var windDesc=wind<3?'Too calm — fine droplets may hang and drift with any slight air movement. Possible inversion conditions.':
-                 wind<=10?'Within the ideal window. Maintain awareness of downwind sensitive areas.':
-                 wind<=15?'Getting high — mechanical drift risk is elevated. Consider larger nozzle size or waiting.':
-                 'Too high for safe application. Significant off-target drift likely.';
-    setFcard('wind', wind+' mph', windDesc, wR, Math.min(100,wind*6));
+    // Wind
+    var windDesc=wind<3?'Very calm — fine droplets may hang and drift with any slight air movement. Possible inversion conditions. Wait for mixing.':
+                 wind<=10?'Within the ideal window. Good mechanical dispersion. Stay aware of downwind sensitive areas.':
+                 wind<=15?'Getting high — mechanical drift risk is elevated. Consider larger nozzle size or waiting for conditions to ease.':
+                 'Too high for safe application. Significant off-target drift likely. Do not spray.';
+    setFcard('wind',wind+' mph',windDesc,wR,Math.min(100,wind*6));
 
+    // Direction
     var compass=degToCompass(dir);
-    var dirDesc='Wind from the '+compass+' ('+Math.round(dir)+'°). Consider what is downwind — neighboring fields, waterways, or non-target crops. Always be aware of what is in the direction the wind is blowing.';
-    setFcard('dir', compass+' ('+Math.round(dir)+'°)', dirDesc, 'marginal', 50);
+    var dirDesc='Wind from the '+compass+' ('+Math.round(dir)+'°). Understand what is downwind — neighboring fields, waterways, residences, or sensitive crops. Always spray with direction away from non-target areas.';
+    setFcard('dir',compass+' ('+Math.round(dir)+'°)',dirDesc,'marginal',50);
 
-    var tempDesc=temp<50?'Too cold for most products. Slow uptake and plant stress risk.':
+    // Temperature
+    var tempDesc=temp<32?'Below freezing. Do not spray — frost injury risk and product efficacy is very poor.':
+                 temp<40?'Too cold for most products. Slow uptake, stress injury risk.':
+                 temp<=50?'Cool but acceptable for hardy products. Check label.':
                  temp<=75?'Ideal temperature range. Good efficacy and low volatilization risk.':
-                 temp<=85?'Warm but acceptable. Watch for dicamba/2,4-D label restrictions.':
-                 'High temperature. Volatilization risk elevated for dicamba and ester formulations. Check your label.';
-    setFcard('temp', temp+'°F', tempDesc, tR, Math.min(100,Math.max(0,(temp-40)*3)));
+                 temp<=85?'Warm but acceptable for most products. Watch dicamba/2,4-D label restrictions.':
+                 'Hot. Volatilization risk is elevated for dicamba and ester formulations. Check your label — may be restricted.';
+    setFcard('temp',temp+'°F',tempDesc,tR,Math.min(100,Math.max(0,(temp-40)*3)));
 
-    var humidDesc=humid<40?'Very dry. Fine droplets evaporate rapidly in flight. Use larger nozzle to maintain target delivery.':
-                  humid<60?'Low-moderate humidity. Watch droplet size selection.':
-                  humid<=90?'Ideal humidity range. Good droplet persistence.':
-                  'Very humid. Leaf surfaces may be wet, reducing contact herbicide efficacy.';
-    setFcard('humid', humid+'% RH', humidDesc, hR, humid);
+    // Humidity
+    var humidDesc=humid<30?'Very dry. Fine droplets evaporate rapidly in flight. Switch to large-droplet nozzles.':
+                  humid<40?'Dry. Watch droplet evaporation. Larger nozzles recommended.':
+                  humid<60?'Low-moderate humidity. Acceptable but monitor nozzle performance.':
+                  humid<=90?'Ideal humidity range. Good droplet persistence and delivery.':
+                  'Very humid. Leaf surfaces may be wet or close to dew point. Check contact product labels.';
+    setFcard('humid',humid+'% RH',humidDesc,hR,humid);
 
-    var invDesc=iR==='poor'?'High inversion risk. Calm winds + stable atmosphere detected. Fine spray droplets will trap near the ground and drift unpredictably.':
-                iR==='marginal'?'Some inversion indicators present. Watch for smoke/dust behavior. Avoid fine droplets.':
-                'Low inversion risk. Atmosphere appears to be mixing adequately.';
-    var invLabels={'good':'Low Risk','marginal':'Moderate','poor':'High Risk'};
+    // Inversion
+    var invDesc=iR==='poor'?'High inversion risk. Calm + stable atmosphere. Fine droplets will trap near ground and drift unpredictably. Do not spray.':
+                iR==='marginal'?'Some inversion indicators possible. Watch for smoke/dust behavior before starting. Avoid fine-droplet nozzles.':
+                'Low inversion risk. Atmosphere appears to be mixing adequately. Normal precautions apply.';
+    var invLabels={good:'Low Risk',marginal:'Moderate',poor:'High Risk'};
     var invEl=document.getElementById('fc-inv-chip');
     if(invEl){invEl.textContent=invLabels[iR];invEl.className='fchip '+iR;}
     var invValEl=document.getElementById('fc-inv-val');
@@ -512,13 +1033,17 @@ function loadWeather(lat, lon, label){
     if(invDescEl) invDescEl.textContent=invDesc;
     var invBarEl=document.getElementById('fc-inv-bar');
     if(invBarEl){invBarEl.style.width=(iR==='poor'?85:iR==='marginal'?50:20)+'%';invBarEl.style.background=iR==='poor'?'var(--red)':iR==='marginal'?'var(--gold)':'var(--green)';}
+    var invCardEl=document.getElementById('fc-inv');
+    if(invCardEl){if(iR==='poor') invCardEl.style.borderColor='rgba(240,96,96,.25)';else if(iR==='good') invCardEl.style.borderColor='rgba(62,207,110,.18)';}
 
+    // Dew
     var dewGap=temp-dew;
-    var dewDesc=dewGap<3?'Dew forming or imminent. Spray onto wet leaves reduces contact herbicide efficacy significantly.':
-                dewGap<7?'Dew point is close. Leaves may be damp. Check crop canopy before applying contact products.':
-                'Good margin between temperature and dew point. Low dew formation risk.';
-    setFcard('dew', dew+'°F dew pt', dewDesc, dR, Math.max(0,100-dewGap*8));
+    var dewDesc=dewGap<3?'Dew forming or imminent. Leaves likely wet. Contact herbicide efficacy significantly reduced.':
+                dewGap<7?'Dew point is close. Check crop canopy for moisture before applying contact products.':
+                'Good margin between temperature and dew point. Low dew formation risk. Clear to proceed.';
+    setFcard('dew',dew+'°F dew pt',dewDesc,dR,Math.max(0,100-dewGap*8));
 
+    // Recommendation
     var rb=document.getElementById('rec-box');
     var rh=document.getElementById('rec-head');
     var rt=document.getElementById('rec-text');
@@ -529,17 +1054,23 @@ function loadWeather(lat, lon, label){
     buildHourly(d.hourly);
     buildDayStrip(d.daily);
 
+    // Save location
+    try{localStorage.setItem('agsist-wx-loc',JSON.stringify({lat:lat,lon:lon,label:label||null}));}catch(e){}
+
     if(!label){
       fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json')
-        .then(function(r){return r.json()})
+        .then(function(r){return r.json();})
         .then(function(geo){
           var city=geo.address.city||geo.address.town||geo.address.village||geo.address.county||'';
           var st=geo.address.state_code||'';
-          if(city) document.getElementById('st-loc').textContent='📍 '+city+(st?', '+st:'');
+          if(city){
+            var loc='📍 '+city+(st?', '+st:'');
+            document.getElementById('st-loc').textContent=loc;
+          }
         }).catch(function(){});
     }
   }).catch(function(){
-    document.getElementById('st-sub').textContent='Weather data unavailable. Check connection.';
+    document.getElementById('st-sub').textContent='Weather data unavailable. Check your connection and try again.';
   });
 }
 
@@ -552,19 +1083,22 @@ function requestGeo(){
     {timeout:8000}
   );
 }
+
 function loadZip(){
   var zip=document.getElementById('spray-zip').value.trim();
   if(zip.length!==5||isNaN(zip)) return;
   fetch('https://geocoding-api.open-meteo.com/v1/search?name='+zip+'&count=1&language=en&format=json&countryCode=US')
-    .then(function(r){return r.json()})
+    .then(function(r){return r.json();})
     .then(function(d){
       if(d.results&&d.results.length){
         var r=d.results[0];
-        loadWeather(r.latitude,r.longitude,(r.name+(r.admin1?', '+r.admin1.substring(0,2):'')));
+        var lbl=r.name+(r.admin1?', '+r.admin1.substring(0,2):'');
+        loadWeather(r.latitude,r.longitude,lbl);
       }
     }).catch(function(){});
 }
 
+// Auto-load from saved location or geolocation
 setTimeout(function(){
   try{
     var s=localStorage.getItem('agsist-wx-loc');
@@ -573,6 +1107,5 @@ setTimeout(function(){
   requestGeo();
 },600);
 </script>
-
 </body>
 </html>
