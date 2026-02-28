@@ -6,7 +6,7 @@
   <title>Data Sources — AGSIST</title>
   <meta name="description" content="Full transparency on every data source used by AGSIST: commodity prices, weather, geocoding, and the Farmers First Ag Index.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://agsist.com/pages/data-sources">
+  <link rel="canonical" href="https://agsist.com/data-sources">
   <meta property="og:title"       content="Data Sources — AGSIST">
   <meta property="og:description" content="Full transparency on every data source used by AGSIST: commodity prices, weather, geocoding, and the Farmers First Ag Index.">
   <meta property="og:url"         content="https://agsist.com/data-sources">
@@ -35,68 +35,61 @@
   <div id="site-header"></div>
   <main id="main" tabindex="-1">
     <div class="info-page">
-      
-<h1>Data Sources</h1>
-<p class="sub">Full transparency on where every number on AGSIST comes from.</p>
+      <h1>Data Sources</h1>
+      <p class="sub">Full transparency on where every number on AGSIST comes from.</p>
 
-<h2>Commodity Prices</h2>
-<div class="info-card">
-  <h3>📊 Stooq.com</h3>
-  <p><strong>Used for:</strong> Corn, soybean, wheat, oat, rough rice, live cattle, lean hog, crude oil, natural gas, gold, silver, S&amp;P 500, Dollar Index futures.</p>
-  <p><strong>Delay:</strong> 15 minutes minimum.</p>
-  <p><strong>Update frequency:</strong> Every 5 minutes during market hours.</p>
-  <p><a href="https://stooq.com" target="_blank" rel="noopener">stooq.com</a> — free, no API key required.</p>
-</div>
+      <h2>Commodity Prices</h2>
+      <div class="info-card">
+        <h3>📊 Stooq.com</h3>
+        <p><strong>Used for:</strong> Corn, soybean, wheat, live cattle, lean hog, crude oil, natural gas, gold, silver, Dollar Index, 10-yr Treasury futures.</p>
+        <p><strong>Delay:</strong> 15 minutes minimum.</p>
+        <p><strong>Update frequency:</strong> Every 5 minutes during market hours.</p>
+        <p><a href="https://stooq.com" target="_blank" rel="noopener">stooq.com</a> — free, no API key required.</p>
+      </div>
+      <div class="info-card">
+        <h3>₿ CoinGecko</h3>
+        <p><strong>Used for:</strong> Bitcoin, XRP, and Kaspa spot prices.</p>
+        <p><strong>Delay:</strong> Real-time (free tier).</p>
+        <p><a href="https://coingecko.com" target="_blank" rel="noopener">coingecko.com</a> — free public API.</p>
+      </div>
 
-<div class="info-card">
-  <h3>₿ CoinGecko</h3>
-  <p><strong>Used for:</strong> Bitcoin and Ethereum spot prices.</p>
-  <p><strong>Delay:</strong> Real-time (free tier).</p>
-  <p><a href="https://coingecko.com" target="_blank" rel="noopener">coingecko.com</a> — free public API.</p>
-</div>
+      <h2>Weather</h2>
+      <div class="info-card">
+        <h3>🌤 Open-Meteo</h3>
+        <p><strong>Used for:</strong> Hourly temperature, wind speed, wind direction, humidity, precipitation probability, and derived spray/urea risk calculations.</p>
+        <p><strong>Update frequency:</strong> Every hour.</p>
+        <p><a href="https://open-meteo.com" target="_blank" rel="noopener">open-meteo.com</a> — free, open-source weather API.</p>
+      </div>
+      <div class="info-card">
+        <h3>🌧 NOAA / National Weather Service</h3>
+        <p><strong>Used for:</strong> Radar imagery via Windy.com embed.</p>
+        <p><a href="https://weather.gov" target="_blank" rel="noopener">weather.gov</a></p>
+      </div>
+      <div class="info-card">
+        <h3>🗺 NOAA Drought Monitor</h3>
+        <p><strong>Used for:</strong> Weekly U.S. Drought Monitor map embed.</p>
+        <p><a href="https://droughtmonitor.unl.edu" target="_blank" rel="noopener">droughtmonitor.unl.edu</a></p>
+      </div>
 
-<h2>Weather</h2>
-<div class="info-card">
-  <h3>🌤 Open-Meteo</h3>
-  <p><strong>Used for:</strong> Hourly temperature, wind speed, wind direction, humidity, precipitation probability, and derived spray/urea risk calculations.</p>
-  <p><strong>Update frequency:</strong> Every hour.</p>
-  <p><a href="https://open-meteo.com" target="_blank" rel="noopener">open-meteo.com</a> — free, open-source weather API.</p>
-</div>
+      <h2>Geocoding</h2>
+      <div class="info-card">
+        <h3>📍 Nominatim / OpenStreetMap</h3>
+        <p><strong>Used for:</strong> Reverse geocoding browser lat/lng to city, state, and ZIP code. No personal location data is stored on our servers.</p>
+      </div>
 
-<div class="info-card">
-  <h3>🌧 NOAA / National Weather Service</h3>
-  <p><strong>Used for:</strong> Radar imagery via Windy.com embed.</p>
-  <p><a href="https://weather.gov" target="_blank" rel="noopener">weather.gov</a></p>
-</div>
+      <h2>Farmers First Ag Index (FFAI)</h2>
+      <div class="info-card">
+        <h3>📈 Farmers First Agri Service — Proprietary</h3>
+        <p>The FFAI is a composite index calculated weekly by Farmers First Agri Service from publicly available agricultural economic data. Published every Monday at <a href="https://farmers1st.com" target="_blank" rel="noopener">farmers1st.com</a>.</p>
+      </div>
 
-<div class="info-card">
-  <h3>🗺 NOAA Drought Monitor</h3>
-  <p><strong>Used for:</strong> Weekly U.S. Drought Monitor map embed.</p>
-  <p><a href="https://droughtmonitor.unl.edu" target="_blank" rel="noopener">droughtmonitor.unl.edu</a></p>
-</div>
+      <h2>Cash Bids</h2>
+      <div class="info-card">
+        <h3>🚜 Barchart OnDemand</h3>
+        <p>Local elevator cash bids are sourced from Barchart OnDemand API, proxied via a Cloudflare Worker to protect the API key. Integration requires Worker deployment — see <a href="/developer">Developer docs</a>.</p>
+      </div>
 
-<h2>Geocoding</h2>
-<div class="info-card">
-  <h3>📍 Open-Meteo Geocoding API</h3>
-  <p><strong>Used for:</strong> Converting your browser location (lat/lng) to a city/state display name.</p>
-  <p>No personal location data is stored on our servers.</p>
-</div>
-
-<h2>Farmers First Ag Index (FFAI)</h2>
-<div class="info-card">
-  <h3>📈 Farmers First Agri Service — Proprietary</h3>
-  <p>The FFAI is a composite index calculated weekly by Farmers First Agri Service from publicly available agricultural economic data. The methodology and weighting are proprietary.</p>
-  <p>Published every Monday at <a href="https://farmers1st.com" target="_blank" rel="noopener">farmers1st.com</a>.</p>
-</div>
-
-<h2>Cash Bids</h2>
-<div class="info-card">
-  <h3>🚜 Cash Bids — Coming Soon</h3>
-  <p>Local elevator cash bids will be sourced from a licensed grain market data provider. Integration in progress.</p>
-</div>
-
-<p>See a data issue? <a href="/contact">Contact us</a>.</p>
-
+      <p>See a data issue? <a href="/contact">Contact us</a>.</p>
     </div>
   </main>
   <div id="site-footer"></div>
