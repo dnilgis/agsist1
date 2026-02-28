@@ -203,9 +203,14 @@
     <div style="display:flex;align-items:center;gap:.5rem">
       <span style="font-size:.82rem;color:var(--text-muted)">Published every weekday by 6am CT.</span>
     </div>
-    <button onclick="dismissDaily()" style="display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1.3rem;background:var(--surface2);border:1px solid var(--border);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:.84rem;font-weight:600;color:var(--text-muted);cursor:pointer;white-space:nowrap" onmouseover="this.style.borderColor='var(--border-g)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">
-      ↑ Hide Until Tomorrow
-    </button>
+    <div style="display:flex;align-items:center;gap:.6rem;flex-wrap:wrap">
+      <a href="/daily-archive" style="display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.1rem;background:var(--surface2);border:1px solid var(--border);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:.82rem;font-weight:600;color:var(--text-muted);text-decoration:none;white-space:nowrap" onmouseover="this.style.borderColor='var(--border-g)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">
+        📚 Browse Archive
+      </a>
+      <button onclick="dismissDaily()" style="display:inline-flex;align-items:center;gap:.5rem;padding:.6rem 1.3rem;background:var(--surface2);border:1px solid var(--border);border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:.84rem;font-weight:600;color:var(--text-muted);cursor:pointer;white-space:nowrap" onmouseover="this.style.borderColor='var(--border-g)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--text-muted)'">
+        ↑ Hide Until Tomorrow
+      </button>
+    </div>
   </div>
 
 </section>
