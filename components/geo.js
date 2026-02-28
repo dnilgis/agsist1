@@ -583,32 +583,117 @@ function rebuildTickerLoop() {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// KALSHI PREDICTION MARKETS
-// Note: Kalshi API currently unavailable via direct browser calls.
-// Shows a clean placeholder linking to Kalshi's ag markets page.
+// PREDICTION MARKETS (Kalshi + Polymarket)
+// Reads from data/markets.json — fetched server-side by GitHub
+// Actions (fetch_markets.py). No CORS issues, no API keys.
 // ─────────────────────────────────────────────────────────────────
 function fetchKalshiMarkets() {
-  var loading = document.getElementById('kalshi-loading');
   var grid    = document.getElementById('kalshi-grid');
-  if (!loading && !grid) return;
+  var loading = document.getElementById('kalshi-loading');
+  if (!grid) return;
 
-  var placeholder = document.createElement('div');
-  placeholder.style.cssText = 'text-align:center;padding:1.5rem .5rem;grid-column:1/-1';
-  placeholder.innerHTML =
-    '<div style="font-size:1.5rem;margin-bottom:.5rem">📊</div>'
-    + '<div style="font-size:.9rem;font-weight:600;color:var(--text);margin-bottom:.3rem">Ag Prediction Markets</div>'
-    + '<div style="font-size:.78rem;color:var(--text-muted);line-height:1.6;margin-bottom:.75rem">'
-    + 'Bet on USDA reports, crop yields, drought conditions, and more at Kalshi — the regulated prediction market.'
-    + '</div>'
-    + '<a href="https://kalshi.com/markets?category=agriculture" target="_blank" rel="noopener" '
-    + 'style="display:inline-block;padding:.45rem 1rem;border:1px solid var(--gold);border-radius:6px;'
-    + 'color:var(--gold);font-size:.78rem;font-weight:600;text-decoration:none">View Ag Markets on Kalshi →</a>';
+  fetch('/data/markets.json', { cache: 'no-store' })
+    .then(function(r) {
+      if (!r.ok) throw new Error('markets.json ' + r.status);
+      return r.json();
+    })
+    .then(function(data) {
+      var markets = data.markets || [];
+      if (loading) loading.style.display = 'none';
+      grid.innerHTML = '';
 
-  if (loading) loading.replaceWith(placeholder);
-  else if (grid) { grid.innerHTML = ''; grid.appendChild(placeholder); }
+      if (!markets.length) {
+        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:1.5rem;font-size:.82rem;color:var(--text-muted)">'
+          + 'No active ag markets found right now. '
+          + '<a href="https://kalshi.com/markets" target="_blank" rel="noopener" style="color:var(--gold)">Check Kalshi →</a> · '
+          + '<a href="https://polymarket.com" target="_blank" rel="noopener" style="color:var(--gold)">Check Polymarket →</a>'
+          + '</div>';
+        return;
+      }
+
+      markets.forEach(function(m) { grid.appendChild(buildMarketCard(m)); });
+
+      // Footer with last updated
+      if (data.fetched) {
+        var mins = Math.round((Date.now() - new Date(data.fetched).getTime()) / 60000);
+        var ageStr = mins < 2 ? 'Just updated' : mins < 60 ? mins + 'min ago' : Math.round(mins/60) + 'h ago';
+        var footer = document.createElement('div');
+        footer.style.cssText = 'grid-column:1/-1;font-size:.65rem;color:var(--text-muted);text-align:center;padding-top:.25rem';
+        footer.textContent = 'Odds from Kalshi & Polymarket · ' + ageStr + ' · Not investment advice';
+        grid.appendChild(footer);
+      }
+    })
+    .catch(function() {
+      if (loading) {
+        loading.innerHTML = 'Market data updating shortly. '
+          + '<a href="https://kalshi.com/markets" target="_blank" rel="noopener" style="color:var(--gold)">Kalshi →</a> · '
+          + '<a href="https://polymarket.com" target="_blank" rel="noopener" style="color:var(--gold)">Polymarket →</a>';
+      }
+    });
 }
 
-function buildKalshiCard() { return document.createElement('div'); }
+function buildMarketCard(m) {
+  var yes   = m.yes || 50;
+  var title = (m.title || '').length > 90 ? m.title.slice(0, 87) + '…' : (m.title || 'Market');
+
+  // Color based on probability
+  var color, bgAlpha, borderC;
+  if (yes >= 65)      { color = 'var(--green)'; bgAlpha = 'rgba(62,207,110,.07)';  borderC = 'rgba(62,207,110,.22)'; }
+  else if (yes <= 35) { color = 'var(--red)';   bgAlpha = 'rgba(240,96,96,.07)';   borderC = 'rgba(240,96,96,.22)';  }
+  else                { color = 'var(--gold)';  bgAlpha = 'rgba(230,176,66,.07)';  borderC = 'rgba(230,176,66,.22)'; }
+
+  // Platform badge color
+  var platColor = m.platform === 'Kalshi' ? '#00b2ff' : '#9b59b6';
+  var platLabel = m.platform || 'Market';
+
+  // Volume display
+  var vol = m.volume_24h || 0;
+  var volStr = vol >= 1000000 ? '$' + (vol/1000000).toFixed(1) + 'M vol'
+             : vol >= 1000    ? '$' + (vol/1000).toFixed(0) + 'k vol'
+             : vol > 0        ? '$' + Math.round(vol) + ' vol'
+             : '';
+
+  var div = document.createElement('div');
+  div.className = 'market-card';
+  div.style.cssText = 'background:' + bgAlpha + ';border:1px solid ' + borderC
+    + ';border-radius:10px;padding:.85rem;display:flex;flex-direction:column;gap:.5rem;cursor:pointer';
+  div.onclick = function() { window.open(m.url, '_blank', 'noopener'); };
+
+  div.innerHTML =
+    // Platform badge + time
+    '<div style="display:flex;justify-content:space-between;align-items:center">'
+      + '<span style="font-size:.6rem;font-weight:700;letter-spacing:.08em;color:' + platColor + ';text-transform:uppercase;'
+        + 'background:' + platColor + '15;border:1px solid ' + platColor + '35;border-radius:4px;padding:.1rem .4rem">'
+        + platLabel + '</span>'
+      + '<span style="font-size:.62rem;color:var(--text-muted)">' + (m.time_left || '') + '</span>'
+    + '</div>'
+    // Title
+    + '<div style="font-size:.78rem;font-weight:600;color:var(--text);line-height:1.4">' + title + '</div>'
+    // Probability bar + number
+    + '<div>'
+      + '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.3rem">'
+        + '<span style="font-size:1.5rem;font-weight:700;color:' + color + ';font-family:\'Oswald\',sans-serif;line-height:1">'
+          + yes + '%</span>'
+        + '<span style="font-size:.7rem;color:var(--text-muted)">YES probability</span>'
+      + '</div>'
+      // Progress bar
+      + '<div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden">'
+        + '<div style="height:100%;width:' + yes + '%;background:' + color + ';border-radius:3px;'
+          + 'transition:width .4s ease"></div>'
+      + '</div>'
+    + '</div>'
+    // Footer: NO price + volume + trade link
+    + '<div style="display:flex;justify-content:space-between;align-items:center;padding-top:.3rem;'
+        + 'border-top:1px solid var(--border);margin-top:.1rem">'
+      + '<span style="font-size:.68rem;color:var(--text-muted)">NO: ' + (m.no || (100 - yes)) + '%'
+        + (volStr ? ' · ' + volStr : '') + '</span>'
+      + '<a href="' + m.url + '" target="_blank" rel="noopener" onclick="event.stopPropagation()"'
+        + ' style="font-size:.66rem;color:' + color + ';text-decoration:none;font-weight:600;'
+          + 'border:1px solid currentColor;border-radius:4px;padding:.15rem .45rem">Trade →</a>'
+    + '</div>';
+
+  return div;
+}
 
 // ─────────────────────────────────────────────────────────────────
 // DAILY BRIEFING
