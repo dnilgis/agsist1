@@ -1,23 +1,126 @@
 {
-  "fetched": "2026-02-28T18:00:00Z",
-  "note": "Seed file — will be overwritten by GitHub Actions (fetch_prices.py via yfinance)",
+  "fetched": "2026-02-28T19:01:23Z",
+  "ok": 17,
+  "failed": 0,
   "quotes": {
-    "corn":       { "close": 4.52, "open": 4.48, "netChange": 0.04,  "pctChange": 0.89  },
-    "corn-dec":   { "close": 4.38, "open": 4.35, "netChange": 0.03,  "pctChange": 0.69  },
-    "beans":      { "close": 9.87, "open": 9.81, "netChange": 0.06,  "pctChange": 0.61  },
-    "beans-nov":  { "close": 9.74, "open": 9.70, "netChange": 0.04,  "pctChange": 0.41  },
-    "wheat":      { "close": 5.42, "open": 5.38, "netChange": 0.04,  "pctChange": 0.74  },
-    "cattle":     { "close": 194.5,"open": 193.8,"netChange": 0.70,  "pctChange": 0.36  },
-    "feeders":    { "close": 271.2,"open": 270.1,"netChange": 1.10,  "pctChange": 0.41  },
-    "hogs":       { "close": 87.4, "open": 86.9, "netChange": 0.50,  "pctChange": 0.58  },
-    "meal":       { "close": 296.8,"open": 295.2,"netChange": 1.60,  "pctChange": 0.54  },
-    "soyoil":     { "close": 42.18,"open": 41.95,"netChange": 0.23,  "pctChange": 0.55  },
-    "crude":      { "close": 71.4, "open": 71.1, "netChange": 0.30,  "pctChange": 0.42  },
-    "natgas":     { "close": 3.72, "open": 3.68, "netChange": 0.04,  "pctChange": 1.09  },
-    "gold":       { "close": 2915, "open": 2901, "netChange": 14.0,  "pctChange": 0.48  },
-    "silver":     { "close": 32.44,"open": 32.18,"netChange": 0.26,  "pctChange": 0.81  },
-    "dollar":     { "close": 107.2,"open": 107.4,"netChange": -0.20, "pctChange": -0.19 },
-    "treasury10": { "close": 4.42, "open": 4.45, "netChange": -0.03, "pctChange": -0.67 },
-    "sp500":      { "close": 5780, "open": 5762, "netChange": 18.0,  "pctChange": 0.31  }
+    "corn": {
+      "ticker": "ZC=F",
+      "close": 438.75,
+      "open": 443.75,
+      "netChange": -5.0,
+      "pctChange": -1.1268
+    },
+    "corn-dec": {
+      "ticker": "ZCZ26.CBT",
+      "close": 469.5,
+      "open": 467.5,
+      "netChange": 2.0,
+      "pctChange": 0.4278
+    },
+    "beans": {
+      "ticker": "ZS=F",
+      "close": 1157.25,
+      "open": 1165.5,
+      "netChange": -8.25,
+      "pctChange": -0.7079
+    },
+    "beans-nov": {
+      "ticker": "ZSX26.CBT",
+      "close": 1128.25,
+      "open": 1128.25,
+      "netChange": 0.0,
+      "pctChange": 0.0
+    },
+    "wheat": {
+      "ticker": "ZW=F",
+      "close": 591.25,
+      "open": 576.75,
+      "netChange": 14.5,
+      "pctChange": 2.5141
+    },
+    "cattle": {
+      "ticker": "LE=F",
+      "close": 244.0,
+      "open": 236.97501,
+      "netChange": 7.02499,
+      "pctChange": 2.9644
+    },
+    "feeders": {
+      "ticker": "GF=F",
+      "close": 355.42499,
+      "open": 358.79999,
+      "netChange": -3.375,
+      "pctChange": -0.9406
+    },
+    "hogs": {
+      "ticker": "HE=F",
+      "close": 95.725,
+      "open": 95.65,
+      "netChange": 0.075,
+      "pctChange": 0.0784
+    },
+    "meal": {
+      "ticker": "ZM=F",
+      "close": 315.5,
+      "open": 322.10001,
+      "netChange": -6.60001,
+      "pctChange": -2.0491
+    },
+    "soyoil": {
+      "ticker": "ZL=F",
+      "close": 61.29,
+      "open": 61.86,
+      "netChange": -0.57,
+      "pctChange": -0.9214
+    },
+    "crude": {
+      "ticker": "CL=F",
+      "close": 67.02,
+      "open": 65.31,
+      "netChange": 1.71,
+      "pctChange": 2.6183
+    },
+    "natgas": {
+      "ticker": "NG=F",
+      "close": 2.859,
+      "open": 2.824,
+      "netChange": 0.035,
+      "pctChange": 1.2394
+    },
+    "gold": {
+      "ticker": "GC=F",
+      "close": 5230.5,
+      "open": 5200.5,
+      "netChange": 30.0,
+      "pctChange": 0.5769
+    },
+    "silver": {
+      "ticker": "SI=F",
+      "close": 92.682,
+      "open": 90.135,
+      "netChange": 2.547,
+      "pctChange": 2.8258
+    },
+    "dollar": {
+      "ticker": "DX=F",
+      "close": 97.565,
+      "open": 97.6,
+      "netChange": -0.035,
+      "pctChange": -0.0359
+    },
+    "treasury10": {
+      "ticker": "^TNX",
+      "close": 3.962,
+      "open": 4.017,
+      "netChange": -0.055,
+      "pctChange": -1.3692
+    },
+    "sp500": {
+      "ticker": "^GSPC",
+      "close": 6878.87988,
+      "open": 6908.86,
+      "netChange": -29.98012,
+      "pctChange": -0.4339
+    }
   }
 }
