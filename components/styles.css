@@ -559,32 +559,6 @@ html {
   will-change: transform;
 }
 
-/* ── TICKER — Pause button for accessibility ──────────────────── */
-.ticker-pause {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  background: none;
-  border: 1px solid var(--border);
-  border-radius: 4px;
-  color: var(--text-muted);
-  font-size: .72rem;
-  cursor: pointer;
-  flex-shrink: 0;
-  margin: 0 .4rem;
-  transition: border-color .15s, color .15s;
-  line-height: 1;
-}
-.ticker-pause:hover {
-  border-color: var(--gold);
-  color: var(--gold);
-}
-.ticker-track.paused {
-  animation-play-state: paused !important;
-}
-
 /* ── Reduced motion — accessibility ───────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
   .ticker-track {
