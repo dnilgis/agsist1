@@ -570,16 +570,30 @@ function fetchFFAILive() {
 // ─────────────────────────────────────────────────────────────────
 // TICKER
 // ─────────────────────────────────────────────────────────────────
+var _tickerRebuildTimer = null;
 function rebuildTickerLoop() {
-  var single = document.getElementById('ticker-items-single');
-  var track  = document.getElementById('ticker-track');
-  if (!single || !track) return;
-  var old = document.getElementById('ticker-items-clone');
-  if (old) old.remove();
-  var c = single.cloneNode(true);
-  c.id = 'ticker-items-clone';
-  c.setAttribute('aria-hidden','true');
-  track.appendChild(c);
+  // Debounce — prices update many items rapidly, only rebuild once they settle
+  if (_tickerRebuildTimer) clearTimeout(_tickerRebuildTimer);
+  _tickerRebuildTimer = setTimeout(function() {
+    var single = document.getElementById('ticker-items-single');
+    var track  = document.getElementById('ticker-track');
+    if (!single || !track) return;
+
+    // Remove old clone
+    var old = document.getElementById('ticker-items-clone');
+    if (old) old.remove();
+
+    // Clone and append
+    var c = single.cloneNode(true);
+    c.id = 'ticker-items-clone';
+    c.setAttribute('aria-hidden', 'true');
+    track.appendChild(c);
+
+    // Restart animation cleanly so the loop doesn't jump mid-scroll
+    track.style.animation = 'none';
+    track.offsetHeight; // force reflow
+    track.style.animation = '';
+  }, 120);
 }
 
 // ─────────────────────────────────────────────────────────────────
