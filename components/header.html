@@ -54,3 +54,51 @@
     </div>
   </div>
 </nav>
+
+<!-- ══ MOBILE DRAWER — lives here so every page gets it via loader.js ══ -->
+<div class="drawer" id="drawer" aria-hidden="true" role="dialog" aria-label="Site navigation">
+  <div class="draw-head">
+    <img src="/img/logo-agsist.jpg" alt="AGSIST" style="height:30px;width:auto;object-fit:contain">
+    <button class="draw-close" id="draw-close" aria-label="Close menu">✕</button>
+  </div>
+  <div class="draw-sec">
+    <div class="draw-lbl">📈 Prices</div>
+    <a href="/corn-futures-prices" class="draw-item">🌽 Corn Futures</a>
+    <a href="/soybean-futures-prices" class="draw-item">🫘 Soybean Futures</a>
+    <a href="/wheat-futures-prices" class="draw-item">🌾 Wheat Futures</a>
+    <a href="/cash-bids" class="draw-item">💵 Cash Bids</a>
+  </div>
+  <div class="draw-sec">
+    <div class="draw-lbl">⛅ Weather</div>
+    <a href="/spray" class="draw-item">🌿 Spray Conditions</a>
+    <a href="/drought-monitor" class="draw-item">🏜️ Drought Monitor</a>
+    <a href="/gdu-calculator" class="draw-item">🌡️ GDU Tracker</a>
+  </div>
+  <div class="draw-sec">
+    <div class="draw-lbl">🛠️ Tools</div>
+    <a href="/breakeven" class="draw-item">📐 Break-Even Calc</a>
+    <a href="/grain-bin-calculator" class="draw-item">🏗️ Grain Bin Calc</a>
+    <a href="/fast-facts" class="draw-item">⚡ Fast Facts</a>
+  </div>
+  <div class="draw-sec">
+    <div class="draw-lbl">📊 Data</div>
+    <a href="/usda-calendar" class="draw-item">📅 USDA Calendar</a>
+    <a href="/daily" class="draw-item">📰 AGSIST Daily</a>
+  </div>
+  <div class="draw-sec">
+    <div class="draw-lbl">Company</div>
+    <a href="/about" class="draw-item">About</a>
+    <a href="/contact" class="draw-item">Contact</a>
+    <a href="/data-sources" class="draw-item">Data Sources</a>
+  </div>
+  <div class="draw-sec" style="border-bottom:none">
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:.6rem 1.1rem">
+      <span style="font-size:.82rem;color:var(--text-dim)">Display mode</span>
+      <button class="theme-btn" id="theme-btn-d" aria-label="Toggle theme">
+        <span id="theme-icon-d">🌙</span>
+        <div class="t-track"><div class="t-thumb"></div></div>
+      </button>
+    </div>
+  </div>
+</div>
+<div class="draw-ov" id="draw-ov" aria-hidden="true"></div>

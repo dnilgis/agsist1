@@ -149,7 +149,7 @@ function fetchWeather(lat, lon, label) {
         }
       }
 
-      // Urea inline widget — FIX: use c.temperature_2m and c.precipitation_probability (not data.*)
+      // Urea inline widget
       var ureaWrap = document.getElementById('wx-urea');
       if (ureaWrap) {
         var u = calcUrea(tempF, humid, wind, precip);
@@ -342,12 +342,10 @@ function loadCashBids(zip) {
 
   if (!listArea) return;
 
-  // Show loading state
   listArea.innerHTML = '<div class="bids-loading">'
     + '<div style="font-size:.75rem;color:var(--text-muted);text-align:center;padding:.75rem 0">'
     + '⏳ Loading bids near ZIP ' + zip + '…</div></div>';
 
-  // Barchart grain bids endpoint via Cloudflare Worker
   var workerUrl = 'https://agsist-prices.workers.dev/api/grain-bids?zip=' + zip + '&commodityCode=corn,soybeans';
   fetch(workerUrl)
     .then(function(r) {
@@ -358,7 +356,6 @@ function loadCashBids(zip) {
       renderBids(data, zip, listArea);
     })
     .catch(function() {
-      // Worker not yet deployed or outside market hours — show helpful placeholder
       listArea.innerHTML = renderBidsPlaceholder(zip);
     });
 }
@@ -394,26 +391,42 @@ function renderBidsPlaceholder(zip) {
     + '</div>';
 }
 
-var STOOQ_QUOTES = [
-  {sym:'zc.f',      label:'Corn (front)',   priceEl:'pcp-corn-near', chgEl:'pcc-corn-near', dec:2, grain:true},
-  {sym:'zcz26.cbt', label:"Corn Dec'26",    priceEl:'pcp-corn-dec',  chgEl:'pcc-corn-dec',  dec:2, grain:true},
-  {sym:'zs.f',      label:'Beans (front)',  priceEl:'pcp-bean-near', chgEl:'pcc-bean-near', dec:2, grain:true},
-  {sym:'zsx26.cbt', label:"Beans Nov'26",   priceEl:'pcp-bean-nov',  chgEl:'pcc-bean-nov',  dec:2, grain:true},
-  {sym:'zw.f',      label:'Wheat (front)',  priceEl:null,            chgEl:null,            dec:2, grain:true},
-  {sym:'le.f',      label:'Live Cattle',    priceEl:null,            chgEl:null,            dec:3, grain:false},
-  {sym:'gf.f',      label:'Feeder Cattle',  priceEl:null,            chgEl:null,            dec:3, grain:false},
-  {sym:'he.f',      label:'Lean Hogs',      priceEl:null,            chgEl:null,            dec:3, grain:false},
-  {sym:'zm.f',      label:'Soy Meal',       priceEl:null,            chgEl:null,            dec:2, grain:false},
-  {sym:'zl.f',      label:'Soy Oil',        priceEl:null,            chgEl:null,            dec:2, grain:false},
-  {sym:'cl.f',      label:'Crude WTI',      priceEl:null,            chgEl:null,            dec:2, grain:false},
-  {sym:'ng.f',      label:'Natural Gas',    priceEl:null,            chgEl:null,            dec:3, grain:false},
-  {sym:'gc.f',      label:'Gold',           priceEl:'pc-gold',       chgEl:'pcc-gold',      dec:0, grain:false},
-  {sym:'si.f',      label:'Silver',         priceEl:'pc-silver',     chgEl:'pcc-silver',    dec:2, grain:false},
-  {sym:'dx.f',      label:'Dollar Index',   priceEl:null,            chgEl:null,            dec:2, grain:false},
-  {sym:'%5etnx',    label:'10-Yr Treasury', priceEl:null,            chgEl:null,            dec:2, grain:false, suffix:'%'}
-];
+// ─────────────────────────────────────────────────────────────────
+// ─────────────────────────────────────────────────────────────────
+// PRICE CONFIGURATION
+// ─────────────────────────────────────────────────────────────────
+// HTML data-sym attributes use stable INTERNAL KEYS (e.g. "corn", "beans").
+// Never use provider-specific symbols in HTML — swapping providers won't
+// break anything as long as this map stays current.
+//
+// Fetch order: 1) Barchart Worker  2) data/prices.json  3) Stooq CORS proxy
+// ─────────────────────────────────────────────────────────────────
+var PRICE_MAP = {
+  //  key          label              priceEl            chgEl             dec  grain  stooqSym       suffix
+  'corn':       { label:'Corn (front)',   priceEl:'pcp-corn-near', chgEl:'pcc-corn-near', dec:2, grain:true,  stooq:'zc.f' },
+  'corn-dec':   { label:"Corn Dec'26",   priceEl:'pcp-corn-dec',  chgEl:'pcc-corn-dec',  dec:2, grain:true,  stooq:'zcz26.cbt' },
+  'beans':      { label:'Beans (front)', priceEl:'pcp-bean-near', chgEl:'pcc-bean-near', dec:2, grain:true,  stooq:'zs.f' },
+  'beans-nov':  { label:"Beans Nov'26",  priceEl:'pcp-bean-nov',  chgEl:'pcc-bean-nov',  dec:2, grain:true,  stooq:'zsx26.cbt' },
+  'wheat':      { label:'Wheat (front)', priceEl:null,            chgEl:null,            dec:2, grain:true,  stooq:'zw.f' },
+  'cattle':     { label:'Live Cattle',   priceEl:null,            chgEl:null,            dec:3, grain:false, stooq:'le.f' },
+  'feeders':    { label:'Feeder Cattle', priceEl:null,            chgEl:null,            dec:3, grain:false, stooq:'gf.f' },
+  'hogs':       { label:'Lean Hogs',     priceEl:null,            chgEl:null,            dec:3, grain:false, stooq:'he.f' },
+  'meal':       { label:'Soy Meal',      priceEl:null,            chgEl:null,            dec:2, grain:false, stooq:'zm.f' },
+  'soyoil':     { label:'Soy Oil',       priceEl:null,            chgEl:null,            dec:2, grain:false, stooq:'zl.f' },
+  'crude':      { label:'Crude WTI',     priceEl:null,            chgEl:null,            dec:2, grain:false, stooq:'cl.f' },
+  'natgas':     { label:'Natural Gas',   priceEl:null,            chgEl:null,            dec:3, grain:false, stooq:'ng.f' },
+  'gold':       { label:'Gold',          priceEl:'pc-gold',       chgEl:'pcc-gold',      dec:0, grain:false, stooq:'gc.f' },
+  'silver':     { label:'Silver',        priceEl:'pc-silver',     chgEl:'pcc-silver',    dec:2, grain:false, stooq:'si.f' },
+  'dollar':     { label:'Dollar Index',  priceEl:null,            chgEl:null,            dec:2, grain:false, stooq:'dx.f' },
+  'treasury10': { label:'10-Yr Treasury',priceEl:null,            chgEl:null,            dec:2, grain:false, stooq:'%5etnx', suffix:'%' },
+};
 
-function fmtStooqPrice(val, dec, grain, suffix) {
+var WORKER_URL = 'https://agsist-prices.workers.dev';
+
+// ─────────────────────────────────────────────────────────────────
+// PRICE FORMATTING — shared by all three sources
+// ─────────────────────────────────────────────────────────────────
+function fmtPrice(val, dec, grain, suffix) {
   var p = parseFloat(val);
   if (isNaN(p)) return '--';
   if (grain) {
@@ -427,11 +440,11 @@ function fmtStooqPrice(val, dec, grain, suffix) {
   return p.toFixed(dec) + (suffix||'');
 }
 
-function fmtStooqChg(close, open, grain) {
+function fmtChange(close, open, grain, netChg, pctChg) {
   var c = parseFloat(close), o = parseFloat(open);
   if (isNaN(c) || isNaN(o)) return {text:'--', cls:'nc'};
-  var diff  = c - o;
-  var pct   = o !== 0 ? (diff/o)*100 : 0;
+  var diff  = netChg !== undefined ? parseFloat(netChg) : (c - o);
+  var pct   = pctChg !== undefined ? parseFloat(pctChg) : (o !== 0 ? (diff/o)*100 : 0);
   var dir   = diff > 0 ? 'up' : diff < 0 ? 'dn' : 'nc';
   var arrow = diff > 0 ? '▲' : diff < 0 ? '▼' : '—';
   var abs   = Math.abs(diff);
@@ -469,47 +482,21 @@ function updateRangeBar(priceElId, price) {
   if (dot) dot.style.left = pct + '%';
 }
 
-function fetchStooqSym(q, cb) {
-  var stooqUrl = 'https://stooq.com/q/l/?s=' + q.sym + '&f=sd2t2ohlcv&h&e=csv';
-  var proxy1 = 'https://corsproxy.io/?' + encodeURIComponent(stooqUrl);
-  var proxy2 = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(stooqUrl);
-  function tryProxy(url, fallback) {
-    fetch(url, {cache:'no-store'})
-      .then(function(r) { return r.text(); })
-      .then(function(csv) {
-        var lines = csv.trim().split('\n');
-        if (lines.length < 2) throw new Error('no data');
-        var cols = lines[1].split(',');
-        cb(null, {sym:q.sym, open:cols[3], close:cols[6], q:q});
-      })
-      .catch(function(e) {
-        if (fallback) { tryProxy(fallback, null); } else { cb(e, null); }
-      });
-  }
-  tryProxy(proxy1, proxy2);
-}
+// Apply a normalized price result to the DOM
+// result: { key, close, open, netChg?, pctChg?, source }
+function applyPriceResult(result) {
+  var key = result.key;
+  var q   = PRICE_MAP[key];
+  if (!q) return;
 
-var _stooqTotal = 0, _stooqOk = 0;
-function updatePriceStatus() {
-  var el = document.getElementById('price-data-status');
-  if (!el) return;
-  if (_stooqOk > 0) {
-    el.textContent = '15-min delayed · Stooq';
-    el.style.color = 'var(--text-muted)';
-  } else if (_stooqTotal >= STOOQ_QUOTES.length) {
-    el.textContent = '⚠ Price data unavailable — refresh to retry';
-    el.style.color = 'var(--gold)';
-  }
-}
+  var priceTxt = fmtPrice(result.close, q.dec, q.grain, q.suffix);
+  var chgObj   = fmtChange(result.close, result.open, q.grain, result.netChg, result.pctChg);
 
-function applyStooqResult(data) {
-  var q = data.q;
-  var priceTxt = fmtStooqPrice(data.close, q.dec, q.grain, q.suffix);
-  var chgObj   = fmtStooqChg(data.close, data.open, q.grain);
-  if (q.priceEl) { updatePriceEl(q.priceEl, priceTxt); updateRangeBar(q.priceEl, data.close); }
+  if (q.priceEl) { updatePriceEl(q.priceEl, priceTxt); updateRangeBar(q.priceEl, result.close); }
   if (q.chgEl)   updatePriceEl(q.chgEl, chgObj.text, chgObj.cls);
-  document.querySelectorAll('[data-sym]').forEach(function(el) {
-    if (el.getAttribute('data-sym').toLowerCase() !== q.sym) return;
+
+  // Update ticker items — HTML uses data-sym="corn", data-sym="beans", etc.
+  document.querySelectorAll('[data-sym="' + key + '"]').forEach(function(el) {
     var pe = el.querySelector('.t-price');
     var ce = el.querySelector('.t-chg');
     if (pe) pe.textContent = priceTxt;
@@ -518,15 +505,148 @@ function applyStooqResult(data) {
   rebuildTickerLoop();
 }
 
-function fetchAllStooq() {
-  _stooqTotal = 0; _stooqOk = 0;
-  STOOQ_QUOTES.forEach(function(q) {
-    fetchStooqSym(q, function(err, data) {
-      _stooqTotal++;
-      if (!err) { _stooqOk++; applyStooqResult(data); }
-      updatePriceStatus();
+// ─────────────────────────────────────────────────────────────────
+// TIER 1 — Barchart Worker
+// Returns a full quotes object or throws so waterfall can continue
+// ─────────────────────────────────────────────────────────────────
+function fetchBarchart() {
+  return fetch(WORKER_URL + '/api/quotes', { cache: 'no-store' })
+    .then(function(r) {
+      if (!r.ok) throw new Error('worker ' + r.status);
+      return r.json();
+    })
+    .then(function(data) {
+      if (!data.quotes) throw new Error('no quotes in response');
+      var keys = Object.keys(data.quotes);
+      if (!keys.length) throw new Error('empty quotes');
+      var filled = {};
+      keys.forEach(function(key) {
+        var q = data.quotes[key];
+        applyPriceResult({ key:key, close:q.close, open:q.open, netChg:q.netChange, pctChg:q.percentChange, source:'barchart' });
+        filled[key] = true;
+      });
+      updatePriceStatus('barchart', keys.length);
+      return filled; // return which keys were filled so fallback can skip them
+    });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// TIER 2 — data/prices.json (pre-fetched by GitHub Action)
+// ─────────────────────────────────────────────────────────────────
+function fetchPricesJson(skipKeys) {
+  return fetch('/data/prices.json', { cache: 'no-store' })
+    .then(function(r) {
+      if (!r.ok) throw new Error('prices.json ' + r.status);
+      return r.json();
+    })
+    .then(function(data) {
+      // prices.json schema: { quotes: { corn: { close, open, ... }, ... }, generated }
+      var quotes = data.quotes || {};
+      var filled = {};
+      Object.keys(quotes).forEach(function(key) {
+        if (skipKeys && skipKeys[key]) return; // already filled by Barchart
+        var q = quotes[key];
+        if (!q || !q.close) return;
+        applyPriceResult({ key:key, close:q.close, open:q.open, netChg:q.netChange, source:'cache' });
+        filled[key] = true;
+      });
+      return filled;
+    });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// TIER 3 — Stooq via free CORS proxy (last resort)
+// Only fetches symbols not already filled by tiers 1+2
+// ─────────────────────────────────────────────────────────────────
+function fetchStooqSym(key, q, cb) {
+  var stooqUrl = 'https://stooq.com/q/l/?s=' + q.stooq + '&f=sd2t2ohlcv&h&e=csv';
+  var proxy1   = 'https://corsproxy.io/?' + encodeURIComponent(stooqUrl);
+  var proxy2   = 'https://api.allorigins.win/raw?url=' + encodeURIComponent(stooqUrl);
+  function tryProxy(url, fallback) {
+    fetch(url, {cache:'no-store'})
+      .then(function(r) { return r.text(); })
+      .then(function(csv) {
+        var lines = csv.trim().split('\n');
+        if (lines.length < 2) throw new Error('no data');
+        var cols = lines[1].split(',');
+        cb(null, { key:key, open:cols[3], close:cols[6], source:'stooq' });
+      })
+      .catch(function(e) {
+        if (fallback) { tryProxy(fallback, null); } else { cb(e, null); }
+      });
+  }
+  tryProxy(proxy1, proxy2);
+}
+
+function fetchStooqFallback(skipKeys) {
+  var keys = Object.keys(PRICE_MAP).filter(function(k) {
+    return (!skipKeys || !skipKeys[k]) && PRICE_MAP[k].stooq;
+  });
+  var done = 0, ok = 0;
+  keys.forEach(function(key) {
+    fetchStooqSym(key, PRICE_MAP[key], function(err, result) {
+      done++;
+      if (!err) { ok++; applyPriceResult(result); }
+      if (done === keys.length && ok === 0) {
+        updatePriceStatus('error', 0);
+      } else if (ok > 0) {
+        updatePriceStatus('stooq', ok);
+      }
     });
   });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// MAIN PRICE FETCH — waterfall
+// ─────────────────────────────────────────────────────────────────
+function fetchAllPrices() {
+  fetchBarchart()
+    .then(function(filled) {
+      // Try prices.json for anything Barchart didn't return
+      var missing = Object.keys(PRICE_MAP).filter(function(k) { return !filled[k]; });
+      if (!missing.length) return;
+      fetchPricesJson(filled).then(function(jsonFilled) {
+        // Stooq for anything still missing
+        var combined = Object.assign({}, filled, jsonFilled);
+        var stillMissing = Object.keys(PRICE_MAP).filter(function(k) { return !combined[k]; });
+        if (stillMissing.length) fetchStooqFallback(combined);
+      }).catch(function() {
+        fetchStooqFallback(filled);
+      });
+    })
+    .catch(function() {
+      // Barchart completely failed — try prices.json then Stooq
+      fetchPricesJson(null)
+        .then(function(jsonFilled) {
+          var stillMissing = Object.keys(PRICE_MAP).filter(function(k) { return !jsonFilled[k]; });
+          if (stillMissing.length) fetchStooqFallback(jsonFilled);
+          else updatePriceStatus('cache', Object.keys(jsonFilled).length);
+        })
+        .catch(function() {
+          fetchStooqFallback(null);
+        });
+    });
+}
+
+var _priceSource = null;
+function updatePriceStatus(source, count) {
+  if (_priceSource === 'barchart') return; // don't downgrade
+  _priceSource = source;
+  var el = document.getElementById('price-data-status');
+  if (!el) return;
+  if (source === 'barchart') {
+    el.textContent = 'Real-time · Barchart';
+    el.style.color = 'var(--green)';
+  } else if (source === 'cache') {
+    el.textContent = 'Cached · Updated 30min';
+    el.style.color = 'var(--text-muted)';
+  } else if (source === 'stooq') {
+    el.textContent = '15-min delayed · Stooq';
+    el.style.color = 'var(--text-muted)';
+  } else {
+    el.textContent = '⚠ Price data unavailable — refresh to retry';
+    el.style.color = 'var(--gold)';
+  }
 }
 
 function fetchCryptoLive() {
@@ -573,15 +693,22 @@ function fetchFFAILive() {
       var diff  = prev !== null ? parseFloat((score - prev).toFixed(1)) : null;
       var dir   = diff && diff > 0 ? 'up' : 'dn';
       var sign  = diff && diff > 0 ? '▲' : '▼';
-      document.querySelectorAll('.t-item').forEach(function(el) {
-        var lbl = el.querySelector('.t-label');
-        if (lbl && lbl.textContent === 'FFAI Index') {
-          var pe = el.querySelector('.t-price');
-          var ce = el.querySelector('.t-chg');
-          if (pe) pe.textContent = score.toFixed(1);
-          if (ce && diff) { ce.className='t-chg '+dir; ce.textContent=sign+' '+Math.abs(diff)+' pts'; }
-        }
+      var priceTxt = score.toFixed(1);
+      var chgTxt   = diff ? sign + ' ' + Math.abs(diff) + ' pts' : '--';
+
+      // FIX: use data-sym="ffai" instead of fragile text-label scan
+      document.querySelectorAll('[data-sym="ffai"]').forEach(function(el) {
+        var pe = el.querySelector('.t-price');
+        var ce = el.querySelector('.t-chg');
+        if (pe) { pe.textContent = priceTxt; pe.style.color = 'var(--blue)'; }
+        if (ce && diff) { ce.className = 't-chg ' + dir; ce.textContent = chgTxt; }
       });
+
+      // Also populate any named FFAI score elements (sidebar card)
+      var scoreEl = document.getElementById('ffai-score');
+      if (scoreEl) scoreEl.textContent = priceTxt;
+      var chgEl = document.getElementById('ffai-change');
+      if (chgEl && diff) { chgEl.className = 'ffai-change ' + dir; chgEl.textContent = chgTxt; }
     }).catch(function() {});
 }
 
@@ -597,27 +724,250 @@ function rebuildTickerLoop() {
   track.appendChild(c);
 }
 
+// ─────────────────────────────────────────────────────────────────
+// KALSHI PREDICTION MARKETS — ag-related odds
+// Searches multiple keywords, deduplicates, renders top 6 markets
+//
+// Kalshi v2 API: GET https://trading.kalshi.com/trade-api/v2/markets
+// No API key required for read-only. yes_bid/ask are in cents (0–100 = 0–100%).
+//
+// CORS: Kalshi allows browser requests. No proxy needed.
+// ─────────────────────────────────────────────────────────────────
+
+var KALSHI_KEYWORDS = ['USDA', 'corn', 'soybean', 'wheat', 'drought', 'farm', 'crop', 'WASDE'];
+var KALSHI_BASE     = 'https://trading.kalshi.com/trade-api/v2/markets';
+
+function fetchKalshiMarkets() {
+  var grid    = document.getElementById('kalshi-grid');
+  var loading = document.getElementById('kalshi-loading');
+  if (!grid) return;
+
+  var seen    = {};
+  var markets = [];
+  var pending = KALSHI_KEYWORDS.length;
+
+  function onDone() {
+    pending--;
+    if (pending > 0) return;
+
+    // Sort by 24h volume descending, take top 6
+    markets.sort(function(a, b) { return (b.volume_24h || 0) - (a.volume_24h || 0); });
+    var top = markets.slice(0, 6);
+
+    if (!top.length) {
+      if (loading) loading.innerHTML = '&#128683; No active ag markets found on Kalshi right now.';
+      return;
+    }
+
+    if (loading) loading.remove();
+
+    top.forEach(function(m) {
+      var card = buildKalshiCard(m);
+      grid.appendChild(card);
+    });
+  }
+
+  KALSHI_KEYWORDS.forEach(function(kw) {
+    var url = KALSHI_BASE + '?limit=10&status=open&keyword=' + encodeURIComponent(kw);
+    fetch(url, { headers: { 'Accept': 'application/json' } })
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        var list = data.markets || [];
+        list.forEach(function(m) {
+          if (!m.ticker || seen[m.ticker]) return;
+          // Only include markets with meaningful volume and yes price between 2-98¢
+          // (filters out near-certain or near-impossible markets)
+          var yes = m.yes_bid !== undefined ? m.yes_bid : m.yes_ask;
+          if (yes === undefined) return;
+          seen[m.ticker] = true;
+          markets.push(m);
+        });
+        onDone();
+      })
+      .catch(function() { onDone(); });
+  });
+}
+
+function buildKalshiCard(m) {
+  // yes_bid is the price to buy YES in cents (e.g. 62 = 62% chance = 62¢)
+  var yesBid  = m.yes_bid  !== undefined ? m.yes_bid  : null;
+  var yesAsk  = m.yes_ask  !== undefined ? m.yes_ask  : null;
+  var noBid   = m.no_bid   !== undefined ? m.no_bid   : null;
+  var mid     = (yesBid !== null && yesAsk !== null) ? Math.round((yesBid + yesAsk) / 2) : (yesBid || yesAsk || 50);
+  var vol24   = m.volume_24h || 0;
+  var closeTs = m.close_time ? new Date(m.close_time) : null;
+
+  // Color coding: green >60, red <40, gold 40-60
+  var color  = mid >= 60 ? 'var(--green)' : mid <= 40 ? 'var(--red)' : 'var(--gold)';
+  var bgAlpha = mid >= 60 ? 'rgba(62,207,110,.06)' : mid <= 40 ? 'rgba(240,96,96,.06)' : 'rgba(230,176,66,.06)';
+
+  // Format close date
+  var closeStr = '';
+  if (closeTs) {
+    var now   = new Date();
+    var diffD = Math.ceil((closeTs - now) / 86400000);
+    if (diffD <= 0)       closeStr = 'Closes today';
+    else if (diffD === 1) closeStr = 'Closes tomorrow';
+    else if (diffD <= 30) closeStr = 'Closes in ' + diffD + ' days';
+    else                  closeStr = 'Closes ' + closeTs.toLocaleDateString('en-US', {month:'short', day:'numeric'});
+  }
+
+  // Format volume
+  var volStr = vol24 >= 1000 ? '$' + (vol24/1000).toFixed(1) + 'k 24h vol' : (vol24 > 0 ? '$' + vol24 + ' 24h vol' : '');
+
+  var div = document.createElement('div');
+  div.style.cssText = 'background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1rem;display:flex;flex-direction:column;gap:.5rem;' +
+    'background:' + bgAlpha + ';border-color:' + color.replace('var(--green)','rgba(62,207,110,.2)').replace('var(--red)','rgba(240,96,96,.2)').replace('var(--gold)','rgba(230,176,66,.2)') + ';';
+
+  var title = m.title || m.ticker || 'Market';
+  // Truncate long titles
+  var titleDisplay = title.length > 80 ? title.slice(0, 77) + '…' : title;
+
+  div.innerHTML =
+    '<div style="font-size:.78rem;font-weight:600;color:var(--text);line-height:1.4">' + titleDisplay + '</div>' +
+    '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:.15rem">' +
+      '<div>' +
+        '<span style="font-size:1.6rem;font-weight:700;color:' + color + ';font-family:\'Oswald\',sans-serif">' + mid + '&#162;</span>' +
+        '<span style="font-size:.72rem;color:var(--text-muted);margin-left:.35rem">YES</span>' +
+      '</div>' +
+      '<div style="text-align:right">' +
+        '<div style="font-size:.75rem;font-weight:700;color:' + color + '">' + mid + '% chance</div>' +
+        (noBid !== null ? '<div style="font-size:.68rem;color:var(--text-muted)">NO: ' + noBid + '&#162;</div>' : '') +
+      '</div>' +
+    '</div>' +
+    '<div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:.4rem;margin-top:.1rem">' +
+      '<span style="font-size:.65rem;color:var(--text-muted)">' + closeStr + '</span>' +
+      (volStr ? '<span style="font-size:.65rem;color:var(--text-muted)">' + volStr + '</span>' : '') +
+    '</div>' +
+    '<a href="https://kalshi.com/markets/' + (m.ticker || '') + '" target="_blank" rel="noopener" ' +
+      'style="font-size:.7rem;color:' + color + ';text-align:center;padding:.3rem;border:1px solid currentColor;border-radius:5px;text-decoration:none;margin-top:.1rem;opacity:.8">' +
+      'Trade on Kalshi &#8594;</a>';
+
+  return div;
+}
+
+// ─────────────────────────────────────────────────────────────────
+// DAILY BRIEFING — load from data/daily.json (AI-generated by GitHub Action)
+// ─────────────────────────────────────────────────────────────────
+function loadDailyBriefing() {
+  fetch('/data/daily.json', { cache: 'no-store' })
+    .then(function(r) {
+      if (!r.ok) throw new Error('daily.json ' + r.status);
+      return r.json();
+    })
+    .then(function(d) {
+      // Headline
+      var h = document.getElementById('daily-headline');
+      if (h && d.headline) h.textContent = d.headline;
+
+      var sh = document.getElementById('daily-subheadline');
+      if (sh && d.subheadline) sh.textContent = d.subheadline;
+
+      // Lead paragraph
+      var lead = document.getElementById('daily-lead');
+      if (lead && d.lead) lead.textContent = d.lead;
+
+      // Teaser / preview
+      var teaser = document.getElementById('daily-teaser');
+      if (teaser && d.teaser) teaser.textContent = d.teaser;
+
+      // The One Number
+      var numVal  = document.getElementById('daily-number-value');
+      var numUnit = document.getElementById('daily-number-unit');
+      var numCtx  = document.getElementById('daily-number-context');
+      if (d.one_number) {
+        if (numVal)  numVal.textContent  = d.one_number.value;
+        if (numUnit) numUnit.textContent = d.one_number.unit;
+        if (numCtx)  numCtx.textContent  = d.one_number.context;
+      }
+
+      // Sections (3 content blocks)
+      if (d.sections && Array.isArray(d.sections)) {
+        d.sections.forEach(function(sec, i) {
+          var titleEl = document.getElementById('daily-section-' + (i+1) + '-title');
+          var bodyEl  = document.getElementById('daily-section-' + (i+1) + '-body');
+          if (titleEl && sec.title) titleEl.textContent = sec.title;
+          if (bodyEl  && sec.body)  bodyEl.textContent  = sec.body;
+        });
+      }
+
+      // Watch list (upcoming events/reports)
+      var wl = document.getElementById('daily-watch-list');
+      if (wl && d.watch_list && d.watch_list.length) {
+        wl.innerHTML = '';
+        d.watch_list.forEach(function(item) {
+          var li = document.createElement('li');
+          li.innerHTML = '<strong>' + (item.time||'') + '</strong> — ' + (item.desc||'');
+          wl.appendChild(li);
+        });
+      }
+
+      // Date badge
+      var dateBadge = document.getElementById('daily-date');
+      if (dateBadge && d.date) dateBadge.textContent = d.date;
+
+      // Source badge
+      var srcBadge = document.getElementById('daily-source');
+      if (srcBadge) srcBadge.textContent = 'AI · Barchart · USDA';
+
+      // Show content, hide loading state
+      var loading = document.getElementById('daily-loading');
+      var content = document.getElementById('daily-content');
+      if (loading) loading.style.display = 'none';
+      if (content) content.style.display = 'block';
+    })
+    .catch(function() {
+      // daily.json missing or malformed — just leave static content visible
+      var loading = document.getElementById('daily-loading');
+      var content = document.getElementById('daily-content');
+      if (loading) loading.style.display = 'none';
+      if (content) content.style.display = 'block';
+    });
+}
+
+// ─────────────────────────────────────────────────────────────────
+// then kick off price fetches.
+// ─────────────────────────────────────────────────────────────────
 (function boot() {
-  // Prices
-  fetchAllStooq();
-  fetchCryptoLive();
-  fetchFFAILive();
-  rebuildTickerLoop();
-  setInterval(function() {
-    fetchAllStooq();
+  function init() {
+    // First rebuild after DOM is ready so the clone has real structure
+    rebuildTickerLoop();
+
+    // Prices — waterfall: Barchart → prices.json → Stooq
+    fetchAllPrices();
     fetchCryptoLive();
     fetchFFAILive();
-  }, 5 * 60 * 1000);
 
-  // Weather — restore saved location or request geo
-  setTimeout(function() {
-    try {
-      var saved = localStorage.getItem('agsist-wx-loc');
-      if (saved) {
-        var p = JSON.parse(saved);
-        if (p.lat && p.lon) { fetchWeather(p.lat, p.lon, p.label); return; }
-      }
-    } catch(e) {}
-    requestGeo();
-  }, 800);
+    // Also load homepage-only features
+    if (document.getElementById('daily-headline')) {
+      loadDailyBriefing();
+    }
+    if (document.getElementById('kalshi-grid')) {
+      fetchKalshiMarkets();
+    }
+
+    setInterval(function() {
+      fetchAllPrices();
+      fetchCryptoLive();
+      fetchFFAILive();
+    }, 5 * 60 * 1000);
+
+    // Weather — restore saved location or request geo
+    setTimeout(function() {
+      try {
+        var saved = localStorage.getItem('agsist-wx-loc');
+        if (saved) {
+          var p = JSON.parse(saved);
+          if (p.lat && p.lon) { fetchWeather(p.lat, p.lon, p.label); return; }
+        }
+      } catch(e) {}
+      requestGeo();
+    }, 800);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();

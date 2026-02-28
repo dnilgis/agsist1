@@ -1,4 +1,4 @@
-// AGSIST Component Loader — injects header, footer; initialises nav after inject
+// AGSIST Component Loader — injects header (+ drawer), footer, analytics; initialises nav after inject
 (function () {
   'use strict';
 
@@ -27,21 +27,46 @@
       .catch(function () { if (onDone) onDone(); });
   }
 
+  // Inject GA4 analytics unless the page already has gtag loaded inline
+  function injectAnalytics() {
+    if (typeof window.gtag === 'function') return; // already loaded inline (index.html)
+    fetch(BASE + '/components/analytics.html', { cache: 'no-cache' })
+      .then(function (r) { return r.text(); })
+      .then(function (html) {
+        var tmp = document.createElement('div');
+        tmp.innerHTML = html;
+        // Execute any <script> tags found in the fragment
+        tmp.querySelectorAll('script').forEach(function (oldScript) {
+          var s = document.createElement('script');
+          if (oldScript.src) {
+            s.src = oldScript.src;
+            s.async = true;
+          } else {
+            s.textContent = oldScript.textContent;
+          }
+          document.head.appendChild(s);
+        });
+      })
+      .catch(function () {});
+  }
+
   function initNav() {
     // ── Theme toggle ────────────────────────────────────────────
     function applyTheme(th) {
       document.documentElement.setAttribute('data-theme', th);
       try { localStorage.setItem('agsist-theme', th); } catch (e) {}
-      var lbl = th === 'light' ? '☀️' : '🌙';
-      ['theme-btn', 'theme-btn-d', 'theme-icon', 'theme-icon-d'].forEach(function (id) {
+      var icon = th === 'light' ? '☀️' : '🌙';
+      var lbl  = th === 'light' ? 'Switch to dark mode' : 'Switch to light mode';
+      ['theme-btn', 'theme-btn-d'].forEach(function (id) {
+        var btn = document.getElementById(id);
+        if (btn) btn.setAttribute('aria-label', lbl);
+      });
+      ['theme-icon', 'theme-icon-d'].forEach(function (id) {
         var el = document.getElementById(id);
-        if (el) {
-          if (el.tagName === 'BUTTON') el.setAttribute('aria-label', lbl);
-          else el.textContent = lbl;
-        }
+        if (el) el.textContent = icon;
       });
     }
-    // Sync icon to current theme
+    // Sync icon to current theme on load
     applyTheme(document.documentElement.getAttribute('data-theme') || 'dark');
 
     ['theme-btn', 'theme-btn-d'].forEach(function (id) {
@@ -66,26 +91,27 @@
       document.querySelectorAll('.nav-dd').forEach(function (d) { d.classList.remove('open'); });
     });
 
-    // ── Mobile drawer ────────────────────────────────────────────
+    // ── Mobile drawer ─────────────────────────────────────────────
+    // Drawer HTML is now in header.html so it exists on every page.
     var ham = document.getElementById('hamburger');
     var dr  = document.getElementById('drawer');
     var ov  = document.getElementById('draw-ov');
     var dc  = document.getElementById('draw-close');
 
     function openDr() {
-      if (dr)  dr.classList.add('open');
+      if (dr)  { dr.classList.add('open');  dr.setAttribute('aria-hidden','false'); }
       if (ov)  ov.classList.add('vis');
       if (ham) { ham.classList.add('open'); ham.setAttribute('aria-expanded', 'true'); }
       document.body.style.overflow = 'hidden';
     }
     function closeDr() {
-      if (dr)  dr.classList.remove('open');
+      if (dr)  { dr.classList.remove('open');  dr.setAttribute('aria-hidden','true'); }
       if (ov)  ov.classList.remove('vis');
       if (ham) { ham.classList.remove('open'); ham.setAttribute('aria-expanded', 'false'); }
       document.body.style.overflow = '';
     }
 
-    // Expose closeDr globally so ESC key handler in page scripts can call it
+    // Expose globally so page scripts can close drawer on route change
     window.closeDr = closeDr;
 
     if (ham) ham.addEventListener('click', openDr);
@@ -94,7 +120,7 @@
 
     // ── Active nav link highlight ─────────────────────────────────
     var path = window.location.pathname.replace(/\/$/, '') || '/';
-    document.querySelectorAll('[data-nav-link], .nav-panel a, .drawer-link').forEach(function (a) {
+    document.querySelectorAll('[data-nav-link], .nav-panel a, .drawer-link, .draw-item').forEach(function (a) {
       var href = (a.getAttribute('href') || '').replace(/\/$/, '') || '/';
       var active = (href === path) || (href !== '/' && path.startsWith(href));
       if (active) { a.classList.add('active'); a.setAttribute('aria-current', 'page'); }
@@ -119,6 +145,7 @@
   }
 
   document.addEventListener('DOMContentLoaded', function () {
+    injectAnalytics();
     loadComponent('site-header', '/components/header.html', initNav);
     loadComponent('site-footer', '/components/footer.html', null);
   });
