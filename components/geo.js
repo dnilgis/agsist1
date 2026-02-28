@@ -584,105 +584,31 @@ function rebuildTickerLoop() {
 
 // ─────────────────────────────────────────────────────────────────
 // KALSHI PREDICTION MARKETS
+// Note: Kalshi API currently unavailable via direct browser calls.
+// Shows a clean placeholder linking to Kalshi's ag markets page.
 // ─────────────────────────────────────────────────────────────────
-var KALSHI_KEYWORDS = ['USDA', 'corn', 'soybean', 'wheat', 'drought', 'farm', 'crop', 'WASDE'];
-var KALSHI_BASE     = 'https://trading.kalshi.com/trade-api/v2/markets';
-
 function fetchKalshiMarkets() {
-  var grid    = document.getElementById('kalshi-grid');
   var loading = document.getElementById('kalshi-loading');
-  if (!grid) return;
+  var grid    = document.getElementById('kalshi-grid');
+  if (!loading && !grid) return;
 
-  var seen    = {};
-  var markets = [];
-  var pending = KALSHI_KEYWORDS.length;
+  var placeholder = document.createElement('div');
+  placeholder.style.cssText = 'text-align:center;padding:1.5rem .5rem;grid-column:1/-1';
+  placeholder.innerHTML =
+    '<div style="font-size:1.5rem;margin-bottom:.5rem">📊</div>'
+    + '<div style="font-size:.9rem;font-weight:600;color:var(--text);margin-bottom:.3rem">Ag Prediction Markets</div>'
+    + '<div style="font-size:.78rem;color:var(--text-muted);line-height:1.6;margin-bottom:.75rem">'
+    + 'Bet on USDA reports, crop yields, drought conditions, and more at Kalshi — the regulated prediction market.'
+    + '</div>'
+    + '<a href="https://kalshi.com/markets?category=agriculture" target="_blank" rel="noopener" '
+    + 'style="display:inline-block;padding:.45rem 1rem;border:1px solid var(--gold);border-radius:6px;'
+    + 'color:var(--gold);font-size:.78rem;font-weight:600;text-decoration:none">View Ag Markets on Kalshi →</a>';
 
-  function onDone() {
-    pending--;
-    if (pending > 0) return;
-    markets.sort(function(a, b) { return (b.volume_24h || 0) - (a.volume_24h || 0); });
-    var top = markets.slice(0, 6);
-    if (!top.length) {
-      if (loading) loading.innerHTML = '<span style="color:var(--text-muted);font-size:.78rem">No active ag markets on Kalshi right now — check back later.</span>';
-      return;
-    }
-    if (loading) loading.remove();
-    top.forEach(function(m) { grid.appendChild(buildKalshiCard(m)); });
-  }
-
-  KALSHI_KEYWORDS.forEach(function(kw) {
-    var url = KALSHI_BASE + '?limit=10&status=open&keyword=' + encodeURIComponent(kw);
-    fetch(url, { headers: { 'Accept': 'application/json' } })
-      .then(function(r) {
-        if (!r.ok) throw new Error('kalshi ' + r.status);
-        return r.json();
-      })
-      .then(function(data) {
-        var list = data.markets || [];
-        list.forEach(function(m) {
-          if (!m.ticker || seen[m.ticker]) return;
-          var yes = m.yes_bid !== undefined ? m.yes_bid : m.yes_ask;
-          if (yes === undefined) return;
-          seen[m.ticker] = true;
-          markets.push(m);
-        });
-        onDone();
-      })
-      .catch(function() { onDone(); });
-  });
-
-  setTimeout(function() {
-    if (loading && loading.parentNode && markets.length === 0) {
-      loading.innerHTML = '<span style="color:var(--text-muted);font-size:.78rem">Prediction market data unavailable. <a href="https://kalshi.com" target="_blank" rel="noopener" style="color:var(--gold)">View on Kalshi →</a></span>';
-    }
-  }, 8000);
+  if (loading) loading.replaceWith(placeholder);
+  else if (grid) { grid.innerHTML = ''; grid.appendChild(placeholder); }
 }
 
-function buildKalshiCard(m) {
-  var yesBid  = m.yes_bid  !== undefined ? m.yes_bid  : null;
-  var yesAsk  = m.yes_ask  !== undefined ? m.yes_ask  : null;
-  var noBid   = m.no_bid   !== undefined ? m.no_bid   : null;
-  var mid     = (yesBid !== null && yesAsk !== null) ? Math.round((yesBid + yesAsk) / 2) : (yesBid || yesAsk || 50);
-  var vol24   = m.volume_24h || 0;
-  var closeTs = m.close_time ? new Date(m.close_time) : null;
-
-  var color   = mid >= 60 ? 'var(--green)' : mid <= 40 ? 'var(--red)' : 'var(--gold)';
-  var bgAlpha = mid >= 60 ? 'rgba(62,207,110,.06)' : mid <= 40 ? 'rgba(240,96,96,.06)' : 'rgba(230,176,66,.06)';
-  var borderC = mid >= 60 ? 'rgba(62,207,110,.2)'  : mid <= 40 ? 'rgba(240,96,96,.2)'  : 'rgba(230,176,66,.2)';
-
-  var closeStr = '';
-  if (closeTs) {
-    var now   = new Date();
-    var diffD = Math.ceil((closeTs - now) / 86400000);
-    if (diffD <= 0)       closeStr = 'Closes today';
-    else if (diffD === 1) closeStr = 'Closes tomorrow';
-    else if (diffD <= 30) closeStr = 'Closes in ' + diffD + ' days';
-    else                  closeStr = 'Closes ' + closeTs.toLocaleDateString('en-US', {month:'short', day:'numeric'});
-  }
-
-  var volStr = vol24 >= 1000 ? '$' + (vol24/1000).toFixed(1) + 'k 24h vol' : (vol24 > 0 ? '$' + vol24 + ' 24h vol' : '');
-  var title  = (m.title || m.ticker || 'Market');
-  var titleD = title.length > 80 ? title.slice(0, 77) + '…' : title;
-
-  var div = document.createElement('div');
-  div.style.cssText = 'background:' + bgAlpha + ';border:1px solid ' + borderC + ';border-radius:10px;padding:1rem;display:flex;flex-direction:column;gap:.5rem';
-  div.innerHTML =
-    '<div style="font-size:.78rem;font-weight:600;color:var(--text);line-height:1.4">' + titleD + '</div>' +
-    '<div style="display:flex;align-items:center;justify-content:space-between;margin-top:.15rem">' +
-      '<div><span style="font-size:1.6rem;font-weight:700;color:' + color + ';font-family:\'Oswald\',sans-serif">' + mid + '&#162;</span>' +
-      '<span style="font-size:.72rem;color:var(--text-muted);margin-left:.35rem">YES</span></div>' +
-      '<div style="text-align:right"><div style="font-size:.75rem;font-weight:700;color:' + color + '">' + mid + '% chance</div>' +
-      (noBid !== null ? '<div style="font-size:.68rem;color:var(--text-muted)">NO: ' + noBid + '&#162;</div>' : '') + '</div>' +
-    '</div>' +
-    '<div style="display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--border);padding-top:.4rem;margin-top:.1rem">' +
-      '<span style="font-size:.65rem;color:var(--text-muted)">' + closeStr + '</span>' +
-      (volStr ? '<span style="font-size:.65rem;color:var(--text-muted)">' + volStr + '</span>' : '') +
-    '</div>' +
-    '<a href="https://kalshi.com/markets/' + (m.ticker || '') + '" target="_blank" rel="noopener" ' +
-      'style="font-size:.7rem;color:' + color + ';text-align:center;padding:.3rem;border:1px solid currentColor;border-radius:5px;text-decoration:none;margin-top:.1rem;opacity:.8">' +
-      'Trade on Kalshi &#8594;</a>';
-  return div;
-}
+function buildKalshiCard() { return document.createElement('div'); }
 
 // ─────────────────────────────────────────────────────────────────
 // DAILY BRIEFING
