@@ -1,0 +1,34 @@
+name: Fetch Markets
+
+on:
+  schedule:
+    # Every 2 hours on weekdays, every 6 hours on weekends
+    - cron: '0 */2 * * 1-5'
+    - cron: '0 */6 * * 0,6'
+  workflow_dispatch:
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Fetch markets
+        run: python scripts/fetch_markets.py
+
+      - name: Commit markets.json
+        run: |
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add data/markets.json
+          git diff --staged --quiet || git commit -m "chore: update markets.json [skip ci]"
+          git push
