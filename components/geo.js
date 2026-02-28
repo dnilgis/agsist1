@@ -455,7 +455,7 @@ function applyPriceResult(key, q, close, open, netChg, pctChg) {
 // Updated every 30 minutes by GitHub Actions (yfinance, free).
 // ─────────────────────────────────────────────────────────────────
 function fetchAllPrices() {
-  var statusEl = document.getElementById('price-data-status');
+  var statusEl = null; // status element removed from UI
 
   fetch('/data/prices.json', { cache: 'no-store' })
     .then(function(r) {
