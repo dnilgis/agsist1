@@ -3,7 +3,7 @@
  * ─────────────────────────────────────────────────────────────────
  * Price sources (all free, no API keys, no trials):
  *   1. data/prices.json  — pre-fetched every 30min by GitHub Actions (yfinance)
- *   2. CoinGecko          — crypto prices, direct browser call
+ *   2. CoinGecko          — crypto prices (proxied via corsproxy.io)
  *   3. Farmers First API  — FFAI Index
  *   4. Open-Meteo         — weather
  *   5. Nominatim OSM      — reverse geocoding
@@ -316,8 +316,6 @@ function renderForecast(lat, lon) {
 
 // ─────────────────────────────────────────────────────────────────
 // CASH BIDS PLACEHOLDER
-// No longer using Barchart. Show a clean placeholder until a free
-// grain bids source is integrated.
 // ─────────────────────────────────────────────────────────────────
 function lookupBids() {
   var zip = (document.getElementById('bids-zip') || {}).value;
@@ -351,40 +349,40 @@ function renderBidsPlaceholder(zip) {
 // Keys match data/prices.json quote keys exactly.
 // ─────────────────────────────────────────────────────────────────
 var PRICE_MAP = {
-  'corn':       { label:'Corn (front)', priceEl:'pcp-corn-near',   chgEl:'pcc-corn-near',   dec:2, grain:true  },
-  'corn-dec':   { label:"Corn Dec'26",  priceEl:'pcp-corn-dec',    chgEl:'pcc-corn-dec',    dec:2, grain:true  },
-  'beans':      { label:'Beans (front)',priceEl:'pcp-bean-near',   chgEl:'pcc-bean-near',   dec:2, grain:true  },
-  'beans-nov':  { label:"Beans Nov'26", priceEl:'pcp-bean-nov',    chgEl:'pcc-bean-nov',    dec:2, grain:true  },
-  'wheat':      { label:'Wheat (front)',priceEl:'pcp-wheat',       chgEl:'pcc-wheat',       dec:2, grain:true  },
-  'cattle':     { label:'Live Cattle',  priceEl:'pcp-cattle',      chgEl:'pcc-cattle',      dec:3, grain:false },
-  'feeders':    { label:'Feeder Cattle',priceEl:'pcp-feeders',     chgEl:'pcc-feeders',     dec:3, grain:false },
-  'hogs':       { label:'Lean Hogs',    priceEl:'pcp-hogs',        chgEl:'pcc-hogs',        dec:3, grain:false },
-  'meal':       { label:'Soy Meal',     priceEl:'pcp-meal',        chgEl:'pcc-meal',        dec:2, grain:false },
-  'soyoil':     { label:'Soy Oil',      priceEl:'pcp-soyoil',      chgEl:'pcc-soyoil',      dec:2, grain:false },
-  'crude':      { label:'Crude WTI',    priceEl:'pcp-crude',       chgEl:'pcc-crude',       dec:2, grain:false },
-  'natgas':     { label:'Natural Gas',  priceEl:'pcp-natgas',      chgEl:'pcc-natgas',      dec:3, grain:false },
-  'gold':       { label:'Gold',         priceEl:'pc-gold',         chgEl:'pcc-gold',        dec:0, grain:false },
-  'silver':     { label:'Silver',       priceEl:'pc-silver',       chgEl:'pcc-silver',      dec:2, grain:false },
-  'dollar':     { label:'Dollar Index', priceEl:'pcp-dollar',      chgEl:'pcc-dollar',      dec:2, grain:false },
-  'treasury10': { label:'10-Yr Tsy',    priceEl:'pcp-treasury',    chgEl:'pcc-treasury',    dec:2, grain:false, suffix:'%' },
-  'sp500':      { label:'S&P 500',      priceEl:'pcp-sp500',       chgEl:'pcc-sp500',       dec:0, grain:false },
+  'corn':       { label:'Corn',          priceEl:'pcp-corn-near', chgEl:'pcc-corn-near', dec:2, grain:true  },
+  'corn-dec':   { label:"Corn Dec'26",   priceEl:'pcp-corn-dec',  chgEl:'pcc-corn-dec',  dec:2, grain:true  },
+  'beans':      { label:'Soybeans',      priceEl:'pcp-bean-near', chgEl:'pcc-bean-near', dec:2, grain:true  },
+  'beans-nov':  { label:"Beans Nov'26",  priceEl:'pcp-bean-nov',  chgEl:'pcc-bean-nov',  dec:2, grain:true  },
+  'wheat':      { label:'Wheat',         priceEl:'pcp-wheat',     chgEl:'pcc-wheat',     dec:2, grain:true  },
+  'cattle':     { label:'Live Cattle',   priceEl:'pcp-cattle',    chgEl:'pcc-cattle',    dec:2, grain:false },
+  'feeders':    { label:'Feeder Cattle', priceEl:'pcp-feeders',   chgEl:'pcc-feeders',   dec:2, grain:false },
+  'hogs':       { label:'Lean Hogs',     priceEl:'pcp-hogs',      chgEl:'pcc-hogs',      dec:2, grain:false },
+  'meal':       { label:'Soy Meal',      priceEl:'pcp-meal',      chgEl:'pcc-meal',      dec:2, grain:false },
+  'soyoil':     { label:'Soy Oil',       priceEl:'pcp-soyoil',    chgEl:'pcc-soyoil',    dec:2, grain:false },
+  'crude':      { label:'Crude Oil',     priceEl:'pcp-crude',     chgEl:'pcc-crude',     dec:2, grain:false },
+  'natgas':     { label:'Natural Gas',   priceEl:'pcp-natgas',    chgEl:'pcc-natgas',    dec:2, grain:false },
+  'gold':       { label:'Gold',          priceEl:'pcp-gold',      chgEl:'pcc-gold',      dec:2, grain:false },
+  'silver':     { label:'Silver',        priceEl:'pcp-silver',    chgEl:'pcc-silver',    dec:2, grain:false },
+  'dollar':     { label:'Dollar Index',  priceEl:'pcp-dollar',    chgEl:'pcc-dollar',    dec:2, grain:false },
+  'treasury10': { label:'10-Yr Treasury',priceEl:'pcp-treasury',  chgEl:'pcc-treasury',  dec:2, grain:false, suffix:'%' },
+  'sp500':      { label:'S&P 500',       priceEl:'pcp-sp500',     chgEl:'pcc-sp500',     dec:2, grain:false },
 };
 
 // ─────────────────────────────────────────────────────────────────
 // PRICE FORMATTING
+// Grain prices: convert from cents to dollars ($4.39 not 438.75)
+// All prices get $ prefix except treasury (%) and dollar index
 // ─────────────────────────────────────────────────────────────────
 function fmtPrice(val, dec, grain, suffix) {
   var p = parseFloat(val);
   if (isNaN(p)) return '--';
   if (grain) {
-    var whole = Math.floor(p);
-    var frac  = Math.round((p - whole) * 4) / 4;
-    var fracs = {'0':'','0.25':'¼','0.50':'½','0.75':'¾'};
-    var fracStr = fracs[frac.toFixed(2)];
-    return whole + (fracStr !== undefined ? fracStr : frac.toFixed(2));
+    var dollars = p / 100;
+    return '$' + dollars.toFixed(2);
   }
-  if (dec === 0) return p.toLocaleString('en-US', {maximumFractionDigits:0});
-  return p.toFixed(dec) + (suffix||'');
+  var str = p.toFixed(dec);
+  if (suffix) return str + suffix;
+  return str;
 }
 
 function fmtChange(close, open, grain, netChg, pctChg) {
@@ -394,14 +392,26 @@ function fmtChange(close, open, grain, netChg, pctChg) {
   var pct   = pctChg !== undefined && pctChg !== null ? parseFloat(pctChg) : (o !== 0 ? (diff/o)*100 : 0);
   var dir   = diff > 0 ? 'up' : diff < 0 ? 'dn' : 'nc';
   var arrow = diff > 0 ? '▲' : diff < 0 ? '▼' : '—';
-  var abs   = Math.abs(diff);
-  var txt;
-  if (grain) {
-    txt = arrow + ' ' + (abs*100).toFixed(1) + '¢ (' + (diff>0?'+':'') + pct.toFixed(2) + '%)';
-  } else {
-    txt = arrow + ' ' + abs.toFixed(abs<1?4:abs<10?3:2) + ' (' + (diff>0?'+':'') + pct.toFixed(2) + '%)';
-  }
-  return {text:txt, cls:dir};
+  var sign  = diff > 0 ? '+' : '';
+  var txt   = sign + pct.toFixed(1) + '%';
+  return {text: arrow + ' ' + txt, cls: dir};
+}
+
+function fmtTickerChange(close, open, grain, netChg, pctChg) {
+  var c = parseFloat(close), o = parseFloat(open);
+  if (isNaN(c) || isNaN(o)) return {text:'--', cls:'nc'};
+  var diff  = netChg !== undefined && netChg !== null ? parseFloat(netChg) : (c - o);
+  var pct   = pctChg !== undefined && pctChg !== null ? parseFloat(pctChg) : (o !== 0 ? (diff/o)*100 : 0);
+  var dir   = diff > 0 ? 'up' : diff < 0 ? 'dn' : 'nc';
+  var arrow = diff > 0 ? '▲' : diff < 0 ? '▼' : '';
+  return {text: arrow + ' ' + Math.abs(pct).toFixed(2) + '%', cls: dir};
+}
+
+function fmtTickerPrice(val, grain) {
+  var p = parseFloat(val);
+  if (isNaN(p)) return '--';
+  if (grain) return '$' + (p / 100).toFixed(2);
+  return p.toFixed(2);
 }
 
 function updatePriceEl(id, txt, cls) {
@@ -421,8 +431,8 @@ function updateRangeBar(priceElId, price) {
   var dot    = card.querySelector('.pc-range-dot');
   var labels = card.querySelectorAll('.pc-range-labels span');
   if (!fill || labels.length < 3) return;
-  var lo = parseFloat(labels[0].textContent.replace(/,/g,''));
-  var hi = parseFloat(labels[2].textContent.replace(/,/g,''));
+  var lo = parseFloat(labels[0].textContent.replace(/[$,]/g,''));
+  var hi = parseFloat(labels[2].textContent.replace(/[$,]/g,''));
   if (isNaN(lo) || isNaN(hi) || hi === lo) return;
   var pct = Math.min(100, Math.max(0, ((parseFloat(price)-lo)/(hi-lo))*100));
   fill.style.width = pct + '%';
@@ -439,12 +449,21 @@ function applyPriceResult(key, q, close, open, netChg, pctChg) {
   if (meta.priceEl) { updatePriceEl(meta.priceEl, priceTxt); updateRangeBar(meta.priceEl, close); }
   if (meta.chgEl)   updatePriceEl(meta.chgEl, chgObj.text, chgObj.cls);
 
+  // Update prev close
+  var prevEl = document.getElementById(meta.priceEl ? meta.priceEl.replace('pcp-','pcprev-') : '');
+  if (prevEl && open != null) {
+    var prevTxt = meta.grain ? '$' + (parseFloat(open)/100).toFixed(2) : parseFloat(open).toFixed(meta.dec) + (meta.suffix||'');
+    prevEl.textContent = 'prev: ' + prevTxt + ' ' + (q && q.ticker ? q.ticker : '');
+  }
+
   // Update ticker items
+  var tickerPriceTxt = fmtTickerPrice(close, meta.grain);
+  var tickerChgObj = fmtTickerChange(close, open, meta.grain, netChg, pctChg);
   document.querySelectorAll('[data-sym="' + key + '"]').forEach(function(el) {
     var pe = el.querySelector('.t-price');
     var ce = el.querySelector('.t-chg');
-    if (pe) pe.textContent = priceTxt;
-    if (ce) { ce.textContent = chgObj.text; ce.className = 't-chg ' + chgObj.cls; }
+    if (pe) pe.textContent = tickerPriceTxt;
+    if (ce) { ce.textContent = tickerChgObj.text; ce.className = 't-chg ' + tickerChgObj.cls; }
   });
 
   rebuildTickerLoop();
@@ -455,8 +474,6 @@ function applyPriceResult(key, q, close, open, netChg, pctChg) {
 // Updated every 30 minutes by GitHub Actions (yfinance, free).
 // ─────────────────────────────────────────────────────────────────
 function fetchAllPrices() {
-  var statusEl = null; // status element removed from UI
-
   fetch('/data/prices.json', { cache: 'no-store' })
     .then(function(r) {
       if (!r.ok) throw new Error('prices.json ' + r.status);
@@ -464,7 +481,6 @@ function fetchAllPrices() {
     })
     .then(function(data) {
       var quotes  = data.quotes || {};
-      var fetched = data.fetched || null;
       var count   = 0;
 
       Object.keys(quotes).forEach(function(key) {
@@ -473,41 +489,27 @@ function fetchAllPrices() {
         applyPriceResult(key, q, q.close, q.open, q.netChange, q.pctChange);
         count++;
       });
-
-      if (statusEl) {
-        if (count > 0) {
-          var ageStr = '';
-          if (fetched) {
-            var mins = Math.round((Date.now() - new Date(fetched).getTime()) / 60000);
-            ageStr = mins < 2 ? ' · Just updated' : mins < 60 ? ' · ' + mins + 'min ago' : '';
-          }
-          statusEl.textContent = 'Prices delayed · Yahoo Finance' + ageStr;
-          statusEl.style.color = 'var(--text-muted)';
-        } else {
-          statusEl.textContent = '⚠ Price data unavailable — refresh to retry';
-          statusEl.style.color = 'var(--gold)';
-        }
-      }
     })
-    .catch(function() {
-      if (statusEl) {
-        statusEl.textContent = '⚠ Price data unavailable — refresh to retry';
-        statusEl.style.color = 'var(--gold)';
-      }
+    .catch(function(e) {
+      console.warn('prices.json fetch failed:', e);
     });
 }
 
 // ─────────────────────────────────────────────────────────────────
-// CRYPTO — CoinGecko (free, no key, real-time)
+// CRYPTO — CoinGecko via CORS proxy (free, no key, real-time)
+// Direct CoinGecko calls are blocked by CORS from GitHub Pages,
+// so we proxy through corsproxy.io.
 // ─────────────────────────────────────────────────────────────────
 function fetchCryptoLive() {
-  fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ripple,kaspa&vs_currencies=usd&include_24hr_change=true&precision=4')
+  var cgUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ripple,kaspa&vs_currencies=usd&include_24hr_change=true&precision=4';
+  var proxied = 'https://corsproxy.io/?' + encodeURIComponent(cgUrl);
+  fetch(proxied)
     .then(function(r) { return r.json(); })
     .then(function(d) {
       var cmap = {
-        bitcoin: { priceEl:'pc-btc',  chgEl:'pcc-btc',  dec:0 },
-        ripple:  { priceEl:'pc-xrp',  chgEl:'pcc-xrp',  dec:4 },
-        kaspa:   { priceEl:'pc-kas',  chgEl:'pcc-kas',  dec:4 },
+        bitcoin: { priceEl:'pc-btc',  chgEl:'pcc-btc',  tickerSym:'bitcoin', dec:2 },
+        ripple:  { priceEl:'pc-xrp',  chgEl:'pcc-xrp',  tickerSym:'ripple',  dec:2 },
+        kaspa:   { priceEl:'pc-kas',  chgEl:'pcc-kas',  tickerSym:'kaspa',   dec:2 },
       };
       Object.keys(cmap).forEach(function(id) {
         var info  = cmap[id];
@@ -520,7 +522,8 @@ function fetchCryptoLive() {
           var cv = parseFloat(chgP);
           updatePriceEl(info.chgEl, (cv>0?'▲':'▼')+' '+Math.abs(cv).toFixed(2)+'%', cv>0?'up':'dn');
         }
-        document.querySelectorAll('[data-sym="'+id+'"]').forEach(function(el) {
+        // Ticker update
+        document.querySelectorAll('[data-sym="'+info.tickerSym+'"]').forEach(function(el) {
           var pe = el.querySelector('.t-price');
           var ce = el.querySelector('.t-chg');
           if (pe) pe.textContent = priceTxt;
@@ -532,7 +535,9 @@ function fetchCryptoLive() {
         });
       });
       rebuildTickerLoop();
-    }).catch(function() {});
+    }).catch(function(e) {
+      console.warn('CoinGecko fetch failed:', e);
+    });
 }
 
 // ─────────────────────────────────────────────────────────────────
@@ -572,34 +577,34 @@ function fetchFFAILive() {
 // ─────────────────────────────────────────────────────────────────
 var _tickerRebuildTimer = null;
 function rebuildTickerLoop() {
-  // Debounce — prices update many items rapidly, only rebuild once they settle
   if (_tickerRebuildTimer) clearTimeout(_tickerRebuildTimer);
   _tickerRebuildTimer = setTimeout(function() {
     var single = document.getElementById('ticker-items-single');
     var track  = document.getElementById('ticker-track');
     if (!single || !track) return;
 
-    // Remove old clone
     var old = document.getElementById('ticker-items-clone');
     if (old) old.remove();
 
-    // Clone and append
     var c = single.cloneNode(true);
     c.id = 'ticker-items-clone';
     c.setAttribute('aria-hidden', 'true');
     track.appendChild(c);
 
-    // Restart animation cleanly so the loop doesn't jump mid-scroll
     track.style.animation = 'none';
-    track.offsetHeight; // force reflow
+    track.offsetHeight;
     track.style.animation = '';
+
+    // Dynamic speed: ~45px/sec
+    var w = single.scrollWidth || single.offsetWidth;
+    if (w > 200) {
+      track.style.animationDuration = Math.max(20, Math.round(w / 45)) + 's';
+    }
   }, 120);
 }
 
 // ─────────────────────────────────────────────────────────────────
 // PREDICTION MARKETS (Kalshi + Polymarket)
-// Reads from data/markets.json — fetched server-side by GitHub
-// Actions (fetch_markets.py). No CORS issues, no API keys.
 // ─────────────────────────────────────────────────────────────────
 function fetchKalshiMarkets() {
   var grid    = document.getElementById('kalshi-grid');
@@ -627,7 +632,6 @@ function fetchKalshiMarkets() {
 
       markets.forEach(function(m) { grid.appendChild(buildMarketCard(m)); });
 
-      // Footer with last updated
       if (data.fetched) {
         var mins = Math.round((Date.now() - new Date(data.fetched).getTime()) / 60000);
         var ageStr = mins < 2 ? 'Just updated' : mins < 60 ? mins + 'min ago' : Math.round(mins/60) + 'h ago';
@@ -649,23 +653,16 @@ function fetchKalshiMarkets() {
 function buildMarketCard(m) {
   var yes   = m.yes || 50;
   var title = (m.title || '').length > 90 ? m.title.slice(0, 87) + '…' : (m.title || 'Market');
-
-  // Color based on probability
   var color, bgAlpha, borderC;
   if (yes >= 65)      { color = 'var(--green)'; bgAlpha = 'rgba(62,207,110,.07)';  borderC = 'rgba(62,207,110,.22)'; }
   else if (yes <= 35) { color = 'var(--red)';   bgAlpha = 'rgba(240,96,96,.07)';   borderC = 'rgba(240,96,96,.22)';  }
   else                { color = 'var(--gold)';  bgAlpha = 'rgba(230,176,66,.07)';  borderC = 'rgba(230,176,66,.22)'; }
-
-  // Platform badge color
   var platColor = m.platform === 'Kalshi' ? '#00b2ff' : '#9b59b6';
   var platLabel = m.platform || 'Market';
-
-  // Volume display
   var vol = m.volume_24h || 0;
   var volStr = vol >= 1000000 ? '$' + (vol/1000000).toFixed(1) + 'M vol'
              : vol >= 1000    ? '$' + (vol/1000).toFixed(0) + 'k vol'
-             : vol > 0        ? '$' + Math.round(vol) + ' vol'
-             : '';
+             : vol > 0        ? '$' + Math.round(vol) + ' vol' : '';
 
   var div = document.createElement('div');
   div.className = 'market-card';
@@ -674,29 +671,23 @@ function buildMarketCard(m) {
   div.onclick = function() { window.open(m.url, '_blank', 'noopener'); };
 
   div.innerHTML =
-    // Platform badge + time
     '<div style="display:flex;justify-content:space-between;align-items:center">'
       + '<span style="font-size:.6rem;font-weight:700;letter-spacing:.08em;color:' + platColor + ';text-transform:uppercase;'
         + 'background:' + platColor + '15;border:1px solid ' + platColor + '35;border-radius:4px;padding:.1rem .4rem">'
         + platLabel + '</span>'
       + '<span style="font-size:.62rem;color:var(--text-muted)">' + (m.time_left || '') + '</span>'
     + '</div>'
-    // Title
     + '<div style="font-size:.78rem;font-weight:600;color:var(--text);line-height:1.4">' + title + '</div>'
-    // Probability bar + number
     + '<div>'
       + '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.3rem">'
         + '<span style="font-size:1.5rem;font-weight:700;color:' + color + ';font-family:\'Oswald\',sans-serif;line-height:1">'
           + yes + '%</span>'
         + '<span style="font-size:.7rem;color:var(--text-muted)">YES probability</span>'
       + '</div>'
-      // Progress bar
       + '<div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden">'
-        + '<div style="height:100%;width:' + yes + '%;background:' + color + ';border-radius:3px;'
-          + 'transition:width .4s ease"></div>'
+        + '<div style="height:100%;width:' + yes + '%;background:' + color + ';border-radius:3px;transition:width .4s ease"></div>'
       + '</div>'
     + '</div>'
-    // Footer: NO price + volume + trade link
     + '<div style="display:flex;justify-content:space-between;align-items:center;padding-top:.3rem;'
         + 'border-top:1px solid var(--border);margin-top:.1rem">'
       + '<span style="font-size:.68rem;color:var(--text-muted)">NO: ' + (m.no || (100 - yes)) + '%'
@@ -751,7 +742,6 @@ function loadDailyBriefing() {
       }
 
       el = document.getElementById('daily-source'); if (el) el.textContent = 'AI · Yahoo Finance · USDA';
-
       el = document.getElementById('daily-loading'); if (el) el.style.display = 'none';
       el = document.getElementById('daily-content'); if (el) el.style.display = 'block';
     })
