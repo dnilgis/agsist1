@@ -1,34 +1,54 @@
 {
-  "date": "Friday, February 27, 2026",
-  "generated_at": "2026-02-27T09:30:00-06:00",
-  "model": "claude-sonnet-4-20250514",
-  "headline": "BRIEFING UPDATES AUTOMATICALLY EACH WEEKDAY MORNING",
-  "subheadline": "Live market data powers this briefing daily via Barchart and Claude AI",
-  "lead": "The AGSIST Daily Briefing is generated automatically each weekday morning from live Barchart futures data. Today's live briefing will appear here after the first GitHub Action run completes.",
-  "teaser": "Add your GitHub secret ANTHROPIC_API_KEY to activate fully automated daily briefings.",
+  "headline": "CORN SLIDES, WHEAT RALLIES AS CLASSIC WRAPS",
+  "subheadline": "Front-month corn drops over 1% while Chicago wheat surges on renewed export interest.",
+  "lead": "Corn took it on the chin Friday, with the front month settling at 438.75 \u2014 down 1.13% \u2014 while new-crop December held up better at 469.50. Chicago wheat was the standout, rallying 2.51% to 591.25. Soybeans softened modestly, but the real pressure hit soybean meal, down over 2%.",
+  "date": "Saturday, February 28, 2026",
+  "teaser": "Wheat surges, corn slides, and Commodity Classic delivers tech buzz \u2014 here's your Saturday snapshot.",
   "one_number": {
-    "value": "--",
-    "unit": "awaiting first run",
-    "context": "Once ANTHROPIC_API_KEY is added to GitHub Secrets, this populates automatically every morning."
+    "value": "+2.51%",
+    "unit": "Chicago Wheat",
+    "context": "Wheat's sharp rally signals potential export demand revival and could pull row crop acres into the conversation."
   },
   "sections": [
     {
-      "title": "How This Works",
-      "body": "Each weekday at 4:30am CT, a GitHub Action fetches overnight futures prices from Barchart, sends them to Claude, and commits the result here. The site reads this file on page load — no server required."
+      "title": "GRAINS & OILSEEDS",
+      "body": "Front-month corn at 438.75 lost over five cents on the session, but the December 2026 contract edged up to 469.50 \u2014 watch that carry for storage signals. Soybeans at 1157.25 slipped 0.71%, with meal taking the harder hit at 315.50. Wheat's 2.51% pop to 591.25 is the number that matters \u2014 if it holds Monday, expect spillover chatter on spring planting intentions."
     },
     {
-      "title": "What You Need",
-      "body": "In your GitHub repo, go to Settings → Secrets → Actions and add ANTHROPIC_API_KEY. BARCHART_API_KEY is already there from the price feed setup. Once both secrets exist, the next scheduled run will produce a real briefing."
+      "title": "WEATHER & FIELD CONDITIONS",
+      "body": "Central Illinois sits at 48\u00b0F under overcast skies with almost no moisture in the forecast \u2014 just 2% precip chance and zero inches over the last three days. That's decent for any fieldwork that needs doing, but soil temps remain a non-factor until mid-March. No spray windows to worry about today; enjoy the dry weekend."
     },
     {
-      "title": "Manual Trigger",
-      "body": "You can also run it on demand: go to Actions → Daily Briefing → Run workflow. The briefing will be live within about 30 seconds of the Action completing."
+      "title": "MARKETS & MACRO",
+      "body": "Live cattle ripped 2.96% to 244.00 \u2014 feedlot margins are getting interesting. Crude oil jumped 2.62% to 67.02, which puts a floor under input costs. The dollar index slipped to 97.565, mildly supportive for exports. Ten-year yields dropped to 3.96%, signaling markets still betting on a soft landing."
     }
   ],
   "watch_list": [
-    { "time": "Setup required", "desc": "Add ANTHROPIC_API_KEY to GitHub Secrets" },
-    { "time": "Auto-runs 4:30am CT", "desc": "Monday through Friday, year-round" },
-    { "time": "Manual anytime", "desc": "Actions → Daily Briefing → Run workflow" }
+    {
+      "time": "Today",
+      "desc": "Commodity Classic 2026 final sessions \u2014 announcements on tech and input pricing."
+    },
+    {
+      "time": "This Week",
+      "desc": "USDA weekly export sales Thursday \u2014 wheat demand confirmation is key."
+    },
+    {
+      "time": "Key Risk",
+      "desc": "South American harvest pressure continues; Brazil's second-crop corn on pace."
+    },
+    {
+      "time": "Key Opportunity",
+      "desc": "Wheat rally could extend if Black Sea logistics tighten; new-crop beans look undervalued."
+    }
   ],
-  "prices_snapshot": {}
+  "source": "Yahoo Finance \u00b7 USDA \u00b7 Open-Meteo",
+  "generated_utc": "2026-02-28T19:13:27Z",
+  "prices_fetched": "2026-02-28T19:01:23Z",
+  "news_sources": [
+    "USDA News",
+    "AgWeb",
+    "Farm Progress",
+    "DTN Progressive Farmer",
+    "Reuters Commodities"
+  ]
 }
