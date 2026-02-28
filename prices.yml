@@ -1,0 +1,38 @@
+name: Fetch Prices
+
+on:
+  schedule:
+    # Every 30 minutes, Mon–Fri, 8:00am–5:30pm ET (13:00–22:30 UTC)
+    - cron: '0,30 13-22 * * 1-5'
+    - cron: '30 22 * * 1-5'
+  workflow_dispatch:   # manual trigger
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install yfinance
+        run: pip install yfinance --quiet
+
+      - name: Fetch prices
+        run: python scripts/fetch_prices.py
+
+      - name: Commit prices.json
+        run: |
+          git config user.name  "AGSIST Price Bot"
+          git config user.email "noreply@agsist.com"
+          git add data/prices.json
+          git diff --cached --quiet && echo "No price changes" || \
+            git commit -m "Price update $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push
