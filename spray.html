@@ -748,6 +748,7 @@ function overallRating(wR,tR,hR,iR,dR){
   return 'good';
 }
 function ratingToWord(r){return {good:'Good',marginal:'Marginal',poor:'Poor'}[r]||r;}
+function ratingAbbr(r){return {good:'GOOD',marginal:'FAIR',poor:'POOR'}[r]||'--';}
 
 var rIcons={good:'✅',marginal:'⚠️',poor:'🚫'};
 var rMainText={good:'Good — Safe to Apply',marginal:'Marginal — Use Caution',poor:'Poor — Do Not Spray'};
@@ -812,7 +813,7 @@ function buildHourly(hourly){
     el.innerHTML='<div class="hr-time">'+timeStr+'</div>'
       +'<div class="hr-icon">'+(WX[code]||'🌡️')+'</div>'
       +'<div class="hr-wind">'+wind+' mph</div>'
-      +'<div class="hr-badge '+overall+'">'+ratingToWord(overall).substring(0,3).toUpperCase()+'</div>';
+      +'<div class="hr-badge '+overall+'">'+ratingAbbr(overall)+'</div>';
     strip.appendChild(el);
   }
 }
@@ -832,7 +833,7 @@ function buildDayStrip(daily){
     el.className='day-item';
     el.innerHTML='<div class="day-name">'+name+'</div>'
       +'<div class="day-icon">'+(WX[daily.weather_code[i]]||'🌡️')+'</div>'
-      +'<div class="day-rating '+overall+'">'+ratingToWord(overall).substring(0,3).toUpperCase()+'</div>'
+      +'<div class="day-rating '+overall+'">'+ratingAbbr(overall)+'</div>'
       +'<div class="day-wind">'+(daily.wind_speed_10m_max[i]?Math.round(daily.wind_speed_10m_max[i]):'--')+' mph</div>';
     strip.appendChild(el);
   }
