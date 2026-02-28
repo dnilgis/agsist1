@@ -2,10 +2,9 @@ name: Fetch Prices
 
 on:
   schedule:
-    # Every 30 minutes, Mon–Fri, 8:00am–5:30pm ET (13:00–22:30 UTC)
+    # Every 30 minutes, Mon–Fri, 8:00 AM – 5:30 PM Central (13:00–22:30 UTC)
     - cron: '0,30 13-22 * * 1-5'
-    - cron: '30 22 * * 1-5'
-  workflow_dispatch:   # manual trigger
+  workflow_dispatch: # Manual trigger button in GitHub Actions UI
 
 jobs:
   fetch:
@@ -14,7 +13,7 @@ jobs:
       contents: write
 
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Set up Python
@@ -22,17 +21,16 @@ jobs:
         with:
           python-version: '3.11'
 
-      - name: Install yfinance
-        run: pip install yfinance --quiet
+      - name: Install dependencies
+        run: pip install yfinance requests
 
       - name: Fetch prices
         run: python scripts/fetch_prices.py
 
       - name: Commit prices.json
         run: |
-          git config user.name  "AGSIST Price Bot"
-          git config user.email "noreply@agsist.com"
+          git config user.name  "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
           git add data/prices.json
-          git diff --cached --quiet && echo "No price changes" || \
-            git commit -m "Price update $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git diff --staged --quiet || git commit -m "chore: update prices.json [skip ci]"
           git push
