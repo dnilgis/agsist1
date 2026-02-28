@@ -1,5 +1,5 @@
 /* AGSIST Shared Stylesheet — edit once, applies everywhere */
-/* Last updated: 2026-02-27 */
+/* Last updated: 2026-02-28 */
 
 /* ── Fonts: imported here so ALL pages get them, not just index.html ── */
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap');
@@ -9,6 +9,13 @@
   --green:    #3ecf6e;
   --red:      #f06060;
   --blue:     #5ba3e0;
+  --orange:   #f0913a;
+
+  /* Risk level palette — used by urea, spray, and future risk pages */
+  --risk-low:     #3ecf6e;
+  --risk-mod:     #e6b042;
+  --risk-high:    #f0913a;
+  --risk-extreme: #f06060;
 
   --bg:       #080e08;
   --bg2:      #0b120b;
@@ -57,6 +64,9 @@ button{cursor:pointer;font-family:inherit}
 .nav-btn{display:flex;align-items:center;gap:.55rem;padding:.5rem .85rem;background:none;border:none;border-radius:5px;font-family:'JetBrains Mono',monospace;font-size:.9rem;font-weight:600;color:var(--text);transition:color .15s,background .15s;white-space:nowrap}
 .nav-btn:hover,.nav-dd.open>.nav-btn{color:var(--gold);background:rgba(230,176,66,.07)}
 .nav-icon{height:34px;width:34px;object-fit:contain;border-radius:4px;background:#f5f1e8;padding:2px;flex-shrink:0}
+/* Nav pixel icon SVGs */
+.nav-svg-icon{width:18px;height:18px;flex-shrink:0;opacity:.7;transition:opacity .15s}
+.nav-btn:hover .nav-svg-icon,.nav-dd.open>.nav-btn .nav-svg-icon{opacity:1}
 .chevron{opacity:.4;transition:transform .2s;margin-left:2px}
 .nav-dd.open .chevron{transform:rotate(180deg);opacity:.9}
 .nav-dd{position:relative}
@@ -237,6 +247,8 @@ button{cursor:pointer;font-family:inherit}
 .cal-date{font-size:.72rem;color:var(--gold);font-weight:600;text-transform:uppercase;letter-spacing:.07em;margin-bottom:.3rem}
 .cal-name{font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:.2rem}
 .cal-time{font-size:.75rem;color:var(--text-muted)}
+
+/* ══ SIGNUP — Full card (default, visits 1–24) ══════════════════════ */
 .signup{position:relative;overflow:hidden;margin-bottom:2rem;background:var(--surface);border:1px solid var(--border-g);border-radius:14px;padding:3rem 2rem}
 .signup::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 700px 320px at 50% -50%,rgba(230,176,66,.07) 0%,transparent 70%);pointer-events:none}
 .signup-inner{max-width:680px;margin:0 auto;text-align:center;position:relative;z-index:1}
@@ -253,11 +265,48 @@ button{cursor:pointer;font-family:inherit}
 .signup-input{flex:1;padding:.8rem 1.1rem;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.92rem;color:var(--text);outline:none;transition:border-color .15s}
 .signup-input::placeholder{color:var(--text-muted)}
 .signup-input:focus{border-color:var(--gold)}
-.signup-submit{padding:.8rem 1.5rem;background:var(--gold);color:#0a1a0a;border:none;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.92rem;font-weight:700;white-space:nowrap;transition:background .15s,transform .1s}
+.signup-submit{padding:.8rem 1.5rem;background:var(--gold);color:#0a1a0a;border:none;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.92rem;font-weight:700;white-space:nowrap;cursor:pointer;transition:background .15s,transform .1s}
 .signup-submit:hover{background:#f0c050;transform:translateY(-1px)}
 .signup-disc{font-size:.75rem;color:var(--text-muted)}
 .signup-disc a{color:var(--text-dim);border-bottom:1px solid var(--border)}
 .sms-note{display:flex;align-items:flex-start;gap:.65rem;background:rgba(230,176,66,.07);border:1px solid rgba(230,176,66,.15);border-radius:8px;padding:.9rem 1.1rem;text-align:left;font-size:.88rem;color:var(--text-dim);line-height:1.6}
+
+/* ══ SIGNUP — Compact bar (visits 25–49) ════════════════════════════ */
+.signup--compact{
+  display:flex;align-items:center;gap:1rem;flex-wrap:wrap;
+  margin-bottom:2rem;
+  background:var(--surface);border:1px solid var(--border-g);border-radius:9px;
+  padding:.85rem 1.25rem;
+  position:relative;overflow:hidden;
+}
+.signup--compact::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 600px 120px at 50% -50%,rgba(230,176,66,.05) 0%,transparent 70%);pointer-events:none}
+.signup--compact .scu-eyebrow{font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);white-space:nowrap;flex-shrink:0}
+.signup--compact .scu-text{font-size:.88rem;color:var(--text-dim);flex:1;min-width:180px}
+.signup--compact .scu-text strong{color:var(--text)}
+.signup--compact .scu-form{display:flex;gap:.55rem;flex-shrink:0;flex-wrap:wrap}
+.signup--compact .scu-input{padding:.6rem .9rem;background:var(--surface2);border:1px solid var(--border);border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:.85rem;color:var(--text);outline:none;width:210px;transition:border-color .15s}
+.signup--compact .scu-input::placeholder{color:var(--text-muted)}
+.signup--compact .scu-input:focus{border-color:var(--gold)}
+.signup--compact .scu-btn{padding:.6rem 1.1rem;background:var(--gold);color:#0a1a0a;border:none;border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:700;white-space:nowrap;transition:background .15s}
+.signup--compact .scu-btn:hover{background:#f0c050}
+.signup--compact .scu-dismiss{margin-left:auto;font-size:.72rem;color:var(--text-muted);background:none;border:none;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.signup--compact .scu-dismiss:hover{color:var(--text-dim)}
+@media(max-width:640px){.signup--compact{flex-direction:column;align-items:flex-start}.signup--compact .scu-input{width:100%}.signup--compact .scu-dismiss{margin-left:0}}
+
+/* ══ SIGNUP — Slim footer line (visits 50+) ════════════════════════ */
+.signup--slim{
+  display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;
+  margin-bottom:1.5rem;
+  padding:.55rem 1rem;
+  border-top:1px solid var(--border);
+  border-bottom:1px solid var(--border);
+}
+.signup--slim .scs-text{font-size:.78rem;color:var(--text-muted);flex:1}
+.signup--slim a{font-size:.78rem;color:var(--gold);white-space:nowrap}
+.signup--slim a:hover{text-decoration:underline}
+.signup--slim .scs-dismiss{font-size:.72rem;color:var(--text-muted);background:none;border:none;cursor:pointer}
+.signup--slim .scs-dismiss:hover{color:var(--text-dim)}
+
 .footer{background:var(--surface);border-top:1px solid var(--border-g);padding:1.5rem 0 0;transition:background .25s}
 .footer-inner{max-width:1400px;margin:0 auto;padding:0 1.5rem}
 .footer-top{display:flex;justify-content:space-between;align-items:center;padding-bottom:.9rem;border-bottom:1px solid var(--border);margin-bottom:.9rem;flex-wrap:wrap;gap:.6rem}
@@ -301,7 +350,8 @@ button{cursor:pointer;font-family:inherit}
 .ticker-track-wrap::before,.ticker-track-wrap::after{content:'';position:absolute;top:0;bottom:0;width:40px;z-index:2;pointer-events:none}
 .ticker-track-wrap::before{left:0;background:linear-gradient(to right,var(--surface),transparent)}
 .ticker-track-wrap::after{right:0;background:linear-gradient(to left,var(--surface),transparent)}
-.ticker-track{display:flex;align-items:center;height:100%;white-space:nowrap;animation:ticker-scroll 55s linear infinite}
+/* FIX: width:max-content so translateX(-50%) = exactly one copy's width for seamless loop */
+.ticker-track{display:flex;align-items:center;height:100%;white-space:nowrap;animation:ticker-scroll 55s linear infinite;width:max-content}
 .ticker-track:hover{animation-play-state:paused}
 @keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 .t-item{display:inline-flex;align-items:baseline;gap:.4rem;padding:0 .5rem;flex-shrink:0}
@@ -339,7 +389,7 @@ button{cursor:pointer;font-family:inherit}
 .pc-sm .pc-price{font-size:1.9rem}
 .pc-section-lbl{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);margin:.25rem 0 .65rem;padding:.2rem 0;border-bottom:1px solid var(--border)}
 .radar-section{margin-bottom:2rem}
-.radar-grid{display:grid;grid-template-columns:1fr 320px;gap:1.25rem;align-items:stretch;height:460px}
+.radar-grid{display:grid;grid-template-columns:3fr 2fr;gap:1.25rem;align-items:stretch;height:460px}
 .radar-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
 .radar-card iframe{display:block;width:100%;border:none;border-radius:0;flex:1;min-height:0}
 .radar-sidebar{display:flex;flex-direction:column;gap:.75rem;height:100%;overflow:hidden}
