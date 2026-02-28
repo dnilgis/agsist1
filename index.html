@@ -3,25 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Google Analytics 4 — inline so it fires before any other scripts -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-6KXCTD5Z9H"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-6KXCTD5Z9H');</script>
-  <!-- Shared styles (includes font imports) -->
   <link rel="stylesheet" href="/components/styles.css">
-  <!-- Favicons -->
   <link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.png">
   <link rel="apple-touch-icon"                    href="/img/apple-touch-icon.png">
-
 <title>AGSIST — Free Live Agricultural Prices, Weather & Tools</title>
 <meta name="description" content="Free live corn, soybean and wheat futures prices, farm weather, calculators and USDA data. The ag dashboard built for working farmers everywhere.">
-
-  <!-- ═══ SEO ════════════════════════════════════════════════════════ -->
   <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <link rel="canonical" href="https://agsist.com/">
-
-  <!-- Open Graph -->
   <meta property="og:type"        content="website">
   <meta property="og:site_name"   content="AGSIST">
   <meta property="og:title"       content="AGSIST — Free Live Agricultural Prices, Weather &amp; Tools">
@@ -31,15 +23,11 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height"content="630">
   <meta property="og:locale"      content="en_US">
-
-  <!-- Twitter / X Card -->
   <meta name="twitter:card"        content="summary_large_image">
   <meta name="twitter:site"        content="@agsist">
   <meta name="twitter:title"       content="AGSIST — Free Live Agricultural Prices, Weather &amp; Tools">
   <meta name="twitter:description" content="Live corn, bean &amp; wheat futures, farm weather, spray advisory, urea risk and USDA data. Free for farmers.">
   <meta name="twitter:image"       content="https://agsist.com/img/og-agsist.jpg">
-
-  <!-- Structured Data JSON-LD -->
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -50,30 +38,15 @@
         "url": "https://agsist.com/",
         "name": "AGSIST",
         "description": "Free live agricultural prices, weather and tools for farmers.",
-        "publisher": { "@id": "https://agsist.com/#organization" },
-        "potentialAction": {
-          "@type": "SearchAction",
-          "target": { "@type": "EntryPoint", "urlTemplate": "https://agsist.com/search?q={search_term_string}" },
-          "query-input": "required name=search_term_string"
-        }
+        "publisher": { "@id": "https://agsist.com/#organization" }
       },
       {
         "@type": "Organization",
         "@id": "https://agsist.com/#organization",
         "name": "AGSIST",
         "url": "https://agsist.com/",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://agsist.com/img/agsist-logo.png",
-          "width": 200, "height": 60
-        },
-        "contactPoint": {
-          "@type": "ContactPoint",
-          "telephone": "+1-715-797-2428",
-          "contactType": "customer service",
-          "areaServed": ["WI","MN"],
-          "availableLanguage": "English"
-        },
+        "logo": { "@type": "ImageObject", "url": "https://agsist.com/img/logo-agsist.jpg" },
+        "contactPoint": { "@type": "ContactPoint", "telephone": "+1-715-797-2428", "contactType": "customer service" },
         "sameAs": ["https://farmers1st.com"]
       },
       {
@@ -81,37 +54,19 @@
         "@id": "https://agsist.com/#webpage",
         "url": "https://agsist.com/",
         "name": "AGSIST — Free Live Agricultural Prices, Weather & Tools",
-        "description": "Live corn, soybean and wheat futures prices, local farm weather, spray advisory, urea risk monitor, USDA reports and ag tools.",
-        "isPartOf": { "@id": "https://agsist.com/#website" },
-        "about": { "@id": "https://agsist.com/#organization" },
-        "breadcrumb": {
-          "@type": "BreadcrumbList",
-          "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Home", "item": "https://agsist.com/" }]
-        }
-      },
-      {
-        "@type": "Dataset",
-        "name": "Live Agricultural Futures Prices",
-        "description": "15-minute delayed futures prices for corn, soybeans, wheat, livestock, energy and metals.",
-        "url": "https://agsist.com/",
-        "creator": { "@id": "https://agsist.com/#organization" },
-        "temporalCoverage": "2024/..",
-        "variableMeasured": ["Corn futures price","Soybean futures price","Wheat futures price"],
-        "license": "https://creativecommons.org/licenses/by/4.0/"
+        "isPartOf": { "@id": "https://agsist.com/#website" }
       }
     ]
   }
   </script>
-
   <link rel="manifest" href="/manifest.json">
 </head>
 <body>
 <a href="#main" class="skip">Skip to content</a>
 
-<!-- NAV + DRAWER injected here by loader.js from /components/header.html -->
 <div id="site-header"></div>
 
-<!-- PRICES STRIP: auto-scroll ticker -->
+<!-- PRICES STRIP -->
 <div class="prices-strip" aria-label="Live commodity prices">
   <div class="ticker-outer">
     <div class="ticker-live">
@@ -121,53 +76,49 @@
     </div>
     <div class="ticker-track-wrap">
       <div class="ticker-track" id="ticker-track">
-        <!-- ══ TICKER ITEMS ══════════════════════════════════════════════
-             data-sym MUST match Stooq symbol format used in geo.js
-             STOOQ_QUOTES (lowercase, dot-separated, e.g. "zc.f").
-             CoinGecko IDs use full lowercase name (bitcoin, ripple, kaspa).
-             FFAI uses data-sym="ffai".
-        ════════════════════════════════════════════════════════════════ -->
         <div id="ticker-items-single">
-        <div class="t-item" data-sym="corn"><span class="t-label">Corn (front)</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="corn-dec"><span class="t-label">Corn Dec '26</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="beans"><span class="t-label">Beans (front)</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="beans-nov"><span class="t-label">Beans Nov '26</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="wheat"><span class="t-label">Wheat (front)</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="cattle"><span class="t-label">Live Cattle</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="feeders"><span class="t-label">Feeder Cattle</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="hogs"><span class="t-label">Lean Hogs</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="meal"><span class="t-label">Soy Meal</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="soyoil"><span class="t-label">Soy Oil</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="crude"><span class="t-label">Crude WTI</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="natgas"><span class="t-label">Natural Gas</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="dollar"><span class="t-label">Dollar Index</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="treasury10"><span class="t-label">10-Yr Treasury</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="gold"><span class="t-label">Gold</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="silver"><span class="t-label">Silver</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="bitcoin"><span class="t-label">Bitcoin</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="ripple"><span class="t-label">XRP</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="kaspa"><span class="t-label">Kaspa</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-        <div class="t-sep">·</div>
-        <div class="t-item" data-sym="ffai"><span class="t-label">FFAI Index</span><span class="t-price" style="color:var(--blue)">--</span><span class="t-chg" style="color:var(--blue)">--</span></div>
-        <div class="t-sep">·</div>
+          <div class="t-item" data-sym="corn"><span class="t-label">Corn (front)</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="corn-dec"><span class="t-label">Corn Dec '26</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="beans"><span class="t-label">Beans (front)</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="beans-nov"><span class="t-label">Beans Nov '26</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="wheat"><span class="t-label">Wheat (front)</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="cattle"><span class="t-label">Live Cattle</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="feeders"><span class="t-label">Feeder Cattle</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="hogs"><span class="t-label">Lean Hogs</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="meal"><span class="t-label">Soy Meal</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="soyoil"><span class="t-label">Soy Oil</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="crude"><span class="t-label">Crude WTI</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="natgas"><span class="t-label">Natural Gas</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="dollar"><span class="t-label">Dollar Index</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="treasury10"><span class="t-label">10-Yr Treasury</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="gold"><span class="t-label">Gold</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="silver"><span class="t-label">Silver</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="sp500"><span class="t-label">S&amp;P 500</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="bitcoin"><span class="t-label">Bitcoin</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="ripple"><span class="t-label">XRP</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="kaspa"><span class="t-label">Kaspa</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
+          <div class="t-sep">·</div>
+          <div class="t-item" data-sym="ffai"><span class="t-label">FFAI Index</span><span class="t-price" style="color:var(--blue)">--</span><span class="t-chg" style="color:var(--blue)">--</span></div>
+          <div class="t-sep">·</div>
         </div>
       </div>
     </div>
@@ -177,11 +128,12 @@
 <!-- AGSIST DAILY HERO -->
 <section class="daily-hero" id="daily-hero">
 
-  <!-- Teaser bar: shown only when dismissed -->
+  <!-- Teaser bar: shown only when dismissed.
+       id="daily-teaser-date" and id="daily-teaser-text" are populated by loadDailyBriefing() in geo.js -->
   <div class="daily-teaser" id="daily-teaser" onclick="expandDaily()" role="button" tabindex="0" aria-label="Expand AGSIST Daily">
     <div class="teaser-left">
-      <span class="teaser-badge">📰 AGSIST Daily · Feb 27</span>
-      <span class="teaser-headline">Corn slides on export concerns. Beans hold near lows.</span>
+      <span class="teaser-badge" id="daily-teaser-date">📰 AGSIST Daily</span>
+      <span class="teaser-headline" id="daily-teaser-text">Today's ag market briefing — click to read</span>
     </div>
     <span class="teaser-action">Read Today's Briefing ↓</span>
   </div>
@@ -189,35 +141,35 @@
   <!-- Full briefing content -->
   <div class="daily-full" id="daily-full">
     <div class="daily-hero-inner">
-
       <div class="daily-grid">
+
         <!-- LEFT: briefing -->
         <div class="daily-left">
           <div id="site-greeting" class="daily-greeting">Good Morning</div>
           <div class="daily-eyebrow"><span class="daily-eyebrow-dot"></span>AGSIST Daily — Today's Briefing</div>
-          <div class="daily-date">Friday, February 27, 2026</div>
-          <h1 class="daily-headline">CORN SLIDES ON<br>EXPORT CONCERNS.<br><span>BEANS HOLD</span> NEAR LOWS.</h1>
-          <p class="daily-lead">Overnight markets turned cautious after a stronger dollar index pressured export-sensitive commodities. December corn lost 4¢ on light early volume. Soybeans steadied near contract lows ahead of Thursday's export sales report.</p>
+          <div class="daily-date" id="daily-date">Loading...</div>
+          <h1 class="daily-headline" id="daily-headline">AGSIST DAILY<br>BRIEFING<br><span>LOADING…</span></h1>
+          <p class="daily-lead" id="daily-lead">Today's market briefing is loading. Prices and analysis update every weekday morning by 6am CT.</p>
           <div class="daily-sections">
             <div class="daily-sec">
               <span class="daily-sec-icon">👁</span>
               <div>
-                <div class="daily-sec-label">What to Watch Today</div>
-                <div class="daily-sec-text"><strong>8:30am ET</strong> — USDA Export Sales. Analyst range: corn 700–900k MT, beans 600–900k MT. Last week beans came in at a 52-week high. <strong>Dollar watch:</strong> Fed commentary expected 2pm ET — any hawkish tone could pressure beans further.</div>
+                <div class="daily-sec-label" id="daily-section-1-title">What to Watch Today</div>
+                <div class="daily-sec-text" id="daily-section-1-body">Loading market data…</div>
               </div>
             </div>
             <div class="daily-sec">
               <span class="daily-sec-icon">#️⃣</span>
               <div>
-                <div class="daily-sec-label">One Number to Know</div>
-                <div class="daily-sec-text"><strong>58%</strong> — Portion of the corn belt in D1 drought or worse, up 4 points from last week. The last time this reading reached 65% in late June, corn rallied $1.40/bu over the following six weeks.</div>
+                <div class="daily-sec-label" id="daily-section-2-title">One Number to Know</div>
+                <div class="daily-sec-text" id="daily-section-2-body">Loading…</div>
               </div>
             </div>
             <div class="daily-sec">
               <span class="daily-sec-icon">🗣</span>
               <div>
-                <div class="daily-sec-label">What Farmers Are Talking About</div>
-                <div class="daily-sec-text">USDA's February Ag Outlook Forum hinted at corn acres holding near 91M for 2026. If realized and yields normalize, the 2026/27 balance sheet could be the tightest since 2021 — watch the March Prospective Plantings report.</div>
+                <div class="daily-sec-label" id="daily-section-3-title">What Farmers Are Talking About</div>
+                <div class="daily-sec-text" id="daily-section-3-body">Loading…</div>
               </div>
             </div>
           </div>
@@ -239,23 +191,20 @@
           <!-- One Number -->
           <div class="s-card s-card--gold">
             <div class="s-card-label">#️⃣ One Number to Know</div>
-            <div class="one-num">58<span style="font-size:2rem">%</span></div>
-            <div class="one-num-unit">of corn belt in D1+ drought</div>
-            <div class="one-num-ctx">Up 4 points week-over-week. Last time at 65%, corn rallied $1.40/bu. Next Drought Monitor update: Thursday.</div>
+            <div class="one-num" id="daily-number-value">--</div>
+            <div class="one-num-unit" id="daily-number-unit">Loading…</div>
+            <div class="one-num-ctx" id="daily-number-context">Today's key data point will appear here after the daily briefing loads.</div>
           </div>
           <!-- Watch list -->
           <div class="s-card">
             <div class="s-card-label">📅 Today's Watch List</div>
-            <div class="watch-list">
-              <div class="watch-item"><span class="watch-time">8:30 ET</span><span class="watch-desc"><strong>USDA Export Sales</strong> — corn, beans &amp; wheat weekly totals</span></div>
-              <div class="watch-item"><span class="watch-time">10:00 ET</span><span class="watch-desc"><strong>EIA Ethanol</strong> — production &amp; stocks report</span></div>
-              <div class="watch-item"><span class="watch-time">2:00 ET</span><span class="watch-desc"><strong>Fed commentary</strong> — dollar-moving risk for beans</span></div>
-              <div class="watch-item"><span class="watch-time">Tonight</span><span class="watch-desc"><strong>Frost advisory</strong> — S. MN &amp; N. Iowa, early-planted corn</span></div>
-            </div>
+            <ul class="watch-list" id="daily-watch-list" style="list-style:none;padding:0;margin:0">
+              <li class="watch-item"><span class="watch-time">--</span><span class="watch-desc">Loading today's schedule…</span></li>
+            </ul>
           </div>
         </div>
-      </div>
 
+      </div>
     </div>
   </div>
 
@@ -293,7 +242,8 @@
           <div id="bids-zip-row" style="display:none;gap:.55rem;margin-bottom:1.1rem">
             <input type="text" id="bids-zip" placeholder="Enter your ZIP code" maxlength="5"
               style="flex:1;padding:.7rem .9rem;background:var(--surface2);border:1px solid var(--border);border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:.9rem;color:var(--text);outline:none;transition:border-color .15s"
-              onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'">
+              onfocus="this.style.borderColor='var(--gold)'" onblur="this.style.borderColor='var(--border)'"
+              onkeydown="if(event.key==='Enter')lookupBids()">
             <button onclick="lookupBids()" style="padding:.7rem 1rem;background:var(--gold);color:#0a1a0a;border:none;border-radius:7px;font-family:'JetBrains Mono',monospace;font-size:.85rem;font-weight:700;cursor:pointer;white-space:nowrap;transition:background .15s" onmouseover="this.style.background='#f0c050'" onmouseout="this.style.background='var(--gold)'">Find Bids →</button>
           </div>
           <div id="bids-list-area">
@@ -347,7 +297,6 @@
               <div class="wstat"><div class="wstat-lbl">Dew Point</div><div class="wstat-val" id="wx-dew">--</div></div>
             </div>
             <div id="wx-spray" class="spray-badge caution" style="margin-top:.85rem">⏳ Calculating spray conditions...</div>
-            <!-- Urea risk inline badge — FIX: single display:none, removed duplicate -->
             <div id="wx-urea" style="display:none;margin-top:.55rem;padding:.6rem .85rem;border-radius:7px;border:1px solid var(--border);background:var(--surface2)">
               <div style="display:flex;align-items:center;justify-content:space-between">
                 <div style="display:flex;align-items:center;gap:.5rem">
@@ -359,9 +308,8 @@
                   <span id="wx-urea-badge" style="font-size:.65rem;font-weight:700;text-transform:uppercase;padding:.15rem .45rem;border-radius:10px">--</span>
                 </div>
               </div>
-              <a href="/urea" style="font-size:.68rem;color:var(--text-muted);display:block;margin-top:.3rem;transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Full urea volatilization analysis →</a>
+              <a href="/urea" style="font-size:.68rem;color:var(--text-muted);display:block;margin-top:.3rem" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Full urea volatilization analysis →</a>
             </div>
-            <!-- 3-day mini forecast -->
             <div id="wx-forecast" style="display:flex;gap:.4rem;margin-top:.85rem"></div>
             <button onclick="showZipEntry()" style="margin-top:.65rem;background:none;border:none;color:var(--text-muted);font-size:.72rem;cursor:pointer;text-decoration:underline">Change location</button>
           </div>
@@ -388,7 +336,10 @@
     </div>
   </div>
 
-  <!-- LARGE PRICE CARDS -->
+  <!-- ══ PRICE CARDS ═════════════════════════════════════════════════════════
+       All price elements have IDs matching geo.js PRICE_MAP priceEl/chgEl.
+       geo.js fetchAllPrices() will populate and update these automatically.
+  ═══════════════════════════════════════════════════════════════════════════ -->
   <div class="price-cards-section fade-up" id="f-prices">
     <div class="sec-head">
       <div class="sec-title">📈 Market Prices</div>
@@ -400,7 +351,7 @@
       <div class="pc pc--highlight">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🌽</span>Corn</span><span class="pc-contract">Front Month</span></div>
         <div class="pc-price" id="pcp-corn-near">--</div>
-        <div class="pc-change"><span class="pc-chg-val dn" id="pcc-corn-near">--</span><span class="pc-prev">ZC=F · zc.f</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-corn-near">--</span><span class="pc-prev">ZC=F · Stooq</span></div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>3.84</span><span>52-Wk Range</span><span>5.42</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:36%"></div><div class="pc-range-dot" style="left:36%"></div></div>
@@ -409,7 +360,7 @@
       <div class="pc pc--highlight">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🌽</span>Corn Harvest</span><span class="pc-contract">Dec '26</span></div>
         <div class="pc-price" id="pcp-corn-dec">--</div>
-        <div class="pc-change"><span class="pc-chg-val dn" id="pcc-corn-dec">--</span><span class="pc-prev">ZCZ26.CBT · zcz26.cbt</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-corn-dec">--</span><span class="pc-prev">ZCZ26 · Stooq</span></div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>3.74</span><span>52-Wk Range</span><span>5.18</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:45%"></div><div class="pc-range-dot" style="left:45%"></div></div>
@@ -418,7 +369,7 @@
       <div class="pc pc--highlight">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🫘</span>Soybeans</span><span class="pc-contract">Front Month</span></div>
         <div class="pc-price" id="pcp-bean-near">--</div>
-        <div class="pc-change"><span class="pc-chg-val dn" id="pcc-bean-near">--</span><span class="pc-prev">ZS=F · zs.f</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-bean-near">--</span><span class="pc-prev">ZS=F · Stooq</span></div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>9.14</span><span>52-Wk Range</span><span>11.38</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:30%"></div><div class="pc-range-dot" style="left:30%"></div></div>
@@ -427,7 +378,7 @@
       <div class="pc pc--highlight">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🫘</span>Beans Harvest</span><span class="pc-contract">Nov '26</span></div>
         <div class="pc-price" id="pcp-bean-nov">--</div>
-        <div class="pc-change"><span class="pc-chg-val dn" id="pcc-bean-nov">--</span><span class="pc-prev">ZSX26.CBT · zsx26.cbt</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-bean-nov">--</span><span class="pc-prev">ZSX26 · Stooq</span></div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>9.22</span><span>52-Wk Range</span><span>11.02</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:28%"></div><div class="pc-range-dot" style="left:28%"></div></div>
@@ -439,35 +390,35 @@
     <div class="price-cards-grid-2">
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🌾</span>Wheat</span><span class="pc-contract">Front Month</span></div>
-        <div class="pc-price">5.62¾</div>
-        <div class="pc-change"><span class="pc-chg-val nc">— ¼¢ (−0.04%)</span><span class="pc-prev">ZWN6</span></div>
+        <div class="pc-price" id="pcp-wheat">--</div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-wheat">--</span><span class="pc-prev">ZW=F · Stooq</span></div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>4.88</span><span></span><span>6.44</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:48%"></div><div class="pc-range-dot" style="left:48%"></div></div>
         </div>
       </div>
       <div class="pc pc-sm">
-        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🥛</span>Milk Class III</span><span class="pc-contract">Mar '26</span></div>
-        <div class="pc-price">19.14</div>
-        <div class="pc-change"><span class="pc-chg-val up">▲ 0.08 (+0.42%)</span><span class="pc-prev">DA</span></div>
-        <div class="pc-range">
-          <div class="pc-range-labels"><span>16.40</span><span></span><span>21.60</span></div>
-          <div class="pc-range-track"><div class="pc-range-fill" style="width:52%"></div><div class="pc-range-dot" style="left:52%"></div></div>
-        </div>
-      </div>
-      <div class="pc pc-sm">
-        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🐄</span>Live Cattle</span><span class="pc-contract">Apr '26</span></div>
-        <div class="pc-price">194.625</div>
-        <div class="pc-change"><span class="pc-chg-val up">▲ 0.600 (+0.31%)</span><span class="pc-prev">LE</span></div>
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🐄</span>Live Cattle</span><span class="pc-contract">Front Month</span></div>
+        <div class="pc-price" id="pcp-cattle">--</div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-cattle">--</span><span class="pc-prev">LE=F · Stooq</span></div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>174.50</span><span></span><span>201.30</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:75%"></div><div class="pc-range-dot" style="left:75%"></div></div>
         </div>
       </div>
       <div class="pc pc-sm">
-        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🐖</span>Lean Hogs</span><span class="pc-contract">Apr '26</span></div>
-        <div class="pc-price">88.225</div>
-        <div class="pc-change"><span class="pc-chg-val dn">▼ 1.150 (−1.29%)</span><span class="pc-prev">HE</span></div>
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🐄</span>Feeder Cattle</span><span class="pc-contract">Front Month</span></div>
+        <div class="pc-price" id="pcp-feeders">--</div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-feeders">--</span><span class="pc-prev">GF=F · Stooq</span></div>
+        <div class="pc-range">
+          <div class="pc-range-labels"><span>220.00</span><span></span><span>280.00</span></div>
+          <div class="pc-range-track"><div class="pc-range-fill" style="width:50%"></div><div class="pc-range-dot" style="left:50%"></div></div>
+        </div>
+      </div>
+      <div class="pc pc-sm">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🐖</span>Lean Hogs</span><span class="pc-contract">Front Month</span></div>
+        <div class="pc-price" id="pcp-hogs">--</div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-hogs">--</span><span class="pc-prev">HE=F · Stooq</span></div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>76.80</span><span></span><span>98.40</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:53%"></div><div class="pc-range-dot" style="left:53%"></div></div>
@@ -478,18 +429,18 @@
     <div class="pc-section-lbl">⚡ Outside Markets</div>
     <div class="price-cards-grid-2">
       <div class="pc pc-sm">
-        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🛢️</span>Crude Oil WTI</span><span class="pc-contract">Apr '26</span></div>
-        <div class="pc-price">71.48</div>
-        <div class="pc-change"><span class="pc-chg-val dn">▼ 0.84 (−1.16%)</span><span class="pc-prev">CL=F</span></div>
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🛢️</span>Crude Oil WTI</span><span class="pc-contract">Front Month</span></div>
+        <div class="pc-price" id="pcp-crude">--</div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-crude">--</span><span class="pc-prev">CL=F · Stooq</span></div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>62.10</span><span></span><span>89.40</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:35%"></div><div class="pc-range-dot" style="left:35%"></div></div>
         </div>
       </div>
       <div class="pc pc-sm">
-        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🔥</span>Natural Gas</span><span class="pc-contract">Apr '26</span></div>
-        <div class="pc-price">3.842</div>
-        <div class="pc-change"><span class="pc-chg-val up">▲ 0.041 (+1.08%)</span><span class="pc-prev">NG=F</span></div>
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🔥</span>Natural Gas</span><span class="pc-contract">Front Month</span></div>
+        <div class="pc-price" id="pcp-natgas">--</div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-natgas">--</span><span class="pc-prev">NG=F · Stooq</span></div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>1.56</span><span></span><span>4.88</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:68%"></div><div class="pc-range-dot" style="left:68%"></div></div>
@@ -497,8 +448,8 @@
       </div>
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">💵</span>Dollar Index</span><span class="pc-contract">Spot</span></div>
-        <div class="pc-price">104.22</div>
-        <div class="pc-change"><span class="pc-chg-val up">▲ 0.31 (+0.30%)</span><span class="pc-prev">DXY</span></div>
+        <div class="pc-price" id="pcp-dollar">--</div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-dollar">--</span><span class="pc-prev">DXY · Stooq</span></div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>95.55</span><span></span><span>107.66</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:72%"></div><div class="pc-range-dot" style="left:72%"></div></div>
@@ -506,8 +457,8 @@
       </div>
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">📈</span>S&amp;P 500</span><span class="pc-contract">Spot</span></div>
-        <div class="pc-price">5,784</div>
-        <div class="pc-change"><span class="pc-chg-val dn">▼ 38 (−0.65%)</span><span class="pc-prev">^GSPC</span></div>
+        <div class="pc-price" id="pcp-sp500">--</div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-sp500">--</span><span class="pc-prev">^SPX · Stooq</span></div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>4,835</span><span></span><span>6,147</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:73%"></div><div class="pc-range-dot" style="left:73%"></div></div>
@@ -528,15 +479,10 @@
           <span style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)"><span class="live-dot" style="display:inline-block"></span> Live Radar</span>
           <span style="font-size:.68rem;color:var(--text-muted)">Powered by Windy</span>
         </div>
-        <iframe
-          id="windy-frame"
+        <iframe id="windy-frame"
           src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=in&metricTemp=%C2%B0F&metricWind=mph&zoom=6&overlay=radar&product=radar&level=surface&lat=44.5&lon=-93.0&detailLat=44.5&detailLon=-93.0&detail=false&pressure=false&menu=false&message=false&marker=false&calendar=now&thunder=false"
-          width="100%" height="100%"
-          style="border:none;display:block"
-          loading="lazy"
-          title="Live Radar — Windy"
-          allow="geolocation; fullscreen"
-          allowfullscreen>
+          width="100%" height="100%" style="border:none;display:block" loading="lazy"
+          title="Live Radar — Windy" allow="geolocation; fullscreen" allowfullscreen>
         </iframe>
       </div>
       <div class="radar-sidebar">
@@ -544,26 +490,21 @@
           <div class="wx-summary-title">📅 4-Day Forecast</div>
           <div id="wx-forecast-full" class="wx-forecast-row">
             <div class="wx-day"><div class="wx-day-name">Today</div><div class="wx-day-icon">⛅</div><div class="wx-day-hi">--°</div><div class="wx-day-lo">--°</div></div>
-            <div class="wx-day"><div class="wx-day-name">Thu</div><div class="wx-day-icon">🌧️</div><div class="wx-day-hi">--°</div><div class="wx-day-lo">--°</div></div>
-            <div class="wx-day"><div class="wx-day-name">Fri</div><div class="wx-day-icon">☁️</div><div class="wx-day-hi">--°</div><div class="wx-day-lo">--°</div></div>
-            <div class="wx-day"><div class="wx-day-name">Sat</div><div class="wx-day-icon">🌤️</div><div class="wx-day-hi">--°</div><div class="wx-day-lo">--°</div></div>
+            <div class="wx-day"><div class="wx-day-name">—</div><div class="wx-day-icon">🌧️</div><div class="wx-day-hi">--°</div><div class="wx-day-lo">--°</div></div>
+            <div class="wx-day"><div class="wx-day-name">—</div><div class="wx-day-icon">☁️</div><div class="wx-day-hi">--°</div><div class="wx-day-lo">--°</div></div>
+            <div class="wx-day"><div class="wx-day-name">—</div><div class="wx-day-icon">🌤️</div><div class="wx-day-hi">--°</div><div class="wx-day-lo">--°</div></div>
           </div>
           <div style="margin-top:.85rem;font-size:.72rem;color:var(--text-muted);text-align:center">📍 <span id="wx-loc-label">Set location in weather card above</span></div>
         </div>
         <div class="drought-embed">
           <div style="padding:.6rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
             <span style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold)">Drought Monitor</span>
-            <a href="/drought-monitor" style="font-size:.68rem;color:var(--text-muted);transition:color .15s" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Full Map →</a>
+            <a href="/drought-monitor" style="font-size:.68rem;color:var(--text-muted)" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--text-muted)'">Full Map →</a>
           </div>
-          <iframe
-            id="drought-frame"
+          <iframe id="drought-frame"
             src="https://droughtmonitor.unl.edu/CurrentMap/StateDroughtMonitor.aspx?US"
-            width="100%"
-            height="200"
-            style="border:none;display:block;border-radius:0 0 10px 10px;min-height:160px"
-            loading="lazy"
-            title="US Drought Monitor"
-            scrolling="no">
+            width="100%" height="200" style="border:none;display:block;border-radius:0 0 10px 10px;min-height:160px"
+            loading="lazy" title="US Drought Monitor" scrolling="no">
           </iframe>
           <div style="padding:.4rem .8rem;font-size:.65rem;color:var(--text-muted);text-align:right;border-top:1px solid var(--border)">
             Source: USDA NDMC · Updated Thursday · <a href="https://droughtmonitor.unl.edu" target="_blank" rel="noopener" style="color:var(--gold)">Full Interactive Map →</a>
@@ -579,7 +520,8 @@
       <div class="sec-title">📅 Upcoming USDA Reports</div>
       <a href="/usda-calendar" class="sec-all">Full Calendar →</a>
     </div>
-    <div class="cal-strip">
+    <div class="cal-strip" id="usda-cal-strip">
+      <!-- Static placeholder — replace with dynamic data/usda-reports.json when available -->
       <div class="cal-card today"><div class="cal-today-badge">Today</div><div class="cal-name">Export Sales</div><div class="cal-time">8:30am ET · Feb 27</div></div>
       <div class="cal-card"><div class="cal-date">Feb 28</div><div class="cal-name">Grain Stocks</div><div class="cal-time">11:00am ET</div></div>
       <div class="cal-card"><div class="cal-date">Mar 3</div><div class="cal-name">Crop Progress</div><div class="cal-time">4:00pm ET</div></div>
@@ -596,25 +538,25 @@
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🥇</span>Gold</span><span class="pc-contract">Spot</span></div>
         <div class="pc-price" id="pc-gold">--</div>
-        <div class="pc-change"><span class="pc-chg-val up" id="pcc-gold">--</span><span class="pc-prev">gc.f</span></div>
-        <div class="pc-range"><div class="pc-range-labels"><span>1,811</span><span></span><span>2,956</span></div><div class="pc-range-track"><div class="pc-range-fill" style="width:97%"></div><div class="pc-range-dot" style="left:97%"></div></div></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-gold">--</span><span class="pc-prev">GC=F · Stooq</span></div>
+        <div class="pc-range"><div class="pc-range-labels"><span>1,811</span><span></span><span>2,956</span></div><div class="pc-range-track"><div class="pc-range-fill" style="width:85%"></div><div class="pc-range-dot" style="left:85%"></div></div></div>
       </div>
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🥈</span>Silver</span><span class="pc-contract">Spot</span></div>
         <div class="pc-price" id="pc-silver">--</div>
-        <div class="pc-change"><span class="pc-chg-val up" id="pcc-silver">--</span><span class="pc-prev">si.f</span></div>
-        <div class="pc-range"><div class="pc-range-labels"><span>22.28</span><span></span><span>34.86</span></div><div class="pc-range-track"><div class="pc-range-fill" style="width:84%"></div><div class="pc-range-dot" style="left:84%"></div></div></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-silver">--</span><span class="pc-prev">SI=F · Stooq</span></div>
+        <div class="pc-range"><div class="pc-range-labels"><span>22.28</span><span></span><span>34.86</span></div><div class="pc-range-track"><div class="pc-range-fill" style="width:75%"></div><div class="pc-range-dot" style="left:75%"></div></div></div>
       </div>
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">₿</span>Bitcoin</span><span class="pc-contract">USD</span></div>
         <div class="pc-price" id="pc-btc">--</div>
-        <div class="pc-change"><span class="pc-chg-val dn" id="pcc-btc">--</span><span class="pc-prev">CoinGecko</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-btc">--</span><span class="pc-prev">CoinGecko</span></div>
         <div class="pc-range"><div class="pc-range-labels"><span>49,000</span><span></span><span>106,000</span></div><div class="pc-range-track"><div class="pc-range-fill" style="width:67%"></div><div class="pc-range-dot" style="left:67%"></div></div></div>
       </div>
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">◎</span>XRP</span><span class="pc-contract">USD</span></div>
         <div class="pc-price" id="pc-xrp">--</div>
-        <div class="pc-change"><span class="pc-chg-val dn" id="pcc-xrp">--</span><span class="pc-prev">CoinGecko</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-xrp">--</span><span class="pc-prev">CoinGecko</span></div>
         <div class="pc-range"><div class="pc-range-labels"><span>0.40</span><span></span><span>3.40</span></div><div class="pc-range-track"><div class="pc-range-fill" style="width:64%"></div><div class="pc-range-dot" style="left:64%"></div></div></div>
       </div>
     </div>
@@ -622,10 +564,10 @@
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">💎</span>Kaspa</span><span class="pc-contract">USD</span></div>
         <div class="pc-price" id="pc-kas">--</div>
-        <div class="pc-change"><span class="pc-chg-val up" id="pcc-kas">--</span><span class="pc-prev">CoinGecko</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-kas">--</span><span class="pc-prev">CoinGecko</span></div>
         <div class="pc-range"><div class="pc-range-labels"><span>0.048</span><span></span><span>0.201</span></div><div class="pc-range-track"><div class="pc-range-fill" style="width:23%"></div><div class="pc-range-dot" style="left:23%"></div></div></div>
       </div>
-      <!-- FFAI compact card -->
+      <!-- FFAI compact — wired to id="ffai-score-compact" in geo.js fetchFFAILive() -->
       <div class="pc pc-sm s-card--ffai" style="display:flex;flex-direction:column">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">📊</span>FFAI Index</span><span class="pc-contract">Quarterly</span></div>
         <div class="ffai-score" id="ffai-score-compact" style="font-size:2.4rem;margin:.3rem 0">--</div>
@@ -636,20 +578,19 @@
 
   <!-- KALSHI AG ODDS -->
   <div class="fade-up" id="f-kalshi">
-    <div class="pc-section-lbl">&#127919; Ag Prediction Markets <span style="font-size:.65rem;font-weight:400;color:var(--text-muted);margin-left:.5rem">via Kalshi</span></div>
+    <div class="pc-section-lbl">🎯 Ag Prediction Markets <span style="font-size:.65rem;font-weight:400;color:var(--text-muted);margin-left:.5rem">via Kalshi</span></div>
     <div id="kalshi-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:.75rem;margin-bottom:.5rem">
-      <!-- Populated by fetchKalshiMarkets() in geo.js -->
       <div id="kalshi-loading" style="grid-column:1/-1;text-align:center;padding:1.5rem;font-size:.82rem;color:var(--text-muted)">
-        &#9203; Loading prediction markets…
+        ⏳ Loading prediction markets…
       </div>
     </div>
     <div style="font-size:.68rem;color:var(--text-muted);text-align:right;padding-bottom:.25rem">
-      Prices are market odds &middot; Not investment advice &middot;
+      Prices are market odds · Not investment advice ·
       <a href="https://kalshi.com" target="_blank" rel="noopener" style="color:var(--text-muted)">kalshi.com</a>
     </div>
   </div>
 
-  <!-- SIGNUP -->
+  <!-- SIGNUP — hides after 4 visits or when subscribed -->
   <div class="signup fade-up" id="signup-section" style="display:none">
     <div class="signup-inner">
       <div class="signup-icon">🌾</div>
@@ -666,7 +607,7 @@
           <input type="email" class="signup-input" placeholder="your@email.com" autocomplete="email">
           <button class="signup-submit" onclick="handleEmailSignup(event)">Subscribe →</button>
         </div>
-        <div class="signup-disc">Free forever. Unsubscribe any time. We never sell your data. <a href="/privacy">Privacy Policy</a>.</div>
+        <div class="signup-disc">Free forever. Unsubscribe any time. We never sell your data. <a href="/legal/privacy">Privacy Policy</a>.</div>
       </div>
       <div class="signup-form" id="form-sms" style="display:none">
         <div class="signup-row">
@@ -677,32 +618,25 @@
           <span style="font-size:1.1rem;flex-shrink:0">📄</span>
           <span>Each morning you'll receive a text with a link to today's PDF briefing. Standard messaging rates apply. Text STOP anytime.</span>
         </div>
-        <div class="signup-disc" style="margin-top:.4rem"><a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms</a></div>
+        <div class="signup-disc" style="margin-top:.4rem"><a href="/legal/privacy">Privacy Policy</a> · <a href="/legal/terms">Terms</a></div>
       </div>
     </div>
   </div>
 
 </main>
 
-<!-- FOOTER -->
 <div id="site-footer"></div>
 
-<!-- ══ SCRIPTS ══════════════════════════════════════════════════════════════
-  Load order:
-  1. loader.js   — injects header (+ drawer), footer, analytics; sets up nav
-  2. geo.js      — prices, weather, ticker (runs after DOM ready internally)
-  3. page script — page-specific UI only
-════════════════════════════════════════════════════════════════════════════ -->
 <script src="/components/loader.js"></script>
 <script src="/components/geo.js"></script>
 
 <script>
 // ═══════════════════════════════════════════════════════════════════
-// Page-specific JS — Daily dismiss/expand, signup tabs & logic, scroll reveal
-// All weather / price / geo logic lives in /components/geo.js
+// Page-specific JS — daily dismiss/expand, signup tabs & logic,
+// scroll reveal. All price/weather/geo logic is in geo.js.
 // ═══════════════════════════════════════════════════════════════════
 
-// ── Dynamic daily key ────────────────────────────────────────────
+// ── Dynamic daily key (resets automatically each day) ────────────
 (function(){
   var d = new Date();
   window.TODAY_KEY = 'agsist-daily-' + d.getFullYear() + '-'
@@ -726,7 +660,7 @@ function expandDaily(){
   }catch(e){}
 })();
 document.getElementById('daily-teaser').addEventListener('keydown',function(e){
-  if(e.key==='Enter'||e.key===' ')expandDaily();
+  if(e.key==='Enter'||e.key===' '){e.preventDefault();expandDaily();}
 });
 
 // ── Signup tabs ──────────────────────────────────────────────────
@@ -742,12 +676,12 @@ document.getElementById('tab-sms').addEventListener('click',function(){
 });
 
 // ── Scroll reveal ────────────────────────────────────────────────
-var io=new IntersectionObserver(function(entries){
+var io = new IntersectionObserver(function(entries){
   entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target);}});
 },{threshold:0.08});
 document.querySelectorAll('.fade-up').forEach(function(el){io.observe(el);});
 
-// ── Signup: visibility, persistence, success states ─────────────
+// ── Signup visibility & persistence ─────────────────────────────
 function isSignedUp(){
   try{
     return document.cookie.split(';').some(function(c){return c.trim().startsWith('agsist_subscribed=');})
@@ -767,7 +701,8 @@ function setSignedUp(){
 function showSignupIfNeeded(){
   var el=document.getElementById('signup-section');
   if(!el) return;
-  var visits = getVisitCount();
+  var visits=getVisitCount();
+  // Show on visits 1-3, hide on 4+ or if already subscribed
   el.style.display=(isSignedUp()||visits>=4)?'none':'block';
 }
 (function(){
@@ -778,7 +713,7 @@ function showSignupIfNeeded(){
   showSignupIfNeeded();
 })();
 
-function showSignupSuccess(formId, icon, headline, sub){
+function showSignupSuccess(formId,icon,headline,sub){
   var formEl=document.getElementById(formId);
   if(!formEl) return;
   formEl.innerHTML='<div style="text-align:center;padding:.9rem 0">'

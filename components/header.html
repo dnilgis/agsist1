@@ -5,6 +5,7 @@
       <img src="/img/logo-agsist.jpg" alt="AGSIST">
     </a>
     <div class="nav-menu">
+
       <div class="nav-dd" id="dd-prices">
         <button class="nav-btn">Prices<svg class="chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <div class="nav-panel">
@@ -16,6 +17,7 @@
           <a href="/markets" class="all">All Markets →</a>
         </div>
       </div>
+
       <div class="nav-dd" id="dd-weather">
         <button class="nav-btn">Weather<svg class="chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <div class="nav-panel">
@@ -24,6 +26,7 @@
           <a href="/gdu-calculator">🌡️ GDU Tracker</a>
         </div>
       </div>
+
       <div class="nav-dd" id="dd-tools">
         <button class="nav-btn">Tools<svg class="chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <div class="nav-panel">
@@ -33,15 +36,22 @@
           <a href="/fast-facts">⚡ Fast Facts</a>
         </div>
       </div>
+
+      <!-- Daily: simple link, no dropdown -->
+      <a href="/daily" class="nav-btn" style="text-decoration:none">Daily</a>
+
+      <!-- Data: dropdown only, no link confusion -->
       <div class="nav-dd" id="dd-data">
-        <a href="/daily" class="nav-btn" style="text-decoration:none">Daily</a>
         <button class="nav-btn">Data<svg class="chevron" width="10" height="6" viewBox="0 0 10 6" fill="none"><path d="M1 1l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         <div class="nav-panel">
           <a href="/usda-quick-stats">📋 USDA Quick Stats</a>
+          <a href="/usda-calendar">📅 USDA Calendar</a>
+          <a href="/data-sources">🔗 Data Sources</a>
           <div class="nav-panel-div"></div>
-          <a href="/usda-calendar" class="all">USDA Calendar →</a>
+          <a href="/developer" class="all">Developer API →</a>
         </div>
       </div>
+
     </div>
     <div class="nav-actions">
       <button class="theme-btn" id="theme-btn" aria-label="Toggle theme">
@@ -55,7 +65,11 @@
   </div>
 </nav>
 
-<!-- ══ MOBILE DRAWER — lives here so every page gets it via loader.js ══ -->
+<!-- ══ MOBILE DRAWER ══════════════════════════════════════════════
+     Lives here so every page gets it via loader.js injection.
+     All nav init (hamburger, drawer open/close, theme toggle)
+     runs in loader.js initNav() after this HTML is injected.
+═══════════════════════════════════════════════════════════════════ -->
 <div class="drawer" id="drawer" aria-hidden="true" role="dialog" aria-label="Site navigation">
   <div class="draw-head">
     <img src="/img/logo-agsist.jpg" alt="AGSIST" style="height:30px;width:auto;object-fit:contain">
@@ -81,15 +95,17 @@
     <a href="/fast-facts" class="draw-item">⚡ Fast Facts</a>
   </div>
   <div class="draw-sec">
-    <div class="draw-lbl">📊 Data</div>
-    <a href="/usda-calendar" class="draw-item">📅 USDA Calendar</a>
+    <div class="draw-lbl">📊 Data & Daily</div>
     <a href="/daily" class="draw-item">📰 AGSIST Daily</a>
+    <a href="/usda-calendar" class="draw-item">📅 USDA Calendar</a>
+    <a href="/usda-quick-stats" class="draw-item">📋 USDA Quick Stats</a>
+    <a href="/data-sources" class="draw-item">🔗 Data Sources</a>
   </div>
   <div class="draw-sec">
     <div class="draw-lbl">Company</div>
     <a href="/about" class="draw-item">About</a>
     <a href="/contact" class="draw-item">Contact</a>
-    <a href="/data-sources" class="draw-item">Data Sources</a>
+    <a href="/developer" class="draw-item">Developer API</a>
   </div>
   <div class="draw-sec" style="border-bottom:none">
     <div style="display:flex;align-items:center;justify-content:space-between;padding:.6rem 1.1rem">

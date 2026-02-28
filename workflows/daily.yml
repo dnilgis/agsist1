@@ -3,17 +3,15 @@ name: Daily Briefing
 on:
   schedule:
     # 9:30 UTC = 4:30am CT (winter) / 3:30am CT (summer)
-    # Runs before markets open so briefing is ready when farmers check in
-    - cron: '30 9 * * 1-5'   # Mon–Fri only
+    - cron: '30 9 * * 1-5'
 
-  # Allow manual trigger from GitHub Actions UI
   workflow_dispatch:
 
 jobs:
   generate:
     runs-on: ubuntu-latest
     permissions:
-      contents: write   # needed to commit daily.json back to repo
+      contents: write
 
     steps:
       - name: Checkout repo
@@ -23,6 +21,9 @@ jobs:
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install yfinance --quiet
 
       - name: Generate daily briefing
         env:
@@ -35,7 +36,6 @@ jobs:
           git config user.name  "AGSIST Daily Bot"
           git config user.email "noreply@agsist.com"
           git add data/daily.json
-          # Only commit if the file actually changed
           git diff --cached --quiet && echo "No changes to commit" || \
             git commit -m "Daily briefing $(date -u +'%Y-%m-%d %H:%M UTC')"
           git push
