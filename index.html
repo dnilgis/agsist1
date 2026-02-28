@@ -123,6 +123,17 @@
   </div>
 </div>
 <!-- AGSIST DAILY HERO -->
+<!-- prevent flash of full briefing if previously dismissed -->
+<script>
+(function(){
+  try{
+    var d=new Date(),k='agsist-daily-'+d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+    if(localStorage.getItem(k)==='1'){
+      document.write('<style>#daily-hero{--_d:1}.daily-full{max-height:0!important;opacity:0!important;pointer-events:none!important;overflow:hidden!important}.daily-teaser{display:flex!important}</style>');
+    }
+  }catch(e){}
+})();
+</script>
 <section class="daily-hero" id="daily-hero">
 
   <div class="daily-teaser" id="daily-teaser" onclick="expandDaily()" role="button" tabindex="0" aria-label="Expand AGSIST Daily">
@@ -664,11 +675,15 @@
 function dismissDaily(){
   try{localStorage.setItem(window.TODAY_KEY,'1');}catch(e){}
   document.getElementById('daily-hero').classList.add('dismissed');
+  // Smooth scroll up so content jumps into view cleanly
+  setTimeout(function(){window.scrollTo({top:0,behavior:'smooth'});},50);
 }
 function expandDaily(){
   try{localStorage.removeItem(window.TODAY_KEY);}catch(e){}
   document.getElementById('daily-hero').classList.remove('dismissed');
 }
+// Apply dismissed state — inline script above already handled pre-paint,
+// this ensures the class is also on the element for JS interactions
 (function(){
   try{
     if(localStorage.getItem(window.TODAY_KEY)==='1')
