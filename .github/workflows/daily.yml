@@ -2,10 +2,10 @@ name: Daily Briefing
 
 on:
   schedule:
-    # 9:30 UTC = 4:30am CT (winter) / 3:30am CT (summer)
-    - cron: '30 9 * * 1-5'
-
-  workflow_dispatch:
+    # 10:30 UTC = 5:30am CT (winter) / 4:30am CT (summer)
+    # Runs after prices.yml has already fetched fresh prices
+    - cron: '30 10 * * 1-5'
+  workflow_dispatch: # Manual "Run workflow" button in Actions UI
 
 jobs:
   generate:
@@ -23,11 +23,10 @@ jobs:
           python-version: '3.11'
 
       - name: Install dependencies
-        run: pip install yfinance --quiet
+        run: pip install --quiet requests
 
       - name: Generate daily briefing
         env:
-          BARCHART_API_KEY:  ${{ secrets.BARCHART_API_KEY }}
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python scripts/generate_daily.py
 
@@ -37,5 +36,5 @@ jobs:
           git config user.email "noreply@agsist.com"
           git add data/daily.json
           git diff --cached --quiet && echo "No changes to commit" || \
-            git commit -m "Daily briefing $(date -u +'%Y-%m-%d %H:%M UTC')"
+            git commit -m "Daily briefing $(date -u +'%Y-%m-%d') [skip ci]"
           git push
