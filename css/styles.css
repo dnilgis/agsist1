@@ -265,7 +265,7 @@ button{cursor:pointer;font-family:inherit}
 .signup-input{flex:1;padding:.8rem 1.1rem;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.92rem;color:var(--text);outline:none;transition:border-color .15s}
 .signup-input::placeholder{color:var(--text-muted)}
 .signup-input:focus{border-color:var(--gold)}
-.signup-submit{padding:.8rem 1.5rem;background:var(--gold);color:#0a1a0a;border:none;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.92rem;font-weight:700;white-space:nowrap;transition:background .15s,transform .1s}
+.signup-submit{padding:.8rem 1.5rem;background:var(--gold);color:#0a1a0a;border:none;border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.92rem;font-weight:700;white-space:nowrap;cursor:pointer;transition:background .15s,transform .1s}
 .signup-submit:hover{background:#f0c050;transform:translateY(-1px)}
 .signup-disc{font-size:.75rem;color:var(--text-muted)}
 .signup-disc a{color:var(--text-dim);border-bottom:1px solid var(--border)}
@@ -389,7 +389,7 @@ button{cursor:pointer;font-family:inherit}
 .pc-sm .pc-price{font-size:1.9rem}
 .pc-section-lbl{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);margin:.25rem 0 .65rem;padding:.2rem 0;border-bottom:1px solid var(--border)}
 .radar-section{margin-bottom:2rem}
-.radar-grid{display:grid;grid-template-columns:1fr 320px;gap:1.25rem;align-items:stretch;height:460px}
+.radar-grid{display:grid;grid-template-columns:3fr 2fr;gap:1.25rem;align-items:stretch;height:460px}
 .radar-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
 .radar-card iframe{display:block;width:100%;border:none;border-radius:0;flex:1;min-height:0}
 .radar-sidebar{display:flex;flex-direction:column;gap:.75rem;height:100%;overflow:hidden}
