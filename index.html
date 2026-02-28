@@ -790,21 +790,23 @@
   } catch(e) {}
 
   // ══════════════════════════════════════════════════════════════
-  //  TICKER — Self-contained: fetch data → populate → clone → scroll
+  //  TICKER — Self-contained, persistent (survives geo.js rebuilds)
+  //  Fetches: prices.json → CoinGecko (proxied) → FFAI
+  //  Caches data and re-applies after any DOM mutation on ticker
   // ══════════════════════════════════════════════════════════════
   var tickerTrack = document.getElementById('ticker-track');
+  var _tickerCache = {}; // {sym: {price, pctChg}} — persists across rebuilds
 
-  // ── Grain fraction formatting (corn, beans, wheat) ──────────
+  // ── Grain fraction formatting ───────────────────────────────
   var GRAIN_SYMS = ['corn','corn-dec','beans','beans-nov','wheat'];
   function fmtGrain(v) {
     var whole = Math.floor(v);
     var dec = +(v - whole).toFixed(3);
     if (dec === 0) return String(whole);
-    var fracs = {0.125:'⅛',0.25:'¼',0.375:'⅜',0.5:'½',0.625:'⅝',0.75:'¾',0.875:'⅞'};
+    var fracs = {0.125:'\u215B',0.25:'\u00BC',0.375:'\u215C',0.5:'\u00BD',0.625:'\u215D',0.75:'\u00BE',0.875:'\u215E'};
     return whole + (fracs[dec] || dec.toString().replace('0',''));
   }
 
-  // ── Format price by symbol type ─────────────────────────────
   function fmtPrice(sym, val) {
     if (GRAIN_SYMS.indexOf(sym) !== -1) return fmtGrain(val);
     if (sym === 'bitcoin') return val >= 1000 ? (val/1000).toFixed(1) + 'k' : val.toFixed(0);
@@ -815,12 +817,13 @@
     return val.toFixed(2);
   }
 
-  // ── Update a single ticker item ─────────────────────────────
+  // ── Update one ticker item (both original + clone) ──────────
   function updateTickerItem(sym, price, pctChg) {
+    _tickerCache[sym] = {price: price, pctChg: pctChg};
     var items = document.querySelectorAll('.t-item[data-sym="' + sym + '"]');
     if (!items.length) return;
     var priceStr = fmtPrice(sym, price);
-    var arrow = pctChg > 0.005 ? '▲' : pctChg < -0.005 ? '▼' : '';
+    var arrow = pctChg > 0.005 ? '\u25B2' : pctChg < -0.005 ? '\u25BC' : '';
     var cls = pctChg > 0.005 ? 'up' : pctChg < -0.005 ? 'dn' : 'nc';
     var chgStr = arrow + ' ' + Math.abs(pctChg).toFixed(2) + '%';
     for (var i = 0; i < items.length; i++) {
@@ -829,6 +832,16 @@
       if (pEl) pEl.textContent = priceStr;
       if (cEl) { cEl.textContent = chgStr; cEl.className = 't-chg ' + cls; }
     }
+  }
+
+  // ── Re-apply ALL cached data to the current DOM ─────────────
+  function reapplyTickerCache() {
+    var keys = Object.keys(_tickerCache);
+    if (!keys.length) return;
+    keys.forEach(function(sym) {
+      var d = _tickerCache[sym];
+      updateTickerItem(sym, d.price, d.pctChg);
+    });
   }
 
   // ── Clone for seamless loop ─────────────────────────────────
@@ -841,21 +854,41 @@
     clone.id = 'ticker-items-clone';
     clone.setAttribute('aria-hidden', 'true');
     tickerTrack.appendChild(clone);
-    // Restart animation cleanly
     tickerTrack.style.animation = 'none';
-    tickerTrack.offsetHeight; // force reflow
+    tickerTrack.offsetHeight;
     tickerTrack.style.animation = '';
   }
 
-  // ── Dynamic speed based on content width ────────────────────
+  // ── Dynamic speed ───────────────────────────────────────────
   function setTickerSpeed() {
     var single = document.getElementById('ticker-items-single');
     if (!single || !tickerTrack) return;
     var w = single.scrollWidth || single.offsetWidth;
     if (w < 200) return;
-    var pxPerSec = 45;
-    var dur = Math.max(20, Math.round(w / pxPerSec));
-    tickerTrack.style.animationDuration = dur + 's';
+    tickerTrack.style.animationDuration = Math.max(20, Math.round(w / 45)) + 's';
+  }
+
+  // ── Full ticker refresh (re-apply cache + rebuild clone) ────
+  var _tickerRebuildTimer = null;
+  var _tickerUpdating = false; // guard against infinite MutationObserver loop
+  function fullTickerRefresh() {
+    if (_tickerUpdating) return;
+    clearTimeout(_tickerRebuildTimer);
+    _tickerRebuildTimer = setTimeout(function() {
+      _tickerUpdating = true;
+      reapplyTickerCache();
+      rebuildTickerClone();
+      setTickerSpeed();
+      // Release guard after browser settles
+      requestAnimationFrame(function() { _tickerUpdating = false; });
+    }, 80);
+  }
+
+  // ── Watch for geo.js rebuilds — re-apply our data after ─────
+  if (tickerTrack && typeof MutationObserver !== 'undefined') {
+    new MutationObserver(function() {
+      if (!_tickerUpdating) fullTickerRefresh();
+    }).observe(tickerTrack, { childList: true, subtree: true, characterData: true });
   }
 
   // ── Fetch prices.json (17 commodities/indices) ──────────────
@@ -864,23 +897,28 @@
       if (!d || !d.quotes) return;
       var q = d.quotes;
       Object.keys(q).forEach(function(sym) {
-        updateTickerItem(sym, q[sym].close, q[sym].pctChange);
+        _tickerCache[sym] = {price: q[sym].close, pctChg: q[sym].pctChange};
       });
+      _tickerUpdating = true;
+      reapplyTickerCache();
       rebuildTickerClone();
       setTickerSpeed();
-    }).catch(function(e) { console.warn('Ticker prices.json failed:', e); });
+      requestAnimationFrame(function() { _tickerUpdating = false; });
+    }).catch(function(e) { console.warn('Ticker prices.json:', e); });
   }
 
-  // ── Fetch CoinGecko (bitcoin, xrp, kaspa) ──────────────────
+  // ── Fetch CoinGecko via CORS proxy ──────────────────────────
   function fetchTickerCrypto() {
-    fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ripple,kaspa&vs_currencies=usd&include_24hr_change=true')
-      .then(function(r) { return r.json(); })
-      .then(function(d) {
-        if (d.bitcoin) updateTickerItem('bitcoin', d.bitcoin.usd, d.bitcoin.usd_24h_change || 0);
-        if (d.ripple) updateTickerItem('ripple', d.ripple.usd, d.ripple.usd_24h_change || 0);
-        if (d.kaspa) updateTickerItem('kaspa', d.kaspa.usd, d.kaspa.usd_24h_change || 0);
-        rebuildTickerClone();
-      }).catch(function(e) { console.warn('Ticker CoinGecko failed:', e); });
+    var cgUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ripple,kaspa&vs_currencies=usd&include_24hr_change=true';
+    var proxied = 'https://corsproxy.io/?' + encodeURIComponent(cgUrl);
+    fetch(proxied).then(function(r) { return r.json(); }).then(function(d) {
+      if (d.bitcoin) updateTickerItem('bitcoin', d.bitcoin.usd, d.bitcoin.usd_24h_change || 0);
+      if (d.ripple) updateTickerItem('ripple', d.ripple.usd, d.ripple.usd_24h_change || 0);
+      if (d.kaspa) updateTickerItem('kaspa', d.kaspa.usd, d.kaspa.usd_24h_change || 0);
+      _tickerUpdating = true;
+      rebuildTickerClone();
+      requestAnimationFrame(function() { _tickerUpdating = false; });
+    }).catch(function(e) { console.warn('Ticker CoinGecko:', e); });
   }
 
   // ── Fetch FFAI Index ────────────────────────────────────────
@@ -889,23 +927,35 @@
       .then(function(r) { return r.json(); })
       .then(function(d) {
         if (d && d.score != null) {
-          var chg = d.change_pct || 0;
-          updateTickerItem('ffai', d.score, chg);
+          updateTickerItem('ffai', d.score, d.change_pct || 0);
+          _tickerUpdating = true;
           rebuildTickerClone();
+          requestAnimationFrame(function() { _tickerUpdating = false; });
         }
-      }).catch(function(e) { console.warn('Ticker FFAI failed:', e); });
+      }).catch(function(e) { console.warn('Ticker FFAI:', e); });
   }
 
-  // ── Boot ticker ─────────────────────────────────────────────
+  // ── Boot: stagger fetches, then keep refreshing ─────────────
   fetchTickerPrices();
-  fetchTickerCrypto();
-  fetchTickerFFAI();
+  setTimeout(fetchTickerCrypto, 300);
+  setTimeout(fetchTickerFFAI, 600);
 
-  // Refresh every 2 minutes
+  // Re-apply every 3s for the first 30s to beat any geo.js overwrites
+  var _tickerGuardCount = 0;
+  var _tickerGuard = setInterval(function() {
+    if (Object.keys(_tickerCache).length && !_tickerUpdating) {
+      _tickerUpdating = true;
+      reapplyTickerCache();
+      rebuildTickerClone();
+      setTickerSpeed();
+      requestAnimationFrame(function() { _tickerUpdating = false; });
+    }
+    if (++_tickerGuardCount >= 10) clearInterval(_tickerGuard);
+  }, 3000);
+
+  // Refresh data every 2 minutes
   setInterval(fetchTickerPrices, 120000);
   setInterval(fetchTickerCrypto, 120000);
-
-  // Recalc speed on resize
   window.addEventListener('resize', setTickerSpeed);
 
   // ── Drought image — dynamic URL with fallback chain ───────────
