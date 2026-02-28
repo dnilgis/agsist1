@@ -389,10 +389,10 @@ button{cursor:pointer;font-family:inherit}
 .pc-sm .pc-price{font-size:1.9rem}
 .pc-section-lbl{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);margin:.25rem 0 .65rem;padding:.2rem 0;border-bottom:1px solid var(--border)}
 .radar-section{margin-bottom:2rem}
-.radar-grid{display:grid;grid-template-columns:3fr 2fr;gap:1.25rem;align-items:stretch;height:460px}
-.radar-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column}
-.radar-card iframe{display:block;width:100%;border:none;border-radius:0;flex:1;min-height:0}
-.radar-sidebar{display:flex;flex-direction:column;gap:.75rem;height:100%;overflow:hidden}
+.radar-grid{display:grid;grid-template-columns:3fr 2fr;gap:1.25rem;align-items:stretch;min-height:420px}
+.radar-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;min-height:380px}
+.radar-card iframe{display:block;width:100%;border:none;border-radius:0;flex:1;min-height:320px}
+.radar-sidebar{display:flex;flex-direction:column;gap:.75rem;overflow:visible}
 .wx-summary-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1.2rem;flex-shrink:0}
 .wx-summary-title{font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.85rem;opacity:.9}
 .wx-forecast-row{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
@@ -404,7 +404,10 @@ button{cursor:pointer;font-family:inherit}
 .wx-day-pop{font-size:.68rem;color:var(--blue);margin-top:.15rem}
 .drought-embed{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
 .drought-embed img{width:100%;display:block;border-radius:10px}
-@media(max-width:1100px){.price-cards-grid{grid-template-columns:repeat(2,1fr)}.price-cards-grid-2{grid-template-columns:repeat(2,1fr)}.radar-grid{grid-template-columns:1fr}}
+@media(max-width:1100px){.price-cards-grid{grid-template-columns:repeat(2,1fr)}.price-cards-grid-2{grid-template-columns:repeat(2,1fr)}.radar-grid{grid-template-columns:1fr;min-height:unset}.radar-card{min-height:340px}}
+/* Market cards */
+.market-card{transition:transform .15s,box-shadow .15s}
+.market-card:hover{transform:translateY(-2px);box-shadow:0 6px 24px rgba(0,0,0,.25)}
 @media(max-width:600px){.price-cards-grid{grid-template-columns:1fr 1fr}.price-cards-grid-2{grid-template-columns:1fr 1fr}.pc-price{font-size:2rem}.pc-sm .pc-price{font-size:1.7rem}}
 .s-card--ffai{border-color:rgba(91,163,224,0.3);background:linear-gradient(135deg,var(--surface) 0%,rgba(91,163,224,0.06) 100%)}
 .ffai-score{font-family:'Oswald',sans-serif;font-size:3.8rem;font-weight:700;color:var(--blue);line-height:1;margin-bottom:.35rem}
@@ -430,8 +433,8 @@ button{cursor:pointer;font-family:inherit}
 .ws-toast.show{opacity:1;transform:translateY(0)}
 @media(max-width:960px){.widget-showcase-grid{grid-template-columns:1fr 1fr}.ws-card--featured{grid-column:1/-1}}
 @media(max-width:580px){.widget-showcase-grid{grid-template-columns:1fr}}
-.radar-sidebar .drought-embed{flex:1;display:flex;flex-direction:column}
-.radar-sidebar .drought-embed iframe{flex:1;min-height:180px}
+.radar-sidebar .drought-embed{flex:0 0 auto}
+.radar-sidebar .drought-embed img{width:100%;height:auto;display:block;border-radius:0 0 8px 8px}
 
 /* ============================================================
    SHARED TOOL / CALCULATOR UI
