@@ -1,34 +1,45 @@
-name: Fetch Markets
+# .github/workflows/markets.yml
+# Fetches ag-relevant prediction market data from Kalshi + Polymarket
+# Writes data/markets.json for the frontend to read
+
+name: Fetch Prediction Markets
 
 on:
   schedule:
-    # Every 2 hours on weekdays, every 6 hours on weekends
-    - cron: '0 */2 * * 1-5'
-    - cron: '0 */6 * * 0,6'
-  workflow_dispatch:
+    # Every 2 hours, 7 days a week (markets don't close on weekends on these platforms)
+    - cron: '15 */2 * * *'   # :15 past every 2nd hour to avoid top-of-hour congestion
+  workflow_dispatch:           # Manual trigger for testing
+
+permissions:
+  contents: write              # Needed to commit data/markets.json
 
 jobs:
-  fetch:
+  fetch-markets:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
+    timeout-minutes: 5
 
     steps:
-      - name: Checkout
+      - name: Checkout repo
         uses: actions/checkout@v4
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
-      - name: Fetch markets
+      - name: Run fetch_markets.py
         run: python scripts/fetch_markets.py
 
-      - name: Commit markets.json
+      - name: Commit updated markets.json
         run: |
-          git config user.name  "github-actions[bot]"
-          git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add data/markets.json
-          git diff --staged --quiet || git commit -m "chore: update markets.json [skip ci]"
-          git push
+          cd data
+          if git diff --quiet markets.json 2>/dev/null; then
+            echo "No changes to markets.json — skipping commit"
+          else
+            git config user.name "AGSIST Bot"
+            git config user.email "bot@agsist.com"
+            git add markets.json
+            MARKET_COUNT=$(python3 -c "import json; d=json.load(open('markets.json')); print(d.get('count',0))")
+            git commit -m "📊 Update prediction markets — ${MARKET_COUNT} markets [skip ci]"
+            git push
+          fi
