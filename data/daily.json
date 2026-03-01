@@ -1,49 +1,49 @@
 {
-  "headline": "CORN SLIPS, WHEAT RALLIES AT COMMODITY CLASSIC",
-  "subheadline": "Front-month corn drops over 1% while Chicago wheat posts a 2.5% gain heading into the weekend.",
-  "lead": "Corn futures gave back ground Friday, with the front month settling at 438.75, down 1.13%. Chicago wheat stole the show, jumping 2.51% to 591.25. Soybeans slid 0.71% to 1157.25 as soybean meal took a 2% hit. The trade heads into the weekend digesting news from Commodity Classic 2026 in the heart of corn country.",
-  "date": "Saturday, February 28, 2026",
-  "teaser": "Wheat rallies, corn stumbles, and Commodity Classic buzzes\u2014here's what farmers need to know.",
+  "headline": "CORN SLIPS, WHEAT RALLIES, CATTLE SURGE",
+  "subheadline": "Mixed grain action overnight as wheat strength and live cattle gains offset corn and bean weakness.",
+  "lead": "Front-month corn dropped 1.13% to 438.75 while Chicago wheat jumped 2.51% to 591.25 \u2014 the spread is widening fast. Live cattle surged nearly 3% to 244.0, giving feedlot operators a reason to smile heading into March. Soybean meal took a 2.05% hit, pressuring crush margins and bean demand prospects.",
+  "date": "Sunday, March 1, 2026",
+  "teaser": "Wheat and cattle surge while corn and meal slide \u2014 here's what to watch this week.",
   "one_number": {
-    "value": "+2.51%",
-    "unit": "Chicago Wheat",
-    "context": "Wheat's Friday rally stands out in a session where corn and beans both finished red."
+    "value": "2.51%",
+    "unit": "Chicago Wheat Gain",
+    "context": "Wheat's sharp rally widens the corn-wheat spread, potentially shifting feed demand dynamics."
   },
   "sections": [
     {
       "title": "GRAINS & OILSEEDS",
-      "body": "Front-month corn settled at 438.75, off 1.13%, while December 2026 corn held firmer at 469.5, up 0.43%. Chicago wheat surged 2.51% to 591.25\u2014the standout gainer in the grains complex. Soybeans slipped to 1157.25, weighed down by a 2.05% drop in soybean meal to 315.5."
+      "body": "Corn front-month fell 1.13% to 438.75, but Dec '26 corn edged up 0.43% to 469.5 \u2014 the market is pricing in new-crop optimism. Soybeans slid 0.71% to 1157.25 with Nov '26 flat at 1128.25. Soybean meal dropped 2.05% to 315.5, putting pressure on crush economics. Wheat was the standout, rallying 2.51% to 591.25 \u2014 watch whether that strength spills into corn or simply reflects its own supply concerns."
     },
     {
       "title": "WEATHER & FIELD CONDITIONS",
-      "body": "Central Illinois is dry and cool\u201442\u00b0F under overcast skies with only a 2% chance of precipitation. The 3-day precip total sits at zero, meaning soils remain firm. Highs near 50\u00b0F and lows in the mid-20s mean no field work yet, but conditions are stable heading into March."
+      "body": "Central Illinois sits at 27\u00b0F this morning with a high of 40\u00b0F expected, staying dry with only a 9% precip chance. Three-day precipitation totals just 0.32 inches \u2014 ground conditions remain firm. Early March looks manageable for fieldwork prep, but overnight lows in the low 20s mean no rush on soil temps. Wind at 16 mph could accelerate topsoil drying where frost is coming out."
     },
     {
       "title": "MARKETS & MACRO",
-      "body": "Live cattle jumped nearly 3% to 244.0, a strong close for the beef complex. Crude oil rallied 2.62% to 67.02, which could lift input costs if sustained. The dollar index was flat at 97.565, offering no major headwind or tailwind for exports. Treasury yields eased slightly."
+      "body": "Live cattle jumped 2.96% to 244.0, a strong signal for beef demand and packer margins \u2014 feeders dipped 0.94% to 355.42. Crude oil rallied 2.62% to 67.02, which lifts input costs and supports ethanol margins. The dollar index slipped slightly to 97.565 and the 10-year fell to 3.962%, keeping borrowing costs manageable for now. S&P 500 off 0.43% \u2014 risk-off mood but nothing dramatic."
     }
   ],
   "watch_list": [
     {
       "time": "Today",
-      "desc": "Weekend position squaring\u2014watch for Monday open tone after Commodity Classic headlines digest."
+      "desc": "Markets closed Sunday \u2014 use downtime to review Commodity Classic announcements and tech updates."
     },
     {
       "time": "This Week",
-      "desc": "USDA weekly export inspections and any weather shifts as March begins."
+      "desc": "USDA weekly export inspections (Monday) and any Crop Progress resumption as March begins."
     },
     {
       "time": "Key Risk",
-      "desc": "Soybean meal weakness dragging the crush complex lower and pressuring bean prices."
+      "desc": "Soybean meal weakness could drag bean prices lower if crush margins continue to deteriorate."
     },
     {
       "time": "Key Opportunity",
-      "desc": "Wheat momentum\u2014if Chicago wheat holds above 590, bulls may push for a test of 600."
+      "desc": "New-crop corn (Dec '26) showing resilience at 469.5 \u2014 consider pricing if rally extends."
     }
   ],
   "source": "Yahoo Finance \u00b7 USDA \u00b7 Open-Meteo",
-  "generated_utc": "2026-02-28T23:55:40Z",
-  "prices_fetched": "2026-02-28T19:01:23Z",
+  "generated_utc": "2026-03-01T14:52:11Z",
+  "prices_fetched": "2026-03-01T00:46:00Z",
   "news_sources": [
     "USDA News",
     "AgWeb",
