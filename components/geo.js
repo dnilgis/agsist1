@@ -133,16 +133,19 @@ function fetchWeather(lat, lon, label) {
 
       var spray = document.getElementById('wx-spray');
       if (spray) {
-        if (wind > 15) {
-          spray.className = 'spray-badge poor';
-          spray.textContent = '🚫 Poor Spray Conditions — Wind too high (' + wind + ' mph)';
-        } else if (wind > 10 || humid > 90 || humid < 40) {
-          spray.className = 'spray-badge caution';
-          spray.textContent = '⚠️ Marginal Spray Conditions — Monitor conditions';
-        } else {
-          spray.className = 'spray-badge good';
-          spray.textContent = '✅ Good Spray Conditions';
-        }
+        var sprayR = (wind > 15 || tempF > 90 || tempF < 40 || humid < 30) ? 'poor'
+                   : (wind > 10 || tempF < 50 || tempF > 85 || humid < 40 || humid > 90 || wind < 3) ? 'caution'
+                   : 'good';
+        var sprayMsgs = {
+          poor: tempF < 40 ? '🚫 Do Not Spray — Too cold (' + tempF + '°F) →'
+              : wind > 15  ? '🚫 Poor Spray Conditions — Wind too high (' + wind + ' mph) →'
+              : tempF > 90 ? '🚫 Poor Spray Conditions — Too hot (' + tempF + '°F) →'
+              : '🚫 Poor Spray Conditions — Humidity too low (' + humid + '%) →',
+          caution: '⚠️ Marginal Spray Conditions — Review before applying →',
+          good: '✅ Good Spray Conditions →'
+        };
+        spray.className = 'spray-badge ' + sprayR;
+        spray.textContent = sprayMsgs[sprayR];
       }
 
       var ureaWrap = document.getElementById('wx-urea');
@@ -222,7 +225,7 @@ function propagateLocation(lat, lon, label) {
 
 function updateWidgetPreviews(tempF, humid, wind, pop) {
   var sprayRating = (wind>15||tempF>90||tempF<40||humid<30) ? 'poor'
-                  : (wind>10||humid<40||humid>90) ? 'marginal' : 'good';
+                  : (wind>10||wind<3||tempF<50||tempF>85||humid<40||humid>90) ? 'marginal' : 'good';
   var sprayColors  = {good:'rgba(62,207,110,.08)',marginal:'rgba(230,176,66,.08)',poor:'rgba(240,96,96,.08)'};
   var sprayBorders = {good:'rgba(62,207,110,.2)',marginal:'rgba(230,176,66,.2)',poor:'rgba(240,96,96,.2)'};
   var sprayIcons   = {good:'✅',marginal:'⚠️',poor:'🚫'};
@@ -646,7 +649,7 @@ function rebuildTickerLoop() {
     // Dynamic speed: ~45px/sec
     var w = single.scrollWidth || single.offsetWidth;
     if (w > 200) {
-      track.style.animationDuration = Math.max(20, Math.round(w / 20)) + 's';
+      track.style.animationDuration = Math.max(20, Math.round(w / 45)) + 's';
     }
   }, 120);
 }
