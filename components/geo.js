@@ -354,9 +354,11 @@ var PRICE_MAP = {
   'beans':      { label:'Soybeans',      priceEl:'pcp-bean-near', chgEl:'pcc-bean-near', dec:2, grain:true  },
   'beans-nov':  { label:"Beans Nov'26",  priceEl:'pcp-bean-nov',  chgEl:'pcc-bean-nov',  dec:2, grain:true  },
   'wheat':      { label:'Wheat',         priceEl:'pcp-wheat',     chgEl:'pcc-wheat',     dec:2, grain:true  },
+  'oats':       { label:'Oats',          priceEl:'pcp-oats',      chgEl:'pcc-oats',      dec:2, grain:true  },
   'cattle':     { label:'Live Cattle',   priceEl:'pcp-cattle',    chgEl:'pcc-cattle',    dec:2, grain:false },
   'feeders':    { label:'Feeder Cattle', priceEl:'pcp-feeders',   chgEl:'pcc-feeders',   dec:2, grain:false },
   'hogs':       { label:'Lean Hogs',     priceEl:'pcp-hogs',      chgEl:'pcc-hogs',      dec:2, grain:false },
+  'milk':       { label:'Class III Milk',priceEl:'pcp-milk',      chgEl:'pcc-milk',      dec:2, grain:false },
   'meal':       { label:'Soy Meal',      priceEl:'pcp-meal',      chgEl:'pcc-meal',      dec:2, grain:false },
   'soyoil':     { label:'Soy Oil',       priceEl:'pcp-soyoil',    chgEl:'pcc-soyoil',    dec:2, grain:false },
   'crude':      { label:'Crude Oil',     priceEl:'pcp-crude',     chgEl:'pcc-crude',     dec:2, grain:false },
@@ -598,7 +600,7 @@ function rebuildTickerLoop() {
     // Dynamic speed: ~45px/sec
     var w = single.scrollWidth || single.offsetWidth;
     if (w > 200) {
-      track.style.animationDuration = Math.max(20, Math.round(w / 25)) + 's';
+      track.style.animationDuration = Math.max(20, Math.round(w / 45)) + 's';
     }
   }, 120);
 }

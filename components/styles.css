@@ -378,8 +378,8 @@ button{cursor:pointer;font-family:inherit}
 .pc-range{margin-top:.6rem}
 .pc-range-labels{display:flex;justify-content:space-between;font-size:.65rem;color:var(--text-muted);margin-bottom:.3rem}
 .pc-range-track{height:5px;background:var(--surface3);border-radius:3px;position:relative;overflow:visible}
-.pc-range-fill{position:absolute;left:0;top:0;height:100%;background:linear-gradient(to right,rgba(230,176,66,.3),var(--gold));border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1)}
-.pc-range-dot{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;background:var(--gold);border:2px solid var(--bg);transform:translate(-50%,-50%);transition:left .6s cubic-bezier(.4,0,.2,1)}
+.pc-range-fill{position:absolute;left:0;top:0;height:100%;background:linear-gradient(to right,var(--red),var(--gold) 50%,var(--green));border-radius:3px;transition:width .6s cubic-bezier(.4,0,.2,1)}
+.pc-range-dot{position:absolute;top:50%;width:10px;height:10px;border-radius:50%;background:var(--text);border:2px solid var(--bg);transform:translate(-50%,-50%);transition:left .6s cubic-bezier(.4,0,.2,1);box-shadow:0 0 4px rgba(0,0,0,.4)}
 .pc-range-52{font-size:.67rem;color:var(--text-muted);text-align:center;margin-top:.4rem}
 .pc-sm .pc-price{font-size:1.9rem}
 .pc-section-lbl{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);margin:.25rem 0 .65rem;padding:.2rem 0;border-bottom:1px solid var(--border)}
