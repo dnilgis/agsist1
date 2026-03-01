@@ -362,20 +362,8 @@
               <div class="wstat"><div class="wstat-lbl">Precip Chance</div><div class="wstat-val" id="wx-precip">--</div></div>
               <div class="wstat"><div class="wstat-lbl">Dew Point</div><div class="wstat-val" id="wx-dew">--</div></div>
             </div>
-            <a href="/spray" id="wx-spray" class="spray-badge caution" style="margin-top:.85rem;text-decoration:none;display:block;cursor:pointer">⏳ Calculating spray conditions...</a>
-            <a href="/urea" id="wx-urea" style="display:none;margin-top:.55rem;padding:.6rem .85rem;border-radius:7px;border:1px solid var(--border);background:var(--surface2);text-decoration:none;color:inherit;cursor:pointer;transition:border-color .15s">
-              <div style="display:flex;align-items:center;justify-content:space-between">
-                <div style="display:flex;align-items:center;gap:.5rem">
-                  <span style="font-size:.85rem" aria-hidden="true">🌾</span>
-                  <span style="font-size:.75rem;font-weight:700;color:var(--text-dim)">Urea Risk</span>
-                </div>
-                <div style="display:flex;align-items:center;gap:.5rem">
-                  <span id="wx-urea-score" style="font-family:'Oswald',sans-serif;font-size:1.1rem;font-weight:700">--</span>
-                  <span id="wx-urea-badge" style="font-size:.65rem;font-weight:700;text-transform:uppercase;padding:.15rem .45rem;border-radius:10px">--</span>
-                </div>
-              </div>
-              <span style="font-size:.68rem;color:var(--text-muted);display:block;margin-top:.3rem">Full urea volatilization analysis →</span>
-            </a>
+
+
             <div id="wx-forecast" style="display:flex;gap:.4rem;margin-top:.85rem"></div>
             <button id="btn-change-loc" style="margin-top:.65rem;background:none;border:none;color:var(--text-muted);font-size:.72rem;cursor:pointer;text-decoration:underline">Change location</button>
           </div>
@@ -394,8 +382,34 @@
             <a href="/breakeven" class="tool-btn"><span class="tool-name">📐 Break-Even Calculator</span><span class="tool-arr">→</span></a>
             <a href="/grain-bin-calculator" class="tool-btn"><span class="tool-name">🏗️ Grain Bin Calculator</span><span class="tool-arr">→</span></a>
             <a href="/gdu-calculator" class="tool-btn"><span class="tool-name">🌡️ GDU Calculator</span><span class="tool-arr">→</span></a>
-            <a href="/spray" class="tool-btn"><span class="tool-name">🌿 Spray Advisory</span><span class="tool-arr">→</span></a>
-            <a href="/urea" class="tool-btn"><span class="tool-name">🌾 Urea Risk Monitor</span><span class="tool-arr">→</span></a>
+            <!-- ── Spray Advisory — LIVE widget ── -->
+            <a href="/spray" id="wsp-spray" class="tool-widget">
+              <div class="tool-widget-inner">
+                <span class="tool-widget-icon" id="wsp-spray-icon">⏳</span>
+                <div class="tool-widget-body">
+                  <span class="tool-widget-status" id="wsp-spray-status">Loading spray conditions…</span>
+                  <span class="tool-widget-detail" id="wsp-spray-detail">Waiting for weather data</span>
+                </div>
+                <span class="tool-widget-arr">→</span>
+              </div>
+            </a>
+            <!-- ── Urea Risk — LIVE widget ── -->
+            <a href="/urea" class="tool-widget tool-widget--urea">
+              <div class="tool-widget-inner">
+                <div class="tool-widget-top">
+                  <span class="tool-widget-icon">🌾</span>
+                  <div class="tool-widget-body">
+                    <span class="tool-widget-status">Urea Volatilization Risk</span>
+                  </div>
+                  <span class="tool-widget-score" id="wsp-urea-score">--</span>
+                  <span class="tool-widget-arr">→</span>
+                </div>
+                <div class="tool-widget-bottom">
+                  <span class="tool-widget-badge" id="wsp-urea-badge">Loading…</span>
+                  <span class="tool-widget-rec" id="wsp-urea-rec">Waiting for weather data</span>
+                </div>
+              </div>
+            </a>
             <a href="/fast-facts" class="tool-btn"><span class="tool-name">⚡ Fast Facts</span><span class="tool-arr">→</span></a>
           </div>
         </div>
