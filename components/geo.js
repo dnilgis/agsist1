@@ -349,7 +349,6 @@ function renderBidsPlaceholder(zip) {
 
 // ─────────────────────────────────────────────────────────────────
 // PRICE CONFIGURATION
-// Keys match data/prices.json quote keys exactly.
 // ─────────────────────────────────────────────────────────────────
 var PRICE_MAP = {
   'corn':       { label:'Corn',          priceEl:'pcp-corn-near', chgEl:'pcc-corn-near', dec:2, grain:true  },
@@ -375,16 +374,11 @@ var PRICE_MAP = {
 
 // ─────────────────────────────────────────────────────────────────
 // PRICE FORMATTING
-// Grain prices: convert from cents to dollars ($4.39 not 438.75)
-// All prices get $ prefix except treasury (%) and dollar index
 // ─────────────────────────────────────────────────────────────────
 function fmtPrice(val, dec, grain, suffix) {
   var p = parseFloat(val);
   if (isNaN(p)) return '--';
-  if (grain) {
-    var dollars = p / 100;
-    return '$' + dollars.toFixed(2);
-  }
+  if (grain) { return '$' + (p / 100).toFixed(2); }
   var str = p.toFixed(dec);
   if (suffix) return str + suffix;
   return str;
@@ -398,8 +392,7 @@ function fmtChange(close, open, grain, netChg, pctChg) {
   var dir   = diff > 0 ? 'up' : diff < 0 ? 'dn' : 'nc';
   var arrow = diff > 0 ? '▲' : diff < 0 ? '▼' : '—';
   var sign  = diff > 0 ? '+' : '';
-  var txt   = sign + pct.toFixed(1) + '%';
-  return {text: arrow + ' ' + txt, cls: dir};
+  return {text: arrow + ' ' + sign + pct.toFixed(1) + '%', cls: dir};
 }
 
 function fmtTickerChange(close, open, grain, netChg, pctChg) {
@@ -426,25 +419,6 @@ function updatePriceEl(id, txt, cls) {
   if (cls) el.className = el.className.replace(/\b(up|dn|nc)\b/g,'').trim() + ' ' + cls;
 }
 
-function updateRangeBar(priceElId, price) {
-  // Legacy — kept for compatibility but update52WeekRange is preferred
-  if (!priceElId) return;
-  var priceEl = document.getElementById(priceElId);
-  if (!priceEl) return;
-  var card = priceEl.closest ? priceEl.closest('.pc') : null;
-  if (!card) return;
-  var fill   = card.querySelector('.pc-range-fill');
-  var dot    = card.querySelector('.pc-range-dot');
-  var labels = card.querySelectorAll('.pc-range-labels span');
-  if (!fill || labels.length < 3) return;
-  var lo = parseFloat(labels[0].textContent.replace(/[$,]/g,''));
-  var hi = parseFloat(labels[2].textContent.replace(/[$,]/g,''));
-  if (isNaN(lo) || isNaN(hi) || hi === lo) return;
-  var pct = Math.min(100, Math.max(0, ((parseFloat(price)-lo)/(hi-lo))*100));
-  fill.style.width = pct + '%';
-  if (dot) dot.style.left = pct + '%';
-}
-
 function update52WeekRange(priceElId, price, wk52Lo, wk52Hi, isGrain) {
   if (!priceElId) return;
   var priceEl = document.getElementById(priceElId);
@@ -455,12 +429,8 @@ function update52WeekRange(priceElId, price, wk52Lo, wk52Hi, isGrain) {
   var dot    = card.querySelector('.pc-range-dot');
   var labels = card.querySelectorAll('.pc-range-labels span');
   if (!fill || labels.length < 3) return;
-
-  var lo = parseFloat(wk52Lo);
-  var hi = parseFloat(wk52Hi);
+  var lo = parseFloat(wk52Lo), hi = parseFloat(wk52Hi);
   if (isNaN(lo) || isNaN(hi) || hi <= lo) return;
-
-  // Update the low/high labels with real values
   if (isGrain) {
     labels[0].textContent = '$' + (lo / 100).toFixed(2);
     labels[2].textContent = '$' + (hi / 100).toFixed(2);
@@ -474,8 +444,6 @@ function update52WeekRange(priceElId, price, wk52Lo, wk52Hi, isGrain) {
     labels[0].textContent = lo < 1 ? lo.toFixed(4) : lo.toFixed(2);
     labels[2].textContent = hi < 1 ? hi.toFixed(4) : hi.toFixed(2);
   }
-
-  // Position the fill + dot
   var pct = Math.min(100, Math.max(0, ((price - lo) / (hi - lo)) * 100));
   fill.style.width = pct + '%';
   if (dot) dot.style.left = pct + '%';
@@ -484,30 +452,21 @@ function update52WeekRange(priceElId, price, wk52Lo, wk52Hi, isGrain) {
 function applyPriceResult(key, q, close, open, netChg, pctChg) {
   var meta = PRICE_MAP[key];
   if (!meta) return;
-
   var priceTxt = fmtPrice(close, meta.dec, meta.grain, meta.suffix);
   var chgObj   = fmtChange(close, open, meta.grain, netChg, pctChg);
-
-  if (meta.priceEl) { updatePriceEl(meta.priceEl, priceTxt); }
+  if (meta.priceEl) updatePriceEl(meta.priceEl, priceTxt);
   if (meta.chgEl)   updatePriceEl(meta.chgEl, chgObj.text, chgObj.cls);
-
-  // Update prev close + ticker symbol
   var prevEl = document.getElementById(meta.priceEl ? meta.priceEl.replace('pcp-','pcprev-') : '');
   if (prevEl && open != null) {
     var prevTxt = meta.grain ? '$' + (parseFloat(open)/100).toFixed(2) : parseFloat(open).toFixed(meta.dec) + (meta.suffix||'');
     prevEl.textContent = 'prev: ' + prevTxt + ' ' + (q && q.ticker ? q.ticker : '');
   }
-
-  // Update 52-week range bar with real data
   if (meta.priceEl && q) {
-    var wk52Hi = q.wk52_hi;
-    var wk52Lo = q.wk52_lo;
+    var wk52Hi = q.wk52_hi, wk52Lo = q.wk52_lo;
     if (wk52Hi != null && wk52Lo != null) {
       update52WeekRange(meta.priceEl, parseFloat(close), wk52Lo, wk52Hi, meta.grain);
     }
   }
-
-  // Update ticker items
   var tickerPriceTxt = fmtTickerPrice(close, meta.grain);
   var tickerChgObj = fmtTickerChange(close, open, meta.grain, netChg, pctChg);
   document.querySelectorAll('[data-sym="' + key + '"]').forEach(function(el) {
@@ -516,13 +475,11 @@ function applyPriceResult(key, q, close, open, netChg, pctChg) {
     if (pe) pe.textContent = tickerPriceTxt;
     if (ce) { ce.textContent = tickerChgObj.text; ce.className = 't-chg ' + tickerChgObj.cls; }
   });
-
   rebuildTickerLoop();
 }
 
 // ─────────────────────────────────────────────────────────────────
 // PRIMARY PRICE SOURCE — data/prices.json
-// Updated every 30 minutes by GitHub Actions (yfinance, free).
 // ─────────────────────────────────────────────────────────────────
 function fetchAllPrices() {
   fetch('/data/prices.json', { cache: 'no-store' })
@@ -531,25 +488,18 @@ function fetchAllPrices() {
       return r.json();
     })
     .then(function(data) {
-      var quotes  = data.quotes || {};
-      var count   = 0;
-
+      var quotes = data.quotes || {};
       Object.keys(quotes).forEach(function(key) {
         var q = quotes[key];
         if (!q || q.close === null || q.close === undefined) return;
         applyPriceResult(key, q, q.close, q.open, q.netChange, q.pctChange);
-        count++;
       });
     })
-    .catch(function(e) {
-      console.warn('prices.json fetch failed:', e);
-    });
+    .catch(function(e) { console.warn('prices.json fetch failed:', e); });
 }
 
 // ─────────────────────────────────────────────────────────────────
-// CRYPTO — CoinGecko via CORS proxy (free, no key, real-time)
-// Direct CoinGecko calls are blocked by CORS from GitHub Pages,
-// so we proxy through corsproxy.io.
+// CRYPTO — CoinGecko via CORS proxy
 // ─────────────────────────────────────────────────────────────────
 function fetchCryptoLive() {
   var cgUrl = 'https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ripple,kaspa&vs_currencies=usd&include_24hr_change=true&precision=4';
@@ -573,7 +523,6 @@ function fetchCryptoLive() {
           var cv = parseFloat(chgP);
           updatePriceEl(info.chgEl, (cv>0?'▲':'▼')+' '+Math.abs(cv).toFixed(2)+'%', cv>0?'up':'dn');
         }
-        // Ticker update
         document.querySelectorAll('[data-sym="'+info.tickerSym+'"]').forEach(function(el) {
           var pe = el.querySelector('.t-price');
           var ce = el.querySelector('.t-chg');
@@ -586,13 +535,11 @@ function fetchCryptoLive() {
         });
       });
       rebuildTickerLoop();
-    }).catch(function(e) {
-      console.warn('CoinGecko fetch failed:', e);
-    });
+    }).catch(function(e) { console.warn('CoinGecko fetch failed:', e); });
 }
 
 // ─────────────────────────────────────────────────────────────────
-// FFAI INDEX — Farmers First Agri Service (free)
+// FFAI INDEX — Farmers First Agri Service
 // ─────────────────────────────────────────────────────────────────
 function fetchFFAILive() {
   fetch('https://farmers1st.com/api/v3/current.json')
@@ -613,11 +560,6 @@ function fetchFFAILive() {
         if (ce && diff) { ce.className = 't-chg ' + dir; ce.textContent = chgTxt; }
       });
 
-      var scoreEl = document.getElementById('ffai-score');
-      if (scoreEl) scoreEl.textContent = priceTxt;
-      var chgEl = document.getElementById('ffai-change');
-      if (chgEl && diff) { chgEl.className = 'ffai-change ' + dir; chgEl.textContent = chgTxt; }
-
       var compactEl = document.getElementById('ffai-score-compact');
       if (compactEl) compactEl.textContent = priceTxt;
     }).catch(function() {});
@@ -633,20 +575,15 @@ function rebuildTickerLoop() {
     var single = document.getElementById('ticker-items-single');
     var track  = document.getElementById('ticker-track');
     if (!single || !track) return;
-
     var old = document.getElementById('ticker-items-clone');
     if (old) old.remove();
-
     var c = single.cloneNode(true);
     c.id = 'ticker-items-clone';
     c.setAttribute('aria-hidden', 'true');
     track.appendChild(c);
-
     track.style.animation = 'none';
     track.offsetHeight;
     track.style.animation = '';
-
-    // Dynamic speed: ~45px/sec
     var w = single.scrollWidth || single.offsetWidth;
     if (w > 200) {
       track.style.animationDuration = Math.max(20, Math.round(w / 20)) + 's';
@@ -661,7 +598,6 @@ function fetchKalshiMarkets() {
   var grid    = document.getElementById('kalshi-grid');
   var loading = document.getElementById('kalshi-loading');
   if (!grid) return;
-
   fetch('/data/markets.json', { cache: 'no-store' })
     .then(function(r) {
       if (!r.ok) throw new Error('markets.json ' + r.status);
@@ -671,18 +607,14 @@ function fetchKalshiMarkets() {
       var markets = data.markets || [];
       if (loading) loading.style.display = 'none';
       grid.innerHTML = '';
-
       if (!markets.length) {
         grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:1.5rem;font-size:.82rem;color:var(--text-muted)">'
           + 'No active ag markets found right now. '
           + '<a href="https://kalshi.com/markets" target="_blank" rel="noopener" style="color:var(--gold)">Check Kalshi →</a> · '
-          + '<a href="https://polymarket.com" target="_blank" rel="noopener" style="color:var(--gold)">Check Polymarket →</a>'
-          + '</div>';
+          + '<a href="https://polymarket.com" target="_blank" rel="noopener" style="color:var(--gold)">Check Polymarket →</a></div>';
         return;
       }
-
       markets.forEach(function(m) { grid.appendChild(buildMarketCard(m)); });
-
       if (data.fetched) {
         var mins = Math.round((Date.now() - new Date(data.fetched).getTime()) / 60000);
         var ageStr = mins < 2 ? 'Just updated' : mins < 60 ? mins + 'min ago' : Math.round(mins/60) + 'h ago';
@@ -714,45 +646,30 @@ function buildMarketCard(m) {
   var volStr = vol >= 1000000 ? '$' + (vol/1000000).toFixed(1) + 'M vol'
              : vol >= 1000    ? '$' + (vol/1000).toFixed(0) + 'k vol'
              : vol > 0        ? '$' + Math.round(vol) + ' vol' : '';
-
   var div = document.createElement('div');
   div.className = 'market-card';
   div.style.cssText = 'background:' + bgAlpha + ';border:1px solid ' + borderC
     + ';border-radius:10px;padding:.85rem;display:flex;flex-direction:column;gap:.5rem;cursor:pointer';
   div.onclick = function() { window.open(m.url, '_blank', 'noopener'); };
-
   div.innerHTML =
     '<div style="display:flex;justify-content:space-between;align-items:center">'
-      + '<span style="font-size:.6rem;font-weight:700;letter-spacing:.08em;color:' + platColor + ';text-transform:uppercase;'
-        + 'background:' + platColor + '15;border:1px solid ' + platColor + '35;border-radius:4px;padding:.1rem .4rem">'
-        + platLabel + '</span>'
-      + '<span style="font-size:.62rem;color:var(--text-muted)">' + (m.time_left || '') + '</span>'
-    + '</div>'
+      + '<span style="font-size:.6rem;font-weight:700;letter-spacing:.08em;color:' + platColor + ';text-transform:uppercase;background:' + platColor + '15;border:1px solid ' + platColor + '35;border-radius:4px;padding:.1rem .4rem">' + platLabel + '</span>'
+      + '<span style="font-size:.62rem;color:var(--text-muted)">' + (m.time_left || '') + '</span></div>'
     + '<div style="font-size:.78rem;font-weight:600;color:var(--text);line-height:1.4">' + title + '</div>'
-    + '<div>'
-      + '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.3rem">'
-        + '<span style="font-size:1.5rem;font-weight:700;color:' + color + ';font-family:\'Oswald\',sans-serif;line-height:1">'
-          + yes + '%</span>'
-        + '<span style="font-size:.7rem;color:var(--text-muted)">YES probability</span>'
-      + '</div>'
+    + '<div><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.3rem">'
+      + '<span style="font-size:1.5rem;font-weight:700;color:' + color + ';font-family:\'Oswald\',sans-serif;line-height:1">' + yes + '%</span>'
+      + '<span style="font-size:.7rem;color:var(--text-muted)">YES probability</span></div>'
       + '<div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden">'
-        + '<div style="height:100%;width:' + yes + '%;background:' + color + ';border-radius:3px;transition:width .4s ease"></div>'
-      + '</div>'
-    + '</div>'
-    + '<div style="display:flex;justify-content:space-between;align-items:center;padding-top:.3rem;'
-        + 'border-top:1px solid var(--border);margin-top:.1rem">'
-      + '<span style="font-size:.68rem;color:var(--text-muted)">NO: ' + (m.no || (100 - yes)) + '%'
-        + (volStr ? ' · ' + volStr : '') + '</span>'
-      + '<a href="' + m.url + '" target="_blank" rel="noopener" onclick="event.stopPropagation()"'
-        + ' style="font-size:.66rem;color:' + color + ';text-decoration:none;font-weight:600;'
-          + 'border:1px solid currentColor;border-radius:4px;padding:.15rem .45rem">Trade →</a>'
-    + '</div>';
-
+        + '<div style="height:100%;width:' + yes + '%;background:' + color + ';border-radius:3px;transition:width .4s ease"></div></div></div>'
+    + '<div style="display:flex;justify-content:space-between;align-items:center;padding-top:.3rem;border-top:1px solid var(--border);margin-top:.1rem">'
+      + '<span style="font-size:.68rem;color:var(--text-muted)">NO: ' + (m.no || (100 - yes)) + '%' + (volStr ? ' · ' + volStr : '') + '</span>'
+      + '<a href="' + m.url + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:.66rem;color:' + color + ';text-decoration:none;font-weight:600;border:1px solid currentColor;border-radius:4px;padding:.15rem .45rem">Trade →</a></div>';
   return div;
 }
 
 // ─────────────────────────────────────────────────────────────────
-// DAILY BRIEFING
+// DAILY BRIEFING — v2 schema
+// Supports: 5 sections, the_more_you_know, daily_quote
 // ─────────────────────────────────────────────────────────────────
 function loadDailyBriefing() {
   fetch('/data/daily.json', { cache: 'no-store' })
@@ -767,7 +684,7 @@ function loadDailyBriefing() {
       el = document.getElementById('daily-lead');        if (el && d.lead)        el.textContent = d.lead;
       el = document.getElementById('daily-date');        if (el && d.date)        el.textContent = d.date;
       el = document.getElementById('daily-teaser-text'); if (el && d.teaser)      el.textContent = d.teaser;
-      el = document.getElementById('daily-teaser-date'); if (el && d.date)        el.textContent = '📰 AGSIST Daily · ' + d.date;
+      el = document.getElementById('daily-teaser-date'); if (el && d.date)        el.textContent = '\u{1F4F0} AGSIST Daily \u00b7 ' + d.date;
 
       if (d.one_number) {
         el = document.getElementById('daily-number-value');   if (el) el.textContent = d.one_number.value;
@@ -775,6 +692,7 @@ function loadDailyBriefing() {
         el = document.getElementById('daily-number-context'); if (el) el.textContent = d.one_number.context;
       }
 
+      // v2: 5 sections
       if (d.sections && Array.isArray(d.sections)) {
         d.sections.forEach(function(sec, i) {
           el = document.getElementById('daily-section-' + (i+1) + '-title'); if (el && sec.title) el.textContent = sec.title;
@@ -782,17 +700,39 @@ function loadDailyBriefing() {
         });
       }
 
+      // v2: The More You Know
+      if (d.the_more_you_know) {
+        el = document.getElementById('daily-tmyk-title'); if (el && d.the_more_you_know.title) el.textContent = d.the_more_you_know.title;
+        el = document.getElementById('daily-tmyk-body');  if (el && d.the_more_you_know.body)  el.textContent = d.the_more_you_know.body;
+      }
+
+      // v2: Daily Quote
+      if (d.daily_quote) {
+        el = document.getElementById('daily-quote-text');
+        if (el && d.daily_quote.text) {
+          var qt = d.daily_quote.text.replace(/^[\u201c""]|[\u201d""]$/g, '');
+          el.textContent = '\u201c' + qt + '\u201d';
+        }
+        el = document.getElementById('daily-quote-attr');
+        if (el && d.daily_quote.attribution) {
+          var attr = d.daily_quote.attribution.replace(/^[\u2014\u2013-]\s*/, '');
+          el.textContent = '\u2014 ' + attr;
+        }
+      }
+
+      // Watch list
       var wl = document.getElementById('daily-watch-list');
       if (wl && d.watch_list && d.watch_list.length) {
         wl.innerHTML = '';
         d.watch_list.forEach(function(item) {
           var li = document.createElement('li');
-          li.innerHTML = '<strong>' + (item.time||'') + '</strong> — ' + (item.desc||'');
+          li.className = 'watch-item';
+          li.innerHTML = '<span class="watch-time">' + (item.time||'') + '</span><span class="watch-desc">' + (item.desc||'') + '</span>';
           wl.appendChild(li);
         });
       }
 
-      el = document.getElementById('daily-source'); if (el) el.textContent = 'AI · Yahoo Finance · USDA';
+      el = document.getElementById('daily-source');  if (el) el.textContent = d.source_summary || d.source || 'USDA \u00b7 Yahoo Finance \u00b7 Open-Meteo';
       el = document.getElementById('daily-loading'); if (el) el.style.display = 'none';
       el = document.getElementById('daily-content'); if (el) el.style.display = 'block';
     })
@@ -810,22 +750,16 @@ function loadDailyBriefing() {
 (function boot() {
   function init() {
     rebuildTickerLoop();
-
     fetchAllPrices();
     fetchCryptoLive();
     fetchFFAILive();
-
     if (document.getElementById('daily-headline')) loadDailyBriefing();
     if (document.getElementById('kalshi-grid'))    fetchKalshiMarkets();
-
-    // Refresh every 5 minutes
     setInterval(function() {
       fetchAllPrices();
       fetchCryptoLive();
       fetchFFAILive();
     }, 5 * 60 * 1000);
-
-    // Weather
     setTimeout(function() {
       try {
         var saved = localStorage.getItem('agsist-wx-loc');
@@ -837,7 +771,6 @@ function loadDailyBriefing() {
       requestGeo();
     }, 400);
   }
-
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);
   } else {
