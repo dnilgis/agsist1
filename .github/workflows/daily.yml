@@ -1,11 +1,14 @@
-name: Daily Briefing
+# .github/workflows/daily.yml
+# Generates the AGSIST Daily briefing every weekday morning
+# Runs AFTER prices.yml so data/prices.json is fresh
+name: Generate Daily Briefing
 
 on:
   schedule:
-    # 10:30 UTC = 5:30am CT (winter) / 4:30am CT (summer)
-    # Runs after prices.yml has already fetched fresh prices
-    - cron: '30 10 * * 1-5'
-  workflow_dispatch: # Manual "Run workflow" button in Actions UI
+    # 5:45am CT (11:45 UTC) — weekdays only
+    # Prices workflow runs at 5:30am CT, so prices.json is fresh
+    - cron: '45 11 * * 1-5'
+  workflow_dispatch: # Manual trigger for testing
 
 jobs:
   generate:
@@ -14,27 +17,25 @@ jobs:
       contents: write
 
     steps:
-      - name: Checkout repo
+      - name: Checkout
         uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
-
-      - name: Install dependencies
-        run: pip install --quiet requests
+          python-version: '3.12'
 
       - name: Generate daily briefing
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python scripts/generate_daily.py
 
-      - name: Commit daily.json
+      - name: Commit and push
         run: |
-          git config user.name  "AGSIST Daily Bot"
-          git config user.email "noreply@agsist.com"
+          git config user.name "AGSIST Bot"
+          git config user.email "bot@agsist.com"
           git add data/daily.json
-          git diff --cached --quiet && echo "No changes to commit" || \
-            git commit -m "Daily briefing $(date -u +'%Y-%m-%d') [skip ci]"
+          git diff --staged --quiet || git commit -m "📰 AGSIST Daily — $(date -u +%Y-%m-%d)"
           git push
