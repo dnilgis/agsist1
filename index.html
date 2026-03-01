@@ -321,8 +321,6 @@
     <div class="fade-up" id="f2" style="transition-delay:.08s">
       <div class="sec-head">
         <div class="sec-title">🌿 Spray &amp; Local Conditions</div>
-        <a href="/spray" class="sec-all">Spray →</a>
-        <a href="/urea" class="sec-all" style="margin-left:.5rem">Urea Risk →</a>
       </div>
       <div class="card">
         <div class="card-body">
@@ -354,8 +352,8 @@
               <div class="wstat"><div class="wstat-lbl">Precip Chance</div><div class="wstat-val" id="wx-precip">--</div></div>
               <div class="wstat"><div class="wstat-lbl">Dew Point</div><div class="wstat-val" id="wx-dew">--</div></div>
             </div>
-            <div id="wx-spray" class="spray-badge caution" style="margin-top:.85rem">⏳ Calculating spray conditions...</div>
-            <div id="wx-urea" style="display:none;margin-top:.55rem;padding:.6rem .85rem;border-radius:7px;border:1px solid var(--border);background:var(--surface2)">
+            <a href="/spray" id="wx-spray" class="spray-badge caution" style="margin-top:.85rem;text-decoration:none;display:block;cursor:pointer">⏳ Calculating spray conditions...</a>
+            <a href="/urea" id="wx-urea" style="display:none;margin-top:.55rem;padding:.6rem .85rem;border-radius:7px;border:1px solid var(--border);background:var(--surface2);text-decoration:none;color:inherit;cursor:pointer;transition:border-color .15s">
               <div style="display:flex;align-items:center;justify-content:space-between">
                 <div style="display:flex;align-items:center;gap:.5rem">
                   <span style="font-size:.85rem" aria-hidden="true">🌾</span>
@@ -366,8 +364,8 @@
                   <span id="wx-urea-badge" style="font-size:.65rem;font-weight:700;text-transform:uppercase;padding:.15rem .45rem;border-radius:10px">--</span>
                 </div>
               </div>
-              <a href="/urea" style="font-size:.68rem;color:var(--text-muted);display:block;margin-top:.3rem">Full urea volatilization analysis →</a>
-            </div>
+              <span style="font-size:.68rem;color:var(--text-muted);display:block;margin-top:.3rem">Full urea volatilization analysis →</span>
+            </a>
             <div id="wx-forecast" style="display:flex;gap:.4rem;margin-top:.85rem"></div>
             <button id="btn-change-loc" style="margin-top:.65rem;background:none;border:none;color:var(--text-muted);font-size:.72rem;cursor:pointer;text-decoration:underline">Change location</button>
           </div>
@@ -386,7 +384,8 @@
             <a href="/breakeven" class="tool-btn"><span class="tool-name">📐 Break-Even Calculator</span><span class="tool-arr">→</span></a>
             <a href="/grain-bin-calculator" class="tool-btn"><span class="tool-name">🏗️ Grain Bin Calculator</span><span class="tool-arr">→</span></a>
             <a href="/gdu-calculator" class="tool-btn"><span class="tool-name">🌡️ GDU Calculator</span><span class="tool-arr">→</span></a>
-            <a href="/cash-bids" class="tool-btn"><span class="tool-name">💵 Cash Bids Near Me</span><span class="tool-arr">→</span></a>
+            <a href="/spray" class="tool-btn"><span class="tool-name">🌿 Spray Advisory</span><span class="tool-arr">→</span></a>
+            <a href="/urea" class="tool-btn"><span class="tool-name">🌾 Urea Risk Monitor</span><span class="tool-arr">→</span></a>
             <a href="/fast-facts" class="tool-btn"><span class="tool-name">⚡ Fast Facts</span><span class="tool-arr">→</span></a>
           </div>
         </div>
@@ -821,7 +820,7 @@
     if (!single || !track) return;
     var w = single.scrollWidth || single.offsetWidth;
     if (w < 200) return;
-    track.style.animationDuration = Math.max(20, Math.round(w / 20)) + 's';
+    track.style.animationDuration = Math.max(20, Math.round(w / 45)) + 's';
   }
   window.addEventListener('resize', setTickerSpeed);
 
