@@ -21,7 +21,14 @@
       .then(function (html) {
         var tmp = document.createElement('div');
         tmp.innerHTML = html;
-        el.replaceWith(tmp.firstElementChild || tmp);
+        // FIX: Insert ALL child nodes using a DocumentFragment.
+        // header.html contains <nav> + <div.drawer> + <div.draw-ov> as siblings.
+        // The old code (el.replaceWith(tmp.firstElementChild)) only injected the
+        // <nav>, silently dropping the drawer and overlay — breaking the hamburger
+        // menu on every page.
+        var frag = document.createDocumentFragment();
+        while (tmp.firstChild) frag.appendChild(tmp.firstChild);
+        el.replaceWith(frag);
         if (onDone) onDone();
       })
       .catch(function () { if (onDone) onDone(); });

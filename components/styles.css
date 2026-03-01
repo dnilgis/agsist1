@@ -1,5 +1,5 @@
 /* AGSIST Shared Stylesheet — edit once, applies everywhere */
-/* Last updated: 2026-02-28 */
+/* Last updated: 2026-03-01 — hamburger + daily mobile overflow fixes */
 
 /* ── Fonts: imported here so ALL pages get them, not just index.html ── */
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap');
@@ -132,7 +132,7 @@ button{cursor:pointer;font-family:inherit}
 .daily-hero{position:relative;overflow:hidden;background:var(--bg2);border-bottom:1px solid var(--border-g);transition:all .35s cubic-bezier(.4,0,.2,1)}
 .daily-hero-inner{max-width:1400px;margin:0 auto;padding:2.5rem 1.5rem;transition:padding .35s}
 .daily-hero.dismissed .daily-hero-inner{padding:0}
-.daily-full{transition:opacity .3s,max-height .5s cubic-bezier(.4,0,.2,1);max-height:2000px;overflow:visible}
+.daily-full{transition:opacity .3s,max-height .5s cubic-bezier(.4,0,.2,1);max-height:4000px;overflow:visible}
 .daily-hero.dismissed .daily-full{max-height:0;opacity:0;pointer-events:none;overflow:hidden}
 .daily-teaser{display:none;align-items:center;justify-content:space-between;gap:.75rem;padding:.45rem 1.5rem;cursor:pointer;transition:background .15s;border-bottom:1px solid var(--border)}
 .daily-teaser:hover{background:rgba(230,176,66,.04)}
@@ -692,4 +692,33 @@ a:focus:not(:focus-visible) {
     width: 100%;
     min-width: 0;
   }
+}
+
+/* ══ DAILY HERO — Mobile overflow fix (iPhone 12 Mini / 375px) ══════
+   When daily hero stacks single-column on narrow screens, total height
+   can exceed the old 2000px cap. max-height bumped to 4000px above.
+   These rules also tighten spacing and sizes to improve readability
+   on small screens. ═══════════════════════════════════════════════ */
+@media (max-width: 520px) {
+  .daily-hero-inner { padding: 1.5rem 1rem; }
+  .daily-greeting { font-size: 1.2rem; margin-bottom: .5rem; }
+  .daily-eyebrow { font-size: .65rem; padding: .2rem .55rem; margin-bottom: .6rem; }
+  .daily-date { font-size: .72rem; margin-bottom: .4rem; }
+  .daily-headline { font-size: clamp(1.8rem, 6vw, 2.4rem); margin-bottom: .75rem; }
+  .daily-lead { font-size: .9rem; line-height: 1.6; margin-bottom: 1rem; }
+  .daily-sec { padding: .65rem .75rem; gap: .6rem; }
+  .daily-sec-icon { font-size: 1rem; }
+  .daily-sec-label { font-size: .62rem; margin-bottom: .2rem; }
+  .daily-sec-text { font-size: .82rem; line-height: 1.55; }
+  .daily-sections { gap: .6rem; margin-bottom: 1rem; }
+  .s-card { padding: .85rem; }
+  .s-card-label { font-size: .62rem; margin-bottom: .5rem; }
+  .one-num { font-size: 2.8rem; }
+  .one-num-unit { font-size: .78rem; }
+  .one-num-ctx { font-size: .78rem; line-height: 1.5; }
+  .ffai-score { font-size: 2.8rem; }
+  .watch-item { padding: .35rem 0; }
+  .watch-time { font-size: .75rem; min-width: 56px; }
+  .watch-desc { font-size: .78rem; }
+  .hero-sidebar { gap: .75rem; }
 }
