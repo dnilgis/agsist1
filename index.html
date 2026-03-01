@@ -93,7 +93,7 @@
 </script>
 <link rel="manifest" href="/manifest.json">
 
-<!-- ── Pre-paint daily dismiss (NO document.write) ──────────────── -->
+<!-- ── Pre-paint daily dismiss ──────────────────────────────────── -->
 <script>
 (function(){
   try{
@@ -106,7 +106,9 @@
 })();
 </script>
 <style>
-  .daily-pre-dismissed .daily-full{max-height:0!important;opacity:0!important;pointer-events:none!important;overflow:hidden!important}
+  /* Pre-paint: uses grid-template-rows: 0fr to match CSS animation */
+  .daily-pre-dismissed .daily-full{grid-template-rows:0fr!important;opacity:0!important;pointer-events:none!important}
+  .daily-pre-dismissed .daily-hero-inner{overflow:hidden!important}
   .daily-pre-dismissed .daily-teaser{display:flex!important}
   .daily-pre-dismissed .daily-dismiss-row{display:none!important}
   @media(prefers-reduced-motion:reduce){
@@ -277,7 +279,7 @@
 <!-- ══ MAIN CONTENT ════════════════════════════════════════════════ -->
 <main id="main" class="main">
 
-  <!-- 3-col dashboard -->
+  <!-- 3-col dashboard (fluid auto-fit) -->
   <div class="dash-grid">
 
     <!-- CASH BIDS -->
@@ -759,7 +761,7 @@
 
 <script>
 // ═══════════════════════════════════════════════════════════════════
-// AGSIST Homepage JS — AUDIT-FIXED VERSION
+// AGSIST Homepage JS — AUDIT v3
 // ═══════════════════════════════════════════════════════════════════
 
 (function() {
@@ -870,8 +872,6 @@
   var bidsZip = document.getElementById('bids-zip');
   if (bidsZip) {
     bidsZip.addEventListener('keydown', function(e) { if (e.key === 'Enter' && typeof lookupBids === 'function') lookupBids(); });
-    bidsZip.addEventListener('focus', function() { this.style.borderColor = 'var(--gold)'; });
-    bidsZip.addEventListener('blur', function() { this.style.borderColor = 'var(--border)'; });
   }
 
   var btnAllowLoc = document.getElementById('btn-allow-loc');
@@ -886,8 +886,6 @@
   var wxZip = document.getElementById('wx-zip');
   if (wxZip) {
     wxZip.addEventListener('keydown', function(e) { if (e.key === 'Enter' && typeof loadWeatherZip === 'function') loadWeatherZip(); });
-    wxZip.addEventListener('focus', function() { this.style.borderColor = 'var(--gold)'; });
-    wxZip.addEventListener('blur', function() { this.style.borderColor = 'var(--border)'; });
   }
 
   var btnChangeLoc = document.getElementById('btn-change-loc');
