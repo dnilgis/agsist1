@@ -424,6 +424,7 @@ function updatePriceEl(id, txt, cls) {
 }
 
 function updateRangeBar(priceElId, price) {
+  // Legacy — kept for compatibility but update52WeekRange is preferred
   if (!priceElId) return;
   var priceEl = document.getElementById(priceElId);
   if (!priceEl) return;
@@ -441,6 +442,42 @@ function updateRangeBar(priceElId, price) {
   if (dot) dot.style.left = pct + '%';
 }
 
+function update52WeekRange(priceElId, price, wk52Lo, wk52Hi, isGrain) {
+  if (!priceElId) return;
+  var priceEl = document.getElementById(priceElId);
+  if (!priceEl) return;
+  var card = priceEl.closest ? priceEl.closest('.pc') : null;
+  if (!card) return;
+  var fill   = card.querySelector('.pc-range-fill');
+  var dot    = card.querySelector('.pc-range-dot');
+  var labels = card.querySelectorAll('.pc-range-labels span');
+  if (!fill || labels.length < 3) return;
+
+  var lo = parseFloat(wk52Lo);
+  var hi = parseFloat(wk52Hi);
+  if (isNaN(lo) || isNaN(hi) || hi <= lo) return;
+
+  // Update the low/high labels with real values
+  if (isGrain) {
+    labels[0].textContent = '$' + (lo / 100).toFixed(2);
+    labels[2].textContent = '$' + (hi / 100).toFixed(2);
+  } else if (hi >= 10000) {
+    labels[0].textContent = Math.round(lo).toLocaleString('en-US');
+    labels[2].textContent = Math.round(hi).toLocaleString('en-US');
+  } else if (hi >= 100) {
+    labels[0].textContent = lo.toFixed(2);
+    labels[2].textContent = hi.toFixed(2);
+  } else {
+    labels[0].textContent = lo < 1 ? lo.toFixed(4) : lo.toFixed(2);
+    labels[2].textContent = hi < 1 ? hi.toFixed(4) : hi.toFixed(2);
+  }
+
+  // Position the fill + dot
+  var pct = Math.min(100, Math.max(0, ((price - lo) / (hi - lo)) * 100));
+  fill.style.width = pct + '%';
+  if (dot) dot.style.left = pct + '%';
+}
+
 function applyPriceResult(key, q, close, open, netChg, pctChg) {
   var meta = PRICE_MAP[key];
   if (!meta) return;
@@ -448,14 +485,23 @@ function applyPriceResult(key, q, close, open, netChg, pctChg) {
   var priceTxt = fmtPrice(close, meta.dec, meta.grain, meta.suffix);
   var chgObj   = fmtChange(close, open, meta.grain, netChg, pctChg);
 
-  if (meta.priceEl) { updatePriceEl(meta.priceEl, priceTxt); updateRangeBar(meta.priceEl, close); }
+  if (meta.priceEl) { updatePriceEl(meta.priceEl, priceTxt); }
   if (meta.chgEl)   updatePriceEl(meta.chgEl, chgObj.text, chgObj.cls);
 
-  // Update prev close
+  // Update prev close + ticker symbol
   var prevEl = document.getElementById(meta.priceEl ? meta.priceEl.replace('pcp-','pcprev-') : '');
   if (prevEl && open != null) {
     var prevTxt = meta.grain ? '$' + (parseFloat(open)/100).toFixed(2) : parseFloat(open).toFixed(meta.dec) + (meta.suffix||'');
     prevEl.textContent = 'prev: ' + prevTxt + ' ' + (q && q.ticker ? q.ticker : '');
+  }
+
+  // Update 52-week range bar with real data
+  if (meta.priceEl && q) {
+    var wk52Hi = q.wk52_hi;
+    var wk52Lo = q.wk52_lo;
+    if (wk52Hi != null && wk52Lo != null) {
+      update52WeekRange(meta.priceEl, parseFloat(close), wk52Lo, wk52Hi, meta.grain);
+    }
   }
 
   // Update ticker items
@@ -600,7 +646,7 @@ function rebuildTickerLoop() {
     // Dynamic speed: ~45px/sec
     var w = single.scrollWidth || single.offsetWidth;
     if (w > 200) {
-      track.style.animationDuration = Math.max(20, Math.round(w / 25)) + 's';
+      track.style.animationDuration = Math.max(20, Math.round(w / 45)) + 's';
     }
   }, 120);
 }
