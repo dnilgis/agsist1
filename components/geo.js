@@ -646,7 +646,7 @@ function rebuildTickerLoop() {
     // Dynamic speed: ~45px/sec
     var w = single.scrollWidth || single.offsetWidth;
     if (w > 200) {
-      track.style.animationDuration = Math.max(20, Math.round(w / 45)) + 's';
+      track.style.animationDuration = Math.max(20, Math.round(w / 20)) + 's';
     }
   }, 120);
 }
