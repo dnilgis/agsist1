@@ -7,6 +7,12 @@
  *   3. Farmers First API  — FFAI Index
  *   4. Open-Meteo         — weather
  *   5. Nominatim OSM      — reverse geocoding
+ *
+ * AUDIT v4 — 2026-03-01
+ *   FIX 1: calcUrea() — added temperature gate (frozen ground was showing "Moderate")
+ *   FIX 2: uT() — returns 0 for <32°F, 3 for 32-39°F (was 5 for all <40)
+ *   FIX 3: Spray badge — distinct "Frozen" message below 32°F
+ *   FIX 4: calcUrea returns 'frozen' level for homepage display
  */
 
 // ─────────────────────────────────────────────────────────────────
@@ -65,14 +71,74 @@ function degToCompass(d) {
   return dirs[Math.round(d / 22.5) % 16];
 }
 
+// ─────────────────────────────────────────────────────────────────
+// UREA VOLATILIZATION RISK — TEMPERATURE-GATED SCORING  [FIX v4]
+// ─────────────────────────────────────────────────────────────────
+// Science: Urease enzyme (EC 3.5.1.5) hydrolyzes urea → ammonia.
+//   <32°F : enzyme inactive in frozen soil. Zero hydrolysis. Score = 0.
+//   32–39°F: near-zero activity. Negligible volatilization. Cap at 15.
+//   40–49°F: slow activity. Days to significant loss. Cap at 38.
+//   50–64°F: moderate. Stabilizer is cheap insurance.
+//   65–79°F: rapid. Q10≈2 (doubles per 18°F). Hours to loss.
+//   80°F+ : extreme. Peak enzyme efficiency.
+//
+// Temperature is a GATE, not just a weighted factor. When enzyme is
+// inactive, wind/humidity/rain cannot drive volatilization. The
+// composite is capped based on enzyme biology.
+// ─────────────────────────────────────────────────────────────────
 function calcUrea(tempF, humid, wind, popPct) {
-  function uT(f){return f<40?5:f<50?15:f<60?30:f<70?50:f<80?72:f<90?88:98;}
+  function uT(f) {
+    if (f < 32)  return 0;   // frozen — urease completely inactive
+    if (f < 40)  return 3;   // near-frozen — negligible activity
+    if (f < 50)  return 15;
+    if (f < 60)  return 30;
+    if (f < 70)  return 50;
+    if (f < 80)  return 72;
+    if (f < 90)  return 88;
+    return 98;
+  }
   function uH(h){return h<30?25:h<50?45:h<70?75:h<85?60:35;}
   function uW(w){return w<2?15:w<5?35:w<10?60:w<15?78:90;}
   function uR(p){return p>=70?10:p>=50?25:p>=30?55:85;}
-  var score = Math.round(uT(tempF)*0.35 + uH(humid)*0.25 + uW(wind)*0.20 + uR(popPct)*0.20);
-  var level = score<30?'low':score<55?'moderate':score<75?'high':'extreme';
-  return { score:score, level:level };
+
+  var raw = Math.round(uT(tempF)*0.35 + uH(humid)*0.25 + uW(wind)*0.20 + uR(popPct)*0.20);
+
+  // TEMPERATURE GATE — biology overrides arithmetic
+  var score;
+  if (tempF < 32) {
+    score = 0;                 // frozen ground — zero urease activity
+  } else if (tempF < 40) {
+    score = Math.min(raw, 15); // near-frozen — negligible
+  } else if (tempF < 50) {
+    score = Math.min(raw, 38); // cold — low-moderate ceiling
+  } else {
+    score = raw;
+  }
+
+  var level;
+  if (tempF < 32) {
+    level = 'frozen';          // distinct state — urease is OFF
+  } else if (score < 25) {
+    level = 'low';
+  } else if (score < 50) {
+    level = 'moderate';
+  } else if (score < 72) {
+    level = 'high';
+  } else {
+    level = 'extreme';
+  }
+
+  return { score: score, level: level, gated: tempF < 50 };
+}
+
+// ─────────────────────────────────────────────────────────────────
+// SPRAY CONDITIONS RATING  [FIX v4: extracted to reusable function]
+// ─────────────────────────────────────────────────────────────────
+function calcSprayRating(tempF, humid, wind) {
+  if (wind > 15 || tempF > 90 || tempF < 32 || humid < 30) return 'poor';
+  if (tempF < 40) return 'poor';
+  if (wind > 10 || tempF < 50 || tempF > 85 || humid < 40 || humid > 90 || wind < 3) return 'caution';
+  return 'good';
 }
 
 function fetchWeather(lat, lon, label) {
@@ -131,29 +197,33 @@ function fetchWeather(lat, lon, label) {
       el = document.getElementById('wx-precip');if(el) el.textContent = precip + '%';
       el = document.getElementById('wx-dew');   if(el) el.textContent = dew + '°F';
 
+      // ── Spray badge ──────────────────────── [FIX v4: frozen-specific message]
       var spray = document.getElementById('wx-spray');
       if (spray) {
-        var sprayR = (wind > 15 || tempF > 90 || tempF < 40 || humid < 30) ? 'poor'
-                   : (wind > 10 || tempF < 50 || tempF > 85 || humid < 40 || humid > 90 || wind < 3) ? 'caution'
-                   : 'good';
-        var sprayMsgs = {
-          poor: tempF < 40 ? '🚫 Do Not Spray — Too cold (' + tempF + '°F) →'
-              : wind > 15  ? '🚫 Poor Spray Conditions — Wind too high (' + wind + ' mph) →'
-              : tempF > 90 ? '🚫 Poor Spray Conditions — Too hot (' + tempF + '°F) →'
-              : '🚫 Poor Spray Conditions — Humidity too low (' + humid + '%) →',
-          caution: '⚠️ Marginal Spray Conditions — Review before applying →',
-          good: '✅ Good Spray Conditions →'
-        };
+        var sprayR = calcSprayRating(tempF, humid, wind);
+        var sprayMsg;
+        if (sprayR === 'poor') {
+          if (tempF < 32)       sprayMsg = '🚫 Do Not Spray — Frozen (' + tempF + '°F) →';
+          else if (tempF < 40)  sprayMsg = '🚫 Do Not Spray — Too cold (' + tempF + '°F) →';
+          else if (wind > 15)   sprayMsg = '🚫 Poor Spray Conditions — Wind too high (' + wind + ' mph) →';
+          else if (tempF > 90)  sprayMsg = '🚫 Poor Spray Conditions — Too hot (' + tempF + '°F) →';
+          else                  sprayMsg = '🚫 Poor Spray Conditions — Humidity too low (' + humid + '%) →';
+        } else if (sprayR === 'caution') {
+          sprayMsg = '⚠️ Marginal Spray Conditions — Review before applying →';
+        } else {
+          sprayMsg = '✅ Good Spray Conditions →';
+        }
         spray.className = 'spray-badge ' + sprayR;
-        spray.textContent = sprayMsgs[sprayR];
+        spray.textContent = sprayMsg;
       }
 
+      // ── Urea risk (temperature-gated) ────── [FIX v4: gated scoring + frozen level]
       var ureaWrap = document.getElementById('wx-urea');
       if (ureaWrap) {
         var u = calcUrea(tempF, humid, wind, precip);
-        var uPalette = {low:'62,207,110',moderate:'230,176,66',high:'240,145,58',extreme:'240,96,96'};
-        var uLabels  = {low:'Low',moderate:'Moderate',high:'High',extreme:'Extreme'};
-        var uColors  = {low:'var(--green)',moderate:'var(--gold)',high:'#f0913a',extreme:'var(--red)'};
+        var uPalette = {frozen:'91,163,224', low:'62,207,110', moderate:'230,176,66', high:'240,145,58', extreme:'240,96,96'};
+        var uLabels  = {frozen:'Frozen — N/A', low:'Low', moderate:'Moderate', high:'High', extreme:'Extreme'};
+        var uColors  = {frozen:'var(--blue)', low:'var(--green)', moderate:'var(--gold)', high:'#f0913a', extreme:'var(--red)'};
         var sEl = document.getElementById('wx-urea-score');
         var bEl = document.getElementById('wx-urea-badge');
         if (sEl) { sEl.textContent = u.score; sEl.style.color = uColors[u.level]; }
@@ -224,8 +294,9 @@ function propagateLocation(lat, lon, label) {
 }
 
 function updateWidgetPreviews(tempF, humid, wind, pop) {
-  var sprayRating = (wind>15||tempF>90||tempF<40||humid<30) ? 'poor'
-                  : (wind>10||wind<3||tempF<50||tempF>85||humid<40||humid>90) ? 'marginal' : 'good';
+  // ── Spray widget preview ──────── [FIX v4: uses shared calcSprayRating]
+  var sprayRating = calcSprayRating(tempF, humid, wind);
+  var sprayDisplay = sprayRating === 'caution' ? 'marginal' : sprayRating;
   var sprayColors  = {good:'rgba(62,207,110,.08)',marginal:'rgba(230,176,66,.08)',poor:'rgba(240,96,96,.08)'};
   var sprayBorders = {good:'rgba(62,207,110,.2)',marginal:'rgba(230,176,66,.2)',poor:'rgba(240,96,96,.2)'};
   var sprayIcons   = {good:'✅',marginal:'⚠️',poor:'🚫'};
@@ -234,25 +305,26 @@ function updateWidgetPreviews(tempF, humid, wind, pop) {
   var statusEl = document.getElementById('wsp-spray-status');
   var detailEl = document.getElementById('wsp-spray-detail');
   var wrapEl   = document.getElementById('wsp-spray');
-  if (sprayEl)  sprayEl.textContent = sprayIcons[sprayRating];
+  if (sprayEl)  sprayEl.textContent = sprayIcons[sprayDisplay];
   if (statusEl) {
-    statusEl.textContent = sprayLabels[sprayRating];
-    statusEl.style.color = {good:'var(--green)',marginal:'var(--gold)',poor:'var(--red)'}[sprayRating];
+    statusEl.textContent = sprayLabels[sprayDisplay];
+    statusEl.style.color = {good:'var(--green)',marginal:'var(--gold)',poor:'var(--red)'}[sprayDisplay];
   }
   if (detailEl) detailEl.textContent = 'Wind '+wind+' mph · '+tempF+'°F · Humidity '+humid+'%';
   if (wrapEl) {
     var inner = wrapEl.querySelector('div');
     if (inner) {
-      inner.style.background = sprayColors[sprayRating];
-      inner.style.borderColor = sprayBorders[sprayRating];
+      inner.style.background = sprayColors[sprayDisplay];
+      inner.style.borderColor = sprayBorders[sprayDisplay];
     }
   }
 
+  // ── Urea widget preview ──────── [FIX v4: gated scoring + frozen level]
   var u = calcUrea(tempF, humid, wind, pop);
-  var uPalette = {low:'62,207,110',moderate:'230,176,66',high:'240,145,58',extreme:'240,96,96'};
-  var uLbls    = {low:'Low Risk',moderate:'Moderate Risk',high:'High Risk',extreme:'Extreme Risk'};
-  var uRecs    = {low:'Favorable for application',moderate:'Consider NBPT stabilizer',high:'Use stabilizer or wait',extreme:'Do not apply without stabilizer'};
-  var uColors  = {low:'var(--green)',moderate:'var(--gold)',high:'#f0913a',extreme:'var(--red)'};
+  var uPalette = {frozen:'91,163,224', low:'62,207,110', moderate:'230,176,66', high:'240,145,58', extreme:'240,96,96'};
+  var uLbls    = {frozen:'Frozen — No Risk', low:'Low Risk', moderate:'Moderate Risk', high:'High Risk', extreme:'Extreme Risk'};
+  var uRecs    = {frozen:'Ground frozen — urease inactive', low:'Favorable for application', moderate:'Consider NBPT stabilizer', high:'Use stabilizer or wait', extreme:'Do not apply without stabilizer'};
+  var uColors  = {frozen:'var(--blue)', low:'var(--green)', moderate:'var(--gold)', high:'#f0913a', extreme:'var(--red)'};
   var uSc = document.getElementById('wsp-urea-score');
   var uBd = document.getElementById('wsp-urea-badge');
   var uRc = document.getElementById('wsp-urea-rec');
@@ -669,7 +741,6 @@ function buildMarketCard(m) {
 
 // ─────────────────────────────────────────────────────────────────
 // DAILY BRIEFING — v2 schema
-// Supports: 5 sections, the_more_you_know, daily_quote
 // ─────────────────────────────────────────────────────────────────
 function loadDailyBriefing() {
   fetch('/data/daily.json', { cache: 'no-store' })
@@ -692,7 +763,6 @@ function loadDailyBriefing() {
         el = document.getElementById('daily-number-context'); if (el) el.textContent = d.one_number.context;
       }
 
-      // v2: 5 sections
       if (d.sections && Array.isArray(d.sections)) {
         d.sections.forEach(function(sec, i) {
           el = document.getElementById('daily-section-' + (i+1) + '-title'); if (el && sec.title) el.textContent = sec.title;
@@ -700,13 +770,11 @@ function loadDailyBriefing() {
         });
       }
 
-      // v2: The More You Know
       if (d.the_more_you_know) {
         el = document.getElementById('daily-tmyk-title'); if (el && d.the_more_you_know.title) el.textContent = d.the_more_you_know.title;
         el = document.getElementById('daily-tmyk-body');  if (el && d.the_more_you_know.body)  el.textContent = d.the_more_you_know.body;
       }
 
-      // v2: Daily Quote
       if (d.daily_quote) {
         el = document.getElementById('daily-quote-text');
         if (el && d.daily_quote.text) {
@@ -720,7 +788,6 @@ function loadDailyBriefing() {
         }
       }
 
-      // Watch list
       var wl = document.getElementById('daily-watch-list');
       if (wl && d.watch_list && d.watch_list.length) {
         wl.innerHTML = '';
