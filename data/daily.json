@@ -61,10 +61,10 @@
       "desc": "New-crop corn (Dec '26) showing resilience at $4.69½ — if you haven't started pricing your 2026 corn crop, consider scaling in some sales on any push toward $4.75-4.80."
     }
   ],
-  "source_summary": "USDA, AgWeb, DTN, Reuters, Brownfield Ag, Farm Progress, Open-Meteo, Yahoo Finance",
+  "source_summary": "USDA NASS, Farm Journal, Brownfield Ag, Farm Progress, AG Daily, Beef Magazine, NOAA, Open-Meteo, Yahoo Finance",
   "generated_utc": "2026-03-02T11:00:00Z",
   "prices_fetched": "2026-03-01T00:46:00Z",
-  "news_sources": ["USDA News", "USDA ERS", "USDA FAS (Trade)", "AgWeb", "Farm Progress", "DTN Progressive", "Successful Farming", "Brownfield Ag", "Reuters Business", "World-Grain", "Beef Magazine", "Hoard's Dairyman", "Drovers (Cattle)", "NOAA Climate", "Farm Policy News", "RFD-TV Rural"],
+  "news_sources": ["USDA NASS Reports", "Farm Journal", "Farm Progress", "Brownfield Ag", "AG Daily", "All Ag News", "Agweek", "Morning Ag Clips", "Beef Magazine", "NOAA Climate", "Farm Policy News", "CropLife"],
   "weather_locations": ["Central Illinois", "Central Iowa", "Central Wisconsin", "Central South Dakota", "Southeast Nebraska"],
   "version": "2.0"
 }
