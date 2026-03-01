@@ -558,6 +558,18 @@ html {
 .ticker-track {
   will-change: transform;
 }
+#ticker-items-single, #ticker-items-clone {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.t-sep {
+  color: var(--text-muted);
+  opacity: .3;
+  font-size: .6rem;
+  padding: 0 .15rem;
+  flex-shrink: 0;
+}
 
 /* ── Reduced motion — accessibility ───────────────────────────── */
 @media (prefers-reduced-motion: reduce) {
