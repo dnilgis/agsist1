@@ -40,6 +40,10 @@ def fetch_quote(key, ticker):
         close = getattr(info, 'last_price', None) or getattr(info, 'regular_market_price', None)
         prev  = getattr(info, 'previous_close', None) or getattr(info, 'regular_market_previous_close', None)
 
+        # 52-week range
+        wk52_hi = getattr(info, 'year_high', None) or getattr(info, 'fifty_two_week_high', None)
+        wk52_lo = getattr(info, 'year_low', None) or getattr(info, 'fifty_two_week_low', None)
+
         if close is None:
             # fallback: last 2 days of history
             hist = t.history(period="2d", interval="1d")
@@ -47,22 +51,36 @@ def fetch_quote(key, ticker):
                 close = float(hist['Close'].iloc[-1])
                 prev  = float(hist['Close'].iloc[-2]) if len(hist) >= 2 else close
 
+        # fallback for 52wk: pull from 1y history
+        if (wk52_hi is None or wk52_lo is None) and close is not None:
+            try:
+                hist_1y = t.history(period="1y", interval="1d")
+                if len(hist_1y) > 0:
+                    wk52_hi = float(hist_1y['High'].max()) if wk52_hi is None else wk52_hi
+                    wk52_lo = float(hist_1y['Low'].min()) if wk52_lo is None else wk52_lo
+            except Exception:
+                pass
+
         if close is None:
             print(f"  SKIP {key} ({ticker}) — no price data")
             return None
 
-        close = round(float(close), 5)
-        prev  = round(float(prev), 5) if prev else close
-        net   = round(close - prev, 5)
-        pct   = round((net / prev * 100) if prev else 0, 4)
+        close   = round(float(close), 5)
+        prev    = round(float(prev), 5) if prev else close
+        net     = round(close - prev, 5)
+        pct     = round((net / prev * 100) if prev else 0, 4)
+        wk52_hi = round(float(wk52_hi), 4) if wk52_hi is not None else None
+        wk52_lo = round(float(wk52_lo), 4) if wk52_lo is not None else None
 
-        print(f"  OK   {key:12s} ({ticker:12s})  {close:>10.4f}  {net:+.4f}  {pct:+.2f}%")
+        print(f"  OK   {key:12s} ({ticker:12s})  {close:>10.4f}  {net:+.4f}  {pct:+.2f}%  52wk: {wk52_lo}-{wk52_hi}")
         return {
             "ticker":    ticker,
             "close":     close,
             "open":      prev,
             "netChange": net,
-            "pctChange": pct
+            "pctChange": pct,
+            "wk52_hi":   wk52_hi,
+            "wk52_lo":   wk52_lo
         }
     except Exception as e:
         print(f"  ERR  {key} ({ticker}): {e}")
