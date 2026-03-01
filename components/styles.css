@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════════
    AGSIST — Shared Stylesheet
-   Last updated: 2026-03-01 — v5: daily hero clipping fix,
-   mobile daily audit, fluid scaling, iOS Safari overflow fix
+   Last updated: 2026-03-01 — v6: 2-wide price cards on mobile,
+   safe-area-inset fix, daily hero clipping fix, mobile audit
    ═══════════════════════════════════════════════════════════════════ */
 
 /* ── Fonts ──────────────────────────────────────────────────────── */
@@ -93,7 +93,12 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  padding-env: safe-area-inset-top safe-area-inset-right safe-area-inset-bottom safe-area-inset-left;
+  /* v6 FIX: was "padding-env:" (invalid). Correct env() syntax for notch-safe spacing */
+  padding:
+    env(safe-area-inset-top)
+    env(safe-area-inset-right)
+    env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
 }
 a { color: inherit; text-decoration: none }
 img { display: block; max-width: 100% }
@@ -193,8 +198,11 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
 .ticker-track-wrap { flex: 1; overflow: hidden; position: relative; cursor: default; min-width: 0 }
 .ticker-track-wrap::before,
 .ticker-track-wrap::after { content: ''; position: absolute; top: 0; bottom: 0; width: 40px; z-index: 2; pointer-events: none }
-.ticker-track-wrap::before { left: 0; background: linear-gradient(to right, var(--surface), transparent) }
-.ticker-track-wrap::after { right: 0; background: linear-gradient(to left, var(--surface), transparent) }
+/* v6 FIX: gradient color now matches ticker strip bg instead of --surface */
+.ticker-track-wrap::before { left: 0; background: linear-gradient(to right, rgba(16,26,16,.92), transparent) }
+.ticker-track-wrap::after { right: 0; background: linear-gradient(to left, rgba(16,26,16,.92), transparent) }
+[data-theme="light"] .ticker-track-wrap::before { background: linear-gradient(to right, rgba(240,236,227,.92), transparent) }
+[data-theme="light"] .ticker-track-wrap::after { background: linear-gradient(to left, rgba(240,236,227,.92), transparent) }
 .ticker-track { display: flex; align-items: center; height: 100%; white-space: nowrap; animation: ticker-scroll 60s linear infinite; width: max-content; will-change: transform }
 .ticker-track:hover { animation-play-state: paused }
 @keyframes ticker-scroll { 0% { transform: translateX(0) } 100% { transform: translateX(-50%) } }
@@ -700,10 +708,9 @@ main.tool-main, main#main-content { max-width: 1100px; margin: 0 auto; padding: 
 /* ═══════════════════════════════════════════════════════════════════
    21. RESPONSIVE — consolidated breakpoints
    ──────────────────────────────────────────────────────────────────
-   v5: Daily hero overflow fix. Mobile daily sections compacted
-   with progressive content hiding (4th/5th sections hidden on
-   phones, quote card hidden, lead paragraph hidden on tiny screens).
-   Users see "Read Full Briefing →" CTA to get the rest on /daily.
+   v6: 2-wide price cards on ALL phone sizes. Tighter card layout
+   so two cards fit side-by-side even on 320px screens.
+   Ticker gradient color matched to strip background.
    ═══════════════════════════════════════════════════════════════════ */
 
 /* ── Large desktop → tablet landscape ──────────────────────────── */
@@ -749,11 +756,7 @@ main.tool-main, main#main-content { max-width: 1100px; margin: 0 auto; padding: 
   .t-price { font-size: .8rem }
   .t-label { font-size: .64rem }
 
-  /* ── Daily hero — v5: compact mobile layout ───────────────────
-     Tighter padding/gaps, smaller type, hide low-priority content
-     so the hero fits well on phone screens without clipping.
-     Full content available via "Read Full Briefing →" CTA.
-     ──────────────────────────────────────────────────────────── */
+  /* ── Daily hero — compact mobile layout ─────────────────────── */
   .daily-hero-inner { padding: 1.25rem .9rem }
   .daily-greeting { font-size: 1rem; margin-bottom: .35rem }
   .daily-eyebrow { font-size: .6rem; padding: .18rem .5rem; margin-bottom: .5rem }
@@ -765,7 +768,6 @@ main.tool-main, main#main-content { max-width: 1100px; margin: 0 auto; padding: 
   .daily-sec-label { font-size: .6rem; margin-bottom: .15rem }
   .daily-sec-text { font-size: .78rem; line-height: 1.45 }
   .daily-sections { gap: .5rem; margin-bottom: .8rem }
-  /* v5: Hide 4th and 5th sections on mobile — CTA links to /daily */
   .daily-sec:nth-child(n+4) { display: none }
   .daily-ctas { margin-top: .25rem }
 
@@ -775,7 +777,7 @@ main.tool-main, main#main-content { max-width: 1100px; margin: 0 auto; padding: 
   .teaser-action { font-size: .68rem }
   .teaser-badge { font-size: .55rem; padding: .15rem .4rem }
 
-  /* ── Hero sidebar — v5: compact cards on mobile ──────────────── */
+  /* ── Hero sidebar — compact cards on mobile ──────────────────── */
   .s-card { padding: .7rem .8rem }
   .s-card-label { font-size: .6rem; margin-bottom: .4rem }
   .one-num { font-size: 2.4rem }
@@ -786,13 +788,25 @@ main.tool-main, main#main-content { max-width: 1100px; margin: 0 auto; padding: 
   .watch-time { font-size: .72rem; min-width: 52px }
   .watch-desc { font-size: .75rem; line-height: 1.4 }
   .hero-sidebar { gap: .6rem }
-  /* v5: Hide quote card on mobile — lowest priority content */
   .hero-sidebar > .s-card:last-child { display: none }
 
-  /* Price cards */
-  .pc { padding: .85rem }
-  .pc-price { font-size: 1.85rem }
-  .pc-sm .pc-price { font-size: 1.5rem }
+  /* ── v6: Price cards — 2-wide on ALL phone sizes ─────────────
+     Force 2-column grid so cards sit side-by-side instead of
+     stretching full-width. Tighter padding/fonts to fit.
+     ──────────────────────────────────────────────────────────── */
+  .price-cards-grid { grid-template-columns: repeat(2, 1fr); gap: .6rem }
+  .price-cards-grid-2 { grid-template-columns: repeat(2, 1fr); gap: .6rem }
+  .pc { padding: .6rem .65rem }
+  .pc-head { margin-bottom: .4rem }
+  .pc-name { font-size: .72rem }
+  .pc-contract { font-size: .58rem; padding: .1rem .3rem }
+  .pc-price { font-size: 1.5rem }
+  .pc-sm .pc-price { font-size: 1.25rem }
+  .pc-chg-val { font-size: .72rem }
+  .pc-prev { font-size: .6rem }
+  .pc-range-labels { font-size: .55rem }
+  .pc-range-dot { width: 9px; height: 9px }
+  .pc-section-lbl { font-size: .6rem }
 
   /* Footer bottom stacks vertically on phone */
   .footer-bottom { flex-direction: column; align-items: flex-start; gap: .4rem }
@@ -800,14 +814,20 @@ main.tool-main, main#main-content { max-width: 1100px; margin: 0 auto; padding: 
 
 /* ── Very narrow (iPhone SE, 375px) ────────────────────────────── */
 @media (max-width: 380px) {
-  .price-cards-grid { grid-template-columns: 1fr }
-  .price-cards-grid-2 { grid-template-columns: 1fr }
+  /* v6: Keep 2-wide price cards even on tiny screens */
+  .price-cards-grid { grid-template-columns: repeat(2, 1fr); gap: .5rem }
+  .price-cards-grid-2 { grid-template-columns: repeat(2, 1fr); gap: .5rem }
+  .pc { padding: .5rem .55rem }
+  .pc-price { font-size: 1.3rem }
+  .pc-sm .pc-price { font-size: 1.1rem }
+  .pc-name { font-size: .65rem }
+  /* v6: Hide range bars on tiny screens to save vertical space */
+  .pc-range { display: none }
+
   .daily-headline { font-size: 1.4rem }
   .one-num { font-size: 2rem }
-  /* v5: On tiny screens, hide lead paragraph and show only 2 sections */
   .daily-lead { display: none }
   .daily-sec:nth-child(n+3) { display: none }
-  /* Hide teaser headline text, just show badge + action */
   .teaser-headline { display: none }
   .daily-teaser { padding: .4rem .75rem }
 }
