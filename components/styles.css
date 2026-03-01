@@ -616,12 +616,27 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
 
 /* ── Mobile: compact tool widgets ──────────────────────────────── */
 @media (max-width: 520px) {
+  .tool-widget-inner { padding: .55rem .7rem; gap: .5rem }
   .tool-widget-icon { font-size: 1.2rem }
   .tool-widget-status { font-size: .78rem }
   .tool-widget-detail { font-size: .65rem }
   .tool-widget-score { font-size: 1.3rem }
   .tool-widget-badge { font-size: .58rem }
-  .tool-widget-rec { font-size: .62rem }
+  .tool-widget-rec { font-size: .62rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+  .tool-widget--urea .tool-widget-top { gap: .4rem }
+}
+
+/* ── Very narrow: tighter tool widgets (iPhone SE, 375px) ──────── */
+@media (max-width: 380px) {
+  .tool-widget-inner { padding: .45rem .55rem; gap: .4rem }
+  .tool-widget-icon { font-size: 1rem }
+  .tool-widget-status { font-size: .7rem }
+  .tool-widget-detail { font-size: .6rem }
+  .tool-widget-score { font-size: 1.1rem }
+  .tool-widget-badge { font-size: .55rem; padding: .1rem .3rem }
+  .tool-widget-rec { font-size: .58rem }
+  .tool-widget-arr { font-size: .72rem }
+  .tool-widget--urea .tool-widget-top { gap: .3rem }
 }
 
 
