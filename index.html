@@ -211,24 +211,38 @@
           <p class="daily-lead" id="daily-lead">Your daily agricultural market briefing with overnight futures, grain prices, weather outlook, and USDA report previews. Updated every weekday morning by 6am CT.</p>
           <div class="daily-sections">
             <div class="daily-sec">
-              <span class="daily-sec-icon" aria-hidden="true">👁</span>
+              <span class="daily-sec-icon" aria-hidden="true">🌽</span>
               <div>
-                <div class="daily-sec-label" id="daily-section-1-title">What to Watch Today</div>
-                <div class="daily-sec-text" id="daily-section-1-body">Corn, soybean, and wheat futures analysis with key support and resistance levels for today's session.</div>
+                <div class="daily-sec-label" id="daily-section-1-title">Grains & Oilseeds</div>
+                <div class="daily-sec-text" id="daily-section-1-body">Corn, soybean, and wheat futures analysis — what moved, why, and what it means for your marketing plan.</div>
               </div>
             </div>
             <div class="daily-sec">
-              <span class="daily-sec-icon" aria-hidden="true">#️⃣</span>
+              <span class="daily-sec-icon" aria-hidden="true">🐄</span>
               <div>
-                <div class="daily-sec-label" id="daily-section-2-title">One Number to Know</div>
-                <div class="daily-sec-text" id="daily-section-2-body">The key data point driving agricultural markets today, with context on what it means for producers.</div>
+                <div class="daily-sec-label" id="daily-section-2-title">Livestock, Dairy & Feed</div>
+                <div class="daily-sec-text" id="daily-section-2-body">Cattle, hogs, dairy, and feed markets — what livestock producers and feed buyers need to know today.</div>
               </div>
             </div>
             <div class="daily-sec">
-              <span class="daily-sec-icon" aria-hidden="true">🗣</span>
+              <span class="daily-sec-icon" aria-hidden="true">🌦️</span>
               <div>
-                <div class="daily-sec-label" id="daily-section-3-title">What Farmers Are Talking About</div>
-                <div class="daily-sec-text" id="daily-section-3-body">The conversations happening across farm country — from planting intentions to input costs and policy updates.</div>
+                <div class="daily-sec-label" id="daily-section-3-title">Weather & Field Conditions</div>
+                <div class="daily-sec-text" id="daily-section-3-body">Corn Belt weather outlook, spray windows, soil conditions, and what the 5-day forecast means for your week.</div>
+              </div>
+            </div>
+            <div class="daily-sec">
+              <span class="daily-sec-icon" aria-hidden="true">⛽</span>
+              <div>
+                <div class="daily-sec-label" id="daily-section-4-title">Energy, Dollar & Outside Markets</div>
+                <div class="daily-sec-text" id="daily-section-4-body">Crude, natural gas, dollar, and equities — what they mean for input costs, ethanol margins, and exports.</div>
+              </div>
+            </div>
+            <div class="daily-sec">
+              <span class="daily-sec-icon" aria-hidden="true">🏛️</span>
+              <div>
+                <div class="daily-sec-label" id="daily-section-5-title">Policy, Trade & Big Picture</div>
+                <div class="daily-sec-text" id="daily-section-5-body">USDA reports, trade policy, global supply stories, and anything in Washington or abroad that hits your bottom line.</div>
               </div>
             </div>
           </div>
@@ -236,15 +250,6 @@
         </div>
 
         <div class="hero-sidebar">
-          <div class="s-card s-card--ffai" style="padding:.9rem 1rem">
-            <div class="s-card-label" style="margin-bottom:.6rem">📊 Farmers First Ag Index (FFAI)</div>
-            <div class="ffai-score" id="ffai-score">--</div>
-            <div class="ffai-meta">
-              <span class="ffai-prev">vs prior: <strong>--</strong></span>
-              <span class="ffai-change" id="ffai-change">--</span>
-            </div>
-            <a href="https://farmers1st.com/api/" target="_blank" rel="noopener" class="ffai-link" style="margin-top:.6rem;display:block">API &amp; methodology →</a>
-          </div>
           <div class="s-card s-card--gold">
             <div class="s-card-label">#️⃣ One Number to Know</div>
             <div class="one-num" id="daily-number-value">--</div>
@@ -257,6 +262,16 @@
               <li class="watch-item"><span class="watch-time">6:00 AM</span><span class="watch-desc">AGSIST Daily briefing publishes</span></li>
               <li class="watch-item"><span class="watch-time">8:30 AM</span><span class="watch-desc">Check for USDA weekly export data</span></li>
             </ul>
+          </div>
+          <div class="s-card" style="border-color:rgba(91,163,224,.25);background:linear-gradient(135deg,var(--surface) 0%,rgba(91,163,224,.04) 100%)">
+            <div class="s-card-label" style="color:var(--blue)">💡 The More You Know</div>
+            <div style="font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:.35rem" id="daily-tmyk-title">Did You Know?</div>
+            <div style="font-size:.82rem;line-height:1.6;color:var(--text-dim)" id="daily-tmyk-body">A new ag fact, historical tidbit, or agronomic insight appears here every weekday morning.</div>
+          </div>
+          <div class="s-card" style="border-color:rgba(230,176,66,.2);text-align:center;padding:1rem 1.2rem">
+            <div style="font-size:1.4rem;margin-bottom:.5rem;opacity:.7" aria-hidden="true">🌾</div>
+            <div style="font-size:.88rem;font-style:italic;line-height:1.65;color:var(--text-dim);margin-bottom:.5rem" id="daily-quote-text">"The farmer has to be an optimist or he wouldn't still be a farmer."</div>
+            <div style="font-size:.72rem;color:var(--text-muted);font-weight:600" id="daily-quote-attr">— Will Rogers</div>
           </div>
         </div>
 

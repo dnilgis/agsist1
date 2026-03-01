@@ -6,21 +6,34 @@
 <link rel="stylesheet" href="/components/styles.css">
 <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
-<title>AGSIST Daily — Morning Market Briefing</title>
-<meta name="description" content="Daily morning market briefing for corn, soybean, and grain farmers. Prices, weather, USDA reports, and agronomic alerts — free, weekdays by 6am CT.">
+<title>AGSIST Daily — The Morning Ag Briefing</title>
+<meta name="description" content="The morning ag briefing for every farmer, grain merchandiser, ag retailer, and rural banker in America. Prices, weather, USDA reports, livestock, policy — plain English, every weekday by 6am CT. Free.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://agsist.com/daily">
-<meta property="og:title" content="AGSIST Daily — Morning Market Briefing">
-<meta property="og:description" content="Free morning briefing for grain farmers. Corn, soybeans, wheat prices + weather + USDA — delivered by 6am CT.">
+<meta property="og:title" content="AGSIST Daily — The Morning Ag Briefing">
+<meta property="og:description" content="Plain-English morning briefing: grain prices, livestock, weather, USDA reports, trade policy. Free, every weekday by 6am CT.">
 <meta property="og:url" content="https://agsist.com/daily">
 <meta property="og:image" content="https://agsist.com/img/og/agsist.jpg">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AGSIST">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="manifest" href="/manifest.json">
-<!-- Google Analytics 4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6KXCTD5Z9H"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-6KXCTD5Z9H');</script>
+<style>
+  .daily-page-hero { text-align:center; padding:2.5rem 1rem 2rem; }
+  .daily-page-hero h1 { font-family:'Oswald',sans-serif; font-size:clamp(2rem,4vw,3rem); font-weight:700; text-transform:uppercase; color:var(--text); margin-bottom:.75rem; letter-spacing:.02em; }
+  .daily-page-hero p { font-size:1rem; color:var(--text-dim); line-height:1.75; max-width:600px; margin:0 auto 2rem; }
+  .daily-sub-box { background:var(--surface); border:1px solid var(--border-g); border-radius:14px; padding:2rem; max-width:480px; margin:0 auto 2.5rem; }
+  .daily-sub-row { display:flex; gap:.6rem; margin-bottom:.6rem; }
+  .daily-sub-row input { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:8px; padding:.65rem .9rem; color:var(--text); font-family:inherit; font-size:.92rem; }
+  .daily-sub-row button { background:var(--gold); color:#0a1a0a; border:none; border-radius:8px; padding:.65rem 1.1rem; font-weight:700; font-size:.85rem; cursor:pointer; white-space:nowrap; }
+  .daily-features { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:.85rem; margin-bottom:2rem; }
+  .daily-feat { background:var(--surface2); border:1px solid var(--border); border-radius:10px; padding:1.1rem; }
+  .daily-feat-icon { font-size:1.2rem; margin-bottom:.35rem; }
+  .daily-feat-title { font-size:.82rem; font-weight:700; color:var(--text); margin-bottom:.2rem; }
+  .daily-feat-desc { font-size:.76rem; color:var(--text-muted); line-height:1.55; }
+</style>
 </head>
 <body>
 <div id="site-header"></div>
@@ -34,59 +47,89 @@
     <div class="section-inner" style="max-width:780px">
 
       <!-- Hero -->
-      <div style="text-align:center;padding:2.5rem 1rem 2rem">
+      <div class="daily-page-hero">
         <div style="font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem">Free · Weekdays · 6am CT</div>
-        <h1 style="font-family:'Oswald',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;text-transform:uppercase;color:var(--text);margin-bottom:.75rem;letter-spacing:.02em">AGSIST Daily</h1>
-        <p style="font-size:1rem;color:var(--text-dim);line-height:1.75;max-width:560px;margin:0 auto 2rem">Your morning briefing before the open. Overnight corn &amp; soybean moves, weather that matters to your field, any USDA reports, and one agronomic note. Read in under 3 minutes.</p>
+        <h1>AGSIST Daily</h1>
+        <p>The morning briefing that every farmer, grain merchandiser, co-op employee, and ag lender in America reads before the open. Overnight prices, Corn Belt weather, livestock markets, USDA reports, trade policy, and one useful thing you probably didn't know — all in plain English, in under 3 minutes.</p>
 
         <!-- Subscribe CTA -->
-        <div style="background:var(--surface);border:1px solid var(--border-g);border-radius:14px;padding:2rem;max-width:480px;margin:0 auto 2.5rem">
-          <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Get It Delivered</div>
-          <div style="display:flex;gap:.6rem;margin-bottom:.6rem">
-            <input id="daily-email" type="email" placeholder="your@email.com"
-              style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.65rem .9rem;color:var(--text);font-family:inherit;font-size:.92rem"
-              onkeydown="if(event.key==='Enter')subscribeDailyEmail()">
-            <button onclick="subscribeDailyEmail()" style="background:var(--gold);color:#0a1a0a;border:none;border-radius:8px;padding:.65rem 1.1rem;font-weight:700;font-size:.85rem;cursor:pointer;white-space:nowrap">Subscribe →</button>
+        <div class="daily-sub-box">
+          <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.75rem">Get It Delivered Free</div>
+          <div class="daily-sub-row">
+            <input id="daily-email" type="email" placeholder="your@email.com" onkeydown="if(event.key==='Enter')subscribeDailyEmail()">
+            <button onclick="subscribeDailyEmail()">Subscribe →</button>
           </div>
-          <div id="daily-signup-msg" style="font-size:.76rem;color:var(--text-muted)">Free forever. Unsubscribe anytime. No spam — just grain markets.</div>
+          <div id="daily-signup-msg" style="font-size:.76rem;color:var(--text-muted)">Free forever. No spam. Just grain markets, weather, and one good quote to start your day.</div>
         </div>
       </div>
 
       <!-- What's in each issue -->
-      <div class="sec-head">
-        <div class="sec-title">📰 What's In Each Issue</div>
-      </div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:.85rem;margin-bottom:2rem">
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.1rem">
-          <div style="font-size:1.2rem;margin-bottom:.35rem">📈</div>
-          <div style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:.2rem">Overnight Prices</div>
-          <div style="font-size:.76rem;color:var(--text-muted);line-height:1.55">Corn, soybeans, wheat, live cattle — overnight moves with context on why</div>
+      <div class="sec-head"><div class="sec-title">📰 What You Get Every Morning</div></div>
+      <div class="daily-features">
+        <div class="daily-feat">
+          <div class="daily-feat-icon">🌽</div>
+          <div class="daily-feat-title">Grains & Oilseeds</div>
+          <div class="daily-feat-desc">Corn, beans, wheat, oats — what moved overnight, why it matters, and what to think about for your marketing plan. Real prices, plain talk.</div>
         </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.1rem">
-          <div style="font-size:1.2rem;margin-bottom:.35rem">🌩️</div>
-          <div style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:.2rem">Field Weather</div>
-          <div style="font-size:.76rem;color:var(--text-muted);line-height:1.55">Rain chances, spray windows, temperature outlook — what matters this week</div>
+        <div class="daily-feat">
+          <div class="daily-feat-icon">🐄</div>
+          <div class="daily-feat-title">Livestock, Dairy & Feed</div>
+          <div class="daily-feat-desc">Cattle, hogs, milk, and feed costs. If you're buying corn for feed or selling calves this spring, this section is for you.</div>
         </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.1rem">
-          <div style="font-size:1.2rem;margin-bottom:.35rem">📋</div>
-          <div style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:.2rem">USDA Reports</div>
-          <div style="font-size:.76rem;color:var(--text-muted);line-height:1.55">Export sales, crop progress, WASDE — day-of alerts and what to watch for</div>
+        <div class="daily-feat">
+          <div class="daily-feat-icon">🌩️</div>
+          <div class="daily-feat-title">Weather & Field Conditions</div>
+          <div class="daily-feat-desc">5 locations across the Corn Belt. Spray windows, planting outlook, soil moisture — what the forecast means for your week ahead.</div>
         </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.1rem">
-          <div style="font-size:1.2rem;margin-bottom:.35rem">🌱</div>
-          <div style="font-size:.82rem;font-weight:700;color:var(--text);margin-bottom:.2rem">Agronomic Note</div>
-          <div style="font-size:.76rem;color:var(--text-muted);line-height:1.55">One timely insight — spray timing, scouting reminders, input decisions</div>
+        <div class="daily-feat">
+          <div class="daily-feat-icon">⛽</div>
+          <div class="daily-feat-title">Energy, Dollar & Outside Markets</div>
+          <div class="daily-feat-desc">Crude, natural gas, dollar — but only in terms of what they mean for your input costs, ethanol margins, and exports.</div>
+        </div>
+        <div class="daily-feat">
+          <div class="daily-feat-icon">🏛️</div>
+          <div class="daily-feat-title">Policy, Trade & Big Picture</div>
+          <div class="daily-feat-desc">USDA reports, tariffs, farm bill, global trade — anything from Washington or abroad that hits your bottom line.</div>
+        </div>
+        <div class="daily-feat">
+          <div class="daily-feat-icon">#️⃣</div>
+          <div class="daily-feat-title">One Number to Know</div>
+          <div class="daily-feat-desc">The single most important data point of the day, with context on why it matters and what you might do about it.</div>
+        </div>
+        <div class="daily-feat">
+          <div class="daily-feat-icon">💡</div>
+          <div class="daily-feat-title">The More You Know</div>
+          <div class="daily-feat-desc">A daily ag fact, historical tidbit, or agronomic insight — the kind of thing you'd share at the co-op or the coffee shop.</div>
+        </div>
+        <div class="daily-feat">
+          <div class="daily-feat-icon">🌾</div>
+          <div class="daily-feat-title">Daily Quote</div>
+          <div class="daily-feat-desc">An inspirational thought to start your day — from farmers, ranchers, authors, and folks who understand the land.</div>
         </div>
       </div>
 
-      <!-- Archive / Previous Issues -->
-      <div class="sec-head">
-        <div class="sec-title">📁 Previous Issues</div>
+      <!-- Who reads it -->
+      <div class="sec-head"><div class="sec-title">👥 Who Reads AGSIST Daily</div></div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:2rem">
+        <div style="font-size:.88rem;color:var(--text-dim);line-height:1.75">
+          Row crop farmers making marketing decisions. Livestock producers watching feed costs. Grain merchandisers setting bids. Co-op agronomists planning field recs. Ag lenders evaluating portfolios. Retailers selling seed and chemical. Commodity traders who want the farmer's perspective. If agriculture affects your livelihood, this briefing is written for you — in language that respects your time and your intelligence.
+        </div>
       </div>
-      <div id="daily-archive" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:2rem;text-align:center;color:var(--text-muted)">
+
+      <!-- Archive -->
+      <div class="sec-head"><div class="sec-title">📁 Previous Issues</div></div>
+      <div id="daily-archive" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:2rem;text-align:center;color:var(--text-muted);margin-bottom:2rem">
         <div style="font-size:1.6rem;margin-bottom:.5rem">📬</div>
         <div style="font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:.3rem">Archive Coming Soon</div>
-        <div style="font-size:.8rem;line-height:1.6">Past issues will be browseable here once publishing begins.<br>Subscribe above to get the first one when it drops.</div>
+        <div style="font-size:.8rem;line-height:1.6">Past issues will be browseable here once publishing begins.<br>Subscribe above to be first in line.</div>
+      </div>
+
+      <!-- Sources -->
+      <div class="sec-head"><div class="sec-title">📡 Our Sources</div></div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin-bottom:2rem">
+        <div style="font-size:.82rem;color:var(--text-dim);line-height:1.75">
+          Every issue is built from 15+ sources: <strong>USDA</strong> (News, ERS, FAS trade data), <strong>AgWeb</strong>, <strong>DTN Progressive Farmer</strong>, <strong>Farm Progress</strong>, <strong>Brownfield Ag News</strong>, <strong>Successful Farming</strong>, <strong>Reuters</strong>, <strong>World-Grain</strong>, <strong>Beef Magazine</strong>, <strong>Hoard's Dairyman</strong>, <strong>Drovers</strong>, <strong>NOAA Climate</strong>, <strong>Farm Policy News</strong>, <strong>RFD-TV</strong>, <strong>Open-Meteo</strong> weather (5 Corn Belt locations), and <strong>Yahoo Finance</strong> commodity data. AI-synthesized by Claude for clarity and accuracy — every number comes from real data, never fabricated.
+        </div>
       </div>
 
     </div>
@@ -108,13 +151,13 @@ function subscribeDailyEmail() {
     headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' }
   }).then(function() {
     document.getElementById('daily-email').style.display = 'none';
-    document.querySelector('#daily-email + button').style.display = 'none';
+    document.querySelector('.daily-sub-row button').style.display = 'none';
     document.getElementById('daily-signup-msg').textContent = '✅ You\'re on the list! First issue arrives at 6am CT on the next market day.';
     document.getElementById('daily-signup-msg').style.color = 'var(--green)';
     document.getElementById('daily-signup-msg').style.fontSize = '.88rem';
     try { localStorage.setItem('agsist_subscribed','1'); } catch(e) {}
   }).catch(function() {
-    document.getElementById('daily-signup-msg').textContent = 'Signup failed — please try again or email us at info@farmers1st.com';
+    document.getElementById('daily-signup-msg').textContent = 'Signup failed — please try again or email info@farmers1st.com';
     document.getElementById('daily-signup-msg').style.color = 'var(--gold)';
   });
 }
