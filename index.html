@@ -106,17 +106,14 @@
 })();
 </script>
 <style>
-  /* Pre-paint daily dismiss — matches class set above */
   .daily-pre-dismissed .daily-full{max-height:0!important;opacity:0!important;pointer-events:none!important;overflow:hidden!important}
   .daily-pre-dismissed .daily-teaser{display:flex!important}
   .daily-pre-dismissed .daily-dismiss-row{display:none!important}
-  /* Reduced motion: stop ticker and all continuous animations */
   @media(prefers-reduced-motion:reduce){
     .ticker-track{animation:none!important}
     .live-dot,.status-dot,.daily-eyebrow-dot{animation:none!important}
     .fade-up{opacity:1!important;transform:none!important;transition:none!important}
   }
-  /* Noscript banner */
   .noscript-banner{background:var(--gold);color:#0a1a0a;text-align:center;padding:.75rem 1rem;font-size:.88rem;font-weight:600}
 </style>
 </head>
@@ -163,15 +160,11 @@
           <div class="t-sep" aria-hidden="true">·</div>
           <div class="t-item" data-sym="meal"><span class="t-label">Soy Meal</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
           <div class="t-sep" aria-hidden="true">·</div>
-          <div class="t-item" data-sym="soyoil"><span class="t-label">Soy Oil</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-          <div class="t-sep" aria-hidden="true">·</div>
           <div class="t-item" data-sym="crude"><span class="t-label">Crude WTI</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
           <div class="t-sep" aria-hidden="true">·</div>
           <div class="t-item" data-sym="natgas"><span class="t-label">Natural Gas</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
           <div class="t-sep" aria-hidden="true">·</div>
           <div class="t-item" data-sym="dollar"><span class="t-label">Dollar Index</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
-          <div class="t-sep" aria-hidden="true">·</div>
-          <div class="t-item" data-sym="treasury10"><span class="t-label">10-Yr Treasury</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
           <div class="t-sep" aria-hidden="true">·</div>
           <div class="t-item" data-sym="gold"><span class="t-label">Gold</span><span class="t-price">--</span><span class="t-chg nc">--</span></div>
           <div class="t-sep" aria-hidden="true">·</div>
@@ -212,7 +205,6 @@
           <div class="daily-eyebrow"><span class="daily-eyebrow-dot" aria-hidden="true"></span>AGSIST Daily — Today's Briefing</div>
           <div class="daily-date" id="daily-date"></div>
           <script>document.getElementById('daily-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})</script>
-          <!-- SEO-friendly fallback content instead of "Loading..." -->
           <h1 class="daily-headline" id="daily-headline">AGSIST DAILY<br>MARKET<br><span>BRIEFING</span></h1>
           <p class="daily-lead" id="daily-lead">Your daily agricultural market briefing with overnight futures, grain prices, weather outlook, and USDA report previews. Updated every weekday morning by 6am CT.</p>
           <div class="daily-sections">
@@ -400,12 +392,14 @@
       <a href="/corn-futures-prices" class="sec-all">All Charts →</a>
     </div>
 
+    <!-- ── GRAINS — KEY CONTRACTS ─────────────────────────────────── -->
     <div class="pc-section-lbl">🌽 Grains — Key Contracts</div>
     <div class="price-cards-grid">
       <div class="pc pc--highlight">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🌽</span>Corn</span><span class="pc-contract">Front Month</span></div>
         <div class="pc-price" id="pcp-corn-near">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-corn-near">--</span><span class="pc-prev">ZC=F</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-corn-near">--</span></div>
+        <div class="pc-prev" id="pcprev-corn-near">ZC=F</div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>3.84</span><span>52-Wk Range</span><span>5.42</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:36%"></div><div class="pc-range-dot" style="left:36%"></div></div>
@@ -414,7 +408,8 @@
       <div class="pc pc--highlight">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🌽</span>Corn Harvest</span><span class="pc-contract">Dec '26</span></div>
         <div class="pc-price" id="pcp-corn-dec">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-corn-dec">--</span><span class="pc-prev">ZCZ26</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-corn-dec">--</span></div>
+        <div class="pc-prev" id="pcprev-corn-dec">ZCZ26</div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>3.74</span><span>52-Wk Range</span><span>5.18</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:45%"></div><div class="pc-range-dot" style="left:45%"></div></div>
@@ -423,7 +418,8 @@
       <div class="pc pc--highlight">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🫘</span>Soybeans</span><span class="pc-contract">Front Month</span></div>
         <div class="pc-price" id="pcp-bean-near">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-bean-near">--</span><span class="pc-prev">ZS=F</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-bean-near">--</span></div>
+        <div class="pc-prev" id="pcprev-bean-near">ZS=F</div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>9.14</span><span>52-Wk Range</span><span>11.38</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:30%"></div><div class="pc-range-dot" style="left:30%"></div></div>
@@ -432,7 +428,8 @@
       <div class="pc pc--highlight">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🫘</span>Beans Harvest</span><span class="pc-contract">Nov '26</span></div>
         <div class="pc-price" id="pcp-bean-nov">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-bean-nov">--</span><span class="pc-prev">ZSX26</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-bean-nov">--</span></div>
+        <div class="pc-prev" id="pcprev-bean-nov">ZSX26</div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>9.22</span><span>52-Wk Range</span><span>11.02</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:28%"></div><div class="pc-range-dot" style="left:28%"></div></div>
@@ -440,12 +437,14 @@
       </div>
     </div>
 
+    <!-- ── MORE GRAINS, FEED & LIVESTOCK ──────────────────────────── -->
     <div class="pc-section-lbl">🌾 More Grains, Feed &amp; Livestock</div>
     <div class="price-cards-grid-2">
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🌾</span>Wheat</span><span class="pc-contract">Front Month</span></div>
         <div class="pc-price" id="pcp-wheat">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-wheat">--</span><span class="pc-prev">ZW=F</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-wheat">--</span></div>
+        <div class="pc-prev" id="pcprev-wheat">ZW=F</div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>4.88</span><span></span><span>6.44</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:48%"></div><div class="pc-range-dot" style="left:48%"></div></div>
@@ -454,7 +453,8 @@
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🌾</span>Oats</span><span class="pc-contract">Front Month</span></div>
         <div class="pc-price" id="pcp-oats">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-oats">--</span><span class="pc-prev">ZO=F</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-oats">--</span></div>
+        <div class="pc-prev" id="pcprev-oats">ZO=F</div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>2.80</span><span></span><span>4.50</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:40%"></div><div class="pc-range-dot" style="left:40%"></div></div>
@@ -463,19 +463,11 @@
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🫘</span>Soy Meal</span><span class="pc-contract">Front Month</span></div>
         <div class="pc-price" id="pcp-meal">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-meal">--</span><span class="pc-prev">ZM=F</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-meal">--</span></div>
+        <div class="pc-prev" id="pcprev-meal">ZM=F</div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>270</span><span></span><span>370</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:50%"></div><div class="pc-range-dot" style="left:50%"></div></div>
-        </div>
-      </div>
-      <div class="pc pc-sm">
-        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🫧</span>Soy Oil</span><span class="pc-contract">Front Month</span></div>
-        <div class="pc-price" id="pcp-soyoil">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-soyoil">--</span><span class="pc-prev">ZL=F</span></div>
-        <div class="pc-range">
-          <div class="pc-range-labels"><span>38.00</span><span></span><span>52.00</span></div>
-          <div class="pc-range-track"><div class="pc-range-fill" style="width:45%"></div><div class="pc-range-dot" style="left:45%"></div></div>
         </div>
       </div>
     </div>
@@ -483,7 +475,8 @@
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🐄</span>Live Cattle</span><span class="pc-contract">Front Month</span></div>
         <div class="pc-price" id="pcp-cattle">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-cattle">--</span><span class="pc-prev">LE=F</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-cattle">--</span></div>
+        <div class="pc-prev" id="pcprev-cattle">LE=F</div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>174.50</span><span></span><span>201.30</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:75%"></div><div class="pc-range-dot" style="left:75%"></div></div>
@@ -492,7 +485,8 @@
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🐄</span>Feeder Cattle</span><span class="pc-contract">Front Month</span></div>
         <div class="pc-price" id="pcp-feeders">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-feeders">--</span><span class="pc-prev">GF=F</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-feeders">--</span></div>
+        <div class="pc-prev" id="pcprev-feeders">GF=F</div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>220.00</span><span></span><span>280.00</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:50%"></div><div class="pc-range-dot" style="left:50%"></div></div>
@@ -501,7 +495,8 @@
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🐖</span>Lean Hogs</span><span class="pc-contract">Front Month</span></div>
         <div class="pc-price" id="pcp-hogs">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-hogs">--</span><span class="pc-prev">HE=F</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-hogs">--</span></div>
+        <div class="pc-prev" id="pcprev-hogs">HE=F</div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>76.80</span><span></span><span>98.40</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:53%"></div><div class="pc-range-dot" style="left:53%"></div></div>
@@ -510,7 +505,8 @@
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🥛</span>Class III Milk</span><span class="pc-contract">Front Month</span></div>
         <div class="pc-price" id="pcp-milk">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-milk">--</span><span class="pc-prev">DC=F</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-milk">--</span></div>
+        <div class="pc-prev" id="pcprev-milk">DC=F</div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>16.00</span><span></span><span>23.00</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:50%"></div><div class="pc-range-dot" style="left:50%"></div></div>
@@ -518,12 +514,14 @@
       </div>
     </div>
 
+    <!-- ── ENERGY & OUTSIDE MARKETS ───────────────────────────────── -->
     <div class="pc-section-lbl">⚡ Energy &amp; Outside Markets</div>
     <div class="price-cards-grid-2">
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🛢️</span>Crude Oil WTI</span><span class="pc-contract">Front Month</span></div>
         <div class="pc-price" id="pcp-crude">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-crude">--</span><span class="pc-prev">CL=F</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-crude">--</span></div>
+        <div class="pc-prev" id="pcprev-crude">CL=F</div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>62.10</span><span></span><span>89.40</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:35%"></div><div class="pc-range-dot" style="left:35%"></div></div>
@@ -532,7 +530,8 @@
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🔥</span>Natural Gas</span><span class="pc-contract">Front Month</span></div>
         <div class="pc-price" id="pcp-natgas">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-natgas">--</span><span class="pc-prev">NG=F</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-natgas">--</span></div>
+        <div class="pc-prev" id="pcprev-natgas">NG=F</div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>1.56</span><span></span><span>4.88</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:68%"></div><div class="pc-range-dot" style="left:68%"></div></div>
@@ -541,39 +540,21 @@
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">💵</span>Dollar Index</span><span class="pc-contract">Spot</span></div>
         <div class="pc-price" id="pcp-dollar">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-dollar">--</span><span class="pc-prev">DXY</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-dollar">--</span></div>
+        <div class="pc-prev" id="pcprev-dollar">DXY</div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>95.55</span><span></span><span>107.66</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:72%"></div><div class="pc-range-dot" style="left:72%"></div></div>
         </div>
       </div>
       <div class="pc pc-sm">
-        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🥇</span>Gold</span><span class="pc-contract">Spot</span></div>
-        <div class="pc-price" id="pcp-gold">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-gold">--</span><span class="pc-prev">GC=F</span></div>
-        <div class="pc-range">
-          <div class="pc-range-labels"><span>1,811</span><span></span><span>2,956</span></div>
-          <div class="pc-range-track"><div class="pc-range-fill" style="width:85%"></div><div class="pc-range-dot" style="left:85%"></div></div>
-        </div>
-      </div>
-    </div>
-    <div class="price-cards-grid-2" style="margin-bottom:.5rem">
-      <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">📈</span>S&amp;P 500</span><span class="pc-contract">Spot</span></div>
         <div class="pc-price" id="pcp-sp500">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-sp500">--</span><span class="pc-prev">^GSPC</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-sp500">--</span></div>
+        <div class="pc-prev" id="pcprev-sp500">^GSPC</div>
         <div class="pc-range">
           <div class="pc-range-labels"><span>4,835</span><span></span><span>6,147</span></div>
           <div class="pc-range-track"><div class="pc-range-fill" style="width:73%"></div><div class="pc-range-dot" style="left:73%"></div></div>
-        </div>
-      </div>
-      <div class="pc pc-sm">
-        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">📊</span>10-Yr Treasury</span><span class="pc-contract">Yield</span></div>
-        <div class="pc-price" id="pcp-treasury">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-treasury">--</span><span class="pc-prev">^TNX</span></div>
-        <div class="pc-range">
-          <div class="pc-range-labels"><span>3.60</span><span></span><span>4.80</span></div>
-          <div class="pc-range-track"><div class="pc-range-fill" style="width:65%"></div><div class="pc-range-dot" style="left:65%"></div></div>
         </div>
       </div>
     </div>
@@ -614,12 +595,7 @@
             <a href="/drought-monitor" style="font-size:.68rem;color:var(--text-muted)">Full Map →</a>
           </div>
           <a href="https://droughtmonitor.unl.edu" target="_blank" rel="noopener" title="View full interactive drought map">
-            <img
-              id="drought-img"
-              src=""
-              alt="US Drought Monitor — current week"
-              style="display:block;width:100%;height:auto"
-              loading="lazy">
+            <img id="drought-img" src="" alt="US Drought Monitor — current week" style="display:block;width:100%;height:auto" loading="lazy">
           </a>
           <div id="drought-fallback" class="drought-fallback" style="display:none">
             <span style="font-size:1.5rem">🏜️</span>
@@ -641,7 +617,6 @@
       <a href="/usda-calendar" class="sec-all">Full Calendar →</a>
     </div>
     <div class="cal-strip" id="usda-cal-strip" role="list" aria-label="Upcoming USDA report dates">
-      <!-- Populated by JS below — hardcoded fallback for noscript/crawlers -->
       <noscript>
         <div class="cal-card" role="listitem"><div class="cal-date">Weekly</div><div class="cal-name">Export Sales</div><div class="cal-time">8:30am ET · Thursdays</div></div>
         <div class="cal-card" role="listitem"><div class="cal-date">Monthly</div><div class="cal-name">WASDE</div><div class="cal-time">11:00am ET · Market-moving</div></div>
@@ -653,33 +628,50 @@
   <!-- ══ METALS & DIGITAL ASSETS ═══════════════════════════════════ -->
   <div class="fade-up" id="f-crypto">
     <div class="pc-section-lbl">🥇 Metals &amp; Digital Assets</div>
-    <div class="price-cards-grid-2" style="margin-bottom:2rem">
+    <div class="price-cards-grid-2" style="margin-bottom:1rem">
+      <div class="pc pc-sm">
+        <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🥇</span>Gold</span><span class="pc-contract">Spot</span></div>
+        <div class="pc-price" id="pcp-gold">--</div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-gold">--</span></div>
+        <div class="pc-prev" id="pcprev-gold">GC=F</div>
+        <div class="pc-range">
+          <div class="pc-range-labels"><span>1,811</span><span></span><span>2,956</span></div>
+          <div class="pc-range-track"><div class="pc-range-fill" style="width:85%"></div><div class="pc-range-dot" style="left:85%"></div></div>
+        </div>
+      </div>
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">🥈</span>Silver</span><span class="pc-contract">Spot</span></div>
         <div class="pc-price" id="pcp-silver">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-silver">--</span><span class="pc-prev">SI=F</span></div>
-        <div class="pc-range"><div class="pc-range-labels"><span>22.28</span><span></span><span>34.86</span></div><div class="pc-range-track"><div class="pc-range-fill" style="width:75%"></div><div class="pc-range-dot" style="left:75%"></div></div></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-silver">--</span></div>
+        <div class="pc-prev" id="pcprev-silver">SI=F</div>
+        <div class="pc-range">
+          <div class="pc-range-labels"><span>22.28</span><span></span><span>34.86</span></div>
+          <div class="pc-range-track"><div class="pc-range-fill" style="width:75%"></div><div class="pc-range-dot" style="left:75%"></div></div>
+        </div>
       </div>
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">₿</span>Bitcoin</span><span class="pc-contract">USD</span></div>
         <div class="pc-price" id="pc-btc">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-btc">--</span><span class="pc-prev">CoinGecko</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-btc">--</span></div>
+        <div class="pc-prev">CoinGecko</div>
         <div class="pc-range"><div class="pc-range-labels"><span>49,000</span><span></span><span>106,000</span></div><div class="pc-range-track"><div class="pc-range-fill" style="width:67%"></div><div class="pc-range-dot" style="left:67%"></div></div></div>
       </div>
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">◎</span>XRP</span><span class="pc-contract">USD</span></div>
         <div class="pc-price" id="pc-xrp">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-xrp">--</span><span class="pc-prev">CoinGecko</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-xrp">--</span></div>
+        <div class="pc-prev">CoinGecko</div>
         <div class="pc-range"><div class="pc-range-labels"><span>0.40</span><span></span><span>3.40</span></div><div class="pc-range-track"><div class="pc-range-fill" style="width:64%"></div><div class="pc-range-dot" style="left:64%"></div></div></div>
       </div>
+    </div>
+    <div class="price-cards-grid-2" style="margin-bottom:2rem">
       <div class="pc pc-sm">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">💎</span>Kaspa</span><span class="pc-contract">USD</span></div>
         <div class="pc-price" id="pc-kas">--</div>
-        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-kas">--</span><span class="pc-prev">CoinGecko</span></div>
+        <div class="pc-change"><span class="pc-chg-val nc" id="pcc-kas">--</span></div>
+        <div class="pc-prev">CoinGecko</div>
         <div class="pc-range"><div class="pc-range-labels"><span>0.048</span><span></span><span>0.201</span></div><div class="pc-range-track"><div class="pc-range-fill" style="width:23%"></div><div class="pc-range-dot" style="left:23%"></div></div></div>
       </div>
-    </div>
-    <div style="display:grid;grid-template-columns:1fr;gap:1rem;margin-bottom:2rem;max-width:50%">
       <div class="pc pc-sm s-card--ffai" style="display:flex;flex-direction:column">
         <div class="pc-head"><span class="pc-name"><span class="pc-name-icon">📊</span>FFAI Index</span><span class="pc-contract">Quarterly</span></div>
         <div class="ffai-score" id="ffai-score-compact" style="font-size:2.4rem;margin:.3rem 0">--</div>
@@ -705,11 +697,7 @@
     </div>
   </div>
 
-  <!-- ══ SIGNUP — Progressive 3-tier system ═══════════════════════
-       Tier 1 (visits 1–24):  Full card      #signup-full
-       Tier 2 (visits 25–49): Compact bar    #signup-compact
-       Tier 3 (visits 50+):   Slim footer    #signup-slim
-       All hidden if subscribed. ════════════════════════════════ -->
+  <!-- ══ SIGNUP — Progressive 3-tier system ═══════════════════════ -->
 
   <!-- TIER 1: Full card -->
   <div class="signup fade-up" id="signup-full" style="display:none">
@@ -772,21 +760,17 @@
 <script>
 // ═══════════════════════════════════════════════════════════════════
 // AGSIST Homepage JS — AUDIT-FIXED VERSION
-// All inline onclick/onmouseover handlers removed. All event
-// listeners attached here via addEventListener after DOM ready.
 // ═══════════════════════════════════════════════════════════════════
 
 (function() {
   'use strict';
 
-  // ── Consistent daily key (zero-padded, matches pre-paint script) ──
   var d = new Date();
   var TODAY_KEY = 'agsist-daily-' + d.getFullYear() + '-'
     + String(d.getMonth()+1).padStart(2,'0') + '-'
     + String(d.getDate()).padStart(2,'0');
   window.TODAY_KEY = TODAY_KEY;
 
-  // ── AGSIST Daily dismiss / expand ──────────────────────────────
   function dismissDaily() {
     try { localStorage.setItem(TODAY_KEY, '1'); } catch(e) {}
     var hero = document.getElementById('daily-hero');
@@ -804,7 +788,6 @@
   }
   window.expandDaily = expandDaily;
 
-  // Apply dismissed state from localStorage (supplements pre-paint)
   try {
     if (localStorage.getItem(TODAY_KEY) === '1') {
       var hero = document.getElementById('daily-hero');
@@ -812,8 +795,6 @@
     }
   } catch(e) {}
 
-  // ── Ticker: geo.js handles all price fetching + ticker rebuild ──
-  // Dynamic speed based on content width (45px/sec target)
   function setTickerSpeed() {
     var single = document.getElementById('ticker-items-single');
     var track  = document.getElementById('ticker-track');
@@ -824,44 +805,30 @@
   }
   window.addEventListener('resize', setTickerSpeed);
 
-  // ── Drought image — dynamic URL with fallback chain ───────────
   (function loadDroughtMap() {
     var img = document.getElementById('drought-img');
     var fallback = document.getElementById('drought-fallback');
     if (!img) return;
-
-    // Calculate most recent Tuesday (USDM data cutoff day)
     function getMostRecentTuesday() {
       var d = new Date();
-      var day = d.getDay(); // 0=Sun, 2=Tue
-      var diff = (day >= 2) ? (day - 2) : (day + 5); // days since last Tuesday
+      var day = d.getDay();
+      var diff = (day >= 2) ? (day - 2) : (day + 5);
       d.setDate(d.getDate() - diff);
       return d;
     }
     function fmtDate(d) {
-      return d.getFullYear()
-        + String(d.getMonth()+1).padStart(2,'0')
-        + String(d.getDate()).padStart(2,'0');
+      return d.getFullYear() + String(d.getMonth()+1).padStart(2,'0') + String(d.getDate()).padStart(2,'0');
     }
-
     var tue = getMostRecentTuesday();
     var dateStr = fmtDate(tue);
-
-    // Try date-based URL first (current pattern), then previous week, then legacy
     var urls = [
       'https://droughtmonitor.unl.edu/data/png/' + dateStr + '/' + dateStr + '_usdm.png',
-      (function() {
-        var prev = new Date(tue); prev.setDate(prev.getDate() - 7);
-        var ps = fmtDate(prev);
-        return 'https://droughtmonitor.unl.edu/data/png/' + ps + '/' + ps + '_usdm.png';
-      })(),
+      (function() { var prev = new Date(tue); prev.setDate(prev.getDate() - 7); var ps = fmtDate(prev); return 'https://droughtmonitor.unl.edu/data/png/' + ps + '/' + ps + '_usdm.png'; })(),
       'https://droughtmonitor.unl.edu/data/png/current/current_usdm.png'
     ];
-
     var attempt = 0;
     function tryNext() {
       if (attempt >= urls.length) {
-        // All failed — show fallback
         img.style.display = 'none';
         if (img.parentElement) img.parentElement.style.display = 'none';
         if (fallback) fallback.style.display = 'flex';
@@ -871,16 +838,11 @@
       attempt++;
     }
     img.addEventListener('error', tryNext);
-    img.addEventListener('load', function() {
-      // Success — make sure fallback stays hidden
-      if (fallback) fallback.style.display = 'none';
-    });
-    tryNext(); // start loading
+    img.addEventListener('load', function() { if (fallback) fallback.style.display = 'none'; });
+    tryNext();
   })();
 
-  // ── Event listeners (replacing all inline handlers) ────────────
-
-  // Daily teaser click/keyboard
+  // ── Event listeners ────────────────────────────────────────────
   var teaser = document.getElementById('daily-teaser');
   if (teaser) {
     teaser.addEventListener('click', expandDaily);
@@ -889,11 +851,9 @@
     });
   }
 
-  // Daily dismiss button
   var btnDismiss = document.getElementById('btn-dismiss-daily');
   if (btnDismiss) btnDismiss.addEventListener('click', dismissDaily);
 
-  // ── Cash Bids handlers ─────────────────────────────────────────
   var bidsEnterZip = document.getElementById('bids-enter-zip-btn');
   if (bidsEnterZip) {
     bidsEnterZip.addEventListener('click', function() {
@@ -914,7 +874,6 @@
     bidsZip.addEventListener('blur', function() { this.style.borderColor = 'var(--border)'; });
   }
 
-  // ── Weather handlers ───────────────────────────────────────────
   var btnAllowLoc = document.getElementById('btn-allow-loc');
   if (btnAllowLoc) btnAllowLoc.addEventListener('click', function() { if (typeof requestGeo === 'function') requestGeo(); });
 
@@ -934,7 +893,6 @@
   var btnChangeLoc = document.getElementById('btn-change-loc');
   if (btnChangeLoc) btnChangeLoc.addEventListener('click', function() { if (typeof showZipEntry === 'function') showZipEntry(); });
 
-  // ── Signup tabs (tier 1) ───────────────────────────────────────
   var tabEmail = document.getElementById('tab-email');
   var tabSms   = document.getElementById('tab-sms');
   var formEmail = document.getElementById('form-email');
@@ -957,7 +915,6 @@
     });
   }
 
-  // ── Scroll reveal ──────────────────────────────────────────────
   if ('IntersectionObserver' in window) {
     var io = new IntersectionObserver(function(entries) {
       entries.forEach(function(e) {
@@ -966,29 +923,20 @@
     }, {threshold: 0.08});
     document.querySelectorAll('.fade-up').forEach(function(el) { io.observe(el); });
   } else {
-    // Fallback: show everything for older browsers
     document.querySelectorAll('.fade-up').forEach(function(el) { el.classList.add('vis'); });
   }
 
-  // ── USDA Calendar (dynamic) ────────────────────────────────────
+  // ── USDA Calendar ──────────────────────────────────────────────
   function buildUSDACalendar() {
     var strip = document.getElementById('usda-cal-strip');
     if (!strip) return;
-
-    // USDA recurring report schedule
-    // Each entry: name, dayOfWeek (0=Sun, 1=Mon...), time, note, recurring
-    // Plus specific dates for major reports
     var now = new Date();
     var events = [];
-
-    // Generate next 6 upcoming report dates
     var reports = [
       { name: 'Export Sales',           weekday: 4, time: '8:30am ET',  note: '' },
       { name: 'Crop Progress',          weekday: 1, time: '4:00pm ET',  note: 'Growing season' },
       { name: 'Export Inspections',      weekday: 1, time: '11:00am ET', note: '' },
     ];
-
-    // Major fixed-date reports (add/update these periodically)
     var majors = [
       { name: 'WASDE',                 date: '2026-03-10', time: '11:00am ET', note: 'Market-moving' },
       { name: 'Crop Production',       date: '2026-03-10', time: '11:00am ET', note: '' },
@@ -999,31 +947,20 @@
       { name: 'WASDE',                 date: '2026-05-12', time: '11:00am ET', note: 'Market-moving' },
       { name: 'WASDE',                 date: '2026-06-11', time: '11:00am ET', note: 'Market-moving' },
     ];
-
-    // Add recurring weekly reports for next 4 weeks
     for (var w = 0; w < 4; w++) {
       reports.forEach(function(r) {
         var dt = new Date(now);
         dt.setDate(dt.getDate() + ((r.weekday - dt.getDay() + 7) % 7) + (w * 7));
-        if (dt < now && w === 0) dt.setDate(dt.getDate() + 7); // skip if already past this week
-        events.push({
-          name: r.name,
-          date: dt,
-          time: r.time,
-          note: r.note
-        });
+        if (dt < now && w === 0) dt.setDate(dt.getDate() + 7);
+        events.push({ name: r.name, date: dt, time: r.time, note: r.note });
       });
     }
-
-    // Add major reports
     majors.forEach(function(m) {
       var dt = new Date(m.date + 'T12:00:00');
       if (dt >= new Date(now.getFullYear(), now.getMonth(), now.getDate())) {
         events.push({ name: m.name, date: dt, time: m.time, note: m.note });
       }
     });
-
-    // Sort by date, deduplicate, take first 8
     events.sort(function(a, b) { return a.date - b.date; });
     var seen = {};
     var unique = [];
@@ -1032,30 +969,25 @@
       if (!seen[key]) { seen[key] = true; unique.push(e); }
     });
     events = unique.slice(0, 8);
-
     var todayStr = now.toDateString();
     var months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-
     strip.innerHTML = '';
     events.forEach(function(ev) {
       var card = document.createElement('div');
       var isToday = ev.date.toDateString() === todayStr;
       card.className = 'cal-card' + (isToday ? ' today' : '');
       card.setAttribute('role', 'listitem');
-
       var dateStr = months[ev.date.getMonth()] + ' ' + ev.date.getDate();
       var timeStr = ev.time + (ev.note ? ' · ' + ev.note : '');
-
       card.innerHTML = (isToday ? '<div class="cal-today-badge">Today</div>' : '<div class="cal-date">' + dateStr + '</div>')
         + '<div class="cal-name">' + ev.name + '</div>'
         + '<div class="cal-time">' + timeStr + (isToday ? ' · ' + dateStr : '') + '</div>';
-
       strip.appendChild(card);
     });
   }
   buildUSDACalendar();
 
-  // ── Signup persistence helpers ─────────────────────────────────
+  // ── Signup persistence ─────────────────────────────────────────
   function isSignedUp() {
     try {
       return document.cookie.split(';').some(function(c) { return c.trim().startsWith('agsist_subscribed='); })
@@ -1079,15 +1011,12 @@
     try { localStorage.setItem(key, '1'); } catch(e) {}
   }
 
-  // ── Progressive signup display ─────────────────────────────────
   (function() {
     try {
       var n = parseInt(localStorage.getItem('agsist_visits') || '0', 10) + 1;
       localStorage.setItem('agsist_visits', String(n));
     } catch(e) {}
-
     if (isSignedUp()) return;
-
     var visits = getVisitCount();
     if (visits <= 24) {
       var el = document.getElementById('signup-full');
@@ -1105,7 +1034,6 @@
     }
   })();
 
-  // ── Dismiss handlers ───────────────────────────────────────────
   var btnCompactDismiss = document.getElementById('btn-compact-dismiss');
   if (btnCompactDismiss) {
     btnCompactDismiss.addEventListener('click', function() {
@@ -1124,7 +1052,6 @@
     });
   }
 
-  // ── Success state helper ───────────────────────────────────────
   function showSignupSuccess(formId, icon, headline, sub) {
     var formEl = document.getElementById(formId);
     if (!formEl) return;
@@ -1136,7 +1063,6 @@
     formEl.style.display = 'block';
   }
 
-  // ── Email signup (tier 1) ──────────────────────────────────────
   var btnEmailSignup = document.getElementById('btn-email-signup');
   if (btnEmailSignup) {
     btnEmailSignup.addEventListener('click', function(e) {
@@ -1152,14 +1078,12 @@
       var tabs = document.querySelector('#signup-full .signup-tabs');
       if (tabs) tabs.style.display = 'none';
       fetch('https://formspree.io/f/xnjbwepn', {
-        method: 'POST',
-        body: JSON.stringify({name: name, email: email, source: 'homepage-email'}),
+        method: 'POST', body: JSON.stringify({name: name, email: email, source: 'homepage-email'}),
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
       }).catch(function() {});
     });
   }
 
-  // ── SMS signup (tier 1) ────────────────────────────────────────
   var btnSmsSignup = document.getElementById('btn-sms-signup');
   if (btnSmsSignup) {
     btnSmsSignup.addEventListener('click', function(e) {
@@ -1173,17 +1097,14 @@
       var tabs = document.querySelector('#signup-full .signup-tabs');
       if (tabs) tabs.style.display = 'none';
       fetch('https://formspree.io/f/xnjbwepn', {
-        method: 'POST',
-        body: JSON.stringify({phone: phone, source: 'homepage-sms'}),
+        method: 'POST', body: JSON.stringify({phone: phone, source: 'homepage-sms'}),
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
       }).catch(function() {});
     });
   }
 
-  // ── Compact signup (tier 2) ────────────────────────────────────
   var btnCompactSignup = document.getElementById('btn-compact-signup');
   var compactEmail = document.getElementById('compact-email');
-
   if (btnCompactSignup) {
     btnCompactSignup.addEventListener('click', function(e) {
       e.preventDefault();
@@ -1193,8 +1114,7 @@
       var bar = document.getElementById('signup-compact');
       if (bar) bar.innerHTML = '<span style="font-size:.88rem;color:var(--green);padding:.1rem 0">✅ You\'re subscribed! AGSIST Daily arrives by 6am CT on weekdays.</span>';
       fetch('https://formspree.io/f/xnjbwepn', {
-        method: 'POST',
-        body: JSON.stringify({email: email, source: 'homepage-compact'}),
+        method: 'POST', body: JSON.stringify({email: email, source: 'homepage-compact'}),
         headers: {'Content-Type': 'application/json', 'Accept': 'application/json'}
       }).catch(function() {});
     });
