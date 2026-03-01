@@ -1,6 +1,6 @@
 {
-  "fetched": "2026-02-28T23:56:57Z",
-  "ok": 17,
+  "fetched": "2026-03-01T00:37:13Z",
+  "ok": 19,
   "failed": 0,
   "quotes": {
     "corn": {
@@ -38,6 +38,13 @@
       "netChange": 14.5,
       "pctChange": 2.5141
     },
+    "oats": {
+      "ticker": "ZO=F",
+      "close": 315.25,
+      "open": 320.0,
+      "netChange": -4.75,
+      "pctChange": -1.4844
+    },
     "cattle": {
       "ticker": "LE=F",
       "close": 244.0,
@@ -58,6 +65,13 @@
       "open": 95.65,
       "netChange": 0.075,
       "pctChange": 0.0784
+    },
+    "milk": {
+      "ticker": "DC=F",
+      "close": 14.94,
+      "open": 17.34,
+      "netChange": -2.4,
+      "pctChange": -13.8408
     },
     "meal": {
       "ticker": "ZM=F",
