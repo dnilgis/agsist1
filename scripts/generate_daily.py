@@ -36,35 +36,31 @@ except ImportError:
 # CONFIGURATION
 # ─────────────────────────────────────────────────────────────────
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
-ANTHROPIC_MODEL   = "claude-sonnet-4-5-20250514"
+ANTHROPIC_MODEL   = "claude-sonnet-4-5-20250929"
 MAX_TOKENS        = 3500
 
 # ─────────────────────────────────────────────────────────────────
 # RSS FEEDS — 15+ sources organized by category
 # ─────────────────────────────────────────────────────────────────
 RSS_FEEDS = [
-    # ── USDA & Government ──
-    {"name": "USDA News",       "url": "https://www.usda.gov/rss/home.xml",                        "category": "government",  "max_items": 6},
-    {"name": "USDA ERS",        "url": "https://www.ers.usda.gov/rss/latest-publications.xml",     "category": "government",  "max_items": 4},
-    {"name": "USDA FAS (Trade)","url": "https://www.fas.usda.gov/rss.xml",                         "category": "government",  "max_items": 4},
+    # ── USDA & Government (NASS reports feed is reliable) ──
+    {"name": "USDA NASS Reports",  "url": "https://www.nass.usda.gov/rss/reports.xml",              "category": "government",  "max_items": 6},
     # ── Major Ag News Wires ──
-    {"name": "AgWeb",           "url": "https://www.agweb.com/rss/news",                           "category": "ag_news",     "max_items": 6},
-    {"name": "Farm Progress",   "url": "https://www.farmprogress.com/rss.xml",                     "category": "ag_news",     "max_items": 5},
-    {"name": "DTN Progressive", "url": "https://www.dtnpf.com/agriculture/web/ag/rss",             "category": "ag_news",     "max_items": 5},
-    {"name": "Successful Farming","url": "https://www.agriculture.com/feed",                        "category": "ag_news",     "max_items": 4},
-    {"name": "Brownfield Ag",   "url": "https://brownfieldagnews.com/feed/",                       "category": "ag_news",     "max_items": 5},
-    # ── Commodity & Markets ──
-    {"name": "Reuters Business","url": "https://feeds.reuters.com/reuters/businessNews",           "category": "markets",     "max_items": 5},
-    {"name": "World-Grain",     "url": "https://www.world-grain.com/ext/rss",                      "category": "markets",     "max_items": 4},
+    {"name": "Farm Journal",       "url": "https://www.farmjournal.com/feed/",                      "category": "ag_news",     "max_items": 6},
+    {"name": "Farm Progress",      "url": "https://www.farmprogress.com/rss.xml",                   "category": "ag_news",     "max_items": 6},
+    {"name": "Brownfield Ag",      "url": "https://brownfieldagnews.com/feed/",                     "category": "ag_news",     "max_items": 6},
+    {"name": "AG Daily",           "url": "https://agdaily.com/feed/",                              "category": "ag_news",     "max_items": 5},
+    {"name": "All Ag News",        "url": "https://allagnews.com/feed/",                            "category": "ag_news",     "max_items": 5},
+    {"name": "Agweek",             "url": "https://www.agweek.com/index.rss",                       "category": "ag_news",     "max_items": 5},
+    {"name": "Morning Ag Clips",   "url": "https://www.morningagclips.com/feed/",                   "category": "ag_news",     "max_items": 4},
     # ── Livestock & Dairy ──
-    {"name": "Beef Magazine",   "url": "https://www.beefmagazine.com/rss.xml",                     "category": "livestock",   "max_items": 4},
-    {"name": "Hoard's Dairyman","url": "https://hoards.com/rss.xml",                               "category": "livestock",   "max_items": 3},
-    {"name": "Drovers (Cattle)","url": "https://www.drovers.com/rss.xml",                          "category": "livestock",   "max_items": 3},
+    {"name": "Beef Magazine",      "url": "https://www.beefmagazine.com/rss.xml",                   "category": "livestock",   "max_items": 4},
     # ── Weather ──
-    {"name": "NOAA Climate",    "url": "https://www.climate.gov/rss.xml",                          "category": "weather",     "max_items": 3},
+    {"name": "NOAA Climate",       "url": "https://www.climate.gov/rss.xml",                        "category": "weather",     "max_items": 3},
     # ── Ag Policy & Trade ──
-    {"name": "Farm Policy News","url": "https://farmpolicynews.illinois.edu/feed/",                "category": "policy",      "max_items": 4},
-    {"name": "RFD-TV Rural",    "url": "https://www.rfdtv.com/rss",                                "category": "ag_news",     "max_items": 3},
+    {"name": "Farm Policy News",   "url": "https://farmpolicynews.illinois.edu/feed/",              "category": "policy",      "max_items": 5},
+    # ── Ag Retail & Inputs ──
+    {"name": "CropLife",           "url": "https://www.croplife.com/feed/",                         "category": "ag_news",     "max_items": 3},
 ]
 
 # Corn Belt weather — 5 representative locations
@@ -87,7 +83,7 @@ USDA_REPORT_KEYWORDS = [
 # ─────────────────────────────────────────────────────────────────
 # HELPERS
 # ─────────────────────────────────────────────────────────────────
-def http_get(url, timeout=12):
+def http_get(url, timeout=18):
     try:
         req = urllib_request.Request(url, headers={
             "User-Agent": "AGSIST/2.0 (agsist.com; agricultural briefing aggregator)",
