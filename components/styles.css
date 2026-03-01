@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════════════════
    AGSIST — Shared Stylesheet
-   Last updated: 2026-03-01 — Full audit: overflow fix, fluid grids,
-   showpiece polish
+   Last updated: 2026-03-01 — Full audit v4: zero-overflow guarantee,
+   fluid grids, showpiece polish, iOS Safari fixes
    ═══════════════════════════════════════════════════════════════════ */
 
 /* ── Fonts ──────────────────────────────────────────────────────── */
@@ -75,9 +75,19 @@
 
 /* ═══════════════════════════════════════════════════════════════════
    2. RESET & BASE
+   ─────────────────────────────────────────────────────────────────
+   FIX v4: overflow-wrap on html/body guarantees NO long strings
+   (URLs, ticker symbols, JSON data) can blow out any container.
    ═══════════════════════════════════════════════════════════════════ */
 *,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0 }
-html { scroll-behavior: smooth; font-size: var(--base); overflow-x: hidden }
+html {
+  scroll-behavior: smooth;
+  font-size: var(--base);
+  overflow-x: hidden;
+  /* FIX v4: prevent ANY horizontal scroll from unbreakable content */
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
 body {
   background: var(--bg);
   color: var(--text);
@@ -87,6 +97,8 @@ body {
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* FIX v4: iOS safe area padding */
+  padding-env: safe-area-inset-top safe-area-inset-right safe-area-inset-bottom safe-area-inset-left;
 }
 a { color: inherit; text-decoration: none }
 img { display: block; max-width: 100% }
@@ -204,9 +216,9 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
 /* ═══════════════════════════════════════════════════════════════════
    6. DAILY HERO
    ──────────────────────────────────────────────────────────────────
-   CRITICAL FIX: Replaced max-height animation with
-   grid-template-rows: 1fr → 0fr. This eliminates the iPhone
-   overflow bug entirely — no magic pixel value needed.
+   FIX v4: grid-template-rows dismiss + teaser overflow fix.
+   The teaser bar now wraps gracefully on narrow screens instead
+   of pushing past the viewport edge.
    ═══════════════════════════════════════════════════════════════════ */
 .daily-hero {
   position: relative; overflow: hidden;
@@ -228,20 +240,54 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
   overflow: hidden;
   max-width: 1400px; margin: 0 auto; padding: var(--sp-2xl) var(--sp-lg);
   transition: padding .35s;
+  /* FIX v4: prevent inner content from blowing out */
+  min-width: 0;
 }
 .daily-hero.dismissed .daily-hero-inner { padding-top: 0; padding-bottom: 0 }
 
-/* Teaser bar (shown when dismissed) */
-.daily-teaser { display: none; align-items: center; justify-content: space-between; gap: .75rem; padding: .45rem var(--sp-lg); cursor: pointer; transition: background .15s; border-bottom: 1px solid var(--border) }
+/* ── Teaser bar (shown when dismissed) ────────────────────────────
+   FIX v4: The teaser was the #1 iPhone overflow culprit.
+   Now uses flex-wrap + overflow:hidden safety net.
+   ───────────────────────────────────────────────────────────────── */
+.daily-teaser {
+  display: none;
+  align-items: center;
+  justify-content: space-between;
+  gap: .5rem;
+  padding: .45rem var(--sp-lg);
+  cursor: pointer;
+  transition: background .15s;
+  border-bottom: 1px solid var(--border);
+  /* FIX v4: hard overflow clamp */
+  max-width: 100%;
+  overflow: hidden;
+}
 .daily-teaser:hover { background: rgba(230,176,66,.04) }
 .daily-hero.dismissed .daily-teaser { display: flex }
-.teaser-left { display: flex; align-items: center; gap: .6rem; min-width: 0; overflow: hidden }
+.teaser-left {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  min-width: 0;
+  overflow: hidden;
+  /* FIX v4: allow shrinking so teaser-action stays visible */
+  flex: 1 1 0%;
+}
 .teaser-badge { font-size: .6rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); background: rgba(230,176,66,.1); border: 1px solid rgba(230,176,66,.2); border-radius: 20px; padding: .18rem .55rem; white-space: nowrap; flex-shrink: 0 }
-.teaser-headline { font-size: .85rem; font-weight: 600; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
+.teaser-headline { font-size: .85rem; font-weight: 600; color: var(--text-dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0 }
 .teaser-action { font-size: .75rem; color: var(--gold); white-space: nowrap; font-weight: 600; flex-shrink: 0 }
 
-/* Daily content layout */
-.daily-grid { display: grid; grid-template-columns: 1fr 360px; gap: var(--sp-xl); align-items: start; min-width: 0 }
+/* ── Daily content layout ─────────────────────────────────────────
+   FIX v4: sidebar uses minmax() instead of fixed 360px so it
+   collapses gracefully on tablets without needing a breakpoint.
+   ───────────────────────────────────────────────────────────────── */
+.daily-grid {
+  display: grid;
+  grid-template-columns: 1fr minmax(0, 360px);
+  gap: var(--sp-xl);
+  align-items: start;
+  min-width: 0;
+}
 .daily-left { min-width: 0; overflow: hidden }
 .daily-eyebrow { display: inline-flex; align-items: center; gap: .5rem; font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-bottom: .9rem; padding: .3rem .75rem; background: rgba(230,176,66,.08); border: 1px solid rgba(230,176,66,.2); border-radius: 20px }
 .daily-eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: blink 2s ease-in-out infinite }
@@ -258,17 +304,27 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
   border: 1px solid var(--border);
   border-radius: var(--r-md);
   transition: border-color .2s, box-shadow .2s;
+  /* FIX v4: prevent inner text blowout */
+  min-width: 0;
 }
 .daily-sec:hover { border-color: var(--border-g); box-shadow: var(--glow-card) }
 .daily-sec-icon { font-size: 1.25rem; flex-shrink: 0; margin-top: .1rem }
+/* FIX v4: text container must shrink with parent */
+.daily-sec > div { min-width: 0 }
 .daily-sec-label { font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-bottom: .3rem; opacity: .9 }
 .daily-sec-text { font-size: .95rem; line-height: 1.7; color: var(--text-dim) }
 .daily-sec-text strong { color: var(--text) }
 .daily-ctas { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap }
-.daily-dismiss-row { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: .75rem; padding: .9rem var(--sp-lg) 1.25rem; border-top: 1px solid var(--border); max-width: 1400px; margin: 0 auto }
+.daily-dismiss-row {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: .75rem;
+  padding: .9rem var(--sp-lg) 1.25rem;
+  border-top: 1px solid var(--border);
+  max-width: 1400px; margin: 0 auto;
+}
 .daily-hero.dismissed .daily-dismiss-row { display: none }
 
-/* Hero sidebar cards */
+/* ── Hero sidebar cards ────────────────────────────────────────── */
 .hero-sidebar { display: flex; flex-direction: column; gap: 1rem; min-width: 0 }
 .s-card {
   background: var(--surface);
@@ -277,6 +333,8 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
   padding: 1.2rem;
   position: relative; overflow: hidden;
   transition: border-color .2s, box-shadow .2s;
+  /* FIX v4 */
+  min-width: 0;
 }
 .s-card:hover { border-color: var(--border-g); box-shadow: var(--glow-card) }
 .s-card--gold { border-color: var(--border-g) }
@@ -289,10 +347,10 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
 .watch-item { display: flex; gap: .7rem; align-items: flex-start; padding: .5rem 0; border-bottom: 1px solid var(--border) }
 .watch-item:last-child { border-bottom: none; padding-bottom: 0 }
 .watch-time { color: var(--gold); font-weight: 600; font-size: .82rem; white-space: nowrap; flex-shrink: 0; min-width: 64px }
-.watch-desc { color: var(--text-dim); font-size: .88rem; line-height: 1.5 }
+.watch-desc { color: var(--text-dim); font-size: .88rem; line-height: 1.5; min-width: 0 }
 .watch-desc strong { color: var(--text) }
 
-/* Buttons */
+/* ── Buttons ───────────────────────────────────────────────────── */
 .btn-gold { display: inline-flex; align-items: center; gap: .5rem; padding: .8rem 1.6rem; background: var(--gold); color: #0a1a0a; border-radius: 7px; font-size: .9rem; font-weight: 700; border: none; transition: background .15s, transform .1s, box-shadow .15s }
 .btn-gold:hover { background: #f0c050; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(230,176,66,.25) }
 .btn-ghost { display: inline-flex; align-items: center; gap: .5rem; padding: .8rem 1.4rem; background: none; border: 1px solid var(--border-g); border-radius: 7px; font-size: .9rem; font-weight: 600; color: var(--text-dim); transition: border-color .15s, color .15s }
@@ -303,11 +361,18 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
 /* ═══════════════════════════════════════════════════════════════════
    7. MAIN LAYOUT
    ═══════════════════════════════════════════════════════════════════ */
-.main { max-width: 1400px; margin: 0 auto; padding: var(--sp-xl) var(--sp-lg); min-width: 0; overflow-x: hidden }
-.sec-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.1rem }
+.main {
+  max-width: 1400px; margin: 0 auto;
+  padding: var(--sp-xl) var(--sp-lg);
+  min-width: 0;
+  /* FIX v4: belt-and-suspenders overflow clamp */
+  overflow-x: hidden;
+  overflow-wrap: anywhere;
+}
+.sec-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.1rem; gap: .5rem }
 .sec-title { display: flex; align-items: center; gap: .6rem; font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--gold) }
 .sec-title img { height: 24px; width: 24px; object-fit: contain; border-radius: 3px; background: #f5f1e8; padding: 2px }
-.sec-all { font-size: .8rem; color: var(--text-muted); transition: color .15s }
+.sec-all { font-size: .8rem; color: var(--text-muted); transition: color .15s; white-space: nowrap; flex-shrink: 0 }
 .sec-all:hover { color: var(--gold) }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -319,7 +384,7 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
   gap: var(--sp-lg);
   margin-bottom: var(--sp-xl);
 }
-.dash-grid > .fade-up { display: flex; flex-direction: column }
+.dash-grid > .fade-up { display: flex; flex-direction: column; min-width: 0 }
 .dash-grid > .fade-up > .card { flex: 1; display: flex; flex-direction: column }
 .dash-grid > .fade-up > .card > .card-body { flex: 1; display: flex; flex-direction: column; justify-content: center }
 
@@ -332,9 +397,10 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
   border-radius: var(--r-md);
   overflow: hidden;
   transition: border-color .2s, box-shadow .2s;
+  min-width: 0;
 }
 .card:hover { border-color: var(--border-g); box-shadow: var(--glow-card) }
-.card-body { padding: 1.1rem 1.2rem }
+.card-body { padding: 1.1rem 1.2rem; min-width: 0 }
 
 /* ═══════════════════════════════════════════════════════════════════
    10. PRICE CARDS — fluid grid + showpiece hover
@@ -384,8 +450,8 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
 .pc--highlight { border-color: var(--border-g) }
 .pc--highlight::before { opacity: .5 }
 
-.pc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: .75rem; gap: .5rem }
-.pc-name { display: flex; align-items: center; gap: .5rem; font-size: .85rem; font-weight: 600; color: var(--text); min-width: 0 }
+.pc-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: .75rem; gap: .5rem; min-width: 0 }
+.pc-name { display: flex; align-items: center; gap: .5rem; font-size: .85rem; font-weight: 600; color: var(--text); min-width: 0; overflow: hidden; text-overflow: ellipsis }
 .pc-name-icon { font-size: 1rem; flex-shrink: 0 }
 .pc-contract { font-size: .68rem; color: var(--text-muted); background: var(--surface2); padding: .15rem .45rem; border-radius: 4px; white-space: nowrap; flex-shrink: 0 }
 .pc-price { font-family: 'Oswald', sans-serif; font-size: 2.4rem; font-weight: 700; color: var(--text); line-height: 1; margin-bottom: .35rem; letter-spacing: -.01em }
@@ -394,7 +460,8 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
 .pc-chg-val.up { color: var(--green) }
 .pc-chg-val.dn { color: var(--red) }
 .pc-chg-val.nc { color: var(--text-muted) }
-.pc-prev { font-size: .68rem; color: var(--text-muted); margin-top: .15rem; letter-spacing: .01em }
+/* FIX v4: prevent long ticker symbols from overflowing */
+.pc-prev { font-size: .68rem; color: var(--text-muted); margin-top: .15rem; letter-spacing: .01em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 
 /* Range bars */
 .pc-range { margin-top: .5rem; padding-top: .45rem; border-top: 1px solid var(--border) }
@@ -419,7 +486,7 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
    11. WEATHER & SPRAY
    ═══════════════════════════════════════════════════════════════════ */
 .wx-hero { display: flex; align-items: center; gap: 1rem; margin-bottom: 1rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border) }
-.wx-icon { font-size: 3rem; line-height: 1 }
+.wx-icon { font-size: 3rem; line-height: 1; flex-shrink: 0 }
 .wx-temp { font-family: 'Oswald', sans-serif; font-size: 2.6rem; font-weight: 700; color: var(--text); line-height: 1 }
 .wx-desc { font-size: .9rem; color: var(--text-dim); margin-top: .2rem }
 .wx-loc { font-size: .75rem; color: var(--text-muted) }
@@ -442,10 +509,11 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
   background: var(--surface2); border: 1px solid var(--border); border-radius: 7px;
   font-size: .9rem; color: var(--text-dim);
   transition: border-color .2s, color .15s, background .15s, box-shadow .2s;
+  min-width: 0;
 }
 .tool-btn:hover { border-color: var(--border-g); color: var(--text); background: var(--surface3); box-shadow: var(--glow-card) }
-.tool-name { display: flex; align-items: center; gap: .55rem }
-.tool-arr { color: var(--text-muted); transition: transform .2s, color .15s }
+.tool-name { display: flex; align-items: center; gap: .55rem; min-width: 0; overflow: hidden; text-overflow: ellipsis }
+.tool-arr { color: var(--text-muted); transition: transform .2s, color .15s; flex-shrink: 0 }
 .tool-btn:hover .tool-arr { transform: translateX(3px); color: var(--gold) }
 
 /* ═══════════════════════════════════════════════════════════════════
@@ -459,7 +527,7 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
 .wx-summary-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r-md); padding: 1.1rem 1.2rem; flex-shrink: 0 }
 .wx-summary-title { font-size: .68rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--gold); margin-bottom: .85rem; opacity: .9 }
 .wx-forecast-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: .5rem }
-.wx-day { text-align: center; padding: .55rem .3rem; background: var(--surface2); border-radius: 7px; border: 1px solid var(--border) }
+.wx-day { text-align: center; padding: .55rem .3rem; background: var(--surface2); border-radius: 7px; border: 1px solid var(--border); min-width: 0 }
 .wx-day-name { font-size: .64rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .3rem }
 .wx-day-icon { font-size: 1.5rem; line-height: 1; margin-bottom: .25rem }
 .wx-day-hi { font-size: .9rem; font-weight: 700; color: var(--text) }
@@ -522,11 +590,12 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
 .signup-tab.active { background: var(--gold); color: #0a1a0a }
 .signup-tab:hover:not(.active) { color: var(--text) }
 .signup-form { display: flex; flex-direction: column; gap: .8rem; max-width: 460px; margin: 0 auto }
-.signup-row { display: flex; gap: .65rem }
-.signup-input { flex: 1; padding: .8rem 1.1rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: .92rem; color: var(--text); outline: none; transition: border-color .15s }
+/* FIX v4: signup row wraps at all screen sizes when needed */
+.signup-row { display: flex; gap: .65rem; flex-wrap: wrap }
+.signup-input { flex: 1 1 160px; padding: .8rem 1.1rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: .92rem; color: var(--text); outline: none; transition: border-color .15s; min-width: 0 }
 .signup-input::placeholder { color: var(--text-muted) }
 .signup-input:focus { border-color: var(--gold) }
-.signup-submit { padding: .8rem 1.5rem; background: var(--gold); color: #0a1a0a; border: none; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: .92rem; font-weight: 700; white-space: nowrap; transition: background .15s, transform .1s, box-shadow .15s }
+.signup-submit { padding: .8rem 1.5rem; background: var(--gold); color: #0a1a0a; border: none; border-radius: 8px; font-family: 'JetBrains Mono', monospace; font-size: .92rem; font-weight: 700; white-space: nowrap; transition: background .15s, transform .1s, box-shadow .15s; flex-shrink: 0 }
 .signup-submit:hover { background: #f0c050; transform: translateY(-1px); box-shadow: 0 4px 16px rgba(230,176,66,.25) }
 .signup-disc { font-size: .75rem; color: var(--text-muted) }
 .signup-disc a { color: var(--text-dim); border-bottom: 1px solid var(--border) }
@@ -539,7 +608,7 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
 .signup--compact .scu-text { font-size: .88rem; color: var(--text-dim); flex: 1; min-width: 180px }
 .signup--compact .scu-text strong { color: var(--text) }
 .signup--compact .scu-form { display: flex; gap: .55rem; flex-shrink: 0; flex-wrap: wrap }
-.signup--compact .scu-input { padding: .6rem .9rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 7px; font-family: 'JetBrains Mono', monospace; font-size: .85rem; color: var(--text); outline: none; width: 210px; transition: border-color .15s }
+.signup--compact .scu-input { padding: .6rem .9rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 7px; font-family: 'JetBrains Mono', monospace; font-size: .85rem; color: var(--text); outline: none; width: 210px; min-width: 0; transition: border-color .15s }
 .signup--compact .scu-input::placeholder { color: var(--text-muted) }
 .signup--compact .scu-input:focus { border-color: var(--gold) }
 .signup--compact .scu-btn { padding: .6rem 1.1rem; background: var(--gold); color: #0a1a0a; border: none; border-radius: 7px; font-family: 'JetBrains Mono', monospace; font-size: .85rem; font-weight: 700; white-space: nowrap; transition: background .15s }
@@ -549,17 +618,20 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
 
 /* Tier 3: Slim line (visits 50+) */
 .signup--slim { display: flex; align-items: center; gap: .75rem; flex-wrap: wrap; margin-bottom: 1.5rem; padding: .55rem 1rem; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border) }
-.signup--slim .scs-text { font-size: .78rem; color: var(--text-muted); flex: 1 }
+.signup--slim .scs-text { font-size: .78rem; color: var(--text-muted); flex: 1; min-width: 0 }
 .signup--slim a { font-size: .78rem; color: var(--gold); white-space: nowrap }
 .signup--slim a:hover { text-decoration: underline }
 
 /* ═══════════════════════════════════════════════════════════════════
    18. FOOTER
+   ─────────────────────────────────────────────────────────────────
+   FIX v4: Removed min-width on footer-net-link that was causing
+   overflow on 375px phones.
    ═══════════════════════════════════════════════════════════════════ */
 .footer { background: var(--surface); border-top: 1px solid var(--border-g); padding: 1.5rem 0 0; transition: background .25s }
 .footer-inner { max-width: 1400px; margin: 0 auto; padding: 0 var(--sp-lg) }
 .footer-top { display: flex; justify-content: space-between; align-items: center; padding-bottom: .9rem; border-bottom: 1px solid var(--border); margin-bottom: .9rem; flex-wrap: wrap; gap: .6rem }
-.footer-brand { display: flex; align-items: center; gap: .65rem }
+.footer-brand { display: flex; align-items: center; gap: .65rem; min-width: 0 }
 .footer-brand img { height: 36px; width: auto; object-fit: contain; max-width: 210px }
 .footer-brand-text { display: flex; flex-direction: column; gap: .15rem }
 .footer-tagline { font-size: .8rem; color: var(--text-dim) }
@@ -573,15 +645,17 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
 .footer-net { padding-bottom: .9rem; border-bottom: 1px solid var(--border); margin-bottom: .8rem }
 .footer-net-lbl { font-size: .65rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .55rem; display: block }
 .footer-net-links { display: flex; gap: .55rem; flex-wrap: wrap }
-.footer-net-link { display: flex; align-items: center; gap: .65rem; padding: .45rem .9rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 7px; transition: border-color .15s; min-width: 195px }
+/* FIX v4: removed min-width:195px — was causing overflow on phones */
+.footer-net-link { display: flex; align-items: center; gap: .65rem; padding: .45rem .9rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 7px; transition: border-color .15s; flex: 1 1 180px; min-width: 0 }
 .footer-net-link:hover { border-color: var(--border-g) }
 .footer-net-link--gold { border-color: var(--border-g) }
 .footer-net-link img { flex-shrink: 0; border-radius: 3px }
-.net-text strong { font-size: .82rem; color: var(--text); font-weight: 600; display: block }
+.net-text { min-width: 0 }
+.net-text strong { font-size: .82rem; color: var(--text); font-weight: 600; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 .net-text em { font-size: .74rem; color: var(--text-dim); font-style: normal }
-.net-arr { font-size: .78rem; color: var(--text-muted); margin-left: auto }
+.net-arr { font-size: .78rem; color: var(--text-muted); margin-left: auto; flex-shrink: 0 }
 .footer-bottom { display: flex; justify-content: space-between; align-items: center; padding: .6rem 0; flex-wrap: wrap; gap: .3rem }
-.footer-legal { display: flex; align-items: center; gap: .4rem; font-size: .74rem; color: var(--text-muted) }
+.footer-legal { display: flex; align-items: center; gap: .4rem; font-size: .74rem; color: var(--text-muted); flex-wrap: wrap }
 .footer-legal a { color: var(--text-muted); transition: color .15s }
 .footer-legal a:hover { color: var(--text-dim) }
 .footer-sep { opacity: .3 }
@@ -666,6 +740,10 @@ main.tool-main, main#main-content { max-width: 1100px; margin: 0 auto; padding: 
 
 /* ═══════════════════════════════════════════════════════════════════
    21. RESPONSIVE — consolidated breakpoints
+   ─────────────────────────────────────────────────────────────────
+   FIX v4: Daily grid now collapses at 960px (was only at 1100px).
+   Footer and signup are tightened for phones. Teaser bar
+   is fully clamp-safe at every width.
    ═══════════════════════════════════════════════════════════════════ */
 
 /* ── Large desktop → tablet landscape ──────────────────────────── */
@@ -681,7 +759,7 @@ main.tool-main, main#main-content { max-width: 1100px; margin: 0 auto; padding: 
   .signup-row { flex-direction: column }
   .footer-cols { grid-template-columns: repeat(2, 1fr) }
   .footer-net-links { flex-direction: column }
-  .footer-net-link { min-width: unset }
+  .footer-net-link { flex: 1 1 100% }
   .hero-sidebar { grid-template-columns: 1fr }
   .grid-2 { grid-template-columns: 1fr }
 }
@@ -723,6 +801,12 @@ main.tool-main, main#main-content { max-width: 1100px; margin: 0 auto; padding: 
   .daily-sec-text { font-size: .82rem; line-height: 1.55 }
   .daily-sections { gap: .6rem; margin-bottom: 1rem }
 
+  /* FIX v4: Teaser bar — condense on phones */
+  .daily-teaser { padding: .4rem .9rem; gap: .4rem }
+  .teaser-headline { font-size: .75rem }
+  .teaser-action { font-size: .68rem }
+  .teaser-badge { font-size: .55rem; padding: .15rem .4rem }
+
   /* Hero sidebar */
   .s-card { padding: .85rem }
   .s-card-label { font-size: .62rem; margin-bottom: .5rem }
@@ -739,6 +823,9 @@ main.tool-main, main#main-content { max-width: 1100px; margin: 0 auto; padding: 
   .pc { padding: .85rem }
   .pc-price { font-size: 1.85rem }
   .pc-sm .pc-price { font-size: 1.5rem }
+
+  /* FIX v4: footer bottom stacks vertically on phone */
+  .footer-bottom { flex-direction: column; align-items: flex-start; gap: .4rem }
 }
 
 /* ── Very narrow (iPhone SE, 375px) ────────────────────────────── */
@@ -747,4 +834,7 @@ main.tool-main, main#main-content { max-width: 1100px; margin: 0 auto; padding: 
   .price-cards-grid-2 { grid-template-columns: 1fr }
   .daily-headline { font-size: 1.6rem }
   .one-num { font-size: 2.2rem }
+  /* FIX v4: hide teaser headline text, just show badge + action */
+  .teaser-headline { display: none }
+  .daily-teaser { padding: .4rem .75rem }
 }
