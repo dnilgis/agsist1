@@ -8,11 +8,12 @@
  *   4. Open-Meteo         — weather
  *   5. Nominatim OSM      — reverse geocoding
  *
- * AUDIT v4 — 2026-03-01
+ * AUDIT v5 — 2026-03-01
  *   FIX 1: calcUrea() — added temperature gate (frozen ground was showing "Moderate")
  *   FIX 2: uT() — returns 0 for <32°F, 3 for 32-39°F (was 5 for all <40)
  *   FIX 3: Spray badge — distinct "Frozen" message below 32°F
  *   FIX 4: calcUrea returns 'frozen' level for homepage display
+ *   NEW 5: Prediction markets v2 — categories, relevance tiers, "why it matters"
  */
 
 // ─────────────────────────────────────────────────────────────────
@@ -72,24 +73,12 @@ function degToCompass(d) {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// UREA VOLATILIZATION RISK — TEMPERATURE-GATED SCORING  [FIX v4]
-// ─────────────────────────────────────────────────────────────────
-// Science: Urease enzyme (EC 3.5.1.5) hydrolyzes urea → ammonia.
-//   <32°F : enzyme inactive in frozen soil. Zero hydrolysis. Score = 0.
-//   32–39°F: near-zero activity. Negligible volatilization. Cap at 15.
-//   40–49°F: slow activity. Days to significant loss. Cap at 38.
-//   50–64°F: moderate. Stabilizer is cheap insurance.
-//   65–79°F: rapid. Q10≈2 (doubles per 18°F). Hours to loss.
-//   80°F+ : extreme. Peak enzyme efficiency.
-//
-// Temperature is a GATE, not just a weighted factor. When enzyme is
-// inactive, wind/humidity/rain cannot drive volatilization. The
-// composite is capped based on enzyme biology.
+// UREA VOLATILIZATION RISK — TEMPERATURE-GATED SCORING
 // ─────────────────────────────────────────────────────────────────
 function calcUrea(tempF, humid, wind, popPct) {
   function uT(f) {
-    if (f < 32)  return 0;   // frozen — urease completely inactive
-    if (f < 40)  return 3;   // near-frozen — negligible activity
+    if (f < 32)  return 0;
+    if (f < 40)  return 3;
     if (f < 50)  return 15;
     if (f < 60)  return 30;
     if (f < 70)  return 50;
@@ -102,37 +91,24 @@ function calcUrea(tempF, humid, wind, popPct) {
   function uR(p){return p>=70?10:p>=50?25:p>=30?55:85;}
 
   var raw = Math.round(uT(tempF)*0.35 + uH(humid)*0.25 + uW(wind)*0.20 + uR(popPct)*0.20);
-
-  // TEMPERATURE GATE — biology overrides arithmetic
   var score;
-  if (tempF < 32) {
-    score = 0;                 // frozen ground — zero urease activity
-  } else if (tempF < 40) {
-    score = Math.min(raw, 15); // near-frozen — negligible
-  } else if (tempF < 50) {
-    score = Math.min(raw, 38); // cold — low-moderate ceiling
-  } else {
-    score = raw;
-  }
+  if (tempF < 32)      score = 0;
+  else if (tempF < 40) score = Math.min(raw, 15);
+  else if (tempF < 50) score = Math.min(raw, 38);
+  else                 score = raw;
 
   var level;
-  if (tempF < 32) {
-    level = 'frozen';          // distinct state — urease is OFF
-  } else if (score < 25) {
-    level = 'low';
-  } else if (score < 50) {
-    level = 'moderate';
-  } else if (score < 72) {
-    level = 'high';
-  } else {
-    level = 'extreme';
-  }
+  if (tempF < 32)       level = 'frozen';
+  else if (score < 25)  level = 'low';
+  else if (score < 50)  level = 'moderate';
+  else if (score < 72)  level = 'high';
+  else                  level = 'extreme';
 
   return { score: score, level: level, gated: tempF < 50 };
 }
 
 // ─────────────────────────────────────────────────────────────────
-// SPRAY CONDITIONS RATING  [FIX v4: extracted to reusable function]
+// SPRAY CONDITIONS RATING
 // ─────────────────────────────────────────────────────────────────
 function calcSprayRating(tempF, humid, wind) {
   if (wind > 15 || tempF > 90 || tempF < 32 || humid < 30) return 'poor';
@@ -197,7 +173,6 @@ function fetchWeather(lat, lon, label) {
       el = document.getElementById('wx-precip');if(el) el.textContent = precip + '%';
       el = document.getElementById('wx-dew');   if(el) el.textContent = dew + '°F';
 
-      // ── Spray badge ──────────────────────── [FIX v4: frozen-specific message]
       var spray = document.getElementById('wx-spray');
       if (spray) {
         var sprayR = calcSprayRating(tempF, humid, wind);
@@ -217,7 +192,6 @@ function fetchWeather(lat, lon, label) {
         spray.textContent = sprayMsg;
       }
 
-      // ── Urea risk (temperature-gated) ────── [FIX v4: gated scoring + frozen level]
       var ureaWrap = document.getElementById('wx-urea');
       if (ureaWrap) {
         var u = calcUrea(tempF, humid, wind, precip);
@@ -294,7 +268,6 @@ function propagateLocation(lat, lon, label) {
 }
 
 function updateWidgetPreviews(tempF, humid, wind, pop) {
-  // ── Spray widget preview ──────── [FIX v4: uses shared calcSprayRating]
   var sprayRating = calcSprayRating(tempF, humid, wind);
   var sprayDisplay = sprayRating === 'caution' ? 'marginal' : sprayRating;
   var sprayColors  = {good:'rgba(62,207,110,.08)',marginal:'rgba(230,176,66,.08)',poor:'rgba(240,96,96,.08)'};
@@ -319,7 +292,6 @@ function updateWidgetPreviews(tempF, humid, wind, pop) {
     }
   }
 
-  // ── Urea widget preview ──────── [FIX v4: gated scoring + frozen level]
   var u = calcUrea(tempF, humid, wind, pop);
   var uPalette = {frozen:'91,163,224', low:'62,207,110', moderate:'230,176,66', high:'240,145,58', extreme:'240,96,96'};
   var uLbls    = {frozen:'Frozen — No Risk', low:'Low Risk', moderate:'Moderate Risk', high:'High Risk', extreme:'Extreme Risk'};
@@ -664,78 +636,226 @@ function rebuildTickerLoop() {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// PREDICTION MARKETS (Kalshi + Polymarket)
+// PREDICTION MARKETS v2 — Categories, Relevance Tiers, Why It Matters
 // ─────────────────────────────────────────────────────────────────
+
+// Category display: icon + sort order for grouped rendering
+var MARKET_CATEGORIES = {
+  'Commodities':       { icon: '🌽', order: 1 },
+  'Trade & Policy':    { icon: '🏛️', order: 2 },
+  'Energy & Inputs':   { icon: '⛽', order: 3 },
+  'Weather & Climate': { icon: '🌦️', order: 4 },
+  'Economy & Markets': { icon: '📊', order: 5 },
+  'Infrastructure':    { icon: '🚂', order: 6 },
+  'Other':             { icon: '🎯', order: 7 }
+};
+
+// Relevance tier badges: color-coded by how directly agricultural
+var RELEVANCE_TIERS = {
+  100: { label: 'Direct Ag',      color: 'var(--green)', bg: 'rgba(62,207,110,.10)',  border: 'rgba(62,207,110,.25)' },
+  70:  { label: 'Trade & Energy', color: 'var(--gold)',  bg: 'rgba(230,176,66,.10)',  border: 'rgba(230,176,66,.25)' },
+  40:  { label: 'Macro Impact',   color: 'var(--blue)',  bg: 'rgba(91,163,224,.10)',  border: 'rgba(91,163,224,.25)' }
+};
+
+function getRelevanceTier(score) {
+  if (score >= 100) return RELEVANCE_TIERS[100];
+  if (score >= 70)  return RELEVANCE_TIERS[70];
+  return RELEVANCE_TIERS[40];
+}
+
 function fetchKalshiMarkets() {
-  var grid    = document.getElementById('kalshi-grid');
-  var loading = document.getElementById('kalshi-loading');
-  if (!grid) return;
+  var container = document.getElementById('kalshi-grid');
+  var loading   = document.getElementById('kalshi-loading');
+  if (!container) return;
+
   fetch('/data/markets.json', { cache: 'no-store' })
     .then(function(r) {
       if (!r.ok) throw new Error('markets.json ' + r.status);
       return r.json();
     })
     .then(function(data) {
-      var markets = data.markets || [];
       if (loading) loading.style.display = 'none';
-      grid.innerHTML = '';
+      container.innerHTML = '';
+
+      var markets = data.markets || [];
+      var isV2    = data.version >= 2;
+
+      // ── Empty state ──────────────────────────────────────────
       if (!markets.length) {
-        grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:1.5rem;font-size:.82rem;color:var(--text-muted)">'
-          + 'No active ag markets found right now. '
-          + '<a href="https://kalshi.com/markets" target="_blank" rel="noopener" style="color:var(--gold)">Check Kalshi →</a> · '
-          + '<a href="https://polymarket.com" target="_blank" rel="noopener" style="color:var(--gold)">Check Polymarket →</a></div>';
+        container.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:2rem 1rem">'
+          + '<div style="font-size:2rem;margin-bottom:.5rem;opacity:.6">🎯</div>'
+          + '<div style="font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:.35rem">No active prediction markets right now</div>'
+          + '<div style="font-size:.78rem;color:var(--text-muted);line-height:1.5;max-width:32rem;margin:0 auto">'
+          + 'We scan Kalshi and Polymarket every 2 hours for events that affect agriculture — tariffs, weather, trade, energy, USDA reports, and more.</div>'
+          + '<div style="margin-top:.75rem;font-size:.78rem">'
+          + '<a href="https://kalshi.com/markets" target="_blank" rel="noopener" style="color:var(--gold)">Browse Kalshi →</a>'
+          + '<span style="color:var(--text-muted);margin:0 .5rem">·</span>'
+          + '<a href="https://polymarket.com" target="_blank" rel="noopener" style="color:var(--gold)">Browse Polymarket →</a></div></div>';
         return;
       }
-      markets.forEach(function(m) { grid.appendChild(buildMarketCard(m)); });
+
+      // ── v2: Group by category, render with headers ───────────
+      if (isV2 && data.categories) {
+        var catKeys = Object.keys(data.categories).sort(function(a, b) {
+          return ((MARKET_CATEGORIES[a] || {}).order || 99) - ((MARKET_CATEGORIES[b] || {}).order || 99);
+        });
+
+        catKeys.forEach(function(catName) {
+          var catMarkets = data.categories[catName];
+          if (!catMarkets || !catMarkets.length) return;
+          var catMeta = MARKET_CATEGORIES[catName] || { icon: '🎯', order: 99 };
+
+          // Category header row
+          var header = document.createElement('div');
+          header.style.cssText = 'grid-column:1/-1;display:flex;align-items:center;gap:.45rem;'
+            + 'padding:.65rem 0 .2rem;border-bottom:1px solid var(--border);margin-bottom:.2rem';
+          header.innerHTML = '<span style="font-size:.9rem">' + catMeta.icon + '</span>'
+            + '<span style="font-size:.72rem;font-weight:700;letter-spacing:.08em;'
+            + 'text-transform:uppercase;color:var(--text-muted)">' + catName + '</span>'
+            + '<span style="font-size:.6rem;color:var(--text-muted);margin-left:auto">'
+            + catMarkets.length + ' market' + (catMarkets.length !== 1 ? 's' : '') + '</span>';
+          container.appendChild(header);
+
+          // Cards in this category
+          catMarkets.forEach(function(m) {
+            container.appendChild(buildMarketCard(m, true));
+          });
+        });
+      } else {
+        // ── v1 fallback: flat list (backward compatible) ──────
+        markets.forEach(function(m) {
+          container.appendChild(buildMarketCard(m, false));
+        });
+      }
+
+      // ── Stats + timestamp footer ─────────────────────────────
+      var footerParts = [];
+      if (data.total_found) footerParts.push(data.total_found + ' markets scanned');
+      if (data.tier_breakdown) {
+        var tb = data.tier_breakdown;
+        var bits = [];
+        if (tb.direct_ag)     bits.push(tb.direct_ag + ' direct ag');
+        if (tb.trade_energy)  bits.push(tb.trade_energy + ' trade/energy');
+        if (tb.macro_weather) bits.push(tb.macro_weather + ' macro/weather');
+        if (bits.length) footerParts.push(bits.join(', '));
+      }
       if (data.fetched) {
         var mins = Math.round((Date.now() - new Date(data.fetched).getTime()) / 60000);
-        var ageStr = mins < 2 ? 'Just updated' : mins < 60 ? mins + 'min ago' : Math.round(mins/60) + 'h ago';
-        var footer = document.createElement('div');
-        footer.style.cssText = 'grid-column:1/-1;font-size:.65rem;color:var(--text-muted);text-align:center;padding-top:.25rem';
-        footer.textContent = 'Odds from Kalshi & Polymarket · ' + ageStr + ' · Not investment advice';
-        grid.appendChild(footer);
+        var ageStr = mins < 2 ? 'Just updated' : mins < 60 ? mins + 'min ago' : Math.round(mins / 60) + 'h ago';
+        footerParts.push(ageStr);
       }
+
+      var footer = document.createElement('div');
+      footer.style.cssText = 'grid-column:1/-1;font-size:.62rem;color:var(--text-muted);'
+        + 'text-align:center;padding:.5rem 0 .15rem;border-top:1px solid var(--border);'
+        + 'margin-top:.25rem;line-height:1.6';
+      footer.innerHTML = 'Odds from Kalshi &amp; Polymarket · ' + footerParts.join(' · ')
+        + '<br>Markets shown based on agricultural relevance scoring · Not investment advice';
+      container.appendChild(footer);
     })
     .catch(function() {
       if (loading) {
-        loading.innerHTML = 'Market data updating shortly. '
+        loading.innerHTML = '<div style="font-size:1.3rem;margin-bottom:.4rem;opacity:.6">🎯</div>'
+          + 'Market data updating shortly. '
           + '<a href="https://kalshi.com/markets" target="_blank" rel="noopener" style="color:var(--gold)">Kalshi →</a> · '
           + '<a href="https://polymarket.com" target="_blank" rel="noopener" style="color:var(--gold)">Polymarket →</a>';
       }
     });
 }
 
-function buildMarketCard(m) {
+function buildMarketCard(m, showExtras) {
   var yes   = m.yes || 50;
-  var title = (m.title || '').length > 90 ? m.title.slice(0, 87) + '…' : (m.title || 'Market');
+  var title = (m.title || '').length > 100 ? m.title.slice(0, 97) + '…' : (m.title || 'Market');
+
+  // Probability-based color theming
   var color, bgAlpha, borderC;
-  if (yes >= 65)      { color = 'var(--green)'; bgAlpha = 'rgba(62,207,110,.07)';  borderC = 'rgba(62,207,110,.22)'; }
-  else if (yes <= 35) { color = 'var(--red)';   bgAlpha = 'rgba(240,96,96,.07)';   borderC = 'rgba(240,96,96,.22)';  }
-  else                { color = 'var(--gold)';  bgAlpha = 'rgba(230,176,66,.07)';  borderC = 'rgba(230,176,66,.22)'; }
+  if (yes >= 65)      { color = 'var(--green)'; bgAlpha = 'rgba(62,207,110,.05)';  borderC = 'rgba(62,207,110,.18)'; }
+  else if (yes <= 35) { color = 'var(--red)';   bgAlpha = 'rgba(240,96,96,.05)';   borderC = 'rgba(240,96,96,.18)';  }
+  else                { color = 'var(--gold)';  bgAlpha = 'rgba(230,176,66,.05)';  borderC = 'rgba(230,176,66,.18)'; }
+
   var platColor = m.platform === 'Kalshi' ? '#00b2ff' : '#9b59b6';
   var platLabel = m.platform || 'Market';
+
   var vol = m.volume_24h || 0;
-  var volStr = vol >= 1000000 ? '$' + (vol/1000000).toFixed(1) + 'M vol'
-             : vol >= 1000    ? '$' + (vol/1000).toFixed(0) + 'k vol'
-             : vol > 0        ? '$' + Math.round(vol) + ' vol' : '';
+  var volStr = vol >= 1e6  ? '$' + (vol / 1e6).toFixed(1) + 'M vol'
+             : vol >= 1e3  ? '$' + (vol / 1e3).toFixed(0) + 'k vol'
+             : vol > 0     ? '$' + Math.round(vol) + ' vol' : '';
+
+  // Relevance tier badge (v2 only)
+  var tierHTML = '';
+  if (showExtras && m.relevance) {
+    var tier = getRelevanceTier(m.relevance);
+    tierHTML = '<span style="font-size:.55rem;font-weight:700;letter-spacing:.05em;'
+      + 'text-transform:uppercase;color:' + tier.color + ';background:' + tier.bg
+      + ';border:1px solid ' + tier.border + ';border-radius:3px;padding:.08rem .3rem;'
+      + 'white-space:nowrap">' + tier.label + '</span>';
+  }
+
+  // "Why it matters" blurb (v2 only)
+  var whyHTML = '';
+  if (showExtras && m.why_it_matters) {
+    var whyText = m.why_it_matters.length > 150 ? m.why_it_matters.slice(0, 147) + '…' : m.why_it_matters;
+    whyHTML = '<div style="font-size:.7rem;line-height:1.55;color:var(--text-dim);'
+      + 'padding:.45rem .55rem;background:var(--surface2);border-radius:6px;'
+      + 'border:1px solid var(--border);margin-top:.1rem">'
+      + '<span style="font-weight:700;color:var(--text-muted);font-size:.58rem;'
+      + 'letter-spacing:.06em;text-transform:uppercase;display:block;margin-bottom:.2rem">'
+      + 'Why it matters to farmers</span>' + whyText + '</div>';
+  }
+
   var div = document.createElement('div');
   div.className = 'market-card';
   div.style.cssText = 'background:' + bgAlpha + ';border:1px solid ' + borderC
-    + ';border-radius:10px;padding:.85rem;display:flex;flex-direction:column;gap:.5rem;cursor:pointer';
+    + ';border-radius:10px;padding:.8rem;display:flex;flex-direction:column;'
+    + 'gap:.4rem;cursor:pointer;transition:border-color .15s,transform .1s';
+
+  div.onmouseenter = function() { div.style.borderColor = color; div.style.transform = 'translateY(-1px)'; };
+  div.onmouseleave = function() { div.style.borderColor = borderC; div.style.transform = 'none'; };
   div.onclick = function() { window.open(m.url, '_blank', 'noopener'); };
+
   div.innerHTML =
-    '<div style="display:flex;justify-content:space-between;align-items:center">'
-      + '<span style="font-size:.6rem;font-weight:700;letter-spacing:.08em;color:' + platColor + ';text-transform:uppercase;background:' + platColor + '15;border:1px solid ' + platColor + '35;border-radius:4px;padding:.1rem .4rem">' + platLabel + '</span>'
-      + '<span style="font-size:.62rem;color:var(--text-muted)">' + (m.time_left || '') + '</span></div>'
+    // Row 1: Platform badge + relevance tier + time remaining
+    '<div style="display:flex;align-items:center;gap:.35rem;flex-wrap:wrap">'
+      + '<span style="font-size:.57rem;font-weight:700;letter-spacing:.08em;color:' + platColor
+        + ';text-transform:uppercase;background:' + platColor + '12;border:1px solid '
+        + platColor + '30;border-radius:4px;padding:.08rem .35rem">' + platLabel + '</span>'
+      + tierHTML
+      + '<span style="font-size:.6rem;color:var(--text-muted);margin-left:auto;white-space:nowrap">'
+        + (m.time_left || '') + '</span>'
+    + '</div>'
+
+    // Row 2: Title
     + '<div style="font-size:.78rem;font-weight:600;color:var(--text);line-height:1.4">' + title + '</div>'
-    + '<div><div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.3rem">'
-      + '<span style="font-size:1.5rem;font-weight:700;color:' + color + ';font-family:\'Oswald\',sans-serif;line-height:1">' + yes + '%</span>'
-      + '<span style="font-size:.7rem;color:var(--text-muted)">YES probability</span></div>'
+
+    // Row 3: Probability + bar
+    + '<div>'
+      + '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.25rem">'
+        + '<span style="font-size:1.5rem;font-weight:700;color:' + color
+          + ';font-family:\'Oswald\',sans-serif;line-height:1">' + yes + '%</span>'
+        + '<span style="font-size:.68rem;color:var(--text-muted)">YES probability</span>'
+      + '</div>'
       + '<div style="height:5px;background:var(--border);border-radius:3px;overflow:hidden">'
-        + '<div style="height:100%;width:' + yes + '%;background:' + color + ';border-radius:3px;transition:width .4s ease"></div></div></div>'
-    + '<div style="display:flex;justify-content:space-between;align-items:center;padding-top:.3rem;border-top:1px solid var(--border);margin-top:.1rem">'
-      + '<span style="font-size:.68rem;color:var(--text-muted)">NO: ' + (m.no || (100 - yes)) + '%' + (volStr ? ' · ' + volStr : '') + '</span>'
-      + '<a href="' + m.url + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" style="font-size:.66rem;color:' + color + ';text-decoration:none;font-weight:600;border:1px solid currentColor;border-radius:4px;padding:.15rem .45rem">Trade →</a></div>';
+        + '<div style="height:100%;width:' + yes + '%;background:' + color
+          + ';border-radius:3px;transition:width .4s ease"></div>'
+      + '</div>'
+    + '</div>'
+
+    // Row 4: Why it matters (v2 only — the key new feature)
+    + whyHTML
+
+    // Row 5: Footer — NO/volume/link
+    + '<div style="display:flex;justify-content:space-between;align-items:center;'
+      + 'padding-top:.35rem;border-top:1px solid var(--border);margin-top:.1rem">'
+      + '<span style="font-size:.66rem;color:var(--text-muted)">NO: '
+        + (m.no || (100 - yes)) + '%' + (volStr ? ' · ' + volStr : '') + '</span>'
+      + '<a href="' + m.url + '" target="_blank" rel="noopener" onclick="event.stopPropagation()" '
+        + 'style="font-size:.64rem;color:' + color + ';text-decoration:none;font-weight:600;'
+        + 'border:1px solid currentColor;border-radius:4px;padding:.12rem .4rem;'
+        + 'white-space:nowrap;transition:opacity .15s"'
+        + ' onmouseenter="this.style.opacity=\'.8\'" onmouseleave="this.style.opacity=\'1\'">'
+        + 'View Market →</a>'
+    + '</div>';
+
   return div;
 }
 
