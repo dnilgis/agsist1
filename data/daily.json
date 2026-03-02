@@ -1,86 +1,86 @@
 {
-  "headline": "Wheat Surges 2.6% as Cattle Slide Sharply",
-  "subheadline": "Chicago wheat jumped nearly 15 cents while live cattle fell $4.75 amid broad livestock weakness and weekend weather uncertainty.",
-  "lead": "Chicago wheat futures closed Friday up 14.75 cents to $5.91\u00bd, the strongest single-day gain in weeks, while live cattle dropped $4.75 to $232.23 as the livestock complex took a beating. Corn added 4.75 cents to $4.48\u00bd on short covering, and soybeans tacked on 5.25 cents to $11.70\u00be. The moves set up an interesting week: grain producers face a split weather pattern with dry conditions across the western Corn Belt but 1-1.5 inches of rain coming to Illinois and parts of Indiana by midweek. For livestock producers, the sharp drop in cattle futures\u2014down 2% in one session\u2014reflects softer cash trade and profit-taking after a strong run, but margins remain historically solid for those with cattle on feed.",
-  "date": "Sunday, March 1, 2026",
-  "teaser": "Wheat rallies hard, cattle tumble, and a wet week looms for parts of the eastern Corn Belt.",
+  "headline": "Wheat Pops, Cattle Stumble, Weather Turns Messy",
+  "subheadline": "Chicago wheat rallied 15 cents while cattle shed nearly 5 bucks as rain heads into the Corn Belt this week.",
+  "lead": "Grain markets woke up Friday with wheat leading the way, jumping 2.6% to close at $5.91\u00bd on short covering and weather concerns in the Southern Plains. Corn added a nickel to finish at $4.48\u00bd, while beans tacked on a nickel to $11.70\u00be. But livestock took it on the chin \u2014 live cattle dropped $4.75 to $232.22 and feeders fell $7.60 to $351.20 as direct cash trade disappointed and the broader market wobbled. The big story for this week is weather: Central Illinois is staring down 1.6 inches of rain over the next five days, with the heaviest stuff hitting Tuesday through Thursday. That'll keep fieldwork on hold and give anyone thinking about early burndown applications something to think about.",
+  "date": "Monday, March 2, 2026",
+  "teaser": "Wheat's hot, cattle's not, and the weather's about to get interesting across the Corn Belt.",
   "one_number": {
-    "value": "14.75\u00a2",
-    "unit": "Friday's wheat futures gain\u2014biggest pop in weeks",
-    "context": "That 2.6% jump in Chicago wheat suggests short covering and weather concerns in global wheat areas. If you're sitting on old-crop wheat in the bin, this rally might be your best selling window before harvest pressure returns. Watch basis levels at your local elevator this week\u2014if they're firm, don't wait."
+    "value": "1.64",
+    "unit": "inches of rain forecast for Central Illinois in 5 days",
+    "context": "That's enough moisture to keep fields too wet for any serious fieldwork through most of this week. If you were planning burndown applications or fertilizer spreading in central Illinois, you're looking at delays until at least the weekend. Iowa stays drier with just 0.34 inches, so the window stays better out west."
   },
   "sections": [
     {
       "title": "Grains & Oilseeds",
-      "body": "Corn closed Friday at $4.48\u00bd, up 4\u00be cents, while December '26 sits at $4.69\u00bd\u2014a 21-cent carry that favors storage if you have decent basis and low carrying costs. Soybeans gained 5\u00bc cents to $11.70\u00be, but November '26 was flat at $11.28\u00bc, showing a 42-cent inverse that rewards forward selling new crop if you're confident in your yield. Wheat stole the show with a 14\u00be-cent jump to $5.91\u00bd on technical buying and short covering. The corn-bean price ratio sits at 2.61 bushels of corn to buy one bushel of beans\u2014near the five-year average, so no huge planting signal either way yet. Oats were quiet, down a quarter-cent."
+      "body": "Corn front month settled Friday at $4.48\u00bd, up a nickel, while December '26 added two cents to $4.69\u00bd \u2014 that 21-cent carry (the premium for storing corn until December) barely covers commercial storage and interest, telling you the market isn't rewarding anyone for holding on-farm right now. Soybeans closed at $11.70\u00be, up a nickel on technical buying and short covering, though meal slipped $1.60 to $320.50 per ton and oil was dead flat at 61.85 cents per pound. The soybean crush margin (what a processor makes turning beans into meal and oil) remains tight, which isn't helping demand for farmer beans. Chicago wheat was the star, jumping nearly 15 cents to $5.91\u00bd on a weaker dollar and lingering questions about Plains wheat condition after the winter's wild weather swings. The wheat rally caught some attention, but it's still a long way from pulling acres away from corn and beans this spring."
     },
     {
       "title": "Livestock, Dairy & Feed",
-      "body": "Live cattle futures got hammered Friday, down $4.75 to $232.23, and feeders dropped $7.60 to $351.20\u2014both down roughly 2% in one session as cash trade softened and funds took profits. Lean hogs were steady at 95.6 cents. Class III milk took a brutal 6% hit, down $1.06 to $16.28, squeezing dairy margins. Soybean meal eased $1.60 to $320.50, but with corn and meal both relatively soft, feed costs remain manageable for cattle feeders\u2014though that cattle price drop means the margin cushion just got thinner. If you're marketing fat cattle this week, don't panic-sell into the weekend weakness; cash trade could stabilize early in the week."
+      "body": "Cattle markets got hammered Friday as direct cash trade came in softer than expected and equity markets sold off. Live cattle fell $4.75 to $232.22 while feeders dropped $7.60 to $351.20, wiping out some of the recent rally. Hogs held steady at $95.62, barely moving, but Class III milk futures took a 6% hit, falling $1.06 to $16.28, which will sting dairy producers already dealing with tight margins. With corn at $4.48\u00bd and soybean meal at $320.50, feed costs remain manageable, but the livestock price pullback means anyone running cattle needs to watch breakevens closely. If you're thinking about forward-contracting cattle or buying feeders, this dip might create an opportunity \u2014 but only if you believe the broader demand story holds up."
     },
     {
       "title": "Weather & Field Conditions",
-      "body": "The Corn Belt is splitting this week. Central Illinois is tracking 1.49 inches of rain over the next five days, with the heaviest Wednesday-Thursday (1.37 inches combined), which will saturate soils and delay any early fieldwork. Iowa and Nebraska stay drier\u2014just 0.10-0.22 inches\u2014so northern and western areas could see some equipment moving if temps cooperate. South Dakota is warming nicely, hitting 70\u00b0 by Friday with zero precip, which is good news for early spring prep. Wisconsin stays cold and quiet. If you're planning burndown applications or early nitrogen, the window in Iowa/Nebraska is Monday-Tuesday before moisture chances rise midweek. Illinois and Indiana producers should plan shop work and maintenance through Thursday; those fields will be too wet to roll."
+      "body": "The Corn Belt splits into two worlds this week. Central Illinois catches the worst of it with 1.64 inches of rain spread across Tuesday through Thursday, with temperatures climbing into the 50s and even touching 72\u00b0F by Friday. That's fieldwork-killing moisture that'll keep equipment parked until the weekend at earliest. Central Iowa stays drier with just 0.34 inches total, mostly coming Friday, giving producers there a better window for early season work if soil temps cooperate. Wisconsin and South Dakota stay mostly dry until week's end, with South Dakota even flirting with 70\u00b0 by midweek before rain moves in Friday. Southeast Nebraska gets moderate moisture (0.39 inches) late week. Bottom line: If you're in Illinois or planning burndown applications, write off Tuesday through Thursday. Iowa and points west, you've got a narrow window early week if you need to move. This warming trend (multiple days in the 50s and 60s) will start pulling frost out of the ground where it's shallow, but don't get too excited \u2014 it's still early March."
     },
     {
       "title": "Energy, Dollar & Outside Markets",
-      "body": "Crude oil jumped $1.71 to $67.02, and natural gas gained 4 cents to $2.86\u2014both supportive for corn via ethanol and fertilizer demand, though higher energy costs add to input expenses for spring. The dollar index was flat at 97.62, which keeps US grain export-competitive. The S&P 500 dipped 0.4%, and the 10-year Treasury yield fell to 3.96%, signaling some investor caution but nothing alarming. Gold and silver rallied sharply (gold up $47, silver up $3.16), often a sign of safe-haven buying, but agricultural fundamentals remain more important than outside market jitters right now."
+      "body": "Crude oil climbed $1.71 to $67.02 per barrel, which translates to higher diesel costs for spring fieldwork and keeps pressure on anhydrous ammonia prices since natural gas (the feedstock for nitrogen fertilizer) also ticked up to $2.86. The dollar index barely moved at 97.61, staying neutral, which is good news for export competitiveness \u2014 a flat dollar doesn't make US grain any more or less attractive to foreign buyers right now. The S&P 500 slipped 30 points and the 10-year Treasury yield dropped to 3.96%, suggesting some economic nervousness, but for agriculture the bigger story is energy: every dollar crude rallies adds about 2-3 cents per gallon to your diesel bill, and you'll be burning plenty of it once planting starts."
     },
     {
       "title": "Policy, Trade & Big Picture",
-      "body": "USDA released several reports Friday: trout production down 6%, egg products up 8%, and the January Agricultural Prices index down 3.9% from last year\u2014a reminder that farm-level price pressure continues. The Cold Storage Annual Summary hit the wire, though details weren't market-moving. More significant: Farm Bureau data shows Chapter 12 farm bankruptcies jumped 46% in 2025 to 315 filings, up from 216 in 2024, a stark reminder of margin stress across the sector. USDA Secretary Brooke Rollins announced plans to sell the department's flagship South Building in Washington as part of cost-cutting, though that's symbolic more than operational. Dicamba is back for 2026 with tighter compliance\u2014if you plan to use over-the-top applications, get trained early and communicate with neighbors now to avoid drift issues."
+      "body": "USDA releases the Cold Storage Annual Summary this week, which will give a comprehensive look at frozen meat, poultry, and food stocks \u2014 important for understanding protein supply pipelines and cold chain dynamics. Separately, USDA Secretary Brooke Rollins outlined five priorities at Commodity Classic and announced the department is selling its massive South Building in Washington as part of cost-cutting efforts. On the sobering side, Farm Bureau data shows farm bankruptcies jumped 46% in 2025, hitting 315 Chapter 12 filings compared to 216 the prior year \u2014 a clear signal financial stress is building across rural America, especially for operations carrying heavy debt loads into a lower commodity price environment. That bankruptcy number is a wake-up call for lenders and producers alike to stress-test cashflow assumptions for 2026."
     }
   ],
   "the_more_you_know": {
-    "title": "Why Wheat Pops on Fridays",
-    "body": "Wheat futures often see exaggerated moves on Friday afternoons due to 'weekend risk' and short covering. Speculators don't want to hold short positions over the weekend when global weather or geopolitical news could break, so they buy back contracts to flatten exposure. That's part of why Friday's 14\u00be-cent wheat rally was so sharp\u2014funds were caught leaning short and scrambled to cover. It's a pattern worth watching if you're timing grain sales."
+    "title": "Why March Weather Lies to Farmers",
+    "body": "March in the Corn Belt is famous for teasing farmers with warm spells that make you think about planting, then slapping you back to reality with a late freeze. Soil temperature matters more than air temperature \u2014 corn needs sustained 50\u00b0F soil temps at 2-inch depth to germinate reliably. A 70\u00b0F day in early March warms the air but doesn't mean the ground is ready. Old-timers say wait until the oak leaves are the size of a squirrel's ear, which typically coincides with stable soil temps. Planting into cold, wet soil invites poor stands, seedling diseases, and uneven emergence that costs yield all season long. Patience in March pays dividends in November."
   },
   "daily_quote": {
     "text": "The farmer has to be an optimist or he wouldn't still be a farmer.",
-    "attribution": "Will Rogers, humorist and ranch owner"
+    "attribution": "Will Rogers, humorist and ranch kid from Oklahoma"
   },
   "watch_list": [
     {
       "time": "Today",
-      "desc": "Weekend weather models for Argentina and Brazil\u2014any shifts in South American moisture forecasts could move soybeans Monday morning."
+      "desc": "Weather radar across Illinois \u2014 if the Tuesday-Thursday rain system looks heavier than forecast, burndown plans get pushed even further back."
     },
     {
       "time": "This Week",
-      "desc": "Cash cattle trade Tuesday-Wednesday. After Friday's futures drop, watch whether packers press bids lower or if feedlots hold firm on prices."
+      "desc": "USDA Cold Storage Annual Summary release \u2014 watch beef and pork stocks for signals on protein supply and meat prices heading into spring."
     },
     {
       "time": "On the Horizon",
-      "desc": "March 15 is the crop insurance sales closing deadline for spring crops. If you haven't updated your APH yields or coverage levels, you're out of time in two weeks."
+      "desc": "March 15 is the crop insurance sales closing deadline \u2014 if you haven't reviewed your APH yields, coverage levels, or enterprise units, you're running out of time."
     },
     {
       "time": "Risk to Watch",
-      "desc": "A stronger-than-expected South American soybean harvest could pressure US bean prices through spring. Brazil's harvest is 40% complete and yields are solid\u2014any upward USDA revisions to their crop would weigh on our export demand and prices."
+      "desc": "China's buying pattern on soybeans remains flat, and South American harvest is ramping up. If China stays quiet and Brazilian beans flood the market, US basis and futures could weaken further through spring."
     },
     {
       "time": "Opportunity",
-      "desc": "December '26 corn at $4.69\u00bd with 21 cents of carry rewards storage. If your on-farm bins are empty and basis is 20-under or better, consider holding old crop and pricing new crop instead to capture that carry\u2014just make sure your storage cost is under 3 cents/month."
+      "desc": "December '26 corn at $4.69\u00bd offers a 21-cent carry over front month \u2014 if you've got on-farm storage and can pencil out the cost, locking some new crop sales here protects downside while keeping you in the game if weather rallies develop."
     },
     {
       "time": "This week",
       "desc": "Cold Storage Annual Summary"
     }
   ],
-  "source_summary": "USDA NASS, Yahoo Finance, Open-Meteo weather data, Farm Journal, Farm Progress, Brownfield Ag News, AG Daily, Agweek",
-  "generated_utc": "2026-03-01T17:30:26Z",
+  "source_summary": "USDA NASS, Yahoo Finance futures data, Open-Meteo weather, Farm Journal, Farm Progress, Brownfield Ag, AG Daily, Agweek",
+  "generated_utc": "2026-03-02T11:58:23Z",
   "prices_fetched": "2026-03-01T14:53:27Z",
   "news_sources": [
-    "Brownfield Ag",
-    "Agweek",
-    "Morning Ag Clips",
     "Beef Magazine",
-    "All Ag News",
+    "Farm Policy News",
     "USDA NASS Reports",
     "CropLife",
     "Farm Journal",
-    "AG Daily",
+    "NOAA Climate",
+    "Agweek",
+    "Brownfield Ag",
+    "Morning Ag Clips",
     "Farm Progress",
-    "Farm Policy News",
-    "NOAA Climate"
+    "AG Daily",
+    "All Ag News"
   ],
   "weather_locations": [
     "Central Illinois",
