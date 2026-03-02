@@ -248,7 +248,7 @@
             <div style="color:var(--text-muted);font-size:.82rem;padding:.5rem">Loading forecast…</div>
           </div>
           <div class="window-legend">
-            🟢 Good window · 🟡 Marginal — proceed with care · 🔴 Do not spray · Scroll to see full 24h
+            🟢 Good window · 🟡 Marginal — proceed with care · 🔴 Do not spray · 🥶 Frozen · Scroll to see full 24h
           </div>
         </div>
       </div>
@@ -704,15 +704,16 @@ document.querySelectorAll('.fade-up').forEach(function(el){io.observe(el);});
 var WX={0:'☀️',1:'🌤️',2:'⛅',3:'☁️',45:'🌫️',48:'🌫️',51:'🌦️',53:'🌧️',55:'🌧️',61:'🌦️',63:'🌧️',65:'⛈️',71:'🌨️',73:'❄️',75:'❄️',80:'🌦️',81:'🌧️',82:'⛈️',95:'⛈️'};
 
 // ── SPRAY SCORING ──────────────────────────────────────────────────
+// FIX 1: <3 mph = poor (inversion risk). Was splitting at 1 mph.
 function windRating(mph){
-  if(mph<1) return 'poor';
-  if(mph<=3) return 'marginal';
+  if(mph<3) return 'poor';
   if(mph<=10) return 'good';
   if(mph<=15) return 'marginal';
   return 'poor';
 }
+// FIX 2: <32°F = 'frozen' (distinct from cold/poor)
 function tempRating(f){
-  if(f<32) return 'poor';
+  if(f<32) return 'frozen';
   if(f<40) return 'poor';
   if(f<50) return 'marginal';
   if(f<=85) return 'good';
@@ -741,28 +742,35 @@ function dewRisk(temp,dew){
   if(gap<7) return 'marginal';
   return 'good';
 }
-function overallRating(wR,tR,hR,iR,dR){
+// FIX 3: handles 'frozen' + active precipitation (wx codes 51-95)
+function overallRating(wR,tR,hR,iR,dR,wxCode){
+  if(tR==='frozen') return 'frozen';
   var r=[wR,tR,hR,iR,dR];
+  if(wxCode>=51&&wxCode<=95) return 'poor';
   if(r.indexOf('poor')!==-1) return 'poor';
   if(r.indexOf('marginal')!==-1) return 'marginal';
   return 'good';
 }
-function ratingToWord(r){return {good:'Good',marginal:'Marginal',poor:'Poor'}[r]||r;}
-function ratingAbbr(r){return {good:'GOOD',marginal:'FAIR',poor:'POOR'}[r]||'--';}
+// FIX 5: frozen added to all display maps
+function ratingToWord(r){return {good:'Good',marginal:'Marginal',poor:'Poor',frozen:'Frozen'}[r]||r;}
+function ratingAbbr(r){return {good:'GOOD',marginal:'FAIR',poor:'POOR',frozen:'FROZEN'}[r]||'--';}
 
-var rIcons={good:'✅',marginal:'⚠️',poor:'🚫'};
-var rMainText={good:'Good — Safe to Apply',marginal:'Marginal — Use Caution',poor:'Poor — Do Not Spray'};
+var rIcons={good:'✅',marginal:'⚠️',poor:'🚫',frozen:'🥶'};
+var rMainText={good:'Good — Safe to Apply',marginal:'Marginal — Use Caution',poor:'Poor — Do Not Spray',frozen:'Frozen — No Application'};
 var rSubs={
   good:'Conditions are within acceptable spray parameters. Monitor wind direction and watch for inversion indicators.',
   marginal:'One or more factors are outside the ideal range. Review the breakdown below and check your product label before proceeding.',
-  poor:'Conditions are unfavorable for spray application. Risk of drift, volatilization, or reduced efficacy is significant.'
+  poor:'Conditions are unfavorable for spray application. Risk of drift, volatilization, or reduced efficacy is significant.',
+  frozen:'Below freezing — ground and plant tissue are frozen. No spray applications are possible or effective under these conditions.'
 };
 var rRec={
   good:'Conditions are currently favorable. Ensure wind is directed away from sensitive areas, double-check your product label restrictions, and run through the checklist before starting the boom.',
   marginal:'One or more conditions are borderline. If wind is under 3 mph, possible inversion — wait and watch for mixing. If wind is over 10 mph, mechanical drift risk is elevated. If temperature is near the limit, check your specific label — dicamba and 2,4-D ester have the strictest requirements.',
-  poor:'Do not apply under current conditions. Check the 24-hour hourly forecast for a better window today, or plan for a different day. Risk of off-target movement is too high to proceed.'
+  poor:'Do not apply under current conditions. Check the 24-hour hourly forecast for a better window today, or plan for a different day. Risk of off-target movement is too high to proceed.',
+  frozen:'Ground is frozen and plant tissue cannot absorb product. No herbicide, fungicide, or insecticide application is effective under frozen conditions. Wait for temperatures to rise above 40°F and plants to resume active growth.'
 };
 
+// FIX 9: frozen color (blue) added to barColors + border
 function setFcard(id,val,desc,rating,barPct){
   var chip=document.getElementById('fc-'+id+'-chip');
   var valEl=document.getElementById('fc-'+id+'-val');
@@ -772,20 +780,25 @@ function setFcard(id,val,desc,rating,barPct){
   if(chip){chip.textContent=ratingToWord(rating);chip.className='fchip '+rating;}
   if(valEl) valEl.textContent=val;
   if(descEl) descEl.textContent=desc;
-  var barColors={good:'var(--green)',marginal:'var(--gold)',poor:'var(--red)'};
-  if(barEl){barEl.style.width=barPct+'%';barEl.style.background=barColors[rating];}
+  var barColors={good:'var(--green)',marginal:'var(--gold)',poor:'var(--red)',frozen:'var(--blue)'};
+  if(barEl){barEl.style.width=barPct+'%';barEl.style.background=barColors[rating]||'var(--red)';}
   if(cardEl){
     if(rating==='poor') cardEl.style.borderColor='rgba(240,96,96,.25)';
     else if(rating==='good') cardEl.style.borderColor='rgba(62,207,110,.18)';
+    else if(rating==='frozen') cardEl.style.borderColor='rgba(91,163,224,.25)';
     else cardEl.style.borderColor='rgba(230,176,66,.2)';
   }
 }
 
+// FIX 4: null/NaN guard
 function degToCompass(d){
+  if(d==null||isNaN(d)) return '--';
   var dirs=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
   return dirs[Math.round(d/22.5)%16];
 }
 
+// FIX 6+7: hourly API now requests dew_point_2m + cloud_cover;
+// buildHourly uses real dew risk + real cloud cover (was passing hR twice, cloud hardcoded 0)
 function buildHourly(hourly){
   var strip=document.getElementById('hourly-strip');
   if(!strip||!hourly) return;
@@ -801,11 +814,14 @@ function buildHourly(hourly){
     var temp=Math.round(hourly.temperature_2m[i]);
     var humid=hourly.relative_humidity_2m[i];
     var code=hourly.weather_code[i];
+    var dew=hourly.dew_point_2m?Math.round(hourly.dew_point_2m[i]):temp-10;
+    var cloud=hourly.cloud_cover?hourly.cloud_cover[i]:50;
     var wR=windRating(wind);
     var tR=tempRating(temp);
     var hR=humidRating(humid);
-    var iR=inversionRisk(wind,h,0);
-    var overall=overallRating(wR,tR,hR,iR,hR);
+    var iR=inversionRisk(wind,h,cloud);
+    var dR=dewRisk(temp,dew);
+    var overall=overallRating(wR,tR,hR,iR,dR,code);
     var timeStr=t.toLocaleTimeString('en-US',{hour:'numeric',hour12:true}).replace(' ','');
     var el=document.createElement('div');
     el.className='hr-item '+overall;
@@ -818,6 +834,7 @@ function buildHourly(hourly){
   }
 }
 
+// FIX 13: buildDayStrip handles frozen
 function buildDayStrip(daily){
   var strip=document.getElementById('day-strip');
   if(!strip||!daily) return;
@@ -828,7 +845,7 @@ function buildDayStrip(daily){
     var name=i===0?'Today':dnames[d.getDay()];
     var wR=windRating(daily.wind_speed_10m_max[i]||8);
     var tR=tempRating(daily.temperature_2m_max[i]||70);
-    var overall=(wR==='poor'||tR==='poor')?'poor':((wR==='marginal'||tR==='marginal')?'marginal':'good');
+    var overall=(tR==='frozen')?'frozen':((wR==='poor'||tR==='poor')?'poor':((wR==='marginal'||tR==='marginal')?'marginal':'good'));
     var el=document.createElement('div');
     el.className='day-item';
     el.innerHTML='<div class="day-name">'+name+'</div>'
@@ -844,9 +861,10 @@ function loadWeather(lat,lon,label){
   document.getElementById('factor-section').style.display='block';
   document.getElementById('st-loc').textContent='📍 '+(label||'Your Location');
 
+  // FIX 6: hourly now includes dew_point_2m + cloud_cover
   var url='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon
     +'&current=temperature_2m,relative_humidity_2m,dew_point_2m,precipitation_probability,weather_code,wind_speed_10m,wind_direction_10m,cloud_cover'
-    +'&hourly=temperature_2m,relative_humidity_2m,wind_speed_10m,wind_direction_10m,weather_code'
+    +'&hourly=temperature_2m,relative_humidity_2m,dew_point_2m,wind_speed_10m,wind_direction_10m,weather_code,cloud_cover'
     +'&daily=weather_code,temperature_2m_max,wind_speed_10m_max,precipitation_probability_max'
     +'&temperature_unit=fahrenheit&wind_speed_unit=mph&timezone=auto&forecast_days=5';
 
@@ -859,13 +877,15 @@ function loadWeather(lat,lon,label){
     var dew=Math.round(c.dew_point_2m);
     var cloud=c.cloud_cover||0;
     var hour=new Date().getHours();
+    // FIX 8: read weather_code for active precip check
+    var code=c.weather_code||0;
 
     var wR=windRating(wind);
     var tR=tempRating(temp);
     var hR=humidRating(humid);
     var iR=inversionRisk(wind,hour,cloud);
     var dR=dewRisk(temp,dew);
-    var overall=overallRating(wR,tR,hR,iR,dR);
+    var overall=overallRating(wR,tR,hR,iR,dR,code);
 
     var si=document.getElementById('st-icon');
     var sm=document.getElementById('st-main');
@@ -876,8 +896,8 @@ function loadWeather(lat,lon,label){
     if(ss) ss.textContent=rSubs[overall];
     if(sp) sp.className='status-panel '+overall;
 
-    // Wind
-    var windDesc=wind<3?'Very calm — fine droplets may hang and drift with any slight air movement. Possible inversion conditions. Wait for mixing.':
+    // FIX 10: wind desc — inversion warning for <3 mph
+    var windDesc=wind<3?'Calm conditions — below 3 mph. Thermal inversions trap spray droplets near the ground causing unpredictable drift. Do not spray until wind picks up to 3+ mph.':
                  wind<=10?'Within the ideal window. Good mechanical dispersion. Stay aware of downwind sensitive areas.':
                  wind<=15?'Getting high — mechanical drift risk is elevated. Consider larger nozzle size or waiting for conditions to ease.':
                  'Too high for safe application. Significant off-target drift likely. Do not spray.';
@@ -888,8 +908,8 @@ function loadWeather(lat,lon,label){
     var dirDesc='Wind from the '+compass+' ('+Math.round(dir)+'°). Understand what is downwind — neighboring fields, waterways, residences, or sensitive crops. Always spray with direction away from non-target areas.';
     setFcard('dir',compass+' ('+Math.round(dir)+'°)',dirDesc,'marginal',50);
 
-    // Temperature
-    var tempDesc=temp<32?'Below freezing. Do not spray — frost injury risk and product efficacy is very poor.':
+    // FIX 11: frozen temp desc — explicit frozen ground messaging
+    var tempDesc=temp<32?'Below freezing — ground and plant tissue are frozen. No spray application is effective or possible. Wait for thaw and active plant growth above 40°F.':
                  temp<40?'Too cold for most products. Slow uptake, stress injury risk.':
                  temp<=50?'Cool but acceptable for hardy products. Check label.':
                  temp<=75?'Ideal temperature range. Good efficacy and low volatilization risk.':
@@ -928,12 +948,12 @@ function loadWeather(lat,lon,label){
                 'Good margin between temperature and dew point. Low dew formation risk. Clear to proceed.';
     setFcard('dew',dew+'°F dew pt',dewDesc,dR,Math.max(0,100-dewGap*8));
 
-    // Recommendation
+    // FIX 12: rec-head includes frozen
     var rb=document.getElementById('rec-box');
     var rh=document.getElementById('rec-head');
     var rt=document.getElementById('rec-text');
     if(rb){rb.className='rec '+overall;}
-    if(rh){rh.className='rec-h '+overall;rh.textContent={good:'✅ Good Window',marginal:'⚠️ Use Caution',poor:'⛔ Do Not Apply'}[overall];}
+    if(rh){rh.className='rec-h '+overall;rh.textContent={good:'✅ Good Window',marginal:'⚠️ Use Caution',poor:'⛔ Do Not Apply',frozen:'🥶 Frozen — No Application'}[overall];}
     if(rt) rt.textContent=rRec[overall];
 
     buildHourly(d.hourly);
