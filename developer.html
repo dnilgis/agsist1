@@ -2,807 +2,612 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-  <link rel="stylesheet" href="/components/styles.css">
-  <link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
-  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
-  <link rel="apple-touch-icon"                    href="/img/apple-touch-icon.png">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AGSIST Developer — Free Ag Data API, Widgets & Embeds</title>
-<meta name="description" content="Free embeddable widgets, live API endpoints, and developer tools for agricultural data. AGSIST Daily briefing widget, commodity prices, weather, and more.">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Developer &amp; API — AGSIST</title>
+<meta name="description" content="Free embeddable widgets and JSON endpoints for agricultural data. Grain prices, spray advisory, urea risk, AGSIST Daily briefing. No API key. No cost.">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://agsist.com/developer">
+<meta property="og:type"        content="website">
+<meta property="og:site_name"   content="AGSIST">
+<meta property="og:title"       content="Free Ag Data Widgets &amp; API — AGSIST Developer">
+<meta property="og:description" content="Embed live grain prices, spray advisory, urea risk and more on any website. Free, no API key required.">
+<meta property="og:url"         content="https://agsist.com/developer">
+<meta property="og:image"       content="https://agsist.com/img/og/developer.jpg">
+<meta name="twitter:card"       content="summary_large_image">
+<link rel="stylesheet"          href="/components/styles.css">
+<link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+<link rel="apple-touch-icon"    href="/img/apple-touch-icon.png">
+<link rel="manifest"            href="/manifest.json">
 
-  <!-- ═══ SEO ════════════════════════════════════════════════════════ -->
-  <meta name="robots"   content="index, follow">
-  <meta name="keywords" content="agricultural data API, free ag data, grain price widget, farm data embed">
-  <link rel="canonical" href="https://agsist.com/developer">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "url": "https://agsist.com/developer",
+  "name": "Free Ag Data Widgets & API — AGSIST Developer",
+  "description": "Free embeddable agricultural data widgets and JSON API endpoints. No key required.",
+  "isPartOf": { "@id": "https://agsist.com/#website" }
+}
+</script>
 
-  <!-- Open Graph -->
-  <meta property="og:type"        content="website">
-  <meta property="og:site_name"   content="AGSIST">
-  <meta property="og:title"       content="Free Ag Data Widgets & API — AGSIST Developer">
-  <meta property="og:description" content="Embed live grain prices, spray advisory, urea risk and more on any website. Free widgets, no API key required.">
-  <meta property="og:url"         content="https://agsist.com/developer">
-  <meta property="og:image"       content="https://agsist.com/img/og/developer.jpg">
-  <meta property="og:image:width" content="1200">
-  <meta property="og:image:height"content="630">
-  <meta property="og:locale"      content="en_US">
+<style>
+/* ── Developer Page ─────────────────────────────────────────── */
+.dev-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 var(--sp-lg) 3rem;
+}
 
-  <!-- Twitter / X Card -->
-  <meta name="twitter:card"        content="summary_large_image">
-  <meta name="twitter:site"        content="@agsist">
-  <meta name="twitter:title"       content="Free Ag Data Widgets & API — AGSIST Developer">
-  <meta name="twitter:description" content="Embed live grain prices, spray advisory, urea risk and more on any website. Free widgets, no API key required.">
-  <meta name="twitter:image"       content="https://agsist.com/img/og/developer.jpg">
+/* Hero */
+.dev-hero {
+  padding: 3rem 0 2.5rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 2.5rem;
+}
+.dev-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(230,176,66,.08);
+  border: 1px solid rgba(230,176,66,.2);
+  border-radius: 20px;
+  padding: .25rem .7rem;
+  margin-bottom: 1rem;
+}
+.dev-hero h1 {
+  font-family: 'Oswald', sans-serif;
+  font-size: clamp(2rem, 4.5vw, 3rem);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--text);
+  line-height: 1.1;
+  margin-bottom: .75rem;
+  letter-spacing: .01em;
+}
+.dev-hero h1 span { color: var(--gold) }
+.dev-hero-sub {
+  font-size: 1rem;
+  line-height: 1.7;
+  color: var(--text-dim);
+  max-width: 640px;
+}
+.dev-stats {
+  display: flex;
+  gap: 2rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+.dev-stat-val {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--gold);
+  line-height: 1;
+}
+.dev-stat-lbl {
+  font-size: .7rem;
+  color: var(--text-muted);
+  margin-top: .2rem;
+}
 
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebPage",
-        "@id": "https://agsist.com/developer#webpage",
-        "url": "https://agsist.com/developer",
-        "name": "Free Ag Data Widgets & API — Embed Live Prices, Spray & FFAI | AGSIST",
-        "description": "Free embeddable agricultural data widgets: live grain prices, spray advisory, urea risk, AGSIST Daily briefing and FFAI index. No API key. No cost.",
-        "isPartOf": { "@id": "https://agsist.com/#website" },
-        "breadcrumb": {
-          "@type": "BreadcrumbList",
-          "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Home", "item": "https://agsist.com/" },
-{ "@type": "ListItem", "position": 2, "name": "Developer", "item": "https://agsist.com/developer" }]
-        }
-      },
-      {
-        "@type": "Organization",
-        "@id": "https://agsist.com/#organization",
-        "name": "AGSIST",
-        "url": "https://agsist.com/"
-      }
-    ]
-  }
-  </script>
+/* Section headers */
+.dev-sec {
+  margin-bottom: 2.5rem;
+}
+.dev-sec-eyebrow {
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  color: var(--gold);
+  opacity: .85;
+  margin-bottom: .35rem;
+}
+.dev-sec-title {
+  font-family: 'Oswald', sans-serif;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text);
+  text-transform: uppercase;
+  margin-bottom: .4rem;
+}
+.dev-sec-desc {
+  font-size: .9rem;
+  color: var(--text-dim);
+  line-height: 1.7;
+  max-width: 600px;
+  margin-bottom: 1.25rem;
+}
 
-  <!-- Analytics loaded by /components/loader.js → /components/analytics.html -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap" rel="stylesheet">  <link rel="manifest" href="/manifest.json">
+/* Widget cards */
+.wg-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 1rem;
+}
+.wg {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 1.1rem 1.2rem;
+  transition: border-color .2s, box-shadow .2s;
+}
+.wg:hover { border-color: var(--border-g); box-shadow: var(--glow-card) }
+.wg-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .65rem;
+  gap: .5rem;
+}
+.wg-name {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: .9rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.wg-name span { font-size: 1.1rem }
+.wg-tag {
+  font-size: .6rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  padding: .15rem .45rem;
+  border-radius: 10px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.wg-tag--live { color: var(--green); background: rgba(62,207,110,.1); border: 1px solid rgba(62,207,110,.2) }
+.wg-tag--soon { color: var(--text-muted); background: var(--surface2); border: 1px solid var(--border) }
+.wg-desc {
+  font-size: .82rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  margin-bottom: .75rem;
+}
+.wg-code {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: .65rem .85rem;
+  font-size: .72rem;
+  color: var(--text-dim);
+  overflow-x: auto;
+  line-height: 1.6;
+  position: relative;
+}
+.wg-code code { color: var(--gold) }
+.wg-sizes {
+  font-size: .7rem;
+  color: var(--text-muted);
+  margin-top: .5rem;
+}
+
+/* Endpoints */
+.ep-list {
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+.ep {
+  display: flex;
+  align-items: center;
+  gap: .75rem;
+  padding: .85rem 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  transition: border-color .2s;
+  min-width: 0;
+}
+.ep:hover { border-color: var(--border-g) }
+.ep-method {
+  font-size: .6rem;
+  font-weight: 700;
+  padding: .2rem .5rem;
+  border-radius: 10px;
+  background: rgba(62,207,110,.12);
+  color: var(--green);
+  flex-shrink: 0;
+  letter-spacing: .04em;
+}
+.ep-info { flex: 1; min-width: 0 }
+.ep-url {
+  font-size: .82rem;
+  font-weight: 600;
+  color: var(--gold);
+  word-break: break-all;
+}
+.ep-desc {
+  font-size: .75rem;
+  color: var(--text-dim);
+  margin-top: .15rem;
+  line-height: 1.5;
+}
+.ep-copy {
+  font-size: .7rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 5px;
+  padding: .3rem .6rem;
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.ep-copy:hover { color: var(--gold); border-color: var(--border-g) }
+
+/* JSON example */
+.json-block {
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 1rem 1.2rem;
+  margin-top: 1rem;
+  overflow-x: auto;
+}
+.json-block pre {
+  font-size: .78rem;
+  line-height: 1.7;
+  color: var(--text-dim);
+  margin: 0;
+}
+.json-block .sk { color: var(--gold) }
+.json-block .sv { color: var(--green) }
+
+/* Use cases */
+.use-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: .85rem;
+}
+.use-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 1rem 1.1rem;
+  transition: border-color .2s;
+}
+.use-card:hover { border-color: var(--border-g) }
+.use-icon { font-size: 1.3rem; margin-bottom: .4rem }
+.use-title { font-size: .88rem; font-weight: 700; color: var(--text); margin-bottom: .3rem }
+.use-desc { font-size: .8rem; color: var(--text-dim); line-height: 1.6 }
+
+/* CORS callout */
+.cors-note {
+  background: rgba(62,207,110,.05);
+  border: 1px solid rgba(62,207,110,.18);
+  border-radius: var(--r-md);
+  padding: .85rem 1.1rem;
+  margin-top: 1rem;
+  font-size: .82rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+.cors-note strong { color: var(--green) }
+.cors-note code {
+  color: var(--gold);
+  background: var(--surface2);
+  padding: .08rem .3rem;
+  border-radius: 3px;
+  font-size: .78rem;
+}
+
+/* Contact/License footer */
+.dev-footer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1.5rem 1.75rem;
+}
+.dev-footer-lbl {
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--blue);
+  margin-bottom: .5rem;
+}
+.dev-footer p {
+  font-size: .88rem;
+  line-height: 1.75;
+  color: var(--text-dim);
+}
+.dev-footer a { color: var(--gold); transition: opacity .15s }
+.dev-footer a:hover { opacity: .8 }
+
+/* Toast */
+.toast {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  background: var(--surface3);
+  border: 1px solid var(--border-g);
+  border-radius: 7px;
+  padding: .55rem 1rem;
+  font-size: .82rem;
+  color: var(--text);
+  z-index: 9999;
+  opacity: 0;
+  transform: translateY(6px);
+  transition: opacity .2s, transform .2s;
+  pointer-events: none;
+}
+.toast.show { opacity: 1; transform: translateY(0) }
+
+/* ── Responsive ─────────────────────────────────────────────── */
+@media (max-width: 768px) {
+  .dev-footer { grid-template-columns: 1fr }
+}
+@media (max-width: 520px) {
+  .dev-page { padding-left: .9rem; padding-right: .9rem }
+  .dev-hero { padding: 2rem 0 1.5rem }
+  .dev-hero h1 { font-size: 1.8rem }
+  .dev-stats { gap: 1.25rem }
+  .dev-stat-val { font-size: 1.3rem }
+  .ep { flex-wrap: wrap; gap: .5rem }
+  .ep-copy { width: 100%; text-align: center }
+  .dev-footer { padding: 1.1rem 1.2rem }
+}
+</style>
 </head>
 <body>
-
-<!-- NAV -->
   <div id="site-header"></div>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-inner">
-    <div class="hero-badge">🛠️ Developer Resources</div>
-    <h1 class="hero-title">Free Ag Data<br><span>Widgets & API</span></h1>
-    <p class="hero-sub">Embed live commodity prices, AGSIST Daily briefings, weather, and agricultural tools on any website. No API key. No rate limits. No cost.</p>
-    <div class="hero-stats">
-      <div class="hero-stat"><div class="hero-stat-val">7</div><div class="hero-stat-lbl">Embeddable Widgets</div></div>
-      <div class="hero-stat"><div class="hero-stat-val">Free</div><div class="hero-stat-lbl">Always & Forever</div></div>
-      <div class="hero-stat"><div class="hero-stat-val">CC BY</div><div class="hero-stat-lbl">Open License</div></div>
-      <div class="hero-stat"><div class="hero-stat-val">0</div><div class="hero-stat-lbl">API Keys Required</div></div>
-    </div>
-  </div>
-</section>
+  <main class="dev-page">
 
-<main class="main">
-
-  <!-- ═══ FLAGSHIP: AGSIST DAILY WIDGET ═══════════════════════════════ -->
-  <div class="sec fade-up" id="f1">
-    <div class="sec-head">
-      <div class="sec-eyebrow">Flagship Widget</div>
-      <div class="sec-title">AGSIST Daily Briefing</div>
-      <div class="sec-desc">Embed today's full market briefing on any farm website, co-op portal, or ag publication. Auto-updates every weekday by 6am CT. No maintenance required.</div>
-    </div>
-
-    <div class="widget-card widget-card--featured">
-      <div class="widget-card-head">
-        <div class="widget-card-title">
-          <span class="widget-icon">📰</span>
-          <div>
-            <div class="widget-name">AGSIST Daily — Full Briefing</div>
-            <div style="font-size:.78rem;color:var(--text-dim);margin-top:.15rem">Today's markets, what to watch, one number to know, farm weather summary</div>
-          </div>
-        </div>
-        <span class="widget-tag widget-tag--live">● Live</span>
-      </div>
-      <div class="widget-body">
-        <!-- Live preview -->
-        <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.65rem">Live Preview</div>
-        <div class="widget-preview" style="display:block;padding:1.5rem;background:var(--bg2);border-radius:8px;min-height:auto">
-          <div style="display:flex;align-items:center;gap:.5rem;margin-bottom:.85rem">
-            <div style="width:7px;height:7px;border-radius:50%;background:var(--green);animation:blink 2s infinite"></div>
-            <span style="font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold)">AGSIST Daily</span>
-            <span id="daily-widget-date" style="font-size:.65rem;color:var(--text-muted)"></span>
-          </div>
-          <div id="daily-widget-headline" style="font-family:'Oswald',sans-serif;font-size:1.5rem;font-weight:700;text-transform:uppercase;color:var(--text);line-height:1.15;margin-bottom:.7rem">Loading today's briefing…</div>
-          <div id="daily-widget-sections" style="display:flex;flex-direction:column;gap:.6rem"></div>
-          <div style="margin-top:1rem;padding-top:.85rem;border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-between">
-            <span style="font-size:.72rem;color:var(--text-muted)">Powered by <a href="https://agsist.com" style="color:var(--gold)">AGSIST</a></span>
-            </div>
-        </div>
-
-        <!-- Size tabs -->
-        <div style="margin-top:1.5rem">
-          <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.65rem">Embed Code</div>
-          <div class="tab-row" id="daily-tabs">
-            <button class="tab active" onclick="switchTab('daily','full')">Full</button>
-            <button class="tab" onclick="switchTab('daily','headline')">Headline Only</button>
-            <button class="tab" onclick="switchTab('daily','compact')">Compact</button>
-          </div>
-          <div id="daily-tab-full" class="tab-panel active">
-            <div class="code-block">
-              <div class="code-block-head"><span class="code-lang">HTML</span><button class="copy-btn" onclick="copyCode('daily-full-code')">Copy</button></div>
-              <pre id="daily-full-code"><span class="cmt">&lt;!-- AGSIST Daily — Full Briefing Widget --&gt;</span>
-<span class="kw">&lt;div</span> <span class="str">id</span>=<span class="val">"agsist-daily"</span> <span class="str">data-size</span>=<span class="val">"full"</span><span class="kw">&gt;&lt;/div&gt;</span>
-<span class="kw">&lt;script</span> <span class="str">src</span>=<span class="val">"https://agsist.com/api/v1/daily.js"</span> <span class="str">defer</span><span class="kw">&gt;&lt;/script&gt;</span></pre>
-            </div>
-          </div>
-          <div id="daily-tab-headline" class="tab-panel">
-            <div class="code-block">
-              <div class="code-block-head"><span class="code-lang">HTML</span><button class="copy-btn" onclick="copyCode('daily-headline-code')">Copy</button></div>
-              <pre id="daily-headline-code"><span class="cmt">&lt;!-- AGSIST Daily — Headline + Summary --&gt;</span>
-<span class="kw">&lt;div</span> <span class="str">id</span>=<span class="val">"agsist-daily"</span> <span class="str">data-size</span>=<span class="val">"headline"</span><span class="kw">&gt;&lt;/div&gt;</span>
-<span class="kw">&lt;script</span> <span class="str">src</span>=<span class="val">"https://agsist.com/api/v1/daily.js"</span> <span class="str">defer</span><span class="kw">&gt;&lt;/script&gt;</span></pre>
-            </div>
-          </div>
-          <div id="daily-tab-compact" class="tab-panel">
-            <div class="code-block">
-              <div class="code-block-head"><span class="code-lang">HTML</span><button class="copy-btn" onclick="copyCode('daily-compact-code')">Copy</button></div>
-              <pre id="daily-compact-code"><span class="cmt">&lt;!-- AGSIST Daily — Compact (sidebar use) --&gt;</span>
-<span class="kw">&lt;div</span> <span class="str">id</span>=<span class="val">"agsist-daily"</span> <span class="str">data-size</span>=<span class="val">"compact"</span><span class="kw">&gt;&lt;/div&gt;</span>
-<span class="kw">&lt;script</span> <span class="str">src</span>=<span class="val">"https://agsist.com/api/v1/daily.js"</span> <span class="str">defer</span><span class="kw">&gt;&lt;/script&gt;</span></pre>
-            </div>
-          </div>
-
-          <!-- Theme options note -->
-          <div style="margin-top:.75rem;padding:.65rem .85rem;background:rgba(91,163,224,.06);border:1px solid rgba(91,163,224,.15);border-radius:6px;font-size:.8rem;color:var(--text-dim)">
-            Add <code style="color:var(--blue);background:var(--surface2);padding:.1rem .35rem;border-radius:3px">data-theme="dark"</code> or <code style="color:var(--blue);background:var(--surface2);padding:.1rem .35rem;border-radius:3px">data-theme="light"</code> to match your site. Default: auto-detects system preference.
-          </div>
-        </div>
+    <!-- ═══ HERO ═══════════════════════════════════════════════════ -->
+    <div class="dev-hero">
+      <div class="dev-hero-badge">🛠️ Developer Resources</div>
+      <h1>Free Ag Data<br><span>Widgets &amp; API</span></h1>
+      <p class="dev-hero-sub">Embed live commodity prices, weather, spray conditions, urea risk, and the AGSIST Daily briefing on any website. Two lines of HTML. No API key. No rate limits. No cost.</p>
+      <div class="dev-stats">
+        <div><div class="dev-stat-val">7</div><div class="dev-stat-lbl">Embeddable widgets</div></div>
+        <div><div class="dev-stat-val">Free</div><div class="dev-stat-lbl">Always</div></div>
+        <div><div class="dev-stat-val">0</div><div class="dev-stat-lbl">API keys required</div></div>
+        <div><div class="dev-stat-val">CORS</div><div class="dev-stat-lbl">Open to all domains</div></div>
       </div>
     </div>
-  </div>
 
-  <!-- ═══ MORE WIDGETS ═════════════════════════════════════════════════ -->
-  <div class="sec fade-up" id="f2">
-    <div class="sec-head">
-      <div class="sec-eyebrow">All Widgets</div>
-      <div class="sec-title">Embed Anything</div>
-      <div class="sec-desc">Drop any widget onto any page with two lines of HTML. All widgets auto-theme, are mobile-responsive, and update from live AGSIST data.</div>
+    <!-- ═══ WIDGETS ════════════════════════════════════════════════ -->
+    <div class="dev-sec">
+      <div class="dev-sec-eyebrow">Embeddable Widgets</div>
+      <div class="dev-sec-title">Drop In &amp; Go</div>
+      <div class="dev-sec-desc">Every widget auto-detects theme, is mobile-responsive, and updates from live AGSIST data. Add <code style="color:var(--blue);background:var(--surface2);padding:.1rem .3rem;border-radius:3px">data-theme="dark"</code> or <code style="color:var(--blue);background:var(--surface2);padding:.1rem .3rem;border-radius:3px">"light"</code> to match your site.</div>
+
+      <div class="wg-grid">
+
+        <div class="wg">
+          <div class="wg-head">
+            <div class="wg-name"><span>📰</span> AGSIST Daily</div>
+            <span class="wg-tag wg-tag--live">● Live</span>
+          </div>
+          <div class="wg-desc">Today's full market briefing — headline, what to watch, one number to know, farm weather. Auto-updates every weekday by 6am CT.</div>
+          <div class="wg-code">&lt;div <code>id="agsist-daily"</code> <code>data-size="full"</code>&gt;&lt;/div&gt;<br>&lt;script src="<code>https://agsist.com/api/v1/daily.js</code>" defer&gt;&lt;/script&gt;</div>
+          <div class="wg-sizes">Sizes: <strong style="color:var(--text)">full</strong> · headline · compact</div>
+        </div>
+
+        <div class="wg">
+          <div class="wg-head">
+            <div class="wg-name"><span>🌽</span> Grain Prices</div>
+            <span class="wg-tag wg-tag--live">● Live</span>
+          </div>
+          <div class="wg-desc">Corn, soybeans, wheat — near-month and harvest contracts. 15-min delayed futures with change and direction.</div>
+          <div class="wg-code">&lt;div <code>id="agsist-prices"</code> <code>data-crops="corn,beans,wheat"</code>&gt;&lt;/div&gt;<br>&lt;script src="<code>https://agsist.com/api/v1/prices.js</code>" defer&gt;&lt;/script&gt;</div>
+        </div>
+
+        <div class="wg">
+          <div class="wg-head">
+            <div class="wg-name"><span>🌿</span> Spray Advisory</div>
+            <span class="wg-tag wg-tag--live">● Live</span>
+          </div>
+          <div class="wg-desc">Wind, temperature, humidity, inversion risk — full spray window assessment based on visitor's location.</div>
+          <div class="wg-code">&lt;div <code>id="agsist-spray"</code> <code>data-size="full"</code>&gt;&lt;/div&gt;<br>&lt;script src="<code>https://agsist.com/api/v1/spray.js</code>" defer&gt;&lt;/script&gt;</div>
+          <div class="wg-sizes">Sizes: <strong style="color:var(--text)">full</strong> · compact · badge</div>
+        </div>
+
+        <div class="wg">
+          <div class="wg-head">
+            <div class="wg-name"><span>🌾</span> Urea Risk Monitor</div>
+            <span class="wg-tag wg-tag--live">● Live</span>
+          </div>
+          <div class="wg-desc">Real-time volatilization risk score from local temp, wind, humidity, and rain forecast. Add <code style="color:var(--orange)">data-zip="54728"</code> to lock location.</div>
+          <div class="wg-code">&lt;div <code>id="agsist-urea"</code> <code>data-size="full"</code>&gt;&lt;/div&gt;<br>&lt;script src="<code>https://agsist.com/api/v1/urea.js</code>" defer&gt;&lt;/script&gt;</div>
+          <div class="wg-sizes">Sizes: <strong style="color:var(--text)">full</strong> · compact · badge</div>
+        </div>
+
+        <div class="wg">
+          <div class="wg-head">
+            <div class="wg-name"><span>📐</span> Break-Even Calc</div>
+            <span class="wg-tag wg-tag--live">● Live</span>
+          </div>
+          <div class="wg-desc">Interactive crop cost calculator. Inputs per-acre costs and yield, outputs break-even price per bushel.</div>
+          <div class="wg-code">&lt;div <code>id="agsist-breakeven"</code>&gt;&lt;/div&gt;<br>&lt;script src="<code>https://agsist.com/api/v1/breakeven.js</code>" defer&gt;&lt;/script&gt;</div>
+        </div>
+
+        <div class="wg">
+          <div class="wg-head">
+            <div class="wg-name"><span>🌡️</span> GDU Tracker</div>
+            <span class="wg-tag wg-tag--soon">Coming Soon</span>
+          </div>
+          <div class="wg-desc">Growing degree units accumulated from plant date. Tracks progress toward estimated maturity.</div>
+          <div class="wg-code">&lt;div <code>id="agsist-gdu"</code> <code>data-plant-date="2026-05-01"</code>&gt;&lt;/div&gt;<br>&lt;script src="<code>https://agsist.com/api/v1/gdu.js</code>" defer&gt;&lt;/script&gt;</div>
+        </div>
+
+        <div class="wg">
+          <div class="wg-head">
+            <div class="wg-name"><span>📊</span> FFAI Index</div>
+            <span class="wg-tag wg-tag--live">● Live</span>
+          </div>
+          <div class="wg-desc">Farmers First Ag Index — weekly composite scoring commodity prices, input costs, weather risk, exports, credit, and policy. CC BY 4.0.</div>
+          <div class="wg-code">&lt;div <code>id="agsist-ffai"</code>&gt;&lt;/div&gt;<br>&lt;script src="<code>https://agsist.com/api/v1/ffai.js</code>" defer&gt;&lt;/script&gt;</div>
+        </div>
+
+      </div>
     </div>
 
-    <div class="widget-grid">
+    <!-- ═══ API ENDPOINTS ══════════════════════════════════════════ -->
+    <div class="dev-sec">
+      <div class="dev-sec-eyebrow">JSON API</div>
+      <div class="dev-sec-title">Data Endpoints</div>
+      <div class="dev-sec-desc">Direct JSON access. Static files on a CDN — fast, no auth. Pull into apps, spreadsheets, dashboards, or anything that speaks HTTP.</div>
 
-      <!-- Corn/Bean Price Widget -->
-      <div class="widget-card">
-        <div class="widget-card-head">
-          <div class="widget-card-title"><span class="widget-icon">🌽</span><div><div class="widget-name">Grain Prices</div><div style="font-size:.76rem;color:var(--text-dim);margin-top:.1rem">Corn, beans, wheat — near & harvest contracts</div></div></div>
-          <span class="widget-tag widget-tag--live">● Live</span>
+      <div class="ep-list">
+        <div class="ep">
+          <span class="ep-method">GET</span>
+          <div class="ep-info">
+            <div class="ep-url">/api/v1/daily/current.json</div>
+            <div class="ep-desc">Today's briefing — headline, lead, sections, timestamp. ~3 KB.</div>
+          </div>
+          <button class="ep-copy" onclick="copyText('https://agsist.com/api/v1/daily/current.json')">Copy</button>
         </div>
-        <div class="widget-body">
-          <div class="widget-preview" style="flex-direction:column;gap:.5rem;align-items:stretch">
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:.35rem 0;border-bottom:1px solid var(--border)"><span style="font-size:.82rem;color:var(--text-dim)">Corn Dec '26</span><div style="text-align:right"><span style="font-size:.95rem;font-weight:700;color:var(--text)">4.38¼</span><span style="font-size:.72rem;color:var(--red);margin-left:.4rem">▼ 4¼¢</span></div></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:.35rem 0;border-bottom:1px solid var(--border)"><span style="font-size:.82rem;color:var(--text-dim)">Beans Nov '26</span><div style="text-align:right"><span style="font-size:.95rem;font-weight:700;color:var(--text)">9.74½</span><span style="font-size:.72rem;color:var(--red);margin-left:.4rem">▼ 7½¢</span></div></div>
-            <div style="display:flex;justify-content:space-between;align-items:center;padding:.35rem 0"><span style="font-size:.82rem;color:var(--text-dim)">Wheat Jul '26</span><div style="text-align:right"><span style="font-size:.95rem;font-weight:700;color:var(--text)">5.62¾</span><span style="font-size:.72rem;color:var(--text-muted);margin-left:.4rem">— ¼¢</span></div></div>
+        <div class="ep">
+          <span class="ep-method">GET</span>
+          <div class="ep-info">
+            <div class="ep-url">/api/v1/prices/current.json</div>
+            <div class="ep-desc">Commodity prices — corn, beans, wheat, cattle, hogs. 15-min delay. ~2 KB.</div>
           </div>
-          <div class="code-block">
-            <div class="code-block-head"><span class="code-lang">HTML</span><button class="copy-btn" onclick="copyCode('grain-code')">Copy</button></div>
-            <pre id="grain-code"><span class="kw">&lt;div</span> <span class="str">id</span>=<span class="val">"agsist-prices"</span> <span class="str">data-crops</span>=<span class="val">"corn,beans,wheat"</span><span class="kw">&gt;&lt;/div&gt;</span>
-<span class="kw">&lt;script</span> <span class="str">src</span>=<span class="val">"https://agsist.com/api/v1/prices.js"</span> <span class="str">defer</span><span class="kw">&gt;&lt;/script&gt;</span></pre>
-          </div>
+          <button class="ep-copy" onclick="copyText('https://agsist.com/api/v1/prices/current.json')">Copy</button>
         </div>
-      </div>
-
-      <!-- Break-Even Calculator Widget -->
-      <div class="widget-card">
-        <div class="widget-card-head">
-          <div class="widget-card-title"><span class="widget-icon">📐</span><div><div class="widget-name">Break-Even Calculator</div><div style="font-size:.76rem;color:var(--text-dim);margin-top:.1rem">Crop cost inputs → break-even price output</div></div></div>
-          <span class="widget-tag widget-tag--live">● Live</span>
+        <div class="ep">
+          <span class="ep-method">GET</span>
+          <div class="ep-info">
+            <div class="ep-url">/api/v1/spray/current.json?lat=44.5&amp;lon=-93.2</div>
+            <div class="ep-desc">Spray advisory — overall rating, wind/temp/humidity/inversion scores, hourly window. ~3 KB.</div>
+          </div>
+          <button class="ep-copy" onclick="copyText('https://agsist.com/api/v1/spray/current.json?lat=44.5&lon=-93.2')">Copy</button>
         </div>
-        <div class="widget-body">
-          <div class="widget-preview" style="flex-direction:column;gap:.6rem;align-items:stretch">
-            <div style="display:flex;gap:.5rem">
-              <div style="flex:1;background:var(--surface3);border:1px solid var(--border);border-radius:5px;padding:.45rem .6rem"><div style="font-size:.62rem;color:var(--text-muted);margin-bottom:.15rem">Cost/Acre</div><div style="font-size:.88rem;font-weight:700;color:var(--text)">$780</div></div>
-              <div style="flex:1;background:var(--surface3);border:1px solid var(--border);border-radius:5px;padding:.45rem .6rem"><div style="font-size:.62rem;color:var(--text-muted);margin-bottom:.15rem">Yield APH</div><div style="font-size:.88rem;font-weight:700;color:var(--text)">185 bu</div></div>
-            </div>
-            <div style="background:rgba(230,176,66,.08);border:1px solid rgba(230,176,66,.2);border-radius:5px;padding:.55rem .8rem;text-align:center"><div style="font-size:.68rem;color:var(--gold);font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:.15rem">Break-Even Price</div><div style="font-family:'Oswald',sans-serif;font-size:1.6rem;font-weight:700;color:var(--gold)">$4.22 / bu</div></div>
+        <div class="ep">
+          <span class="ep-method">GET</span>
+          <div class="ep-info">
+            <div class="ep-url">/api/v1/urea/current.json?lat=44.5&amp;lon=-93.2</div>
+            <div class="ep-desc">Urea volatilization risk — score, level, factor breakdown. ~2 KB.</div>
           </div>
-          <div class="code-block">
-            <div class="code-block-head"><span class="code-lang">HTML</span><button class="copy-btn" onclick="copyCode('breakeven-code')">Copy</button></div>
-            <pre id="breakeven-code"><span class="kw">&lt;div</span> <span class="str">id</span>=<span class="val">"agsist-breakeven"</span><span class="kw">&gt;&lt;/div&gt;</span>
-<span class="kw">&lt;script</span> <span class="str">src</span>=<span class="val">"https://agsist.com/api/v1/breakeven.js"</span> <span class="str">defer</span><span class="kw">&gt;&lt;/script&gt;</span></pre>
-          </div>
+          <button class="ep-copy" onclick="copyText('https://agsist.com/api/v1/urea/current.json?lat=44.5&lon=-93.2')">Copy</button>
         </div>
-      </div>
-
-      <!-- Spray Conditions Widget -->
-      <div class="widget-card">
-        <div class="widget-card-head">
-          <div class="widget-card-title"><span class="widget-icon">🌿</span><div><div class="widget-name">Spray Conditions</div><div style="font-size:.76rem;color:var(--text-dim);margin-top:.1rem">Real-time local spray window assessment</div></div></div>
-          <span class="widget-tag widget-tag--live">● Live</span>
-        </div>
-        <div class="widget-body">
-          <div class="widget-preview" style="flex-direction:column;gap:.5rem;align-items:stretch">
-            <div style="display:flex;align-items:center;gap:.75rem;padding:.5rem .75rem;background:rgba(62,207,110,.08);border:1px solid rgba(62,207,110,.2);border-radius:6px"><span style="font-size:1.4rem">✅</span><div><div style="font-size:.88rem;font-weight:700;color:var(--green)">Good Spray Conditions</div><div style="font-size:.75rem;color:var(--text-dim)">Wind 6 mph · Humidity 62% · Temp 58°F</div></div></div>
-            <div style="font-size:.72rem;color:var(--text-muted);text-align:center">Auto-detects location · Updates hourly</div>
+        <div class="ep">
+          <span class="ep-method">GET</span>
+          <div class="ep-info">
+            <div class="ep-url">farmers1st.com/api/v3/current.json</div>
+            <div class="ep-desc">FFAI — quarterly composite, sub-indexes, regime, outlook. CC BY 4.0.</div>
           </div>
-          <div class="code-block">
-            <div class="code-block-head"><span class="code-lang">HTML</span><button class="copy-btn" onclick="copyCode('spray-code')">Copy</button></div>
-            <pre id="spray-code"><span class="kw">&lt;div</span> <span class="str">id</span>=<span class="val">"agsist-spray"</span><span class="kw">&gt;&lt;/div&gt;</span>
-<span class="kw">&lt;script</span> <span class="str">src</span>=<span class="val">"https://agsist.com/api/v1/spray.js"</span> <span class="str">defer</span><span class="kw">&gt;&lt;/script&gt;</span></pre>
-          </div>
+          <button class="ep-copy" onclick="copyText('https://farmers1st.com/api/v3/current.json')">Copy</button>
         </div>
       </div>
 
-      <!-- GDU Widget -->
-      <div class="widget-card">
-        <div class="widget-card-head">
-          <div class="widget-card-title"><span class="widget-icon">🌡️</span><div><div class="widget-name">GDU Accumulator</div><div style="font-size:.76rem;color:var(--text-dim);margin-top:.1rem">Growing degree units tracked from plant date</div></div></div>
-          <span class="widget-tag widget-tag--soon">Coming Soon</span>
-        </div>
-        <div class="widget-body">
-          <div class="widget-preview" style="flex-direction:column;gap:.4rem;align-items:stretch">
-            <div style="display:flex;justify-content:space-between"><span style="font-size:.8rem;color:var(--text-dim)">GDUs accumulated</span><span style="font-size:1.1rem;font-weight:700;color:var(--text)">1,248</span></div>
-            <div style="height:6px;background:var(--surface3);border-radius:3px"><div style="width:78%;height:100%;background:var(--gold);border-radius:3px"></div></div>
-            <div style="display:flex;justify-content:space-between;font-size:.7rem;color:var(--text-muted)"><span>Planted: May 1</span><span>Est. maturity: Sep 14</span></div>
-          </div>
-          <div class="code-block">
-            <div class="code-block-head"><span class="code-lang">HTML</span><button class="copy-btn" onclick="copyCode('gdu-code')">Copy</button></div>
-            <pre id="gdu-code"><span class="kw">&lt;div</span> <span class="str">id</span>=<span class="val">"agsist-gdu"</span> <span class="str">data-plant-date</span>=<span class="val">"2026-05-01"</span><span class="kw">&gt;&lt;/div&gt;</span>
-<span class="kw">&lt;script</span> <span class="str">src</span>=<span class="val">"https://agsist.com/api/v1/gdu.js"</span> <span class="str">defer</span><span class="kw">&gt;&lt;/script&gt;</span></pre>
-          </div>
-        </div>
+      <div class="cors-note">
+        <strong>CORS:</strong> All endpoints include <code>Access-Control-Allow-Origin: *</code>. Fetch from any domain — no proxy needed.
       </div>
 
-      <!-- Urea Volatilization Risk Widget -->
-      <div class="widget-card">
-        <div class="widget-card-head">
-          <div class="widget-card-title"><span class="widget-icon">🌾</span><div><div class="widget-name">Urea Volatilization Risk</div><div style="font-size:.76rem;color:var(--text-dim);margin-top:.1rem">Real-time N-loss risk score from local temp, wind, humidity & rain forecast</div></div></div>
-          <span class="widget-tag widget-tag--live">● Live</span>
-        </div>
-        <div class="widget-body">
-          <div class="widget-preview" style="display:block;padding:1rem;background:var(--bg2)">
-            <div style="display:flex;align-items:center;gap:1rem">
-              <!-- Mini gauge -->
-              <div style="text-align:center;flex-shrink:0">
-                <svg width="80" height="48" viewBox="0 0 80 48">
-                  <path fill="none" stroke="var(--surface2)" stroke-width="8" stroke-linecap="round" d="M 8 44 A 32 32 0 0 1 72 44"/>
-                  <path fill="none" stroke="var(--risk-high,#f0913a)" stroke-width="8" stroke-linecap="round" stroke-dasharray="101" stroke-dashoffset="35" d="M 8 44 A 32 32 0 0 1 72 44"/>
-                </svg>
-                <div style="font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700;color:var(--orange);margin-top:-8px">64</div>
-                <div style="font-size:.6rem;color:var(--text-muted)">/100</div>
-              </div>
-              <div>
-                <div style="display:inline-flex;align-items:center;gap:.4rem;padding:.28rem .7rem;background:rgba(240,145,58,.12);border:1px solid rgba(240,145,58,.2);border-radius:12px;font-size:.72rem;font-weight:700;color:var(--orange);margin-bottom:.4rem">🔶 High Risk</div>
-                <div style="font-size:.78rem;color:var(--text-dim);line-height:1.55">72°F · 8 mph wind · 15% rain chance<br>Use NBPT stabilizer or delay application.</div>
-              </div>
-            </div>
-          </div>
-          <div class="tab-row" id="urea-tabs">
-            <button class="tab active" onclick="switchTab('urea','full')">Full</button>
-            <button class="tab" onclick="switchTab('urea','compact')">Compact</button>
-            <button class="tab" onclick="switchTab('urea','badge')">Badge</button>
-          </div>
-          <div id="urea-tab-full" class="tab-panel active">
-            <div class="code-block">
-              <div class="code-block-head"><span class="code-lang">HTML</span><button class="copy-btn" onclick="copyCode('urea-full-code')">Copy</button></div>
-              <pre id="urea-full-code"><span class="cmt">&lt;!-- AGSIST Urea Risk Monitor — Full --&gt;</span>
-<span class="kw">&lt;div</span> <span class="str">id</span>=<span class="val">"agsist-urea"</span> <span class="str">data-size</span>=<span class="val">"full"</span><span class="kw">&gt;&lt;/div&gt;</span>
-<span class="kw">&lt;script</span> <span class="str">src</span>=<span class="val">"https://agsist.com/api/v1/urea.js"</span> <span class="str">defer</span><span class="kw">&gt;&lt;/script&gt;</span></pre>
-            </div>
-          </div>
-          <div id="urea-tab-compact" class="tab-panel">
-            <div class="code-block">
-              <div class="code-block-head"><span class="code-lang">HTML</span><button class="copy-btn" onclick="copyCode('urea-compact-code')">Copy</button></div>
-              <pre id="urea-compact-code"><span class="cmt">&lt;!-- AGSIST Urea Risk — Compact (sidebar) --&gt;</span>
-<span class="kw">&lt;div</span> <span class="str">id</span>=<span class="val">"agsist-urea"</span> <span class="str">data-size</span>=<span class="val">"compact"</span><span class="kw">&gt;&lt;/div&gt;</span>
-<span class="kw">&lt;script</span> <span class="str">src</span>=<span class="val">"https://agsist.com/api/v1/urea.js"</span> <span class="str">defer</span><span class="kw">&gt;&lt;/script&gt;</span></pre>
-            </div>
-          </div>
-          <div id="urea-tab-badge" class="tab-panel">
-            <div class="code-block">
-              <div class="code-block-head"><span class="code-lang">HTML</span><button class="copy-btn" onclick="copyCode('urea-badge-code')">Copy</button></div>
-              <pre id="urea-badge-code"><span class="cmt">&lt;!-- AGSIST Urea Risk — Score Badge only --&gt;</span>
-<span class="kw">&lt;div</span> <span class="str">id</span>=<span class="val">"agsist-urea"</span> <span class="str">data-size</span>=<span class="val">"badge"</span><span class="kw">&gt;&lt;/div&gt;</span>
-<span class="kw">&lt;script</span> <span class="str">src</span>=<span class="val">"https://agsist.com/api/v1/urea.js"</span> <span class="str">defer</span><span class="kw">&gt;&lt;/script&gt;</span></pre>
-            </div>
-          </div>
-          <div style="margin-top:.65rem;padding:.55rem .8rem;background:rgba(240,145,58,.06);border:1px solid rgba(240,145,58,.15);border-radius:6px;font-size:.78rem;color:var(--text-dim)">
-            Widget auto-detects visitor location. Add <code style="color:var(--orange);background:var(--surface2);padding:.1rem .3rem;border-radius:3px">data-zip="54728"</code> to lock to a specific ZIP code.
-          </div>
-        </div>
-      </div>
-
-      <!-- Spray Advisory Widget -->
-      <div class="widget-card">
-        <div class="widget-card-head">
-          <div class="widget-card-title"><span class="widget-icon">🌿</span><div><div class="widget-name">Spray Advisory</div><div style="font-size:.76rem;color:var(--text-dim);margin-top:.1rem">Wind, inversion risk, temperature, humidity — full spray window assessment</div></div></div>
-          <span class="widget-tag widget-tag--live">● Live</span>
-        </div>
-        <div class="widget-body">
-          <div class="widget-preview" style="flex-direction:column;gap:.5rem;align-items:stretch">
-            <div style="display:flex;align-items:center;gap:.75rem;padding:.6rem .8rem;background:rgba(62,207,110,.07);border:1px solid rgba(62,207,110,.2);border-radius:7px">
-              <span style="font-size:1.5rem">✅</span>
-              <div>
-                <div style="font-size:.88rem;font-weight:700;color:var(--green)">Good — Apply Now</div>
-                <div style="font-size:.74rem;color:var(--text-dim)">Wind 5 mph NW · Humidity 58% · Temp 62°F · No inversion</div>
-              </div>
-            </div>
-            <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:.35rem">
-              <div style="text-align:center;padding:.4rem;background:var(--surface3);border-radius:5px"><div style="font-size:.6rem;color:var(--text-muted)">Wind</div><div style="font-size:.8rem;font-weight:700;color:var(--green)">Good</div></div>
-              <div style="text-align:center;padding:.4rem;background:var(--surface3);border-radius:5px"><div style="font-size:.6rem;color:var(--text-muted)">Temp</div><div style="font-size:.8rem;font-weight:700;color:var(--green)">Good</div></div>
-              <div style="text-align:center;padding:.4rem;background:var(--surface3);border-radius:5px"><div style="font-size:.6rem;color:var(--text-muted)">Humidity</div><div style="font-size:.8rem;font-weight:700;color:var(--green)">Good</div></div>
-              <div style="text-align:center;padding:.4rem;background:var(--surface3);border-radius:5px"><div style="font-size:.6rem;color:var(--text-muted)">Inversion</div><div style="font-size:.8rem;font-weight:700;color:var(--gold)">Low</div></div>
-            </div>
-          </div>
-          <div class="tab-row" id="spray-tabs">
-            <button class="tab active" onclick="switchTab('spray','full')">Full</button>
-            <button class="tab" onclick="switchTab('spray','compact')">Compact</button>
-            <button class="tab" onclick="switchTab('spray','badge')">Badge</button>
-          </div>
-          <div id="spray-tab-full" class="tab-panel active">
-            <div class="code-block">
-              <div class="code-block-head"><span class="code-lang">HTML</span><button class="copy-btn" onclick="copyCode('spray-full-code')">Copy</button></div>
-              <pre id="spray-full-code"><span class="cmt">&lt;!-- AGSIST Spray Advisory — Full --&gt;</span>
-<span class="kw">&lt;div</span> <span class="str">id</span>=<span class="val">"agsist-spray"</span> <span class="str">data-size</span>=<span class="val">"full"</span><span class="kw">&gt;&lt;/div&gt;</span>
-<span class="kw">&lt;script</span> <span class="str">src</span>=<span class="val">"https://agsist.com/api/v1/spray.js"</span> <span class="str">defer</span><span class="kw">&gt;&lt;/script&gt;</span></pre>
-            </div>
-          </div>
-          <div id="spray-tab-compact" class="tab-panel">
-            <div class="code-block">
-              <div class="code-block-head"><span class="code-lang">HTML</span><button class="copy-btn" onclick="copyCode('spray-compact-code')">Copy</button></div>
-              <pre id="spray-compact-code"><span class="cmt">&lt;!-- AGSIST Spray Advisory — Compact --&gt;</span>
-<span class="kw">&lt;div</span> <span class="str">id</span>=<span class="val">"agsist-spray"</span> <span class="str">data-size</span>=<span class="val">"compact"</span><span class="kw">&gt;&lt;/div&gt;</span>
-<span class="kw">&lt;script</span> <span class="str">src</span>=<span class="val">"https://agsist.com/api/v1/spray.js"</span> <span class="str">defer</span><span class="kw">&gt;&lt;/script&gt;</span></pre>
-            </div>
-          </div>
-          <div id="spray-tab-badge" class="tab-panel">
-            <div class="code-block">
-              <div class="code-block-head"><span class="code-lang">HTML</span><button class="copy-btn" onclick="copyCode('spray-badge-code')">Copy</button></div>
-              <pre id="spray-badge-code"><span class="cmt">&lt;!-- AGSIST Spray Advisory — Badge --&gt;</span>
-<span class="kw">&lt;div</span> <span class="str">id</span>=<span class="val">"agsist-spray"</span> <span class="str">data-size</span>=<span class="val">"badge"</span><span class="kw">&gt;&lt;/div&gt;</span>
-<span class="kw">&lt;script</span> <span class="str">src</span>=<span class="val">"https://agsist.com/api/v1/spray.js"</span> <span class="str">defer</span><span class="kw">&gt;&lt;/script&gt;</span></pre>
-            </div>
-          </div>
-        </div>
-      </div>
-
-
-    </div>
-  </div>
-
-  <!-- ═══ ENDPOINTS ════════════════════════════════════════════════════ -->
-  <div class="sec fade-up" id="f3">
-    <div class="sec-head">
-      <div class="sec-eyebrow">REST API</div>
-      <div class="sec-title">Data Endpoints</div>
-      <div class="sec-desc">Direct JSON access to AGSIST data. Static files on a CDN — fast, reliable, no auth. Suitable for apps, spreadsheets, research tools, and automation.</div>
-    </div>
-
-    <div class="endpoint">
-      <span class="endpoint-method">GET</span>
-      <div class="endpoint-info">
-        <div class="endpoint-url">https://agsist.com/api/v1/daily/current.json</div>
-        <div class="endpoint-desc">Today's AGSIST Daily briefing — headline, lead, all sections, publish timestamp. ~3 KB.</div>
-      </div>
-      <button class="endpoint-copy" onclick="copyText('https://agsist.com/api/v1/daily/current.json')">Copy URL</button>
-    </div>
-    <div class="endpoint">
-      <span class="endpoint-method">GET</span>
-      <div class="endpoint-info">
-        <div class="endpoint-url">https://agsist.com/api/v1/daily/YYYY-MM-DD.json</div>
-        <div class="endpoint-desc">Archived briefing by date. Replace YYYY-MM-DD with any past weekday. Available from launch date forward.</div>
-      </div>
-      <button class="endpoint-copy" onclick="copyText('https://agsist.com/api/v1/daily/2026-02-26.json')">Copy Example</button>
-    </div>
-    <div class="endpoint">
-      <span class="endpoint-method">GET</span>
-      <div class="endpoint-info">
-        <div class="endpoint-url">https://agsist.com/api/v1/prices/current.json</div>
-        <div class="endpoint-desc">Latest commodity prices — corn, beans, wheat, milk, cattle, hogs. 15-min delayed. ~2 KB.</div>
-      </div>
-      <button class="endpoint-copy" onclick="copyText('https://agsist.com/api/v1/prices/current.json')">Copy URL</button>
-    </div>
-    <div class="endpoint">
-      <span class="endpoint-method">GET</span>
-      <div class="endpoint-info">
-        <div class="endpoint-url">https://agsist.com/api/v1/spray/current.json</div>
-        <div class="endpoint-desc">Spray conditions by lat/lon. Pass ?lat=44.5&lon=-93.2 for location-specific results.</div>
-      </div>
-      <button class="endpoint-copy" onclick="copyText('https://agsist.com/api/v1/spray/current.json?lat=44.5&lon=-93.2')">Copy URL</button>
-    </div>
-    <div class="endpoint">
-      <span class="endpoint-method">GET</span>
-      <div class="endpoint-info">
-        <div class="endpoint-url">https://agsist.com/api/v1/urea/current.json</div>
-        <div class="endpoint-desc">Urea volatilization risk score for a lat/lon. Pass ?lat=44.5&lon=-93.2. Returns score, level, factor breakdown. ~2 KB.</div>
-      </div>
-      <button class="endpoint-copy" onclick="copyText('https://agsist.com/api/v1/urea/current.json?lat=44.5&lon=-93.2')">Copy URL</button>
-    </div>
-    <div class="endpoint">
-      <span class="endpoint-method">GET</span>
-      <div class="endpoint-info">
-        <div class="endpoint-url">https://agsist.com/api/v1/spray/current.json</div>
-        <div class="endpoint-desc">Spray advisory for a lat/lon. Returns overall rating, wind/temp/humidity/inversion factor scores, and hourly window forecast. ~3 KB.</div>
-      </div>
-      <button class="endpoint-copy" onclick="copyText('https://agsist.com/api/v1/spray/current.json?lat=44.5&lon=-93.2')">Copy URL</button>
-    </div>
-    <div class="endpoint">
-      <span class="endpoint-method">GET</span>
-      <div class="endpoint-info">
-        <div class="endpoint-url">https://farmers1st.com/api/v3/current.json</div>
-        <div class="endpoint-desc">FFAI — Farmers First Ag Index. Current quarter composite, sub-indexes, regime, outlook. CC BY 4.0.</div>
-      </div>
-      <button class="endpoint-copy" onclick="copyText('https://farmers1st.com/api/v3/current.json')">Copy URL</button>
-    </div>
-
-    <!-- Example response -->
-    <div style="margin-top:1.25rem">
-      <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.65rem">Example — daily/current.json</div>
-      <div class="code-block">
-        <div class="code-block-head"><span class="code-lang">JSON</span><button class="copy-btn" onclick="copyCode('json-example')">Copy</button></div>
-        <pre id="json-example">{
-  <span class="str">"date"</span>:      <span class="val">"2026-02-26"</span>,
-  <span class="str">"headline"</span>: <span class="val">"CORN SLIDES ON EXPORT CONCERNS. BEANS HOLD NEAR LOWS."</span>,
-  <span class="str">"lead"</span>:     <span class="val">"Overnight markets turned cautious after a stronger dollar..."</span>,
-  <span class="str">"sections"</span>: [
-    { <span class="str">"label"</span>: <span class="val">"What to Watch Today"</span>, <span class="str">"text"</span>: <span class="val">"8:30am ET — USDA Export Sales..."</span> },
-    { <span class="str">"label"</span>: <span class="val">"One Number to Know"</span>,  <span class="str">"text"</span>: <span class="val">"58% — corn belt in D1+ drought..."</span> },
-    { <span class="str">"label"</span>: <span class="val">"What Farmers Are Talking About"</span>, <span class="str">"text"</span>: <span class="val">"USDA Outlook Forum..."</span> }
+      <!-- Example response -->
+      <div class="json-block">
+        <div style="font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.6rem">Example — /api/v1/daily/current.json</div>
+        <pre>{
+  <span class="sk">"date"</span>:         <span class="sv">"2026-02-26"</span>,
+  <span class="sk">"headline"</span>:     <span class="sv">"CORN SLIDES ON EXPORT CONCERNS. BEANS HOLD NEAR LOWS."</span>,
+  <span class="sk">"lead"</span>:         <span class="sv">"Overnight markets turned cautious after a stronger dollar..."</span>,
+  <span class="sk">"sections"</span>: [
+    { <span class="sk">"label"</span>: <span class="sv">"What to Watch Today"</span>, <span class="sk">"text"</span>: <span class="sv">"8:30am ET — USDA Export Sales..."</span> },
+    { <span class="sk">"label"</span>: <span class="sv">"One Number to Know"</span>,  <span class="sk">"text"</span>: <span class="sv">"58% — corn belt in D1+ drought..."</span> }
   ],
-  <span class="str">"published_at"</span>: <span class="val">"2026-02-26T06:00:00-06:00"</span>
+  <span class="sk">"published_at"</span>: <span class="sv">"2026-02-26T06:00:00-06:00"</span>
 }</pre>
       </div>
     </div>
-  </div>
 
-  <!-- ═══ USE CASES ════════════════════════════════════════════════════ -->
-  <div class="sec fade-up" id="f4">
-    <div class="sec-head">
-      <div class="sec-eyebrow">Who Uses This</div>
-      <div class="sec-title">Built For The Ag Web</div>
-    </div>
-    <div class="use-grid">
-      <div class="use-card">
-        <div class="use-icon">🌾</div>
-        <div class="use-title">Co-op & Elevator Websites</div>
-        <div class="use-desc">Embed live grain prices and the AGSIST Daily briefing directly on your member portal. Zero backend work — two lines of HTML.</div>
-      </div>
-      <div class="use-card">
-        <div class="use-icon">📰</div>
-        <div class="use-title">Ag Publications & Blogs</div>
-        <div class="use-desc">Add a live market sidebar to any article page. Keeps readers engaged with current data without leaving your site.</div>
-      </div>
-      <div class="use-card">
-        <div class="use-icon">📱</div>
-        <div class="use-title">Farm Management Apps</div>
-        <div class="use-desc">Pull JSON data directly into your application. Price feeds, spray windows, GDU tracking — all available as structured data.</div>
-      </div>
-      <div class="use-card">
-        <div class="use-icon">📊</div>
-        <div class="use-title">Spreadsheet & Excel Users</div>
-        <div class="use-desc">Use Power Query or Google Sheets IMPORTDATA() to pull live commodity prices directly into your farm financial models.</div>
-      </div>
-      <div class="use-card">
-        <div class="use-icon">🏦</div>
-        <div class="use-title">Ag Lenders & Insurers</div>
-        <div class="use-desc">Display the FFAI index and commodity outlook in client-facing portals. CC BY 4.0 license — free to use with attribution.</div>
-      </div>
-      <div class="use-card">
-        <div class="use-icon">🎓</div>
-        <div class="use-title">Ag Education & Extension</div>
-        <div class="use-desc">Use live market data in curriculum, demonstration tools, and student dashboards. No API key or budget required.</div>
-      </div>
-    </div>
-  </div>
+    <!-- ═══ WHO USES THIS ══════════════════════════════════════════ -->
+    <div class="dev-sec">
+      <div class="dev-sec-eyebrow">Who Uses This</div>
+      <div class="dev-sec-title">Built For The Ag Web</div>
 
-  <!-- ═══ TERMS & ATTRIBUTION ══════════════════════════════════════════ -->
-  <div class="sec fade-up" id="f5">
-    <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.75rem 2rem">
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:2rem">
+      <div class="use-grid">
+        <div class="use-card">
+          <div class="use-icon">🌾</div>
+          <div class="use-title">Co-ops &amp; Elevators</div>
+          <div class="use-desc">Embed live grain prices and the daily briefing on your member portal. Two lines of HTML, zero backend work.</div>
+        </div>
+        <div class="use-card">
+          <div class="use-icon">📰</div>
+          <div class="use-title">Ag Publications</div>
+          <div class="use-desc">Add a live market sidebar to any article page. Current data keeps readers on your site.</div>
+        </div>
+        <div class="use-card">
+          <div class="use-icon">📱</div>
+          <div class="use-title">Farm Apps</div>
+          <div class="use-desc">Pull JSON into your application — price feeds, spray windows, GDU tracking, all structured.</div>
+        </div>
+        <div class="use-card">
+          <div class="use-icon">📊</div>
+          <div class="use-title">Spreadsheet Users</div>
+          <div class="use-desc">Power Query or IMPORTDATA() — pull live prices directly into your farm financial models.</div>
+        </div>
+        <div class="use-card">
+          <div class="use-icon">🏦</div>
+          <div class="use-title">Ag Lenders &amp; Insurers</div>
+          <div class="use-desc">Display the FFAI index and commodity outlook in client portals. CC BY 4.0 — free with attribution.</div>
+        </div>
+        <div class="use-card">
+          <div class="use-icon">🎓</div>
+          <div class="use-title">Education &amp; Extension</div>
+          <div class="use-desc">Live market data for classrooms, demos, and student dashboards. No budget required.</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ LICENSE & CONTACT ══════════════════════════════════════ -->
+    <div class="dev-sec">
+      <div class="dev-footer">
         <div>
-          <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:.6rem">License & Terms</div>
-          <div style="font-size:.9rem;line-height:1.75;color:var(--text-dim)">
-            AGSIST widget and API data is free to use with attribution. Display "Powered by <a href="https://agsist.com" style="color:var(--gold)">AGSIST</a>" near any embedded widget. Commodity price data is 15-minute delayed and not suitable for trading decisions.
-          </div>
+          <div class="dev-footer-lbl">License</div>
+          <p>Free to use with attribution. Display "Powered by <a href="https://agsist.com">AGSIST</a>" near any embedded widget. Price data is 15-min delayed and not suitable for trading decisions. Commercial redistribution needs a written agreement.</p>
         </div>
         <div>
-          <div style="font-size:.68rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--blue);margin-bottom:.6rem">Contact & Support</div>
-          <div style="font-size:.9rem;line-height:1.75;color:var(--text-dim)">
-            Questions about integration, custom widget requests, or data partnerships:<br>
-            <a href="/cdn-cgi/l/email-protection#a4d7cdc3e4c2c5d6c9c1d6d795d7d08ac7cbc9" style="color:var(--gold)"><span class="__cf_email__" data-cfemail="d7a4beb097b1b6a5bab2a5a4e6a4a3f9b4b8ba">[email&#160;protected]</span></a><br>
-            <a href="tel:7157972428" style="color:var(--gold)">715-797-2428</a><br>
-            <a href="/contact" style="color:var(--gold)">Contact form →</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══════════════════════════════════════════════════════════
-       DATA ENDPOINTS
-  ═══════════════════════════════════════════════════════════ -->
-  <div style="max-width:1100px;margin:0 auto;padding:0 16px 32px">
-
-    <!-- Section: Data Endpoints -->
-    <div style="margin-top:32px;margin-bottom:16px">
-      <div style="font-size:.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.8px;font-weight:700;border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:16px">
-        📡 Data Endpoints
-      </div>
-
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:16px">
-        <div style="background:var(--bg);padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center">
-          <span style="font-size:.95rem;font-weight:700;color:var(--gold)">Available Endpoints</span>
-          <span style="font-size:.75rem;color:var(--text-dim)">No API key required · CORS enabled · JSON</span>
-        </div>
-        <div style="padding:16px">
-
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:12px">
-
-            <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                <span style="background:rgba(34,197,94,.15);color:#4ade80;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px">GET</span>
-                <code style="font-size:.8rem;color:var(--gold)">/data/markets.json</code>
-              </div>
-              <div style="font-size:.75rem;color:var(--text-dim);margin-bottom:8px">Live grain futures prices (Stooq, 15-min delay). Corn, soybeans, wheat, cattle, hogs.</div>
-              <pre style="background:var(--surface);padding:8px;border-radius:4px;font-size:.7rem;color:var(--text);overflow-x:auto;margin:0">{ "grains": {
-  "corn":  { "price": 438.25, "change": -2.5, "label": "ZC" },
-  "beans": { "price": 971.50, "change":  1.75, "label": "ZS" }
-}}</pre>
-            </div>
-
-            <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                <span style="background:rgba(34,197,94,.15);color:#4ade80;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px">GET</span>
-                <code style="font-size:.8rem;color:var(--gold)">/data/weather.json</code>
-              </div>
-              <div style="font-size:.75rem;color:var(--text-dim);margin-bottom:8px">Current conditions at the user's detected location. Temp, wind, humidity, precip chance.</div>
-              <pre style="background:var(--surface);padding:8px;border-radius:4px;font-size:.7rem;color:var(--text);overflow-x:auto;margin:0">{ "temp": 62, "wind_mph": 8,
-  "humidity": 58, "rain_pct": 15,
-  "location": "Chippewa Falls, WI" }</pre>
-            </div>
-
-            <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                <span style="background:rgba(34,197,94,.15);color:#4ade80;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px">GET</span>
-                <code style="font-size:.8rem;color:var(--gold)">/data/daily.json</code>
-              </div>
-              <div style="font-size:.75rem;color:var(--text-dim);margin-bottom:8px">Today's AGSIST Daily briefing data. Markets summary, key number, weather summary.</div>
-              <pre style="background:var(--surface);padding:8px;border-radius:4px;font-size:.7rem;color:var(--text);overflow-x:auto;margin:0">{ "headline": "Corn steady…",
-  "key_number": "34,000",
-  "date": "2026-02-27" }</pre>
-            </div>
-
-            <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px">
-              <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
-                <span style="background:rgba(34,197,94,.15);color:#4ade80;font-size:.65rem;font-weight:700;padding:2px 8px;border-radius:10px">GET</span>
-                <code style="font-size:.8rem;color:var(--gold)">/data/spray.json</code>
-              </div>
-              <div style="font-size:.75rem;color:var(--text-dim);margin-bottom:8px">Spray advisory score and contributing factors for the detected location.</div>
-              <pre style="background:var(--surface);padding:8px;border-radius:4px;font-size:.7rem;color:var(--text);overflow-x:auto;margin:0">{ "score": 82, "rating": "Good",
-  "wind_ok": true, "temp_ok": true,
-  "inversion_risk": "low" }</pre>
-            </div>
-
-          </div>
-
-          <div style="margin-top:16px;background:rgba(34,197,94,.05);border:1px solid rgba(34,197,94,.2);border-radius:8px;padding:12px 14px;font-size:.8rem">
-            <strong style="color:#4ade80">CORS Policy:</strong>
-            <span style="color:var(--text-dim)"> All <code style="color:var(--gold)">/data/*</code> endpoints include <code style="color:var(--text)">Access-Control-Allow-Origin: *</code> headers. Fetch directly from any domain — no proxy required. Rate limit: 300 requests/hour per IP.</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Section: Iframe Embeds -->
-    <div style="margin-top:24px;margin-bottom:16px">
-      <div style="font-size:.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.8px;font-weight:700;border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:16px">
-        🖼️ Iframe Page Embeds
-      </div>
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden">
-        <div style="background:var(--bg);padding:12px 16px;border-bottom:1px solid var(--border)">
-          <span style="font-size:.95rem;font-weight:700;color:var(--gold)">Embed Any AGSIST Tool as an Iframe</span>
-        </div>
-        <div style="padding:16px">
-          <p style="font-size:.85rem;color:var(--text-dim);margin:0 0 16px 0">Every AGSIST tool page can be embedded directly via iframe. All pages are dark-theme, mobile-responsive, and X-Frame-Options: SAMEORIGIN exempt for agsist.com embeds.</p>
-
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
-            <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px">
-              <div style="font-size:.82rem;font-weight:700;color:var(--gold);margin-bottom:6px">💰 Break-Even Calculator</div>
-              <pre style="background:var(--surface);padding:8px;border-radius:4px;font-size:.7rem;color:var(--text);overflow-x:auto;margin:0;white-space:pre-wrap">&lt;iframe
-  src="https://agsist.com/pages/breakeven"
-  width="100%"
-  height="800"
-  frameborder="0"
-  title="AGSIST Break-Even Calculator"
-  loading="lazy"&gt;
-&lt;/iframe&gt;</pre>
-            </div>
-            <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px">
-              <div style="font-size:.82rem;font-weight:700;color:var(--gold);margin-bottom:6px">🏗️ Grain Bin Calculator</div>
-              <pre style="background:var(--surface);padding:8px;border-radius:4px;font-size:.7rem;color:var(--text);overflow-x:auto;margin:0;white-space:pre-wrap">&lt;iframe
-  src="https://agsist.com/pages/grain-bin-calculator"
-  width="100%"
-  height="700"
-  frameborder="0"
-  title="AGSIST Grain Bin Calculator"
-  loading="lazy"&gt;
-&lt;/iframe&gt;</pre>
-            </div>
-            <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px">
-              <div style="font-size:.82rem;font-weight:700;color:var(--gold);margin-bottom:6px">🌡️ GDU Calculator</div>
-              <pre style="background:var(--surface);padding:8px;border-radius:4px;font-size:.7rem;color:var(--text);overflow-x:auto;margin:0;white-space:pre-wrap">&lt;iframe
-  src="https://agsist.com/gdu-calculator"
-  width="100%"
-  height="900"
-  frameborder="0"
-  title="AGSIST GDU Calculator"
-  loading="lazy"&gt;
-&lt;/iframe&gt;</pre>
-            </div>
-            <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px">
-              <div style="font-size:.82rem;font-weight:700;color:var(--gold);margin-bottom:6px">📅 USDA Report Calendar</div>
-              <pre style="background:var(--surface);padding:8px;border-radius:4px;font-size:.7rem;color:var(--text);overflow-x:auto;margin:0;white-space:pre-wrap">&lt;iframe
-  src="https://agsist.com/usda-calendar"
-  width="100%"
-  height="800"
-  frameborder="0"
-  title="USDA Report Calendar"
-  loading="lazy"&gt;
-&lt;/iframe&gt;</pre>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Section: JavaScript SDK -->
-    <div style="margin-top:24px;margin-bottom:16px">
-      <div style="font-size:.7rem;color:var(--text-dim);text-transform:uppercase;letter-spacing:.8px;font-weight:700;border-bottom:1px solid var(--border);padding-bottom:8px;margin-bottom:16px">
-        ⚙️ JavaScript SDK Reference
-      </div>
-      <div style="background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden">
-        <div style="background:var(--bg);padding:12px 16px;border-bottom:1px solid var(--border)">
-          <span style="font-size:.95rem;font-weight:700;color:var(--gold)">geo.js — Shared Utility Functions</span>
-        </div>
-        <div style="padding:16px">
-          <p style="font-size:.82rem;color:var(--text-dim);margin:0 0 12px 0">
-            Including <code style="color:var(--gold)">geo.js</code> exposes global utilities used by all AGSIST pages.
+          <div class="dev-footer-lbl">Contact</div>
+          <p>
+            Integration questions, custom widgets, data partnerships, or media inquiries — just call or email.<br>
+            <strong style="color:var(--text)">Sigurd Lindquist</strong><br>
+            <a href="tel:+17157972428">715-797-2428</a><br>
+            <a href="https://farmers1st.com" target="_blank" rel="noopener">farmers1st.com</a>
           </p>
-          <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px">
-            <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px">
-              <div style="font-size:.75rem;font-weight:700;color:var(--gold);margin-bottom:6px">fetchStooqSym(entry, callback)</div>
-              <div style="font-size:.73rem;color:var(--text-dim);margin-bottom:6px">Fetches a single CBOT futures price from Stooq with auto-fallback proxy.</div>
-              <pre style="background:var(--surface);padding:8px;border-radius:4px;font-size:.68rem;color:var(--text);overflow-x:auto;margin:0">const entry = STOOQ_BY_LABEL['Corn (front)'];
-fetchStooqSym(entry, (err, result) => {
-  if (result) // e.g. "4.3825"
-});</pre>
-            </div>
-            <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px">
-              <div style="font-size:.75rem;font-weight:700;color:var(--gold);margin-bottom:6px">STOOQ_BY_LABEL[label]</div>
-              <div style="font-size:.73rem;color:var(--text-dim);margin-bottom:6px">Lookup table of all available Stooq symbols. Keys match geo.js STOOQ_QUOTES labels.</div>
-              <pre style="background:var(--surface);padding:8px;border-radius:4px;font-size:.68rem;color:var(--text);overflow-x:auto;margin:0">// Available labels:
-'Corn (front)', "Corn Dec'26"
-'Beans (front)', "Beans Nov'26"
-'Wheat (front)', 'Live Cattle'
-'Lean Hogs', 'Dollar Index'
-'10-Yr Treasury', 'Gold'</pre>
-            </div>
-            <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px">
-              <div style="font-size:.75rem;font-weight:700;color:var(--gold);margin-bottom:6px">AGSIST_GEO.getState() / setState()</div>
-              <div style="font-size:.73rem;color:var(--text-dim);margin-bottom:6px">Read/write the user's selected state (persists via localStorage). From state.js.</div>
-              <pre style="background:var(--surface);padding:8px;border-radius:4px;font-size:.68rem;color:var(--text);overflow-x:auto;margin:0">// Include state.js first
-const st = AGSIST_GEO.getState(); // 'WI'
-AGSIST_GEO.setState('MN');
-// Fires 'agsist-state-change' event</pre>
-            </div>
-            <div style="background:var(--bg);border:1px solid var(--border);border-radius:8px;padding:14px">
-              <div style="font-size:.75rem;font-weight:700;color:var(--gold);margin-bottom:6px">AGSIST_GEO.detectLocation(ok, fail)</div>
-              <div style="font-size:.73rem;color:var(--text-dim);margin-bottom:6px">Browser geolocation → Nominatim reverse-geocode → 2-letter state abbreviation.</div>
-              <pre style="background:var(--surface);padding:8px;border-radius:4px;font-size:.68rem;color:var(--text);overflow-x:auto;margin:0">AGSIST_GEO.detectLocation(
-  abbr =>,
-  ()   =>);</pre>
-            </div>
-          </div>
         </div>
       </div>
     </div>
 
-  </div>
+  </main>
 
-</main>
-
-<!-- FOOTER -->
   <div id="site-footer"></div>
+  <div class="toast" id="toast">Copied to clipboard</div>
 
-<!-- Toast notification -->
-<div class="toast" id="toast">Copied to clipboard</div>
+  <script>
+  /* Copy helper */
+  function copyText(t){
+    navigator.clipboard.writeText(t).then(function(){
+      var el=document.getElementById('toast');
+      el.textContent='Copied!';
+      el.classList.add('show');
+      setTimeout(function(){el.classList.remove('show')},1800);
+    }).catch(function(){});
+  }
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// ── Theme ──────────────────────────────────────────────────────
-function getTheme(){try{return localStorage.getItem('agsist-theme')||'dark'}catch(e){return'dark'}}
-function setTheme(t){
-  document.documentElement.setAttribute('data-theme',t);
-  try{localStorage.setItem('agsist-theme',t)}catch(e){}
-  document.getElementById('theme-icon').textContent=t==='light'?'☀️':'🌙';
-}
-setTheme(getTheme());
-var _tb=document.getElementById('theme-btn');if(_tb)_tb.addEventListener('click',function(){setTheme(document.documentElement.getAttribute('data-theme')==='dark'?'light':'dark');});
-
-// ── Sticky nav ────────────────────────────────────────────────
-window.addEventListener('scroll',function(){
-  document.getElementById('topnav').classList.toggle('scrolled',window.scrollY>10);
-},{passive:true});
-
-// ── Tab switcher ──────────────────────────────────────────────
-function switchTab(group,name){
-  var tabs=document.getElementById(group+'-tabs').querySelectorAll('.tab');
-  tabs.forEach(function(t,i){
-    var names=['full','headline','compact'];
-    t.classList.toggle('active',names[i]===name);
-  });
-  ['full','headline','compact'].forEach(function(n){
-    var el=document.getElementById(group+'-tab-'+n);
-    if(el)el.classList.toggle('active',n===name);
-  });
-}
-
-// ── Copy helpers ──────────────────────────────────────────────
-function showToast(msg){
-  var t=document.getElementById('toast');
-  t.textContent=msg||'Copied to clipboard';
-  t.classList.add('show');
-  setTimeout(function(){t.classList.remove('show')},2000);
-}
-function copyCode(id){
-  var el=document.getElementById(id);
-  if(!el)return;
-  var text=el.innerText||el.textContent;
-  navigator.clipboard.writeText(text).then(function(){showToast('Code copied!')}).catch(function(){});
-}
-function copyText(txt){
-  navigator.clipboard.writeText(txt).then(function(){showToast('URL copied!')}).catch(function(){});
-}
-
-// ── Scroll reveal ─────────────────────────────────────────────
-var io=new IntersectionObserver(function(entries){
-  entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target)}});
-},{threshold:0.08});
-document.querySelectorAll('.fade-up').forEach(function(el){io.observe(el)});
-
-// ── Daily widget live preview ─────────────────────────────────
-// Simulate what the live widget will show (using hardcoded today data)
-(function(){
-  var dateEl=document.getElementById('daily-widget-date');
-  var hlEl=document.getElementById('daily-widget-headline');
-  var secEl=document.getElementById('daily-widget-sections');
-  if(!dateEl)return;
-
-  var now=new Date();
-  dateEl.textContent=now.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'});
-
-  // In production this would fetch /api/v1/daily/current.json
-  hlEl.textContent='CORN SLIDES ON EXPORT CONCERNS. BEANS HOLD NEAR LOWS.';
-
-  var sections=[
-    {icon:'👁',label:'WHAT TO WATCH TODAY',text:'8:30am ET — USDA Export Sales. Analyst range: corn 700–900k MT, beans 600–900k MT.'},
-    {icon:'#️⃣',label:'ONE NUMBER TO KNOW',text:'58% — Portion of the corn belt in D1 drought or worse, up 4 points from last week.'},
-    {icon:'🗣',label:'WHAT FARMERS ARE TALKING ABOUT',text:"USDA's February Ag Outlook Forum hinted at corn acres holding near 91M for 2026."}
-  ];
-
-  sections.forEach(function(s){
-    var d=document.createElement('div');
-    d.style.cssText='display:flex;gap:.6rem;align-items:flex-start;padding:.65rem .75rem;background:rgba(255,255,255,.04);border-radius:6px';
-    d.innerHTML='<span style="font-size:.95rem;flex-shrink:0">'+s.icon+'</span>'
-      +'<div><div style="font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.2rem">'+s.label+'</div>'
-      +'<div style="font-size:.82rem;line-height:1.6;color:var(--text-dim)">'+s.text+'</div></div>';
-    secEl.appendChild(d);
-  });
-})();
-
-</script>
-
+  /* Scroll reveal */
+  if('IntersectionObserver' in window){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');io.unobserve(e.target)}});
+    },{threshold:0.06});
+    document.querySelectorAll('.fade-up').forEach(function(el){io.observe(el)});
+  }
+  </script>
   <script src="/components/loader.js"></script>
 </body>
 </html>
