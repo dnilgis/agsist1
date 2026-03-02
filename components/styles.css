@@ -510,9 +510,6 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
 /* ═══════════════════════════════════════════════════════════════════
    12b. TOOL WIDGETS — Live spray/urea in Quick Tools card
    Added: Session 8 · 2026-03-01
-   
-   Insert this block into styles.css AFTER section "12. TOOLS"
-   and BEFORE section "13. RADAR & DROUGHT"
    ═══════════════════════════════════════════════════════════════════ */
 .tool-widget {
   display: block;
@@ -744,11 +741,11 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
 .signup--slim a:hover { text-decoration: underline }
 
 /* ═══════════════════════════════════════════════════════════════════
-   18. FOOTER
+   18. FOOTER — v8: streamlined 4-column layout
    ═══════════════════════════════════════════════════════════════════ */
-.footer { background: var(--surface); border-top: 1px solid var(--border-g); padding: 1.5rem 0 0; transition: background .25s }
+.footer { background: var(--surface); border-top: 1px solid var(--border-g); padding: 1.25rem 0 0; transition: background .25s }
 .footer-inner { max-width: 1400px; margin: 0 auto; padding: 0 var(--sp-lg) }
-.footer-top { display: flex; justify-content: space-between; align-items: center; padding-bottom: .9rem; border-bottom: 1px solid var(--border); margin-bottom: .9rem; flex-wrap: wrap; gap: .6rem }
+.footer-top { display: flex; justify-content: space-between; align-items: center; padding-bottom: .75rem; border-bottom: 1px solid var(--border); margin-bottom: .75rem; flex-wrap: wrap; gap: .6rem }
 .footer-brand { display: flex; align-items: center; gap: .65rem; min-width: 0 }
 .footer-brand img { height: 36px; width: auto; object-fit: contain; max-width: 210px }
 .footer-brand-text { display: flex; flex-direction: column; gap: .15rem }
@@ -756,12 +753,12 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
 .footer-built { font-size: .72rem; color: var(--text-muted) }
 .footer-status { display: flex; align-items: center; gap: .4rem; font-size: .75rem; color: var(--text-dim) }
 .status-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); animation: blink 2s ease-in-out infinite }
-.footer-cols { display: grid; grid-template-columns: repeat(6, 1fr); gap: 1.25rem; padding-bottom: .9rem; border-bottom: 1px solid var(--border); margin-bottom: .9rem }
-.footer-col h4 { font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: .5rem; opacity: .9 }
-.footer-col a { display: block; font-size: .82rem; color: var(--text-dim); padding: .14rem 0; transition: color .15s }
+.footer-cols { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; padding-bottom: .75rem; border-bottom: 1px solid var(--border); margin-bottom: .75rem }
+.footer-col h4 { font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: .45rem; opacity: .9 }
+.footer-col a { display: block; font-size: .82rem; color: var(--text-dim); padding: .12rem 0; transition: color .15s }
 .footer-col a:hover { color: var(--text) }
-.footer-net { padding-bottom: .9rem; border-bottom: 1px solid var(--border); margin-bottom: .8rem }
-.footer-net-lbl { font-size: .65rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .55rem; display: block }
+.footer-net { padding-bottom: .75rem; border-bottom: 1px solid var(--border); margin-bottom: .6rem }
+.footer-net-lbl { font-size: .65rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--text-muted); margin-bottom: .5rem; display: block }
 .footer-net-links { display: flex; gap: .55rem; flex-wrap: wrap }
 .footer-net-link { display: flex; align-items: center; gap: .65rem; padding: .45rem .9rem; background: var(--surface2); border: 1px solid var(--border); border-radius: 7px; transition: border-color .15s; flex: 1 1 180px; min-width: 0 }
 .footer-net-link:hover { border-color: var(--border-g) }
@@ -771,7 +768,7 @@ button:focus:not(:focus-visible), a:focus:not(:focus-visible) { outline: none }
 .net-text strong { font-size: .82rem; color: var(--text); font-weight: 600; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis }
 .net-text em { font-size: .74rem; color: var(--text-dim); font-style: normal }
 .net-arr { font-size: .78rem; color: var(--text-muted); margin-left: auto; flex-shrink: 0 }
-.footer-bottom { display: flex; justify-content: space-between; align-items: center; padding: .6rem 0; flex-wrap: wrap; gap: .3rem }
+.footer-bottom { display: flex; justify-content: center; align-items: center; padding: .5rem 0 }
 .footer-legal { display: flex; align-items: center; gap: .4rem; font-size: .74rem; color: var(--text-muted); flex-wrap: wrap }
 .footer-legal a { color: var(--text-muted); transition: color .15s }
 .footer-legal a:hover { color: var(--text-dim) }
@@ -840,10 +837,6 @@ main.tool-main, main#main-content { max-width: 1100px; margin: 0 auto; padding: 
 
 /* ═══════════════════════════════════════════════════════════════════
    21. RESPONSIVE — consolidated breakpoints
-   ──────────────────────────────────────────────────────────────────
-   v6: 2-wide price cards on ALL phone sizes. Tighter card layout
-   so two cards fit side-by-side even on 320px screens.
-   Ticker gradient color matched to strip background.
    ═══════════════════════════════════════════════════════════════════ */
 
 /* ── Large desktop → tablet landscape ──────────────────────────── */
@@ -881,7 +874,7 @@ main.tool-main, main#main-content { max-width: 1100px; margin: 0 auto; padding: 
   .main { padding: 1.25rem .9rem }
   .signup { padding: 1.75rem 1rem }
   .footer-inner { padding-left: .9rem; padding-right: .9rem }
-  .footer-cols { grid-template-columns: 1fr }
+  .footer-cols { grid-template-columns: repeat(2, 1fr) }
 
   /* Ticker */
   .prices-strip { top: 60px }
@@ -923,10 +916,7 @@ main.tool-main, main#main-content { max-width: 1100px; margin: 0 auto; padding: 
   .hero-sidebar { gap: .6rem }
   .hero-sidebar > .s-card:last-child { display: none }
 
-  /* ── v6: Price cards — 2-wide on ALL phone sizes ─────────────
-     Force 2-column grid so cards sit side-by-side instead of
-     stretching full-width. Tighter padding/fonts to fit.
-     ──────────────────────────────────────────────────────────── */
+  /* ── v6: Price cards — 2-wide on ALL phone sizes ─────────────── */
   .price-cards-grid { grid-template-columns: repeat(2, 1fr); gap: .6rem }
   .price-cards-grid-2 { grid-template-columns: repeat(2, 1fr); gap: .6rem }
   .pc { padding: .6rem .65rem }
@@ -942,7 +932,7 @@ main.tool-main, main#main-content { max-width: 1100px; margin: 0 auto; padding: 
   .pc-section-lbl { font-size: .6rem }
 
   /* Footer bottom stacks vertically on phone */
-  .footer-bottom { flex-direction: column; align-items: flex-start; gap: .4rem }
+  .footer-bottom { flex-direction: column; align-items: center; gap: .3rem }
 }
 
 /* ── Very narrow (iPhone SE, 375px) ────────────────────────────── */
