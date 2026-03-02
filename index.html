@@ -187,9 +187,101 @@
   </div>
 </div>
 
-<!-- ══ AGSIST DAILY HERO ═══════════════════════════════════════════ -->
+<!-- ══ AGSIST DAILY HERO — v4 mobile-first ═════════════════════════ -->
+<style>
+/* ═══ DAILY HERO v4 — mobile-first rewrite ═══════════════════════ */
+.dh{--dh-pad:1rem;max-width:1400px;margin:0 auto}
+.dh *{box-sizing:border-box}
+
+/* Teaser (collapsed) — keep existing */
+
+/* Full briefing wrapper */
+.dh-inner{padding:var(--dh-pad) var(--dh-pad) .5rem}
+
+/* Greeting + meta */
+.dh-greeting{font-family:'Oswald',sans-serif;font-size:1.35rem;font-weight:600;color:var(--text-dim);letter-spacing:.03em;margin-bottom:.15rem}
+.dh-eyebrow{display:flex;align-items:center;gap:.45rem;font-size:.65rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.15rem}
+.dh-eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--green);animation:blink 1.5s infinite}
+.dh-date{font-size:.78rem;color:var(--text-muted);margin-bottom:1rem;font-family:'JetBrains Mono',monospace}
+
+/* Field call badge */
+.dh-field-call{display:flex;align-items:center;gap:.5rem;padding:.5rem .9rem;margin-bottom:.85rem;border-radius:8px;font-size:.78rem;font-weight:700;letter-spacing:.03em;font-family:'JetBrains Mono',monospace;line-height:1.45}
+.dh-fc--plan{background:rgba(230,176,66,.1);color:var(--gold);border:1px solid rgba(230,176,66,.2)}
+.dh-fc--go{background:rgba(34,197,94,.08);color:var(--green);border:1px solid rgba(34,197,94,.18)}
+.dh-fc--stop{background:rgba(239,68,68,.1);color:#ef4444;border:1px solid rgba(239,68,68,.2)}
+.dh-fc--caution{background:rgba(230,176,66,.1);color:var(--gold);border:1px solid rgba(230,176,66,.2)}
+
+/* Headline */
+.dh-headline{font-family:'Oswald',sans-serif;font-size:1.65rem;font-weight:800;line-height:1.15;color:var(--text);margin:0 0 .5rem;letter-spacing:-.01em;text-transform:uppercase}
+.dh-lead{font-size:.88rem;line-height:1.55;color:var(--text-dim);margin:0 0 .85rem}
+
+/* Top-line price strip */
+.dh-topline{padding:.6rem .8rem;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-family:'JetBrains Mono',monospace;font-size:.72rem;line-height:1.85;color:var(--text-dim);margin-bottom:1.1rem}
+.dh-topline div+div{border-top:1px solid var(--border);padding-top:.3rem;margin-top:.3rem}
+
+/* Quick-glance card grid */
+.dh-cards{display:grid;grid-template-columns:1fr;gap:.75rem;margin-bottom:1rem}
+.dh-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.85rem 1rem;min-width:0}
+.dh-card-label{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.55rem;display:flex;align-items:center;gap:.4rem}
+
+/* One Number */
+.dh-card--gold{border-color:rgba(230,176,66,.25);background:linear-gradient(135deg,var(--surface) 0%,rgba(230,176,66,.04) 100%)}
+.dh-card--gold .dh-card-label{color:var(--gold)}
+.dh-one-val{font-family:'Oswald',sans-serif;font-size:2rem;font-weight:800;color:var(--gold);line-height:1.1;margin-bottom:.2rem}
+.dh-one-unit{font-size:.78rem;font-weight:600;color:var(--text-dim);margin-bottom:.3rem}
+.dh-one-ctx{font-size:.76rem;line-height:1.55;color:var(--text-muted)}
+
+/* Watch List */
+.dh-watch-item{display:flex;gap:.65rem;padding:.45rem 0;border-bottom:1px solid var(--border);font-size:.78rem;line-height:1.45;align-items:baseline}
+.dh-watch-item:last-child{border-bottom:none;padding-bottom:0}
+.dh-watch-item:first-child{padding-top:0}
+.dh-watch-label{flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--gold);min-width:4.5rem}
+.dh-watch-text{color:var(--text-dim)}
+
+/* Section accordion */
+.dh-sections{margin-bottom:1rem;display:flex;flex-direction:column;gap:.5rem}
+.dh-sec{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.dh-sec summary{display:flex;align-items:center;gap:.55rem;padding:.7rem .9rem;cursor:pointer;font-size:.82rem;font-weight:700;color:var(--text);list-style:none;user-select:none;-webkit-user-select:none;transition:background .15s}
+.dh-sec summary::-webkit-details-marker{display:none}
+.dh-sec summary::marker{display:none;content:''}
+.dh-sec summary:hover{background:var(--surface2)}
+.dh-sec-icon{font-size:1rem;flex-shrink:0}
+.dh-sec-arrow{margin-left:auto;font-size:.7rem;color:var(--text-muted);transition:transform .2s}
+.dh-sec[open] .dh-sec-arrow{transform:rotate(180deg)}
+.dh-sec-body{padding:0 .9rem .75rem;font-size:.8rem;line-height:1.65;color:var(--text-dim)}
+.dh-sec-body span{display:block;margin-bottom:.4rem;padding-left:.1rem}
+.dh-sec-body span:last-child{margin-bottom:0}
+
+/* Bottom cards (TMYK + Quote) */
+.dh-bottom{display:grid;grid-template-columns:1fr;gap:.75rem;margin-bottom:.5rem}
+.dh-card--blue{border-color:rgba(91,163,224,.2);background:linear-gradient(135deg,var(--surface) 0%,rgba(91,163,224,.03) 100%)}
+.dh-card--blue .dh-card-label{color:var(--blue)}
+.dh-tmyk-title{font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:.3rem}
+.dh-tmyk-body{font-size:.8rem;line-height:1.6;color:var(--text-dim)}
+.dh-card--quote{border-color:rgba(230,176,66,.15);text-align:center;padding:1rem 1.2rem}
+.dh-quote-icon{font-size:1.2rem;opacity:.5;margin-bottom:.35rem}
+.dh-quote-text{font-size:.85rem;font-style:italic;line-height:1.65;color:var(--text-dim);margin-bottom:.4rem}
+.dh-quote-attr{font-size:.7rem;color:var(--text-muted);font-weight:600}
+
+/* ── Desktop: 2-col for card pairs ─────────────────────────────── */
+@media(min-width:700px){
+  .dh{--dh-pad:1.75rem}
+  .dh-headline{font-size:2.2rem}
+  .dh-cards{grid-template-columns:1fr 1fr}
+  .dh-bottom{grid-template-columns:1fr 1fr}
+  .dh-topline div+div{border-top:none;padding-top:0;margin-top:0}
+  .dh-topline{display:flex;flex-wrap:wrap;gap:.15rem .6rem}
+}
+@media(min-width:1000px){
+  .dh-headline{font-size:2.6rem}
+  .dh-sections{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}
+  .dh-sec:first-child{grid-column:1/-1}
+}
+</style>
+
 <section class="daily-hero" id="daily-hero">
- 
+
+  <!-- Teaser bar: shown when dismissed -->
   <div class="daily-teaser" id="daily-teaser" role="button" tabindex="0" aria-label="Expand AGSIST Daily briefing">
     <div class="teaser-line1">
       <div class="teaser-left">
@@ -200,88 +292,89 @@
     <span class="teaser-preview" id="daily-teaser-text">Today's ag market briefing — click to read</span>
   </div>
 
+  <!-- Full briefing -->
   <div class="daily-full" id="daily-full">
     <div class="daily-hero-inner">
-      <div class="daily-grid">
+      <div class="dh">
+        <div class="dh-inner">
 
-        <div class="daily-left">
-          <div id="site-greeting" class="daily-greeting">Good Morning</div>
-          <div class="daily-eyebrow"><span class="daily-eyebrow-dot" aria-hidden="true"></span>AGSIST Daily — Today's Briefing</div>
-          <div class="daily-date" id="daily-date"></div>
+          <!-- ── Meta ── -->
+          <div class="dh-greeting" id="site-greeting">Good Morning</div>
+          <div class="dh-eyebrow">AGSIST Daily — Today's Briefing</div>
+          <div class="dh-date" id="daily-date"></div>
           <script>document.getElementById('daily-date').textContent=new Date().toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric',year:'numeric'})</script>
-          <h1 class="daily-headline" id="daily-headline">AGSIST DAILY<br>MARKET<br><span>BRIEFING</span></h1>
-          <p class="daily-lead" id="daily-lead">Your daily agricultural market briefing with overnight futures, grain prices, weather outlook, and USDA report previews. Updated every weekday morning by 6am CT.</p>
-          <div class="daily-sections">
-            <div class="daily-sec">
-              <span class="daily-sec-icon" aria-hidden="true">🌽</span>
-              <div>
-                <div class="daily-sec-label" id="daily-section-1-title">Grains & Oilseeds</div>
-                <div class="daily-sec-text" id="daily-section-1-body">Corn, soybean, and wheat futures analysis — what moved, why, and what it means for your marketing plan.</div>
-              </div>
-            </div>
-            <div class="daily-sec">
-              <span class="daily-sec-icon" aria-hidden="true">🐄</span>
-              <div>
-                <div class="daily-sec-label" id="daily-section-2-title">Livestock, Dairy & Feed</div>
-                <div class="daily-sec-text" id="daily-section-2-body">Cattle, hogs, dairy, and feed markets — what livestock producers and feed buyers need to know today.</div>
-              </div>
-            </div>
-            <div class="daily-sec">
-              <span class="daily-sec-icon" aria-hidden="true">🌦️</span>
-              <div>
-                <div class="daily-sec-label" id="daily-section-3-title">Weather & Field Conditions</div>
-                <div class="daily-sec-text" id="daily-section-3-body">Corn Belt weather outlook, spray windows, soil conditions, and what the 5-day forecast means for your week.</div>
-              </div>
-            </div>
-            <div class="daily-sec">
-              <span class="daily-sec-icon" aria-hidden="true">⛽</span>
-              <div>
-                <div class="daily-sec-label" id="daily-section-4-title">Energy, Dollar & Outside Markets</div>
-                <div class="daily-sec-text" id="daily-section-4-body">Crude, natural gas, dollar, and equities — what they mean for input costs, ethanol margins, and exports.</div>
-              </div>
-            </div>
-            <div class="daily-sec">
-              <span class="daily-sec-icon" aria-hidden="true">🏛️</span>
-              <div>
-                <div class="daily-sec-label" id="daily-section-5-title">Policy, Trade & Big Picture</div>
-                <div class="daily-sec-text" id="daily-section-5-body">USDA reports, trade policy, global supply stories, and anything in Washington or abroad that hits your bottom line.</div>
-              </div>
-            </div>
-          </div>
-          <div class="daily-ctas">
-           </div>
-          </div><!-- /daily-left -->
 
-        <div class="hero-sidebar">
-          <div class="s-card s-card--gold">
-            <div class="s-card-label">#️⃣ One Number to Know</div>
-            <div class="one-num" id="daily-number-value">--</div>
-            <div class="one-num-unit" id="daily-number-unit">Today's Key Metric</div>
-            <div class="one-num-ctx" id="daily-number-context">The single most important data point for agricultural markets today, updated with each daily briefing.</div>
+          <!-- ── Field Call (injected by hydration) ── -->
+          <div id="daily-field-call-slot"></div>
+
+          <!-- ── Headline ── -->
+          <h1 class="dh-headline" id="daily-headline">AGSIST Daily Market Briefing</h1>
+          <p class="dh-lead" id="daily-lead">Your daily agricultural market briefing with overnight futures, grain prices, weather outlook, and USDA report previews. Updated every weekday morning by 6am CT.</p>
+
+          <!-- ── Top-line Prices (injected by hydration) ── -->
+          <div id="daily-topline-slot"></div>
+
+          <!-- ── Quick-glance: One Number + Watch List ── -->
+          <div class="dh-cards">
+            <div class="dh-card dh-card--gold">
+              <div class="dh-card-label">#️⃣ One Number to Know</div>
+              <div class="dh-one-val" id="daily-number-value">--</div>
+              <div class="dh-one-unit" id="daily-number-unit">Today's Key Metric</div>
+              <div class="dh-one-ctx" id="daily-number-context">The single most important data point for agricultural markets today.</div>
+            </div>
+            <div class="dh-card">
+              <div class="dh-card-label">📅 Today's Watch List</div>
+              <div id="daily-watch-list">
+                <div class="dh-watch-item"><span class="dh-watch-label">6:00 AM</span><span class="dh-watch-text">AGSIST Daily briefing publishes</span></div>
+                <div class="dh-watch-item"><span class="dh-watch-label">8:30 AM</span><span class="dh-watch-text">Check for USDA weekly export data</span></div>
+              </div>
+            </div>
           </div>
-          <div class="s-card">
-            <div class="s-card-label">📅 Today's Watch List</div>
-            <ul class="watch-list" id="daily-watch-list" style="list-style:none;padding:0;margin:0">
-              <li class="watch-item"><span class="watch-time">6:00 AM</span><span class="watch-desc">AGSIST Daily briefing publishes</span></li>
-              <li class="watch-item"><span class="watch-time">8:30 AM</span><span class="watch-desc">Check for USDA weekly export data</span></li>
-            </ul>
+
+          <!-- ── Market Sections (collapsible) ── -->
+          <div class="dh-sections" id="dh-sections">
+            <details class="dh-sec" open>
+              <summary><span class="dh-sec-icon">🌽</span><span id="daily-section-1-title">Grains & Oilseeds</span><span class="dh-sec-arrow">▼</span></summary>
+              <div class="dh-sec-body" id="daily-section-1-body">Corn, soybean, and wheat futures analysis — what moved, why, and what it means for your marketing plan.</div>
+            </details>
+            <details class="dh-sec" open>
+              <summary><span class="dh-sec-icon">🐄</span><span id="daily-section-2-title">Livestock & Dairy</span><span class="dh-sec-arrow">▼</span></summary>
+              <div class="dh-sec-body" id="daily-section-2-body">Cattle, hogs, dairy, and feed markets — what livestock producers and feed buyers need to know today.</div>
+            </details>
+            <details class="dh-sec" open>
+              <summary><span class="dh-sec-icon">🌦️</span><span id="daily-section-3-title">Weather & Fieldwork</span><span class="dh-sec-arrow">▼</span></summary>
+              <div class="dh-sec-body" id="daily-section-3-body">Corn Belt weather outlook, spray windows, soil conditions, and what the 5-day forecast means for your week.</div>
+            </details>
+            <details class="dh-sec" open>
+              <summary><span class="dh-sec-icon">⛽</span><span id="daily-section-4-title">Energy & Macro</span><span class="dh-sec-arrow">▼</span></summary>
+              <div class="dh-sec-body" id="daily-section-4-body">Crude, natural gas, dollar, and equities — what they mean for input costs, ethanol margins, and exports.</div>
+            </details>
+            <details class="dh-sec" open>
+              <summary><span class="dh-sec-icon">🏛️</span><span id="daily-section-5-title">Policy & Trade</span><span class="dh-sec-arrow">▼</span></summary>
+              <div class="dh-sec-body" id="daily-section-5-body">USDA reports, trade policy, global supply stories, and anything in Washington or abroad that hits your bottom line.</div>
+            </details>
           </div>
-          <div class="s-card" style="border-color:rgba(91,163,224,.25);background:linear-gradient(135deg,var(--surface) 0%,rgba(91,163,224,.04) 100%)">
-            <div class="s-card-label" style="color:var(--blue)">💡 The More You Know</div>
-            <div style="font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:.35rem" id="daily-tmyk-title">Did You Know?</div>
-            <div style="font-size:.82rem;line-height:1.6;color:var(--text-dim)" id="daily-tmyk-body">A new ag fact, historical tidbit, or agronomic insight appears here every weekday morning.</div>
+
+          <!-- ── Bottom: TMYK + Quote ── -->
+          <div class="dh-bottom">
+            <div class="dh-card dh-card--blue">
+              <div class="dh-card-label">💡 The More You Know</div>
+              <div class="dh-tmyk-title" id="daily-tmyk-title">Did You Know?</div>
+              <div class="dh-tmyk-body" id="daily-tmyk-body">A new ag fact, historical tidbit, or agronomic insight appears here every weekday morning.</div>
+            </div>
+            <div class="dh-card dh-card--quote">
+              <div class="dh-quote-icon">🌾</div>
+              <div class="dh-quote-text" id="daily-quote-text">"The farmer has to be an optimist or he wouldn't still be a farmer."</div>
+              <div class="dh-quote-attr" id="daily-quote-attr">— Will Rogers</div>
+            </div>
           </div>
-          <div class="s-card" style="border-color:rgba(230,176,66,.2);text-align:center;padding:1rem 1.2rem">
-            <div style="font-size:1.4rem;margin-bottom:.5rem;opacity:.7" aria-hidden="true">🌾</div>
-            <div style="font-size:.88rem;font-style:italic;line-height:1.65;color:var(--text-dim);margin-bottom:.5rem" id="daily-quote-text">"The farmer has to be an optimist or he wouldn't still be a farmer."</div>
-            <div style="font-size:.72rem;color:var(--text-muted);font-weight:600" id="daily-quote-attr">— Will Rogers</div>
-          </div>
+
         </div>
-
       </div>
     </div>
   </div>
 
+  <!-- Dismiss row -->
   <div class="daily-dismiss-row" id="daily-dismiss-row">
     <div style="display:flex;align-items:center;gap:.5rem">
       <span style="font-size:.82rem;color:var(--text-muted)">Published every weekday by 6am CT.</span>
@@ -293,7 +386,6 @@
   </div>
 
 </section>
-
 <!-- ══ MAIN CONTENT ════════════════════════════════════════════════ -->
 <main id="main" class="main">
 
@@ -364,8 +456,6 @@
               <div class="wstat"><div class="wstat-lbl">Precip Chance</div><div class="wstat-val" id="wx-precip">--</div></div>
               <div class="wstat"><div class="wstat-lbl">Dew Point</div><div class="wstat-val" id="wx-dew">--</div></div>
             </div>
-
-
             <div id="wx-forecast" style="display:flex;gap:.4rem;margin-top:.85rem"></div>
             <button id="btn-change-loc" style="margin-top:.65rem;background:none;border:none;color:var(--text-muted);font-size:.72rem;cursor:pointer;text-decoration:underline">Change location</button>
           </div>
@@ -1162,7 +1252,7 @@
 })();
 </script>
 
-<!-- ── Daily Briefing Hydration — fetches data/daily.json & populates hero ── -->
+<!-- ── Daily Briefing Hydration v4 ─────────────────────────────── -->
 <script>
 (function hydrateDaily() {
   fetch('/data/daily.json?v=' + Date.now())
@@ -1174,7 +1264,7 @@
       // ── Headline & lead ──
       if (d.headline) {
         var hl = $('daily-headline');
-        if (hl) hl.innerHTML = d.headline;
+        if (hl) hl.textContent = d.headline;
       }
       txt('daily-lead', d.subheadline || d.teaser);
       txt('daily-date', d.date);
@@ -1187,37 +1277,29 @@
       }
       txt('daily-teaser-text', d.teaser || d.subheadline);
 
-      // ── Field call badge (inject above headline) ──
+      // ── Field call badge ──
       if (d.field_call && d.field_call.label) {
-        var hl2 = $('daily-headline');
-        if (hl2 && !$('daily-field-call')) {
-          var fc = document.createElement('div');
-          fc.id = 'daily-field-call';
-          fc.style.cssText = 'display:inline-flex;align-items:center;gap:.45rem;padding:.4rem .85rem;margin-bottom:.75rem;border-radius:6px;font-size:.78rem;font-weight:700;letter-spacing:.04em;font-family:"JetBrains Mono",monospace;';
+        var slot = $('daily-field-call-slot');
+        if (slot) {
           var label = d.field_call.label.toUpperCase();
-          if (label.indexOf('STAY OUT') >= 0 || label.indexOf('NO ') >= 0) {
-            fc.style.background = 'rgba(239,68,68,.12)'; fc.style.color = '#ef4444'; fc.style.border = '1px solid rgba(239,68,68,.25)';
-          } else if (label.indexOf('CAUTION') >= 0 || label.indexOf('PLAN') >= 0) {
-            fc.style.background = 'rgba(230,176,66,.12)'; fc.style.color = 'var(--gold)'; fc.style.border = '1px solid rgba(230,176,66,.25)';
-          } else {
-            fc.style.background = 'rgba(34,197,94,.1)'; fc.style.color = 'var(--green)'; fc.style.border = '1px solid rgba(34,197,94,.2)';
-          }
-          fc.textContent = '\u{1F69C} ' + d.field_call.label + (d.field_call.detail ? ' \u2014 ' + d.field_call.detail : '');
-          hl2.parentNode.insertBefore(fc, hl2);
+          var cls = 'dh-field-call ';
+          if (label.indexOf('STAY OUT') >= 0 || label.indexOf('NO ') >= 0) cls += 'dh-fc--stop';
+          else if (label.indexOf('CAUTION') >= 0 || label.indexOf('PLAN') >= 0) cls += 'dh-fc--plan';
+          else if (label.indexOf('GOOD') >= 0 || label.indexOf('GO') >= 0) cls += 'dh-fc--go';
+          else cls += 'dh-fc--caution';
+          slot.className = cls;
+          slot.textContent = '\u{1F69C} ' + d.field_call.label + (d.field_call.detail ? ' \u2014 ' + d.field_call.detail : '');
         }
       }
 
-      // ── Top-line price strip (inject below lead) ──
+      // ── Top-line price strip ──
       if (d.top_line && d.top_line.length) {
-        var lead = $('daily-lead');
-        if (lead && !$('daily-topline')) {
-          var tl = document.createElement('div');
-          tl.id = 'daily-topline';
-          tl.style.cssText = 'margin-top:.85rem;padding:.65rem .85rem;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-family:"JetBrains Mono",monospace;font-size:.76rem;line-height:1.75;color:var(--text-dim);';
-          tl.innerHTML = d.top_line.map(function(line) {
+        var tlSlot = $('daily-topline-slot');
+        if (tlSlot) {
+          tlSlot.className = 'dh-topline';
+          tlSlot.innerHTML = d.top_line.map(function(line) {
             return '<div>' + line + '</div>';
           }).join('');
-          lead.parentNode.insertBefore(tl, lead.nextSibling);
         }
       }
 
@@ -1225,12 +1307,11 @@
       var secs = d.sections || [];
       for (var i = 0; i < secs.length && i < 5; i++) {
         var sec = secs[i];
-        var titleEl = $('daily-section-' + (i + 1) + '-title');
-        var bodyEl  = $('daily-section-' + (i + 1) + '-body');
-        if (titleEl && sec.title) titleEl.textContent = sec.title;
+        txt('daily-section-' + (i + 1) + '-title', sec.title);
+        var bodyEl = $('daily-section-' + (i + 1) + '-body');
         if (bodyEl && sec.bullets && sec.bullets.length) {
           bodyEl.innerHTML = sec.bullets.map(function(b) {
-            return '<span style="display:block;margin-bottom:.35rem">\u2022 ' + b + '</span>';
+            return '<span>\u2022 ' + b + '</span>';
           }).join('');
         }
       }
@@ -1247,10 +1328,10 @@
         var wl = $('daily-watch-list');
         if (wl) {
           wl.innerHTML = d.watch_list.map(function(w) {
-            return '<li class="watch-item">'
-              + '<span class="watch-time">' + (w.label || w.time || '') + '</span>'
-              + '<span class="watch-desc">' + (w.item || w.desc || '') + '</span>'
-              + '</li>';
+            return '<div class="dh-watch-item">'
+              + '<span class="dh-watch-label">' + (w.label || '') + '</span>'
+              + '<span class="dh-watch-text">' + (w.item || w.desc || '') + '</span>'
+              + '</div>';
           }).join('');
         }
       }
@@ -1267,6 +1348,14 @@
         txt('daily-quote-attr', '\u2014 ' + d.daily_quote.attribution);
       }
 
+      // ── Mobile: collapse lower sections by default ──
+      if (window.innerWidth < 700) {
+        var details = document.querySelectorAll('.dh-sec');
+        for (var j = 2; j < details.length; j++) {
+          details[j].removeAttribute('open');
+        }
+      }
+
       console.log('[AGSIST] Daily briefing hydrated: ' + d.headline);
     })
     .catch(function(err) {
@@ -1274,6 +1363,5 @@
     });
 })();
 </script>
-
 </body>
 </html>
