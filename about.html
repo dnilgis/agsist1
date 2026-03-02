@@ -4,61 +4,137 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>About AGSIST — AGSIST</title>
-  <meta name="description" content="AGSIST is a free agricultural dashboard built by Farmers First Agri Service for corn, soybean, and grain producers in the Upper Midwest.">
+  <meta name="description" content="AGSIST is a free agricultural dashboard built by Farmers First Agri Service. Live prices, farm weather, spray advisory, and tools — no ads, no subscriptions, no catch.">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://agsist.com/pages/about">
-  <meta property="og:title"       content="About AGSIST — AGSIST">
-  <meta property="og:description" content="AGSIST is a free agricultural dashboard built by Farmers First Agri Service for corn, soybean, and grain producers in the Upper Midwest.">
+  <link rel="canonical" href="https://agsist.com/about">
+  <meta property="og:title"       content="About AGSIST">
+  <meta property="og:description" content="Free agricultural prices, tools & news. Built for farmers, by a crop insurance guy who thought they deserved better data.">
   <meta property="og:url"         content="https://agsist.com/about">
   <meta property="og:image"       content="https://agsist.com/img/og/about.jpg">
   <meta property="og:type"        content="website">
   <meta property="og:site_name"   content="AGSIST">
   <meta name="twitter:card"       content="summary_large_image">
-  <meta name="twitter:site"       content="@agsist">
-  <link rel="stylesheet"                          href="/components/styles.css">
-  <link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
-  <link rel="apple-touch-icon"                    href="/img/apple-touch-icon.png">
+  <link rel="stylesheet"          href="/components/styles.css">
+  <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+  <link rel="apple-touch-icon"    href="/img/apple-touch-icon.png">
+  <link rel="manifest"            href="/manifest.json">
   <style>
-    .info-page{max-width:820px;margin:0 auto;padding:3rem 1.5rem 5rem;}
-    .info-page h1{font-size:2rem;color:var(--gold);margin-bottom:.5rem;}
-    .info-page .sub{color:var(--text-dim);font-size:1rem;margin-bottom:2.5rem;line-height:1.6;}
-    .info-page h2{font-size:1.15rem;color:var(--text);margin:2rem 0 .75rem;font-weight:700;border-bottom:1px solid var(--border);padding-bottom:.4rem;}
-    .info-page p,.info-page li{color:var(--text-dim);line-height:1.8;font-size:.95rem;}
-    .info-page ul{padding-left:1.5rem;margin:.5rem 0 1rem;}
-    .info-page a{color:var(--gold);}
-    .info-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:1.5rem;margin:1rem 0;}
-    .info-card h3{font-size:1rem;color:var(--gold);margin-bottom:.5rem;}
+    .info-page {
+      max-width: 780px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+    .info-page h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: .4rem;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+    }
+    .info-page .sub {
+      color: var(--text-dim);
+      font-size: .95rem;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+      max-width: 560px;
+    }
+    .info-page h2 {
+      font-size: 1.05rem;
+      color: var(--text);
+      font-weight: 700;
+      margin: 2rem 0 .6rem;
+      padding-bottom: .35rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .info-page p, .info-page li {
+      color: var(--text-dim);
+      line-height: 1.8;
+      font-size: .92rem;
+    }
+    .info-page p + p { margin-top: .75rem }
+    .info-page ul {
+      padding-left: 1.4rem;
+      margin: .4rem 0 .8rem;
+    }
+    .info-page a {
+      color: var(--gold);
+      transition: opacity .15s;
+    }
+    .info-page a:hover { opacity: .8 }
+    .info-card {
+      background: var(--surface);
+      border: 1px solid var(--border-g);
+      border-radius: var(--r-md);
+      padding: 1.25rem 1.3rem;
+      margin: 1.25rem 0;
+    }
+    .info-card h3 {
+      font-size: .95rem;
+      color: var(--gold);
+      margin-bottom: .4rem;
+      font-weight: 700;
+    }
+    .info-card p {
+      font-size: .88rem;
+      margin: 0;
+    }
+    .contact-block {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--r-md);
+      padding: 1.25rem 1.3rem;
+      margin-top: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: .3rem;
+    }
+    .contact-block span {
+      font-size: .88rem;
+      color: var(--text-dim);
+    }
+    .contact-block a {
+      color: var(--gold);
+    }
+    @media (max-width: 520px) {
+      .info-page { padding: 1.5rem .9rem 3rem }
+      .info-page h1 { font-size: 1.6rem }
+      .info-page h2 { font-size: .95rem }
+      .info-page p, .info-page li { font-size: .85rem }
+    }
   </style>
-  <link rel="manifest" href="/manifest.json">
 </head>
 <body>
   <div id="site-header"></div>
   <main id="main" tabindex="-1">
     <div class="info-page">
-      
-<h1>About AGSIST</h1>
-<p class="sub">Agricultural Support Services built for the people who grow America's food.</p>
 
-<h2>What Is AGSIST?</h2>
-<p>AGSIST is a free agricultural dashboard built by <a href="https://farmers1st.com" target="_blank" rel="noopener">Farmers First Agri Service</a>, a crop insurance agency serving farmers across Wisconsin and Minnesota. The goal is simple: put the data farmers actually need in one fast, clean, ad-free place.</p>
+      <h1>About AGSIST</h1>
+      <p class="sub">Free agricultural prices, tools, and news — built for the people who grow America's food.</p>
 
-<h2>The Farmers First Ag Index</h2>
-<p>The FFAI is a proprietary weekly composite indicator that scores the current agricultural economic environment across six categories: commodity prices, input costs, weather risk, export demand, credit conditions, and policy outlook. It's published every Monday and available for free to any farmer who wants it.</p>
+      <h2>What This Is</h2>
+      <p>AGSIST is a free agricultural dashboard. Live futures prices, local farm weather, spray conditions, urea volatilization risk, USDA reports, prediction markets, calculators, and a daily briefing — all in one place, no login required.</p>
+      <p>The ag data that matters has been locked behind expensive subscriptions designed for commodity traders, not the farmers who actually raise the crops. That never made sense to me. AGSIST exists to level that playing field.</p>
 
-<h2>Who Builds This?</h2>
-<div class="info-card">
-  <h3>🌽 Farmers First Agri Service</h3>
-  <p>A crop insurance agency rooted in the Upper Midwest, serving corn, soybean, and small grain producers across Wisconsin and Minnesota. Licensed, independent, farmer-first.</p>
-</div>
+      <h2>Who Builds This</h2>
+      <div class="info-card">
+        <h3>🌽 Farmers First Agri Service</h3>
+        <p>A crop insurance agency rooted in the Upper Midwest, serving corn, soybean, and small grain producers across Wisconsin and Minnesota. Licensed, independent, farmer-first. That's who we are and that's who AGSIST is built for.</p>
+      </div>
 
-<h2>Why Free?</h2>
-<p>Ag data has historically been locked behind expensive subscriptions designed for commodity traders, not the farmers who actually raise the crops. AGSIST exists to level that playing field. Every tool on this site is and will remain free.</p>
+      <h2>The Farmers First Ag Index</h2>
+      <p>The FFAI is a proprietary weekly composite that scores the current agricultural economic environment across six categories: commodity prices, input costs, weather risk, export demand, credit conditions, and policy outlook. Published every Monday, available to anyone who wants it.</p>
 
-<h2>Data Sources</h2>
-<p>See our full <a href="/data-sources">Data Sources page</a> for transparency on where every number comes from.</p>
+      <h2>Why Free</h2>
+      <p>Because the people growing the food shouldn't have to pay hundreds a month just to see their own market data. Every tool on this site is free and always will be. No ads, no paywalls, no catch.</p>
 
-<h2>Contact</h2>
-<p>Questions, partnership ideas, or feedback? See our <a href="/contact">Contact page</a> or visit <a href="https://farmers1st.com" target="_blank" rel="noopener">farmers1st.com</a>.</p>
+      <h2>Questions</h2>
+      <div class="contact-block">
+        <span><strong style="color:var(--text)">Sigurd Lindquist</strong></span>
+        <span>📞 <a href="tel:+17157972428">715-797-2428</a></span>
+        <span>🌐 <a href="https://farmers1st.com" target="_blank" rel="noopener">farmers1st.com</a></span>
+      </div>
 
     </div>
   </main>
