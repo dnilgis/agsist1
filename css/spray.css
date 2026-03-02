@@ -4,6 +4,15 @@
    Shared base: /components/styles.css (already loaded first)
    ==================================================================== */
 
+/* ── Fallback vars (in case styles.css doesn't define them) ───── */
+:root {
+  --blue:     #5ba3e0;
+  --orange:   #f0913a;
+  --bg2:      var(--bg, #0a1a0a);
+  --border-g: var(--border, rgba(62,207,110,.12));
+  --surface3: var(--surface2, #1a2a1a);
+}
+
 /* ── CRITICAL: Prevent horizontal blowout ────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; }
 html { overflow-x: hidden; }
@@ -46,7 +55,7 @@ body  { overflow-x: hidden; max-width: 100vw; }
 .status-panel {
   background: var(--surface); border: 1px solid var(--border-g);
   border-radius: 14px; padding: 1.5rem; text-align: center;
-  min-width: 0; /* prevent grid blowout */
+  min-width: 0;
 }
 .status-lbl {
   display: flex; align-items: center; justify-content: center; gap: .4rem;
@@ -153,8 +162,8 @@ body  { overflow-x: hidden; max-width: 100vw; }
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 10px; padding: 1rem 1.1rem;
   transition: border-color .2s;
-  min-width: 0;       /* CRITICAL: prevents grid blowout */
-  overflow: hidden;    /* clip any overflowing text */
+  min-width: 0;
+  overflow: hidden;
 }
 .fcard:hover { border-color: var(--border-g); }
 .fcard-head {
@@ -164,7 +173,7 @@ body  { overflow-x: hidden; max-width: 100vw; }
 .fcard-name {
   display: flex; align-items: center; gap: .4rem;
   font-size: .82rem; font-weight: 700; color: var(--text);
-  min-width: 0; /* allow text truncation */
+  min-width: 0;
 }
 .fcard-icon { font-size: 1rem; flex-shrink: 0; }
 .fchip {
@@ -175,6 +184,7 @@ body  { overflow-x: hidden; max-width: 100vw; }
 .fchip.good    { background: rgba(62,207,110,.12);  color: var(--green); }
 .fchip.marginal{ background: rgba(230,176,66,.12);  color: var(--gold); }
 .fchip.poor    { background: rgba(240,96,96,.12);   color: var(--red); }
+.fchip.frozen  { background: rgba(91,163,224,.12);  color: var(--blue); }
 .fcard-val {
   font-family: 'Oswald', sans-serif; font-size: 1.9rem; font-weight: 700;
   color: var(--text); line-height: 1; margin-bottom: .45rem;
@@ -198,7 +208,7 @@ body  { overflow-x: hidden; max-width: 100vw; }
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 10px; padding: 1.1rem;
   margin-bottom: 1.5rem;
-  overflow: hidden; /* prevent child blowout */
+  overflow: hidden;
 }
 .window-head {
   font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
@@ -332,13 +342,13 @@ body  { overflow-x: hidden; max-width: 100vw; }
   font-family: 'JetBrains Mono', monospace;
   font-size: 1rem; font-weight: 800; flex-shrink: 0;
 }
-.mix-num-1 { background: rgba(91,163,224,.12); color: var(--blue, #5ba3e0); }
+.mix-num-1 { background: rgba(91,163,224,.12); color: var(--blue); }
 .mix-num-2 { background: rgba(230,176,66,.12); color: var(--gold); }
 .mix-num-3 { background: rgba(159,122,234,.12); color: #9f7aea; }
-.mix-num-4 { background: rgba(240,145,58,.12); color: var(--orange, #f0913a); }
+.mix-num-4 { background: rgba(240,145,58,.12); color: var(--orange); }
 .mix-num-5 { background: rgba(62,207,110,.12); color: var(--green); }
 .mix-num-6 { background: rgba(240,96,96,.12); color: var(--red); }
-.mix-num-7 { background: rgba(91,163,224,.12); color: var(--blue, #5ba3e0); }
+.mix-num-7 { background: rgba(91,163,224,.12); color: var(--blue); }
 .mix-num-8 { background: rgba(230,176,66,.12); color: var(--gold); }
 .mix-num-9 { background: rgba(62,207,110,.12); color: var(--green); }
 .mix-step-name { font-size: .85rem; font-weight: 700; color: var(--text); margin-bottom: .25rem; }
@@ -394,6 +404,11 @@ body  { overflow-x: hidden; max-width: 100vw; }
 /* ── Nozzle Comparison Table ─────────────────────────────────────── */
 .nozzle-table-wrap {
   overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 1rem 0;
+  position: relative;
+}
+.nozzle-table-wrap::after {
+  content: '\2190 scroll \2192'; display: none;
+  font-size: .6rem; color: var(--text-muted); text-align: center; padding: .3rem 0;
 }
 .nozzle-table {
   width: 100%; min-width: 520px; border-collapse: collapse; font-size: .78rem;
@@ -421,7 +436,7 @@ body  { overflow-x: hidden; max-width: 100vw; }
 /* ── Sidebar Cards ───────────────────────────────────────────────── */
 .sidebar {
   display: flex; flex-direction: column; gap: 1rem;
-  min-width: 0; /* prevent sidebar from blowing out */
+  min-width: 0;
 }
 .sc {
   background: var(--surface); border: 1px solid var(--border);
@@ -476,18 +491,7 @@ body  { overflow-x: hidden; max-width: 100vw; }
 }
 .checklist-item span { color: var(--text-dim); }
 
-/* ── Quick Mix Order (sidebar) ───────────────────────────────────── */
-.quick-mix-item {
-  display: flex; gap: .5rem; align-items: center; font-size: .78rem;
-}
-.quick-mix-num {
-  font-weight: 700;
-  font-family: 'JetBrains Mono', monospace;
-  width: 18px; flex-shrink: 0;
-}
-.quick-mix-text { color: var(--text-dim); }
-
-/* ── Cross-Link (Spray → Urea) ───────────────────────────────────── */
+/* ── Cross-Link ──────────────────────────────────────────────────── */
 .cross-link {
   display: flex; align-items: flex-start; gap: .9rem;
   padding: 1rem 1.1rem; background: var(--surface);
@@ -543,13 +547,27 @@ body  { overflow-x: hidden; max-width: 100vw; }
   .inv-arrow { display: none; }
   .inv-layer-meta { margin-left: 0; }
   .loc-setup { padding: 1.25rem 1rem; }
+  .nozzle-table-wrap::after { display: block; }
 }
 @media (max-width: 380px) {
   .hero { padding: 1.5rem .75rem 1.25rem; }
+  .hero-sub { font-size: .88rem; }
   .pg { padding: 1rem .75rem; }
   .jump-nav { padding: 0 .75rem; }
-  .fcard { padding: .85rem; }
+  .jump-link { font-size: .65rem; padding: .3rem .55rem; }
+  .fcard { padding: .75rem; }
   .fcard-val { font-size: 1.5rem; }
+  .fcard-desc { font-size: .72rem; }
+  .status-main { font-size: 1.1rem; }
+  .status-icon { font-size: 2.5rem; }
+  .loc-setup { padding: 1rem .85rem; }
+  .loc-setup h3 { font-size: .92rem; }
+  .mix-step-name { font-size: .78rem; }
+  .mix-step-what { font-size: .72rem; }
+  .mix-step-why { font-size: .66rem; }
+  .tip-card { padding: .85rem; }
+  .tip-card-title { font-size: .78rem; }
+  .tip-card-text { font-size: .74rem; }
 }
 
 /* ── Print ───────────────────────────────────────────────────────── */
