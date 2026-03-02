@@ -1,19 +1,17 @@
 #!/usr/bin/env python3
 """
-AGSIST generate_daily.py  v2.0 — Gold-Standard Daily Ag Briefing
-═════════════════════════════════════════════════════════════════
+AGSIST generate_daily.py  v3.0 — Daily Ag Briefing
+═══════════════════════════════════════════════════
 Generates data/daily.json every weekday morning via GitHub Actions.
 
-Pulls from 15+ free news/data sources across ag markets, USDA, global
-trade, weather, livestock, dairy, energy, and policy — then uses Claude
-to synthesize a plain-English briefing written for working farmers.
+Pulls from 15+ free ag news/data sources, Corn Belt weather, and
+yfinance prices — then uses Claude to write a tight, plain-English
+briefing that hits hard and respects farmers' time.
 
 Data sources (all free, no API keys except ANTHROPIC_API_KEY):
   • data/prices.json      — yfinance futures (fetched by prices.yml)
   • Open-Meteo            — Corn Belt weather (5 locations)
-  • 15+ ag RSS feeds      — USDA, AgWeb, DTN, Farm Progress, Brownfield,
-                            Successful Farming, World-Grain, Beef Magazine,
-                            Hoard's Dairyman, NOAA, Pro Farmer, etc.
+  • 15+ ag RSS feeds      — USDA, Farm Progress, Brownfield, etc.
   • Claude API            — writes the briefing narrative
 
 Requires secret: ANTHROPIC_API_KEY
@@ -37,13 +35,13 @@ except ImportError:
 # ─────────────────────────────────────────────────────────────────
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY", "")
 ANTHROPIC_MODEL   = "claude-sonnet-4-5-20250929"
-MAX_TOKENS        = 3500
+MAX_TOKENS        = 4000
 
 # ─────────────────────────────────────────────────────────────────
 # RSS FEEDS — 15+ sources organized by category
 # ─────────────────────────────────────────────────────────────────
 RSS_FEEDS = [
-    # ── USDA & Government (NASS reports feed is reliable) ──
+    # ── USDA & Government ──
     {"name": "USDA NASS Reports",  "url": "https://www.nass.usda.gov/rss/reports.xml",              "category": "government",  "max_items": 6},
     # ── Major Ag News Wires ──
     {"name": "Farm Journal",       "url": "https://www.farmjournal.com/feed/",                      "category": "ag_news",     "max_items": 6},
@@ -86,7 +84,7 @@ USDA_REPORT_KEYWORDS = [
 def http_get(url, timeout=18):
     try:
         req = urllib_request.Request(url, headers={
-            "User-Agent": "AGSIST/2.0 (agsist.com; agricultural briefing aggregator)",
+            "User-Agent": "AGSIST/3.0 (agsist.com; agricultural briefing aggregator)",
             "Accept": "application/rss+xml, application/xml, text/xml, */*",
         })
         with urllib_request.urlopen(req, timeout=timeout) as r:
@@ -178,7 +176,7 @@ def format_prices_for_prompt(quotes):
         lo = q.get("low", close)
         arrow = "▲" if net > 0 else "▼" if net < 0 else "—"
         suffix = "%" if key == "treasury10" else ""
-        lines.append(f"  {label}: {close}{suffix}  {arrow} {abs(net):.2f} ({abs(pct):.2f}%)  Open: {opn}  High: {hi}  Low: {lo}")
+        lines.append(f"  {label}: {close}{suffix}  {arrow} {abs(net):.2f} ({abs(pct):.2f}%)  O:{opn} H:{hi} L:{lo}")
     return "\n".join(lines) if lines else "Price data unavailable."
 
 
@@ -226,12 +224,12 @@ def fetch_cornbelt_weather():
                 lo_d = round((dai.get("temperature_2m_min") or [0]*5)[i])
                 pop_d = (dai.get("precipitation_probability_max") or [0]*5)[i]
                 precip_d = (dai.get("precipitation_sum") or [0]*5)[i]
-                day_outlook.append(f"    {day_names[i]}: Hi {hi_d}°F / Lo {lo_d}°F, rain chance {pop_d}%, precip {precip_d:.2f}in")
+                day_outlook.append(f"    {day_names[i]}: {hi_d}°/{lo_d}°F, {pop_d}% rain, {precip_d:.2f}in")
             summary = (
-                f"  {loc['name']}: Currently {desc}, {round(cur.get('temperature_2m', 0))}°F, "
-                f"wind {round(cur.get('wind_speed_10m', 0))} mph, humidity {cur.get('relative_humidity_2m', 0)}%\n"
-                f"    Today: Hi {hi_today}° / Lo {lo_today}°, rain chance {pop_today}%, max wind {wind_max} mph\n"
-                f"    5-day precip total: {precip_5day:.2f} inches\n"
+                f"  {loc['name']}: {desc}, {round(cur.get('temperature_2m', 0))}°F, "
+                f"wind {round(cur.get('wind_speed_10m', 0))} mph, RH {cur.get('relative_humidity_2m', 0)}%\n"
+                f"    Today: {hi_today}°/{lo_today}°, {pop_today}% rain, gusts {wind_max} mph\n"
+                f"    5-day total: {precip_5day:.2f}in\n"
                 + "\n".join(day_outlook)
             )
             summaries.append(summary)
@@ -314,40 +312,30 @@ def get_upcoming_usda_reports(news_items):
 # STEP 5 — CALL CLAUDE API
 # ─────────────────────────────────────────────────────────────────
 
-BRIEFING_SYSTEM = """You are the editor of AGSIST Daily, the morning agricultural briefing
-that every farmer, grain merchandiser, ag retailer, co-op employee, and rural banker in
-America reads before their first cup of coffee. Your readers are smart, practical people
-who don't have time for Wall Street jargon or academic language.
+BRIEFING_SYSTEM = """You write the AGSIST Daily — a morning ag briefing read by row crop
+farmers, cattle producers, grain merchandisers, co-op staff, and ag lenders across the
+Corn Belt. They check it before coffee. Respect their time.
 
-YOUR VOICE:
-- Write like a trusted neighbor who happens to know markets inside and out
-- Plain English always. If you must use a market term (basis, carry, crush margin, etc.),
-  explain it in a quick parenthetical so everyone follows along
-- Lead with WHY IT MATTERS TO THE READER. Don't just say corn is down — say what that
-  means for someone deciding whether to sell, store, or forward-contract today
-- Be direct and confident. "Corn got hit" not "Corn experienced downward pressure"
-- Use real numbers. Be specific. Farmers respect precision
-- Okay to use common ag shorthand: "beans" for soybeans, "the board" for futures, etc.
-- When talking about weather, tell them what it means for fieldwork, not just temperatures
+YOUR RULES:
+1. SHORT. Every sentence earns its place. Cut filler words ruthlessly.
+2. NUMBERS FIRST. Lead with the price, the change, the data. Then explain why it matters.
+3. FARMER DECISIONS. Don't just report — tell them what to think about. Sell or hold?
+   Spray or wait? Lock in inputs or hold off?
+4. PLAIN ENGLISH. "Corn's up a nickel" not "corn experienced upward movement." Use ag
+   shorthand: beans, the board, basis, carry. But if you use a term a newer farmer might
+   not know (crush margin, inverse, contango), add a quick parenthetical.
+5. NEVER FABRICATE. Only use data provided. If something's missing, skip it.
+6. CONNECT THE DOTS. Crude up = diesel up = higher field costs. Dollar down = better
+   exports. Rain in Illinois = delayed burndown. Make these connections.
+7. WEATHER IS KING. Farmers plan their week around weather. Be specific about which
+   areas are wet vs dry and what it means for field operations.
 
-YOUR STANDARDS:
-- NEVER fabricate prices, statistics, or data. Only use what is provided in the data
-- If data is missing or unavailable, say so honestly — farmers respect that
-- Attribute claims to sources when relevant ("USDA says…", "DTN reports…")
-- Cover the full picture: grains, livestock, energy, weather, policy, global trade
-- Always connect market moves to real-world farm decisions
-- Every section should answer: "So what does this mean for my operation?"
+VOICE: Think DTN Progressive Farmer meets your smartest neighbor at the co-op. Confident,
+direct, occasionally wry. Not corporate. Not academic. Not breathless.
 
-YOUR BRIEFING IS READ BY:
-- Row crop farmers (corn, beans, wheat) making marketing and input decisions
-- Livestock producers watching feed costs and cattle/hog markets
-- Grain merchandisers and elevator operators setting bids
-- Co-op agronomists planning field recommendations
-- Ag lenders evaluating farm financial health
-- Ag retailers selling seed, chemical, and fertilizer
-- Commodity traders and analysts
-
-Make every reader feel like they got smarter and more prepared in 3 minutes."""
+STRUCTURE: The briefing uses a "scan then read" format. Top-line items are scannable
+in 15 seconds. Sections below give detail for those who want it. Every section should
+be 2-3 SHORT sentences max — tight paragraphs, not essays."""
 
 
 def build_prompt(price_text, weather_text, news_text, today_str, upcoming_reports):
@@ -357,72 +345,128 @@ def build_prompt(price_text, weather_text, news_text, today_str, upcoming_report
         for r in upcoming_reports:
             reports_text += f"  • {r['desc']}\n"
 
-    return f"""Today is {today_str}. Generate the AGSIST Daily morning briefing from the data below.
-Read ALL the data carefully before writing. Connect the dots between markets, weather, policy, and
-what it means on the farm.
+    return f"""Today is {today_str}. Write the AGSIST Daily from this data.
 
-═══ FUTURES PRICES (yesterday's settle via Yahoo Finance / yfinance) ═══
+═══ FUTURES PRICES (yesterday's settle) ═══
 {price_text}
 
-═══ CORN BELT WEATHER (5 locations across the belt) ═══
+═══ CORN BELT WEATHER (5 locations) ═══
 {weather_text}
 {reports_text}
-═══ TODAY'S AG NEWS & HEADLINES ═══
+═══ TODAY'S AG NEWS ═══
 {news_text}
 
-═══ OUTPUT FORMAT ═══
-Return ONLY valid JSON (no markdown, no backticks, no commentary outside the JSON) matching this schema:
+═══ OUTPUT — RETURN ONLY VALID JSON ═══
+No markdown. No backticks. No commentary. Just the JSON object below.
 
 {{
-  "headline": "Short punchy headline in plain English (max 8 words, NOT all caps — write it like a newspaper headline)",
-  "subheadline": "One plain-English sentence explaining the headline and why it matters (max 25 words)",
-  "lead": "Opening paragraph — 3-4 sentences. Tell a farmer what happened, why, and what it means for their operation this week. Write it like you're talking to your neighbor over the fence. Be specific with numbers.",
+  "headline": "Max 10 words. Newspaper style, not all caps. Lead with the biggest mover or story.",
+  "subheadline": "One sentence, max 20 words. Why it matters.",
   "date": "{today_str}",
-  "teaser": "One compelling sentence that makes someone want to read the full briefing (max 20 words)",
+
+  "top_line": [
+    "Corn $X.XX½, +X¢ · Beans $XX.XX¾, +X¢ · Wheat $X.XX, +XX¢",
+    "Cattle $XXX.XX, -$X.XX · Hogs $XX.XX, unch · Milk $XX.XX, -$X.XX",
+    "Crude $XX.XX, +$X.XX · Dollar XX.XX, flat · S&P X,XXX, -XX"
+  ],
+
+  "teaser": "One punchy sentence for the collapsed view, max 15 words.",
+
   "one_number": {{
-    "value": "The single most important number today — a price, a change amount, a percentage, bushels, etc.",
-    "unit": "What that number represents in plain terms",
-    "context": "Why this number matters to a farmer making decisions today. 2 sentences, plain English. Connect it to something they'd actually do — sell, hold, apply, plant, hedge."
+    "value": "The single most important number — a price, percent, bushels, inches of rain, etc.",
+    "unit": "What it is in 5 words or less",
+    "why": "One sentence: why this number matters for a farm decision RIGHT NOW. Max 30 words."
   }},
+
+  "field_call": {{
+    "label": "SPRAY WINDOW / FIELD WORK / STAY OUT / GOOD TO GO / PLAN AHEAD — pick one",
+    "detail": "One sentence. What the weather means for field operations this week. Max 25 words."
+  }},
+
   "sections": [
     {{
+      "id": "grains",
       "title": "Grains & Oilseeds",
-      "body": "3-4 sentences covering corn, soybeans, wheat, and oats if relevant. What moved, why it moved, and what a farmer should think about. Use specific prices. If there's a spread worth noting (old crop vs new crop, corn-bean ratio), explain what it is and why it matters. Example: 'The corn-bean price ratio (how many bushels of corn it takes to buy one bushel of beans) is sitting at X, which historically favors planting more corn.'"
+      "icon": "🌽",
+      "bullets": [
+        "Corn: $X.XX½, up X¢. Dec '26 at $X.XX. The carry is X¢ — [what that means in one phrase].",
+        "Beans: $XX.XX¾, up X¢. Meal at $XXX, oil at XX.XX¢. Crush margins [tight/healthy/etc].",
+        "Wheat: $X.XX½, up XX¢. [Why it moved in one clause]. [What it means in one clause].",
+        "OPTIONAL 4th bullet if oats or something else is notable."
+      ]
     }},
     {{
-      "title": "Livestock, Dairy & Feed",
-      "body": "2-3 sentences. Cover cattle, hogs, dairy — what's moving and why a livestock producer or someone selling feed should care. Connect feed costs (corn, meal) to livestock margins when relevant. Explain terms like 'crush margin' or 'basis' if you use them."
+      "id": "livestock",
+      "title": "Livestock & Dairy",
+      "icon": "🐄",
+      "bullets": [
+        "Live cattle $XXX.XX, [move]. Feeders $XXX.XX, [move]. [One sentence on why + what to watch].",
+        "Hogs $XX.XX, [move]. [Context if notable].",
+        "Class III milk $XX.XX, [move]. [Impact for dairy if notable]."
+      ]
     }},
     {{
-      "title": "Weather & Field Conditions",
-      "body": "3-4 sentences. Synthesize the 5-location weather data into what matters for field operations. Talk about planting windows, spray conditions, soil moisture, frost risk, drought — whatever is timely. Tell them what the 5-day outlook means for their week ahead. Be specific about which parts of the belt are wet vs dry. This is one of the most important sections — farmers plan their entire week around weather."
+      "id": "weather",
+      "title": "Weather & Fieldwork",
+      "icon": "🌦️",
+      "bullets": [
+        "[Region] gets [X inches] rain [timeframe]. [What it means for fieldwork].",
+        "[Region] stays [dry/wet]. [Window for operations].",
+        "[Temps]: [range]. [Soil/frost/GDU implication if relevant].",
+        "Bottom line: [One sentence summary of the week ahead for field planning]."
+      ]
     }},
     {{
-      "title": "Energy, Dollar & Outside Markets",
-      "body": "2-3 sentences. Cover crude oil, natural gas, dollar index, stock market — but ONLY in terms of what they mean for agriculture. Examples: 'Higher crude means your diesel and anhydrous (nitrogen fertilizer made from natural gas) costs go up, but it also boosts ethanol margins which supports corn demand.' 'A stronger dollar makes US grain more expensive for foreign buyers, which can drag on export demand.' Always make the farm connection."
+      "id": "energy",
+      "title": "Energy & Macro",
+      "icon": "⛽",
+      "bullets": [
+        "Crude $XX.XX, [move]. Diesel implication: [one phrase]. Anhydrous: [one phrase].",
+        "Dollar at XX.XX, [move]. [Export competitiveness implication in one phrase].",
+        "OPTIONAL: S&P, treasuries, natgas if they matter for ag today."
+      ]
     }},
     {{
-      "title": "Policy, Trade & Big Picture",
-      "body": "2-3 sentences. Cover USDA reports, trade deals, tariffs, farm bill news, EPA rulings, global supply stories — whatever is in the news that affects agriculture. If a USDA report is coming, tell them what it is, when it drops, and what to watch for. Always explain why the policy or trade item matters to someone running a farm or ranch."
+      "id": "policy",
+      "title": "Policy & Trade",
+      "icon": "🏛️",
+      "bullets": [
+        "[Most important policy/trade/USDA item]. [Why it matters for producers].",
+        "[Second item if notable].",
+        "OPTIONAL: upcoming report or deadline to watch."
+      ]
     }}
   ],
-  "the_more_you_know": {{
-    "title": "Short catchy title (max 6 words)",
-    "body": "A genuinely interesting and useful agricultural fact, historical tidbit, agronomic insight, or market wisdom that the reader probably didn't know. Something they'd share at the co-op or coffee shop. 2-3 sentences. Examples: a surprising stat about corn genetics, how a historical event changed grain markets, a soil science nugget, a little-known USDA program, the origin of a farming term, a record that still stands. Make it delightful to read and actually educational."
-  }},
-  "daily_quote": {{
-    "text": "An inspirational, thoughtful, or wise quote relevant to farming, agriculture, hard work, weather, land, food, resilience, or rural life. Can be from a farmer, rancher, president, author, economist, agronomist, or folk wisdom. Something that resonates with people who work the land or serve those who do. Do NOT repeat quotes from previous days — pick something fresh.",
-    "attribution": "Who said it (name and brief identifier if the person isn't universally known, e.g. 'Wendell Berry, farmer and author')"
-  }},
+
   "watch_list": [
-    {{"time": "Today", "desc": "The single most important thing to watch today — a report release time, a price level, a weather event, a decision point. Be specific."}},
-    {{"time": "This Week", "desc": "Key item to monitor this week — upcoming report, weather pattern, export deadline, etc."}},
-    {{"time": "On the Horizon", "desc": "Something 1-4 weeks out that smart operators are already thinking about — planting dates, input buying windows, USDA report schedule, etc."}},
-    {{"time": "Risk to Watch", "desc": "The biggest downside risk to grain/livestock prices right now. Explain in plain terms what could go wrong and what it would mean."}},
-    {{"time": "Opportunity", "desc": "The best opportunity a producer should consider right now. Be specific — what action, at what level, and why the timing matters."}}
+    {{"label": "Today", "item": "Specific thing to watch today — max 15 words."}},
+    {{"label": "This Week", "item": "Key event or report this week — max 15 words."}},
+    {{"label": "Horizon", "item": "1-4 weeks out, what smart operators are planning for."}},
+    {{"label": "Risk", "item": "Biggest downside risk to prices right now — one sentence."}},
+    {{"label": "Opportunity", "item": "Best move a producer should consider — specific and actionable."}}
   ],
-  "source_summary": "Brief line listing key sources (e.g. 'USDA, DTN, AgWeb, Reuters, Open-Meteo, Yahoo Finance')"
-}}"""
+
+  "the_more_you_know": {{
+    "title": "Max 6 words — catchy, interesting",
+    "body": "A genuinely useful or surprising ag fact in 2 sentences. Something worth sharing at the co-op."
+  }},
+
+  "daily_quote": {{
+    "text": "A quote about farming, land, hard work, or resilience. Keep it real — no corporate inspiration.",
+    "attribution": "Name, brief identifier"
+  }},
+
+  "source_summary": "Brief source attribution line"
+}}
+
+CRITICAL FORMATTING RULES:
+- "top_line" array: exactly 3 strings. Line 1 = grains. Line 2 = livestock. Line 3 = energy/macro.
+  Use fraction notation for grains: ½ ¼ ¾. Use $ signs. Keep each line under 70 chars.
+- "bullets" arrays: each bullet is one string, 1-2 sentences MAX. Lead with the number.
+- "field_call" is a quick-scan weather verdict — farmers look at this first thing.
+- Total word count for the entire briefing should be 500-700 words. Not more. Every word earns its spot.
+- Keep "one_number.why" to ONE sentence, max 30 words. This is a gut-punch stat, not a paragraph.
+- Avoid hedging language: "may", "could potentially", "it remains to be seen". Be direct."""
 
 
 def call_claude(prompt):
@@ -438,11 +482,11 @@ def call_claude(prompt):
         "https://api.anthropic.com/v1/messages", data=payload,
         headers={
             "Content-Type": "application/json", "x-api-key": ANTHROPIC_API_KEY,
-            "anthropic-version": "2023-06-01", "User-Agent": "AGSIST/2.0",
+            "anthropic-version": "2023-06-01", "User-Agent": "AGSIST/3.0",
         }, method="POST",
     )
     try:
-        with urllib_request.urlopen(req, timeout=60) as r:
+        with urllib_request.urlopen(req, timeout=90) as r:
             resp = json.loads(r.read().decode("utf-8"))
         text = resp["content"][0]["text"].strip()
         usage = resp.get("usage", {})
@@ -476,10 +520,19 @@ def parse_briefing_json(raw_text):
         else:
             print(f"  ✗ No JSON found: {text[:600]}")
             sys.exit(1)
-    required = ["headline","subheadline","lead","date","teaser","one_number","sections","watch_list","the_more_you_know","daily_quote"]
+
+    required = ["headline", "subheadline", "date", "top_line", "teaser",
+                "one_number", "field_call", "sections", "watch_list",
+                "the_more_you_know", "daily_quote"]
     missing = [k for k in required if k not in data]
     if missing:
         print(f"  ⚠ Missing keys: {missing}")
+
+    # Validate top_line has 3 items
+    tl = data.get("top_line", [])
+    if len(tl) != 3:
+        print(f"  ⚠ top_line has {len(tl)} items, expected 3")
+
     return data
 
 
@@ -490,7 +543,7 @@ def main():
     today = datetime.now(timezone.utc)
     today_str = today.strftime("%A, %B %-d, %Y")
     print(f"\n{'═' * 60}")
-    print(f"  AGSIST Daily Generator v2.0")
+    print(f"  AGSIST Daily Generator v3.0")
     print(f"  {today.strftime('%Y-%m-%d %H:%M UTC')}")
     print(f"{'═' * 60}")
 
@@ -517,17 +570,19 @@ def main():
     print("\n[5/5] Parsing briefing JSON…")
     briefing = parse_briefing_json(raw_response)
 
+    # Append USDA reports to watch_list
     if upcoming:
         wl = briefing.get("watch_list", [])
         for report in upcoming[:2]:
-            wl.append(report)
+            wl.append({"label": "USDA", "item": report["desc"]})
         briefing["watch_list"] = wl[:7]
 
+    # Add metadata
     briefing["generated_utc"] = today.strftime("%Y-%m-%dT%H:%M:%SZ")
     briefing["prices_fetched"] = fetched or "unknown"
     briefing["news_sources"] = list(set(f["name"] for f in RSS_FEEDS))
     briefing["weather_locations"] = [loc["name"] for loc in WEATHER_LOCATIONS]
-    briefing["version"] = "2.0"
+    briefing["version"] = "3.0"
 
     os.makedirs("data", exist_ok=True)
     with open("data/daily.json", "w") as f:
@@ -537,6 +592,8 @@ def main():
     print(f"  ✓ data/daily.json written")
     print(f"  Headline:      {briefing.get('headline', '')}")
     print(f"  Sections:      {len(briefing.get('sections', []))}")
+    print(f"  Top Line:      {len(briefing.get('top_line', []))} items")
+    print(f"  Field Call:    {briefing.get('field_call', {}).get('label', '')}")
     print(f"  More You Know: {briefing.get('the_more_you_know', {}).get('title', '')}")
     print(f"  Quote:         {briefing.get('daily_quote', {}).get('attribution', '')}")
     print(f"{'═' * 60}\nDone.\n")
