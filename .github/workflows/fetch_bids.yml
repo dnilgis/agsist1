@@ -27,7 +27,7 @@ jobs:
       - name: Fetch grain bids
         env:
           BARCHART_API_KEY: ${{ secrets.BARCHART_API_KEY }}
-        run: python fetch_bids.py
+        run: python scripts/fetch_bids.py
 
       - name: Commit and push
         run: |
