@@ -393,25 +393,27 @@ var PRICE_MAP = {
   'soyoil':     { label:'Soy Oil',       priceEl:'pcp-soyoil',    chgEl:'pcc-soyoil',    dec:2, grain:false },
   'crude':      { label:'Crude Oil',     priceEl:'pcp-crude',     chgEl:'pcc-crude',     dec:2, grain:false },
   'natgas':     { label:'Natural Gas',   priceEl:'pcp-natgas',    chgEl:'pcc-natgas',    dec:2, grain:false },
-  'gold':       { label:'Gold',          priceEl:'pcp-gold',      chgEl:'pcc-gold',      dec:2, grain:false },
-  'silver':     { label:'Silver',        priceEl:'pcp-silver',    chgEl:'pcc-silver',    dec:2, grain:false },
+  'gold':       { label:'Gold',          priceEl:'pcp-gold',      chgEl:'pcc-gold',      dec:0, grain:false, prefix:'$', comma:true },
+  'silver':     { label:'Silver',        priceEl:'pcp-silver',    chgEl:'pcc-silver',    dec:2, grain:false, prefix:'$' },
   'dollar':     { label:'Dollar Index',  priceEl:'pcp-dollar',    chgEl:'pcc-dollar',    dec:2, grain:false },
   'treasury10': { label:'10-Yr Treasury',priceEl:'pcp-treasury',  chgEl:'pcc-treasury',  dec:2, grain:false, suffix:'%' },
   'sp500':      { label:'S&P 500',       priceEl:'pcp-sp500',     chgEl:'pcc-sp500',     dec:2, grain:false },
-  'bitcoin':    { label:'Bitcoin',        priceEl:'pc-btc',        chgEl:'pcc-btc',       dec:0, grain:false },
-  'ripple':     { label:'XRP',            priceEl:'pc-xrp',        chgEl:'pcc-xrp',       dec:4, grain:false },
-  'kaspa':      { label:'Kaspa',          priceEl:'pc-kas',        chgEl:'pcc-kas',       dec:4, grain:false },
+  'bitcoin':    { label:'Bitcoin',        priceEl:'pc-btc',        chgEl:'pcc-btc',       dec:0, grain:false, prefix:'$', comma:true },
+  'ripple':     { label:'XRP',            priceEl:'pc-xrp',        chgEl:'pcc-xrp',       dec:2, grain:false, prefix:'$' },
+  'kaspa':      { label:'Kaspa',          priceEl:'pc-kas',        chgEl:'pcc-kas',       dec:2, grain:false, prefix:'$' },
 };
 
 // ─────────────────────────────────────────────────────────────────
 // PRICE FORMATTING
 // ─────────────────────────────────────────────────────────────────
-function fmtPrice(val, dec, grain, suffix) {
+function fmtPrice(val, dec, grain, suffix, prefix, comma) {
   var p = parseFloat(val);
   if (isNaN(p)) return '--';
   if (grain) { return '$' + (p / 100).toFixed(2); }
   var str = p.toFixed(dec);
-  if (suffix) return str + suffix;
+  if (comma) str = Number(str).toLocaleString('en-US', {minimumFractionDigits: dec, maximumFractionDigits: dec});
+  if (prefix) str = prefix + str;
+  if (suffix) str = str + suffix;
   return str;
 }
 
@@ -436,11 +438,15 @@ function fmtTickerChange(close, open, grain, netChg, pctChg) {
   return {text: arrow + ' ' + Math.abs(pct).toFixed(2) + '%', cls: dir};
 }
 
-function fmtTickerPrice(val, grain) {
+function fmtTickerPrice(val, grain, dec, prefix, comma) {
   var p = parseFloat(val);
   if (isNaN(p)) return '--';
   if (grain) return '$' + (p / 100).toFixed(2);
-  return p.toFixed(2);
+  var d = dec != null ? dec : 2;
+  var str = p.toFixed(d);
+  if (comma) str = Number(str).toLocaleString('en-US', {minimumFractionDigits: d, maximumFractionDigits: d});
+  if (prefix) str = prefix + str;
+  return str;
 }
 
 function updatePriceEl(id, txt, cls) {
@@ -450,7 +456,7 @@ function updatePriceEl(id, txt, cls) {
   if (cls) el.className = el.className.replace(/\b(up|dn|nc)\b/g,'').trim() + ' ' + cls;
 }
 
-function update52WeekRange(priceElId, price, wk52Lo, wk52Hi, isGrain) {
+function update52WeekRange(priceElId, price, wk52Lo, wk52Hi, isGrain, prefix) {
   if (!priceElId) return;
   var priceEl = document.getElementById(priceElId);
   if (!priceEl) return;
@@ -462,18 +468,19 @@ function update52WeekRange(priceElId, price, wk52Lo, wk52Hi, isGrain) {
   if (!fill || labels.length < 3) return;
   var lo = parseFloat(wk52Lo), hi = parseFloat(wk52Hi);
   if (isNaN(lo) || isNaN(hi) || hi <= lo) return;
+  var pfx = prefix || '';
   if (isGrain) {
     labels[0].textContent = '$' + (lo / 100).toFixed(2);
     labels[2].textContent = '$' + (hi / 100).toFixed(2);
   } else if (hi >= 10000) {
-    labels[0].textContent = Math.round(lo).toLocaleString('en-US');
-    labels[2].textContent = Math.round(hi).toLocaleString('en-US');
+    labels[0].textContent = pfx + Math.round(lo).toLocaleString('en-US');
+    labels[2].textContent = pfx + Math.round(hi).toLocaleString('en-US');
   } else if (hi >= 100) {
-    labels[0].textContent = lo.toFixed(2);
-    labels[2].textContent = hi.toFixed(2);
+    labels[0].textContent = pfx + lo.toFixed(2);
+    labels[2].textContent = pfx + hi.toFixed(2);
   } else {
-    labels[0].textContent = lo < 1 ? lo.toFixed(4) : lo.toFixed(2);
-    labels[2].textContent = hi < 1 ? hi.toFixed(4) : hi.toFixed(2);
+    labels[0].textContent = pfx + (lo < 1 ? lo.toFixed(4) : lo.toFixed(2));
+    labels[2].textContent = pfx + (hi < 1 ? hi.toFixed(4) : hi.toFixed(2));
   }
   var pct = Math.min(100, Math.max(0, ((price - lo) / (hi - lo)) * 100));
   fill.style.width = pct + '%';
@@ -483,7 +490,7 @@ function update52WeekRange(priceElId, price, wk52Lo, wk52Hi, isGrain) {
 function applyPriceResult(key, q, close, open, netChg, pctChg) {
   var meta = PRICE_MAP[key];
   if (!meta) return;
-  var priceTxt = fmtPrice(close, meta.dec, meta.grain, meta.suffix);
+  var priceTxt = fmtPrice(close, meta.dec, meta.grain, meta.suffix, meta.prefix, meta.comma);
   var chgObj   = fmtChange(close, open, meta.grain, netChg, pctChg);
   if (meta.priceEl) updatePriceEl(meta.priceEl, priceTxt);
   if (meta.chgEl)   updatePriceEl(meta.chgEl, chgObj.text, chgObj.cls);
@@ -506,16 +513,16 @@ function applyPriceResult(key, q, close, open, netChg, pctChg) {
   }
   var prevEl = (prevElId && prevElId !== meta.priceEl) ? document.getElementById(prevElId) : null;
   if (prevEl && open != null) {
-    var prevTxt = meta.grain ? '$' + (parseFloat(open)/100).toFixed(2) : parseFloat(open).toFixed(meta.dec) + (meta.suffix||'');
+    var prevTxt = fmtPrice(open, meta.dec, meta.grain, meta.suffix, meta.prefix, meta.comma);
     prevEl.textContent = 'prev: ' + prevTxt + ' ' + (q && q.ticker ? q.ticker : '');
   }
   if (meta.priceEl && q) {
     var wk52Hi = q.wk52_hi, wk52Lo = q.wk52_lo;
     if (wk52Hi != null && wk52Lo != null) {
-      update52WeekRange(meta.priceEl, parseFloat(close), wk52Lo, wk52Hi, meta.grain);
+      update52WeekRange(meta.priceEl, parseFloat(close), wk52Lo, wk52Hi, meta.grain, meta.prefix);
     }
   }
-  var tickerPriceTxt = fmtTickerPrice(close, meta.grain);
+  var tickerPriceTxt = fmtTickerPrice(close, meta.grain, meta.dec, meta.prefix, meta.comma);
   var tickerChgObj = fmtTickerChange(close, open, meta.grain, netChg, pctChg);
   document.querySelectorAll('[data-sym="' + key + '"]').forEach(function(el) {
     var pe = el.querySelector('.t-price');
@@ -706,8 +713,7 @@ function fetchKalshiMarkets() {
       footer.style.cssText = 'grid-column:1/-1;font-size:.62rem;color:var(--text-muted);'
         + 'text-align:center;padding:.5rem 0 .15rem;border-top:1px solid var(--border);'
         + 'margin-top:.25rem;line-height:1.6';
-      footer.innerHTML = 'Odds from Kalshi &amp; Polymarket · ' + footerParts.join(' · ')
-        + '<br>Markets shown based on agricultural relevance scoring · Not investment advice';
+      footer.innerHTML = footerParts.join(' · ');
       container.appendChild(footer);
     })
     .catch(function() {
