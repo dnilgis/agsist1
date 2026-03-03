@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """
-fetch_prices.py — fetches commodity/futures/index prices via yfinance
+fetch_prices.py — fetches commodity/futures/index/crypto prices via yfinance
 Writes to data/prices.json. Run by GitHub Actions every 30min on weekdays.
 All free, no API key needed.
+
+Crypto (BTC, XRP, KAS) are now fetched server-side here instead of
+client-side CoinGecko calls, eliminating CORS proxy dependency.
 """
 
 import json
@@ -12,26 +15,37 @@ import yfinance as yf
 
 # Map our internal keys → Yahoo Finance ticker symbols
 SYMBOLS = {
+    # ── Grains (CBOT) ──
     "corn":       "ZC=F",
     "corn-dec":   "ZCZ26.CBT",
     "beans":      "ZS=F",
     "beans-nov":  "ZSX26.CBT",
     "wheat":      "ZW=F",
     "oats":       "ZO=F",
+    # ── Livestock ──
     "cattle":     "LE=F",
     "feeders":    "GF=F",
     "hogs":       "HE=F",
     "milk":       "DC=F",
+    # ── Oilseeds / Feed ──
     "meal":       "ZM=F",
     "soyoil":     "ZL=F",
+    # ── Energy ──
     "crude":      "CL=F",
     "natgas":     "NG=F",
+    # ── Metals ──
     "gold":       "GC=F",
     "silver":     "SI=F",
+    # ── Macro / Indices ──
     "dollar":     "DX=F",
     "treasury10": "^TNX",
     "sp500":      "^GSPC",
+    # ── Crypto (replaces client-side CoinGecko) ──
+    "bitcoin":    "BTC-USD",
+    "ripple":     "XRP-USD",
+    "kaspa":      "KAS-USD",
 }
+
 
 def fetch_quote(key, ticker):
     try:
@@ -40,10 +54,6 @@ def fetch_quote(key, ticker):
         close = getattr(info, 'last_price', None) or getattr(info, 'regular_market_price', None)
         prev  = getattr(info, 'previous_close', None) or getattr(info, 'regular_market_previous_close', None)
 
-        # 52-week range
-        wk52_hi = getattr(info, 'year_high', None) or getattr(info, 'fifty_two_week_high', None)
-        wk52_lo = getattr(info, 'year_low', None) or getattr(info, 'fifty_two_week_low', None)
-
         if close is None:
             # fallback: last 2 days of history
             hist = t.history(period="2d", interval="1d")
@@ -51,40 +61,27 @@ def fetch_quote(key, ticker):
                 close = float(hist['Close'].iloc[-1])
                 prev  = float(hist['Close'].iloc[-2]) if len(hist) >= 2 else close
 
-        # fallback for 52wk: pull from 1y history
-        if (wk52_hi is None or wk52_lo is None) and close is not None:
-            try:
-                hist_1y = t.history(period="1y", interval="1d")
-                if len(hist_1y) > 0:
-                    wk52_hi = float(hist_1y['High'].max()) if wk52_hi is None else wk52_hi
-                    wk52_lo = float(hist_1y['Low'].min()) if wk52_lo is None else wk52_lo
-            except Exception:
-                pass
-
         if close is None:
             print(f"  SKIP {key} ({ticker}) — no price data")
             return None
 
-        close   = round(float(close), 5)
-        prev    = round(float(prev), 5) if prev else close
-        net     = round(close - prev, 5)
-        pct     = round((net / prev * 100) if prev else 0, 4)
-        wk52_hi = round(float(wk52_hi), 4) if wk52_hi is not None else None
-        wk52_lo = round(float(wk52_lo), 4) if wk52_lo is not None else None
+        close = round(float(close), 5)
+        prev  = round(float(prev), 5) if prev else close
+        net   = round(close - prev, 5)
+        pct   = round((net / prev * 100) if prev else 0, 4)
 
-        print(f"  OK   {key:12s} ({ticker:12s})  {close:>10.4f}  {net:+.4f}  {pct:+.2f}%  52wk: {wk52_lo}-{wk52_hi}")
+        print(f"  OK   {key:12s} ({ticker:12s})  {close:>12.4f}  {net:+.4f}  {pct:+.2f}%")
         return {
             "ticker":    ticker,
             "close":     close,
             "open":      prev,
             "netChange": net,
-            "pctChange": pct,
-            "wk52_hi":   wk52_hi,
-            "wk52_lo":   wk52_lo
+            "pctChange": pct
         }
     except Exception as e:
         print(f"  ERR  {key} ({ticker}): {e}")
         return None
+
 
 def main():
     print(f"\nAGSIST fetch_prices.py — {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}")
@@ -128,6 +125,7 @@ def main():
     if ok == 0:
         print("WARNING: All fetches failed — prices.json unchanged from seed")
         sys.exit(1)
+
 
 if __name__ == "__main__":
     main()
