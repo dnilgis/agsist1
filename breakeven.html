@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#111a0a">
+  <meta name="theme-color" content="#0e0e0c">
 
   <link rel="stylesheet" href="/components/styles.css">
   <link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
@@ -55,12 +55,16 @@
   </script>
 
   <style>
+    /* ══════════════════════════════════════════════════════════════
+       BREAK-EVEN CALCULATOR — Embedded Styles
+       Brand alignment v8 — 2026-03-02
+       Palette: forest green primary, warm gold data, muted red
+       ══════════════════════════════════════════════════════════════ */
+
     /* ── BASE ──────────────────────────────────────────────────── */
     html, body { overflow-x: hidden; width: 100%; }
     .panel { overflow: visible; }
     .panel-body { overflow-x: hidden; }
-
-    /* Fallback if styles.css grid-2 doesn't exist or lacks breakpoint */
     .grid-2 { max-width: 1100px; margin: 0 auto; }
 
     /* ── NO NUMBER SPINNERS ───────────────────────────────────── */
@@ -79,17 +83,21 @@
       transition: all 0.2s; flex-shrink: 0;
       user-select: none; -webkit-tap-highlight-color: transparent;
     }
-    .hint-icon:hover, .hint-icon.active { background: var(--gold); color: #000; }
+    .hint-icon:hover, .hint-icon.active { background: var(--green); color: #fff; }
     .hint-popup {
       display: none; margin-top: 8px;
-      background: var(--surface); border: 1px solid var(--gold);
-      border-radius: 8px; padding: 12px 14px;
+      background: var(--surface); border: 2px solid var(--green);
+      border-radius: 4px; padding: 12px 14px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.3);
       animation: hintIn 0.15s ease-out;
     }
     .hint-popup.hint-open { display: block; }
     @keyframes hintIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
-    .hint-title { font-size: 0.7rem; font-weight: 700; color: var(--gold); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .hint-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; font-weight: 700; color: var(--green);
+      text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px;
+    }
     .hint-list { list-style: none; padding: 0; margin: 0; }
     .hint-list li { font-size: 0.75rem; color: var(--text); padding: 2px 0; line-height: 1.5; }
     .hint-list li::before { content: '☐ '; color: var(--text-dim); }
@@ -99,31 +107,43 @@
     .live-price-bar {
       display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
       padding: 10px 14px; margin-bottom: 16px;
-      background: rgba(230,176,66,0.06); border: 1px solid rgba(230,176,66,0.2);
-      border-radius: 6px; font-size: 0.8rem;
+      background: rgba(58,139,60,0.05); border: 2px solid rgba(58,139,60,0.20);
+      border-radius: 4px; font-size: 0.8rem;
     }
     .live-dot { width: 6px; height: 6px; background: var(--green); border-radius: 50%; animation: pulse 2s infinite; flex-shrink: 0; }
     @keyframes pulse { 0%,100% { opacity:1; } 50% { opacity:0.3; } }
-    .live-price-bar .price-tag { font-weight: 700; color: var(--gold); }
-    .live-price-bar .chg-tag { font-size: 0.75rem; font-weight: 600; }
+    .live-price-bar .price-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 700; color: var(--gold);
+    }
+    .live-price-bar .chg-tag {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem; font-weight: 600;
+    }
     .live-price-bar .chg-tag.up { color: var(--green); }
     .live-price-bar .chg-tag.dn { color: var(--red); }
     .live-price-bar button {
-      background: var(--gold); color: #000; border: none; padding: 4px 12px;
-      border-radius: 4px; font-family: inherit; font-size: 0.75rem; font-weight: 600;
-      cursor: pointer; transition: opacity 0.2s; margin-left: auto;
+      background: var(--green); color: #fff; border: none; padding: 4px 12px;
+      border-radius: 4px; font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .3px;
+      cursor: pointer; transition: background 0.15s; margin-left: auto;
     }
-    .live-price-bar button:hover { opacity: 0.8; }
+    .live-price-bar button:hover { background: #1b4d1c; }
 
     /* ── COST BREAKDOWN BAR ────────────────────────────────────── */
     .cost-breakdown { margin-top: 16px; }
-    .cost-breakdown-title { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px; font-weight: 600; }
-    .cost-bar { display: flex; height: 28px; border-radius: 6px; overflow: hidden; margin-bottom: 8px; }
+    .cost-breakdown-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase;
+      letter-spacing: .08em; margin-bottom: 8px; font-weight: 700;
+    }
+    .cost-bar { display: flex; height: 28px; border-radius: 4px; overflow: hidden; margin-bottom: 8px; }
     .cost-bar-seg { transition: width 0.4s ease; min-width: 2px; position: relative; cursor: pointer; }
-    .cost-bar-seg:hover { filter: brightness(1.3); }
+    .cost-bar-seg:hover { filter: brightness(1.2); }
     .cost-bar-seg .seg-tip {
       display: none; position: absolute; bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%);
-      background: var(--surface); border: 1px solid var(--border); border-radius: 4px;
+      background: var(--surface); border: 2px solid var(--border); border-radius: 4px;
       padding: 4px 8px; font-size: 0.7rem; white-space: nowrap; z-index: 500;
       pointer-events: none;
     }
@@ -135,31 +155,51 @@
 
     /* ── SENSITIVITY TABLE ─────────────────────────────────────── */
     .sensitivity { margin-top: 20px; }
-    .sensitivity-title { font-size: 0.75rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; font-weight: 600; }
+    .sensitivity-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.68rem; color: var(--text-dim); text-transform: uppercase;
+      letter-spacing: .08em; margin-bottom: 10px; font-weight: 700;
+    }
     .sens-table { width: 100%; border-collapse: collapse; font-size: 0.75rem; }
-    .sens-table th { background: var(--surface); color: var(--text-dim); padding: 6px 8px; font-weight: 600; text-align: center; border: 1px solid var(--border); }
-    .sens-table td { padding: 6px 8px; text-align: center; border: 1px solid var(--border); font-weight: 600; }
-    .sens-table .corner { background: var(--bg); color: var(--text-dim); font-size: 0.65rem; }
+    .sens-table th {
+      background: var(--surface); color: var(--text-dim); padding: 6px 8px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .65rem; font-weight: 700; text-align: center;
+      border: 1px solid var(--border);
+    }
+    .sens-table td {
+      font-family: 'JetBrains Mono', monospace;
+      padding: 6px 8px; text-align: center; border: 1px solid var(--border); font-weight: 600;
+    }
+    .sens-table .corner { background: var(--bg); color: var(--text-dim); font-size: 0.62rem; }
     .sens-table .row-head { background: var(--surface); color: var(--text-dim); font-weight: 600; text-align: right; padding-right: 10px; }
     .sens-positive { color: var(--green); }
     .sens-negative { color: var(--red); }
     .sens-zero { color: var(--text-dim); }
-    .sens-current { background: rgba(230,176,66,0.12) !important; outline: 1px solid var(--gold); }
+    .sens-current { background: rgba(58,139,60,0.10) !important; outline: 2px solid var(--green); }
 
     /* ── PROFIT GAUGE ──────────────────────────────────────────── */
-    .profit-gauge { margin-top: 16px; padding: 14px; background: var(--bg); border-radius: 6px; border: 1px solid var(--border); }
-    .profit-gauge-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 6px; }
+    .profit-gauge { margin-top: 16px; padding: 14px; background: var(--bg); border-radius: 4px; border: 2px solid var(--border); }
+    .profit-gauge-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.65rem; color: var(--text-dim); text-transform: uppercase;
+      letter-spacing: .08em; margin-bottom: 6px; font-weight: 700;
+    }
     .profit-gauge-bar { height: 8px; background: var(--border); border-radius: 4px; position: relative; }
     .profit-gauge-fill { height: 100%; border-radius: 4px; transition: width 0.4s, background 0.4s; }
     .profit-gauge-marker { position: absolute; top: -4px; width: 3px; height: 16px; background: var(--text); border-radius: 2px; transition: left 0.4s; }
-    .profit-gauge-labels { display: flex; justify-content: space-between; font-size: 0.65rem; color: var(--text-dim); margin-top: 4px; }
+    .profit-gauge-labels {
+      display: flex; justify-content: space-between;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.62rem; color: var(--text-dim); margin-top: 4px;
+    }
 
     .be-highlight { font-size: 1.3rem; }
 
     /* ── ACRES ROW ─────────────────────────────────────────────── */
     .acres-row {
-      margin-top: 14px; padding: 12px; border-radius: 6px;
-      background: var(--bg); border: 1px solid var(--border);
+      margin-top: 14px; padding: 12px; border-radius: 4px;
+      background: var(--bg); border: 2px solid var(--border);
     }
     .acres-inner {
       display: flex; align-items: center; justify-content: space-between;
@@ -167,43 +207,50 @@
     }
     .acres-input-group { display: flex; align-items: center; gap: 8px; }
     .acres-label {
-      font-size: .7rem; color: var(--text-dim); text-transform: uppercase;
-      letter-spacing: .5px; margin: 0; white-space: nowrap;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .65rem; color: var(--text-dim); text-transform: uppercase;
+      letter-spacing: .08em; margin: 0; white-space: nowrap; font-weight: 700;
     }
     .acres-field {
-      width: 80px; padding: 4px 8px; font-size: .85rem;
-      background: var(--surface); border: 1px solid var(--border);
-      border-radius: 4px; color: var(--text); font-family: inherit;
+      width: 80px; padding: 4px 8px;
+      font-family: 'JetBrains Mono', monospace; font-size: .85rem;
+      background: var(--surface); border: 2px solid var(--border);
+      border-radius: 4px; color: var(--text);
     }
+    .acres-field:focus { outline: none; border-color: var(--green); }
     .farm-total-label {
-      font-size: .65rem; color: var(--text-dim); text-transform: uppercase;
-      letter-spacing: .5px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .62rem; color: var(--text-dim); text-transform: uppercase;
+      letter-spacing: .08em; font-weight: 700;
     }
-    .farm-total-value { font-size: 1.2rem; font-weight: 700; }
+    .farm-total-value {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 1.2rem; font-weight: 700;
+    }
 
     /* ── ACTION BUTTONS ────────────────────────────────────────── */
     .action-bar { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
     .btn {
       display: inline-flex; align-items: center; gap: 6px;
-      padding: 10px 18px; border-radius: 6px; font-family: inherit;
-      font-size: 0.8rem; font-weight: 600; cursor: pointer;
-      transition: all 0.2s; border: 1px solid var(--border);
+      padding: 10px 18px; border-radius: 4px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem; font-weight: 700; cursor: pointer;
+      text-transform: uppercase; letter-spacing: .3px;
+      transition: all 0.15s; border: 2px solid var(--border);
     }
-    .btn-primary { background: var(--gold); color: #000; border-color: var(--gold); }
-    .btn-primary:hover { opacity: 0.85; }
+    .btn-primary { background: var(--green); color: #fff; border-color: var(--green); }
+    .btn-primary:hover { background: #1b4d1c; border-color: #1b4d1c; }
     .btn-secondary { background: var(--surface); color: var(--text-dim); }
-    .btn-secondary:hover { color: var(--text); border-color: var(--text); }
+    .btn-secondary:hover { color: var(--text); border-color: var(--green); }
 
     /* ══════════════════════════════════════════════════════════════
        MOBILE RESPONSIVE
        ══════════════════════════════════════════════════════════════ */
     @media (max-width: 768px) {
-      /* Stack panels vertically */
       .grid-2 { display: block !important; }
       .grid-2 > .panel { margin-bottom: 12px; }
     }
     @media (max-width: 500px) {
-      /* Stack 2-col input grids to single column */
       .input-grid-2 { grid-template-columns: 1fr !important; }
       .sens-table { font-size: 0.63rem; }
       .sens-table th, .sens-table td { padding: 3px 4px; }
@@ -215,7 +262,7 @@
 
     /* ══════════════════════════════════════════════════════════════
        PRINT STYLES — Professional one-page farm report
-       Calculator ONLY — no site header, footer, or navigation
+       ONLY the calculator prints. ALL site chrome is killed.
        ══════════════════════════════════════════════════════════════ */
     @media not print {
       .print-header, .print-footer, .print-summary { display: none; }
@@ -224,7 +271,6 @@
     @media print {
       @page { size: letter landscape; margin: 0.4in 0.5in; }
 
-      /* Reset for paper — but DON'T nuke all backgrounds/colors */
       body {
         color: #000 !important;
         font-size: 8.5pt !important;
@@ -233,20 +279,28 @@
         print-color-adjust: exact !important;
       }
 
-      /* ── TOTAL ISOLATION: hide ALL site chrome ──────────────── */
-      /* Target every possible header/footer/nav element by ID,
-         class, tag, and any children injected by loader.js       */
+      /* ── NUCLEAR HIDE: every piece of site chrome ───────────── */
+      /* IDs from loader.js injection targets */
       #site-header,
-      #site-header *,
       #site-footer,
-      #site-footer *,
+      /* Class-based nav/footer/ticker from styles.css */
+      .nav,
+      .prices-strip,
+      .footer,
+      .drawer,
+      .draw-ov,
+      /* Page-level UI not useful on paper */
       .breadcrumb,
       .action-bar,
       .hint-popup,
       .hint-icon,
       .live-price-bar,
       .profit-gauge,
-      .cost-bar {
+      .cost-bar,
+      /* Skip links and toasts */
+      .skip,
+      .ws-toast,
+      .noscript-banner {
         display: none !important;
         visibility: hidden !important;
         height: 0 !important;
@@ -257,6 +311,12 @@
         border: none !important;
         line-height: 0 !important;
         font-size: 0 !important;
+      }
+
+      /* Absolutely ensure no header/footer children leak through */
+      #site-header *, #site-footer * {
+        display: none !important;
+        visibility: hidden !important;
       }
 
       /* Show print-only elements */
@@ -402,8 +462,8 @@
       .sens-negative { color: #c41a1a !important; }
       .sens-zero { color: #666 !important; }
       .sens-current {
-        background: #fffbe6 !important;
-        outline: 1.5pt solid #c8a600 !important;
+        background: #eef6ee !important;
+        outline: 1.5pt solid #2d6a2e !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
@@ -674,7 +734,18 @@
   };
   var CROP_PRICE_KEY = { corn:'corn', soybeans:'beans', wheat:'wheat' };
   var CROP_NAMES     = { corn:'Corn', soybeans:'Soybeans', wheat:'Wheat' };
-  var COST_COLORS = { seed:'#4ade80', fertilizer:'#3b82f6', chemicals:'#8b5cf6', insurance:'#f59e0b', machinery:'#ef4444', labor:'#ec4899', land:'#06b6d4', overhead:'#9a9aa6' };
+
+  /* Brand-aligned cost segment colors — muted, earthy palette */
+  var COST_COLORS = {
+    seed:       '#3a8b3c',   /* forest green */
+    fertilizer: '#4a8fba',   /* brand blue */
+    chemicals:  '#7a6fad',   /* muted purple */
+    insurance:  '#daa520',   /* warm gold */
+    machinery:  '#b84c2a',   /* brand red */
+    labor:      '#c87a28',   /* warm orange */
+    land:       '#5a9e6f',   /* sage green */
+    overhead:   '#8a8a80'    /* warm gray */
+  };
   var COST_LABELS = { seed:'Seed', fertilizer:'Fertilizer', chemicals:'Chemicals', insurance:'Insurance', machinery:'Machinery', labor:'Labor', land:'Land', overhead:'Overhead' };
   var COST_KEYS   = ['seed','fertilizer','chemicals','insurance','machinery','labor','land','overhead'];
   var _livePrices = null;
