@@ -1,18 +1,24 @@
 #!/usr/bin/env python3
 """
-AGSIST fetch_markets.py  v4
+AGSIST fetch_markets.py  v5
 ════════════════════════════
 Fetches prediction-market odds relevant to agriculture from Kalshi
 and Polymarket.  Runs once daily via GitHub Actions (6 AM CT).
 
+v5 changes (2026-03-03):
+  • FIX: Kalshi ticker hashes (e.g. "S2026FDA8DCAB06F") were included in
+    scoring text — "FDA" substring matched TIER2, giving NBA parlays score 70.
+    Now scoring uses only human-readable text (title + subtitle).
+  • FIX: Added parlay/multi-leg detection to is_meme_market() — catches
+    "yes NAME: N+" patterns from Kalshi cross-category bets.
+  • FIX: Added KXMVE/CROSSCATEGORY ticker prefix detection for Kalshi
+    multi-event sports markets.
+  • Expanded SPORTS_PLAYER_PATTERNS with more active players.
+
 v4 changes (2026-03-02):
-  • Lowered minimum relevance to 40 (was 60) — macro/weather markets
-    like interest rates, recession odds, dollar moves ARE relevant to ag
-  • Massively expanded meme/junk filter — catches sports teams, players,
-    entertainment by pattern, not just exact strings
-  • Added category-aware sports detection (team names, league patterns)
+  • Lowered minimum relevance to 40 (was 60)
+  • Massively expanded meme/junk filter
   • Graceful empty-state: output always valid even with 0 markets
-  • Better dedup across platforms
 
 Sources (public, no API keys required):
   • Kalshi      — https://api.elections.kalshi.com/trade-api/v2/markets
@@ -193,6 +199,11 @@ SPORTS_PLAYER_PATTERNS = [
     r"messi\b", r"ronaldo", r"haaland", r"mbappe",
     r"lamar jackson", r"josh allen", r"patrick mahomes",
     r"judge\b.*homer", r"batting\b", r"rushing\b", r"passing\b",
+    # v5: added players that appeared in the NBA parlay leak
+    r"desmond bane", r"cade cunningham", r"paolo banchero",
+    r"lamelo ball", r"evan mobley", r"jarrett allen",
+    r"james harden", r"dennis schr", r"ausar thompson",
+    r"wendell carter", r"miles bridges", r"knueppel",
 ]
 
 # Patterns that look like sports scores/stats
@@ -208,10 +219,32 @@ SPORTS_STAT_PATTERNS = [
     r"wins?\s+the\s+(title|trophy|cup|ring|belt)",
 ]
 
+# v5: patterns for parlay/multi-leg/cross-category bets
+PARLAY_PATTERNS = [
+    # "yes NAME: N+,yes NAME: N+" — Kalshi cross-category format
+    r"(yes\s+\w+.*?:\s*\d+\+.*?,\s*){2,}",
+    # Multiple comma-separated "NAME: N+" entries
+    r"(\w+\s+\w+:\s*\d+\+,?\s*){3,}",
+]
 
-def is_meme_market(title):
+# v5: Kalshi ticker prefixes that indicate multi-event/cross-category sports bets
+KALSHI_JUNK_TICKER_PATTERNS = [
+    r"^KXMVE",              # Cross-category multi-event
+    r"CROSSCATEGORY",       # Explicit cross-category
+    r"^KX.*PARLAY",         # Parlay markets
+]
+
+
+def is_meme_market(title, ticker=""):
     """Return True if market title matches meme/junk/sports patterns."""
     t = title.lower()
+
+    # v5: Check Kalshi ticker patterns for known junk market types
+    if ticker:
+        ticker_upper = ticker.upper()
+        for pattern in KALSHI_JUNK_TICKER_PATTERNS:
+            if re.search(pattern, ticker_upper):
+                return True
 
     # Check exact substring blacklists
     for pattern in MEME_BLACKLIST:
@@ -229,6 +262,11 @@ def is_meme_market(title):
 
     # Check sports stat patterns (regex)
     for pattern in SPORTS_STAT_PATTERNS:
+        if re.search(pattern, t):
+            return True
+
+    # v5: Check parlay/multi-leg patterns
+    for pattern in PARLAY_PATTERNS:
         if re.search(pattern, t):
             return True
 
@@ -429,7 +467,7 @@ def get_category(title):
 def http_get_json(url, timeout=15):
     try:
         req = urllib_request.Request(url, headers={
-            "User-Agent": "AGSIST/4.0 (agsist.com; agricultural data aggregator)",
+            "User-Agent": "AGSIST/5.0 (agsist.com; agricultural data aggregator)",
             "Accept": "application/json",
         })
         with urllib_request.urlopen(req, timeout=timeout) as r:
@@ -500,14 +538,25 @@ def fetch_kalshi():
             continue
 
         title = m.get("title") or m.get("subtitle") or ticker
+        subtitle = m.get("subtitle", "")
         event_ticker = m.get("event_ticker", "")
-        full_text = f"{title} {ticker} {m.get('subtitle', '')} {event_ticker}"
 
-        if is_meme_market(full_text):
+        # v5: Separate human-readable text from raw ticker hashes.
+        # The old code used full_text = title + ticker + subtitle + event_ticker
+        # for BOTH meme-checking and relevance scoring. Problem: Kalshi ticker
+        # hashes like "S2026FDA8DCAB06F" contain random letter sequences that
+        # can match keywords ("FDA" matched TIER2). Now:
+        #   - meme_text: includes ticker (for KXMVE pattern detection)
+        #   - scoring_text: only human-readable title + subtitle (no ticker hashes)
+        meme_text = f"{title} {subtitle} {event_ticker}"
+        scoring_text = f"{title} {subtitle}"
+
+        # v5: pass ticker separately for KXMVE/cross-category detection
+        if is_meme_market(meme_text, ticker=ticker):
             continue
 
-        relevance, tier = score_relevance(full_text)
-        if relevance < 40:  # v4: lowered from 60
+        relevance, tier = score_relevance(scoring_text)
+        if relevance < 40:
             continue
 
         yes_price = m.get("yes_price")
@@ -547,8 +596,8 @@ def fetch_kalshi():
             "url":            f"https://kalshi.com/markets/{ticker.split('-')[0]}",
             "relevance":      relevance,
             "tier":           tier,
-            "category":       get_category(full_text),
-            "why_it_matters": get_why_it_matters(full_text),
+            "category":       get_category(scoring_text),
+            "why_it_matters": get_why_it_matters(scoring_text),
         })
 
     print(f"  → {len(markets)} ag-relevant markets ({len(seen)} unique)")
@@ -608,7 +657,7 @@ def fetch_polymarket():
                 continue
 
             relevance, tier = score_relevance(question)
-            if relevance < 40:  # v4: lowered from 60
+            if relevance < 40:
                 continue
 
             # Parse probability
@@ -709,7 +758,7 @@ def composite_score(market):
 
 def main():
     now = datetime.now(timezone.utc)
-    print(f"\nAGSIST fetch_markets.py v4 — {now.strftime('%Y-%m-%d %H:%M UTC')}")
+    print(f"\nAGSIST fetch_markets.py v5 — {now.strftime('%Y-%m-%d %H:%M UTC')}")
     print("=" * 60)
 
     kalshi = fetch_kalshi()
