@@ -6,21 +6,120 @@
 <link rel="stylesheet" href="/components/styles.css">
 <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
-<title>Cash Bids — Local Grain Prices — AGSIST</title>
-<meta name="description" content="Live local cash grain bids near you. Compare corn, soybean, and wheat elevator prices and basis levels across locations.">
+<title>Cash Bids — Local Grain Elevator Prices — AGSIST</title>
+<meta name="description" content="Live local cash grain bids for any US ZIP code. Compare corn, soybean, and wheat elevator prices and basis levels. Updated in real time from Barchart.">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://agsist.com/cash-bids">
 <meta property="og:title" content="Cash Bids — Local Grain Prices — AGSIST">
-<meta property="og:description" content="Live local corn, soybean, and wheat elevator prices near you. Compare basis across locations.">
+<meta property="og:description" content="Live local corn, soybean, and wheat elevator prices near you. Compare basis across locations — any US ZIP code.">
 <meta property="og:url" content="https://agsist.com/cash-bids">
 <meta property="og:image" content="https://agsist.com/img/og/agsist.jpg">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AGSIST">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="manifest" href="/manifest.json">
-<!-- Google Analytics 4 -->
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@graph":[
+    {"@type":"BreadcrumbList","itemListElement":[
+      {"@type":"ListItem","position":1,"name":"Home","item":"https://agsist.com/"},
+      {"@type":"ListItem","position":2,"name":"Cash Bids","item":"https://agsist.com/cash-bids"}
+    ]},
+    {"@type":"WebPage","name":"Cash Bids — Local Grain Elevator Prices","description":"Live local cash grain bids for any US ZIP code. Compare corn, soybean, and wheat elevator prices and basis levels.","url":"https://agsist.com/cash-bids","isPartOf":{"@id":"https://agsist.com/#website"}},
+    {"@type":"FAQPage","mainEntity":[
+      {"@type":"Question","name":"What is grain basis?","acceptedAnswer":{"@type":"Answer","text":"Basis is the difference between your local cash price and the nearby CME futures contract. A basis of −30 means local cash is 30 cents below futures."}},
+      {"@type":"Question","name":"How often are cash bids updated?","acceptedAnswer":{"@type":"Answer","text":"Cash bids are fetched live from Barchart OnDemand when you search. During market hours they reflect the latest posted bids from your local elevators."}},
+      {"@type":"Question","name":"What areas are covered?","acceptedAnswer":{"@type":"Answer","text":"Any US ZIP code with reporting grain elevators. Coverage is strongest in the Corn Belt and Great Plains but extends nationwide."}}
+    ]}
+  ]
+}
+</script>
+<!-- GA4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6KXCTD5Z9H"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-6KXCTD5Z9H');</script>
+<style>
+/* ═══ Cash Bids page styles ══════════════════════════════════════ */
+.cb-wrap{max-width:960px;margin:0 auto;padding:0 1rem}
+.cb-hero{text-align:center;padding:1.5rem 0 .5rem}
+.cb-hero h1{font-family:'Oswald',sans-serif;font-size:1.8rem;font-weight:800;text-transform:uppercase;letter-spacing:.02em;color:var(--text);margin:0 0 .35rem}
+.cb-hero p{font-size:.85rem;color:var(--text-dim);line-height:1.55;max-width:38rem;margin:0 auto}
+@media(min-width:700px){.cb-hero h1{font-size:2.4rem}}
+
+.cb-lookup{max-width:520px;margin:1.2rem auto 1.5rem;background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:1.2rem 1.4rem}
+.cb-lookup-label{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.55rem}
+.cb-lookup-row{display:flex;gap:.55rem}
+.cb-lookup-input{flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.7rem .9rem;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.92rem;outline:none;transition:border-color .15s}
+.cb-lookup-input:focus{border-color:var(--gold)}
+.cb-lookup-input::placeholder{color:var(--text-muted)}
+.cb-lookup-btn{padding:.7rem 1.3rem;background:var(--gold);color:#0a1a0a;border:none;border-radius:8px;font-weight:700;font-size:.88rem;cursor:pointer;white-space:nowrap;transition:background .15s}
+.cb-lookup-btn:hover{background:#d4a83a}
+.cb-lookup-btn:disabled{opacity:.5;cursor:wait}
+.cb-geo-row{margin-top:.55rem;font-size:.74rem;color:var(--text-muted);display:flex;align-items:center;gap:.4rem;flex-wrap:wrap}
+.cb-geo-row button{background:none;border:none;color:var(--gold);cursor:pointer;font-size:.74rem;padding:0}
+.cb-radius-row{margin-top:.55rem;display:flex;align-items:center;gap:.5rem;font-size:.72rem;color:var(--text-muted)}
+.cb-radius-row select{background:var(--surface2);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:.72rem;padding:.2rem .35rem;cursor:pointer;outline:none}
+
+.cb-status{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.5rem;margin-bottom:1rem;padding:.5rem 0;border-bottom:1px solid var(--border)}
+.cb-status-loc{font-size:.82rem;color:var(--text-dim);display:flex;align-items:center;gap:.35rem}
+.cb-status-meta{font-size:.68rem;color:var(--text-muted)}
+
+.cb-filters{display:flex;flex-wrap:wrap;gap:.4rem;margin-bottom:1rem}
+.cb-filt{padding:.4rem .8rem;border-radius:6px;border:1px solid var(--border);background:var(--surface);color:var(--text-dim);font-size:.76rem;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
+.cb-filt:hover{border-color:var(--gold);color:var(--text)}
+.cb-filt.active{background:var(--gold);color:#0a1a0a;border-color:var(--gold)}
+
+.cb-sort{display:flex;align-items:center;gap:.5rem;margin-bottom:.75rem;font-size:.72rem;color:var(--text-muted)}
+.cb-sort select{background:var(--surface2);border:1px solid var(--border);border-radius:5px;color:var(--text);font-size:.72rem;padding:.25rem .4rem;cursor:pointer;outline:none}
+
+.cb-grid{display:grid;grid-template-columns:1fr;gap:.65rem;margin-bottom:1.5rem}
+@media(min-width:600px){.cb-grid{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:880px){.cb-grid{grid-template-columns:repeat(3,1fr)}}
+
+.cb-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.85rem 1rem;display:flex;flex-direction:column;gap:.45rem;transition:border-color .15s}
+.cb-card:hover{border-color:rgba(230,176,66,.35)}
+.cb-card-head{display:flex;align-items:center;justify-content:space-between;gap:.3rem}
+.cb-card-fac{font-size:.82rem;font-weight:700;color:var(--text);line-height:1.3;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.cb-card-dist{font-size:.65rem;color:var(--text-muted);white-space:nowrap;font-family:'JetBrains Mono',monospace}
+.cb-card-loc{font-size:.7rem;color:var(--text-dim)}
+.cb-card-comm{display:inline-flex;align-items:center;gap:.3rem;font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.2rem .5rem;border-radius:4px;border:1px solid var(--border);color:var(--text-muted);width:fit-content}
+.cb-card-comm.corn{border-color:rgba(230,176,66,.3);color:var(--gold)}
+.cb-card-comm.soybeans{border-color:rgba(34,197,94,.25);color:var(--green)}
+.cb-card-comm.wheat{border-color:rgba(202,138,60,.3);color:#ca8a3c}
+
+.cb-card-prices{display:flex;gap:1rem;align-items:baseline;margin-top:.15rem}
+.cb-price-main{display:flex;flex-direction:column}
+.cb-price-label{font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted)}
+.cb-price-val{font-family:'Oswald',sans-serif;font-size:1.5rem;font-weight:700;color:var(--text);line-height:1.15}
+.cb-basis-val{font-family:'JetBrains Mono',monospace;font-size:.88rem;font-weight:700;line-height:1.15}
+.cb-basis-val.pos{color:var(--green)}
+.cb-basis-val.neg{color:var(--red,#ef4444)}
+.cb-basis-val.flat{color:var(--text-muted)}
+
+.cb-card-delivery{font-size:.68rem;color:var(--text-muted);margin-top:.1rem}
+.cb-card-phone{font-size:.68rem;color:var(--text-dim)}
+.cb-card-phone a{color:var(--gold);text-decoration:none}
+.cb-card-phone a:hover{text-decoration:underline}
+
+.cb-empty{text-align:center;padding:2.5rem 1rem;color:var(--text-muted);font-size:.88rem}
+.cb-empty-icon{font-size:2rem;margin-bottom:.5rem;opacity:.5}
+.cb-skeleton{display:grid;grid-template-columns:1fr;gap:.65rem}
+@media(min-width:600px){.cb-skeleton{grid-template-columns:repeat(2,1fr)}}
+@media(min-width:880px){.cb-skeleton{grid-template-columns:repeat(3,1fr)}}
+.cb-skel{background:var(--surface);border:1px solid var(--border);border-radius:10px;height:140px;animation:shimmer 1.5s infinite}
+@keyframes shimmer{0%,100%{opacity:.5}50%{opacity:.8}}
+
+.cb-info-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.85rem;margin:1.5rem 0}
+.cb-info{background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.1rem}
+.cb-info-title{font-size:.68rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem}
+.cb-info-body{font-size:.8rem;color:var(--text-dim);line-height:1.6}
+.cb-count{font-family:'JetBrains Mono',monospace;font-size:.68rem;padding:.2rem .5rem;border-radius:5px;background:var(--surface2);color:var(--text-muted);border:1px solid var(--border)}
+
+@media print{
+  .cb-lookup,.cb-filters,.cb-sort,.cb-info-grid,#site-header,#site-footer,.breadcrumb,.cb-geo-row,.cb-radius-row{display:none!important}
+  .cb-card{break-inside:avoid;border:1px solid #ccc;page-break-inside:avoid}
+}
+</style>
 </head>
 <body>
 <div id="site-header"></div>
@@ -30,78 +129,388 @@
     <a href="/">Home</a> → Cash Bids
   </nav>
 
-  <section class="section">
-    <div class="section-inner">
-      <div class="sec-head">
-        <div class="sec-title">💵 Local Cash Bids</div>
-      </div>
+  <div class="cb-wrap">
 
-      <!-- ZIP lookup -->
-      <div class="card" style="max-width:520px;margin:0 auto 1.5rem;padding:1.5rem">
-        <div style="font-size:.75rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem">Enter Your ZIP Code</div>
-        <div style="display:flex;gap:.6rem">
-          <input id="bids-zip" type="tel" inputmode="numeric" maxlength="5" placeholder="ZIP Code"
-            style="flex:1;background:var(--surface2);border:1px solid var(--border);border-radius:8px;padding:.65rem .9rem;color:var(--text);font-family:inherit;font-size:.95rem"
-            onkeydown="if(event.key==='Enter')lookupBids()">
-          <button onclick="lookupBids()" class="tool-btn" style="padding:.65rem 1.2rem;background:var(--gold);color:#0a1a0a;border:none;border-radius:8px;font-weight:700;font-size:.88rem;cursor:pointer">Search</button>
-        </div>
-        <!-- Geo detection bar -->
-        <div id="bids-geo-bar" style="margin-top:.65rem;font-size:.76rem;color:var(--text-muted)">
-          <span id="bids-geo-txt">📍 Detecting your location…</span>
-          <button onclick="document.getElementById('bids-geo-bar').style.display='none';document.getElementById('bids-zip-row').style.display='flex'" style="background:none;border:none;color:var(--gold);cursor:pointer;font-size:.76rem;margin-left:.4rem">Enter ZIP manually</button>
-        </div>
-      </div>
-
-      <!-- Bids results area -->
-      <div class="card" style="max-width:720px;margin:0 auto">
-        <div id="bids-list-area">
-          <div style="text-align:center;padding:2rem 1rem;color:var(--text-muted);font-size:.88rem">
-            <div style="font-size:1.8rem;margin-bottom:.5rem">📍</div>
-            Enter your ZIP above to see live cash bids from nearby elevators.
-          </div>
-        </div>
-
-        <!-- Commodity filter -->
-        <div id="bids-filters" style="display:none;margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);display:flex;gap:.4rem;flex-wrap:wrap">
-          <button class="tool-btn active" onclick="filterBids('all',this)">All</button>
-          <button class="tool-btn" onclick="filterBids('corn',this)">🌽 Corn</button>
-          <button class="tool-btn" onclick="filterBids('soybeans',this)">🫘 Soybeans</button>
-          <button class="tool-btn" onclick="filterBids('wheat',this)">🌾 Wheat</button>
-        </div>
-
-        <div style="margin-top:1rem;font-size:.7rem;color:var(--text-muted)">
-          Prices from Barchart OnDemand · Basis = cash minus nearby futures
-        </div>
-      </div>
-
-      <!-- Info cards -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:.85rem;max-width:720px;margin:1.5rem auto 0">
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.1rem">
-          <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem">What Is Basis?</div>
-          <div style="font-size:.82rem;color:var(--text-dim);line-height:1.6">Basis is the difference between your local cash price and the nearest CME futures contract. A negative basis (e.g. −20¢) means local cash is 20 cents below futures.</div>
-        </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.1rem">
-          <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem">Why Basis Matters</div>
-          <div style="font-size:.82rem;color:var(--text-dim);line-height:1.6">Stronger (less negative) basis means more local demand. Track basis trends over time to decide when to sell and whether to use basis contracts.</div>
-        </div>
-        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:1.1rem">
-          <div style="font-size:.72rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem">Compare Elevators</div>
-          <div style="font-size:.82rem;color:var(--text-dim);line-height:1.6">Even a 5¢ difference in basis at elevators 20 miles apart can be significant. Use this tool before delivery decisions.</div>
-        </div>
-      </div>
-
+    <div class="cb-hero">
+      <h1>💵 Local Cash Grain Bids</h1>
+      <p>Enter any US ZIP code to see live cash prices and basis from elevators near you. Powered by Barchart OnDemand.</p>
     </div>
-  </section>
+
+    <div class="cb-lookup">
+      <div class="cb-lookup-label">Find Bids Near You</div>
+      <div class="cb-lookup-row">
+        <input id="cb-zip" class="cb-lookup-input" type="tel" inputmode="numeric" maxlength="5" placeholder="Enter any US ZIP code" aria-label="ZIP code for cash bids">
+        <button id="cb-go" class="cb-lookup-btn">Search</button>
+      </div>
+      <div class="cb-radius-row">
+        <label for="cb-radius">Search radius:</label>
+        <select id="cb-radius">
+          <option value="25">25 miles</option>
+          <option value="50" selected>50 miles</option>
+          <option value="100">100 miles</option>
+          <option value="150">150 miles</option>
+          <option value="250">250 miles</option>
+        </select>
+      </div>
+      <div class="cb-geo-row" id="cb-geo-row">
+        <span style="display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);animation:blink 1.5s infinite" aria-hidden="true"></span>
+        <span id="cb-geo-txt">Detecting your location…</span>
+        <button id="cb-use-detect" style="display:none">Use my location</button>
+      </div>
+    </div>
+
+    <div id="cb-status" class="cb-status" style="display:none">
+      <div class="cb-status-loc">
+        <span>📍</span>
+        <span id="cb-status-label">Showing bids near…</span>
+        <span class="cb-count" id="cb-bid-count">0</span>
+      </div>
+      <div class="cb-status-meta" id="cb-status-meta">Barchart OnDemand · Live</div>
+    </div>
+
+    <div id="cb-filter-bar" class="cb-filters" style="display:none">
+      <button class="cb-filt active" data-filter="all">All</button>
+      <button class="cb-filt" data-filter="corn">🌽 Corn</button>
+      <button class="cb-filt" data-filter="soybeans">🫘 Soybeans</button>
+      <button class="cb-filt" data-filter="wheat">🌾 Wheat</button>
+      <button class="cb-filt" data-filter="other">Other</button>
+    </div>
+
+    <div id="cb-sort-bar" class="cb-sort" style="display:none">
+      <label for="cb-sort-select">Sort by:</label>
+      <select id="cb-sort-select">
+        <option value="distance">Distance (nearest)</option>
+        <option value="price-high">Cash Price (highest)</option>
+        <option value="price-low">Cash Price (lowest)</option>
+        <option value="basis-strong">Basis (strongest)</option>
+        <option value="facility">Facility (A–Z)</option>
+      </select>
+    </div>
+
+    <div id="cb-results">
+      <div class="cb-empty">
+        <div class="cb-empty-icon">📍</div>
+        Enter any US ZIP code above — or allow location access — to see live cash bids from nearby grain elevators.
+      </div>
+    </div>
+
+    <div class="cb-info-grid">
+      <div class="cb-info">
+        <div class="cb-info-title">What Is Basis?</div>
+        <div class="cb-info-body">Basis is the difference between your local cash price and the nearest CME futures contract. A negative basis (e.g. −30¢) means local cash is 30 cents below futures.</div>
+      </div>
+      <div class="cb-info">
+        <div class="cb-info-title">Why Basis Matters</div>
+        <div class="cb-info-body">Stronger (less negative) basis means more local demand. Track basis trends to decide when to sell and whether to use basis contracts.</div>
+      </div>
+      <div class="cb-info">
+        <div class="cb-info-title">Compare Elevators</div>
+        <div class="cb-info-body">Even a 5¢ difference in basis at elevators 20 miles apart can be significant on a big crop. Check bids before every delivery decision.</div>
+      </div>
+      <div class="cb-info">
+        <div class="cb-info-title">Nationwide Coverage</div>
+        <div class="cb-info-body">Enter any US ZIP code — from the Corn Belt to the Delta to the Pacific Northwest. If there are reporting elevators nearby, you'll see their bids.</div>
+      </div>
+    </div>
+
+  </div>
 </main>
 <div id="site-footer"></div>
-<script src="/components/geo.js"></script>
+
 <script src="/components/loader.js"></script>
 <script>
-function filterBids(type, btn) {
-  document.querySelectorAll('#bids-filters .tool-btn').forEach(function(b){ b.classList.remove('active'); });
-  btn.classList.add('active');
-  // TODO: filter bids-list-area rows by commodity when live data is wired
-}
+(function(){
+  'use strict';
+
+  var API_KEY = 'd3f0e9bd96636187a70426233ec41b59';
+  var BASE_URL = 'https://ondemand.websol.barchart.com/getGrainBids.json';
+
+  var currentBids = [];
+  var currentFilter = 'all';
+  var currentSort = 'distance';
+
+  var zipInput     = document.getElementById('cb-zip');
+  var goBtn        = document.getElementById('cb-go');
+  var radiusSelect = document.getElementById('cb-radius');
+  var results      = document.getElementById('cb-results');
+  var statusBar    = document.getElementById('cb-status');
+  var statusLabel  = document.getElementById('cb-status-label');
+  var statusMeta   = document.getElementById('cb-status-meta');
+  var bidCount     = document.getElementById('cb-bid-count');
+  var filterBar    = document.getElementById('cb-filter-bar');
+  var sortBar      = document.getElementById('cb-sort-bar');
+  var sortSelect   = document.getElementById('cb-sort-select');
+  var geoTxt       = document.getElementById('cb-geo-txt');
+  var geoUseBtn    = document.getElementById('cb-use-detect');
+
+  function classifyCommodity(name){
+    var n = (name || '').toLowerCase();
+    if(n.indexOf('corn') >= 0) return 'corn';
+    if(n.indexOf('soy') >= 0 || n.indexOf('bean') >= 0) return 'soybeans';
+    if(n.indexOf('wheat') >= 0 || n.indexOf('hrw') >= 0 || n.indexOf('srw') >= 0 || n.indexOf('hrsw') >= 0 || n.indexOf('hrs') >= 0) return 'wheat';
+    return 'other';
+  }
+
+  function normalizeBid(raw){
+    var loc = raw.location || {};
+    if(typeof loc === 'string') loc = {};
+    return {
+      facility:     loc.name || raw.facility || raw.locationName || raw.elevator_name || 'Unknown',
+      city:         loc.city || raw.city || '',
+      state:        loc.state || raw.state || '',
+      lat:          parseFloat(loc.lat || raw.latitude) || null,
+      lng:          parseFloat(loc.lng || raw.longitude) || null,
+      distance:     parseFloat(raw.distance || loc.distance) || null,
+      phone:        loc.phone || raw.phone || '',
+      commodity:    raw.commodity || raw.commodityName || raw.commodity_name || '',
+      cashPrice:    parseFloat(raw.cashPrice) || null,
+      basis:        parseFloat(raw.basis) || null,
+      deliveryMonth: raw.deliveryMonth || raw.delivery_month || '',
+      deliveryStart: raw.delivery_start || raw.deliveryStart || '',
+      deliveryEnd:   raw.delivery_end || raw.deliveryEnd || '',
+      notes:        raw.notes || '',
+      symbol:       raw.symbol || raw.basisSymbol || '',
+      category:     classifyCommodity(raw.commodity || raw.commodityName || '')
+    };
+  }
+
+  function fetchBids(zip, radius, callback){
+    var url = BASE_URL + '?apikey=' + API_KEY
+      + '&zipCode=' + encodeURIComponent(zip)
+      + '&maxDistance=' + (radius || 50);
+
+    fetch(url)
+      .then(function(r){ return r.ok ? r.json() : Promise.reject('HTTP ' + r.status); })
+      .then(function(data){
+        var raw = data.results || data.bids || data.data || [];
+        var bids = [];
+        if(Array.isArray(raw)){
+          raw.forEach(function(r){
+            var b = normalizeBid(r);
+            if(b.cashPrice !== null || b.basis !== null) bids.push(b);
+          });
+        }
+        callback(null, bids);
+      })
+      .catch(function(err){
+        console.warn('[AGSIST] Barchart fetch error:', err);
+        callback(err, []);
+      });
+  }
+
+  function escHtml(s){
+    if(!s) return '';
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  function renderBids(bids){
+    if(!bids || bids.length === 0){
+      results.innerHTML = '<div class="cb-empty"><div class="cb-empty-icon">🔍</div>'
+        + 'No cash bids found in this area. Try a larger search radius or a different ZIP code.</div>';
+      bidCount.textContent = '0';
+      return;
+    }
+
+    var filtered = bids;
+    if(currentFilter !== 'all'){
+      filtered = bids.filter(function(b){ return b.category === currentFilter; });
+    }
+
+    filtered = filtered.slice().sort(function(a,b){
+      switch(currentSort){
+        case 'price-high':  return (b.cashPrice||0) - (a.cashPrice||0);
+        case 'price-low':   return (a.cashPrice||0) - (b.cashPrice||0);
+        case 'basis-strong':return (b.basis||0) - (a.basis||0);
+        case 'facility':    return (a.facility||'').localeCompare(b.facility||'');
+        default:            return (a.distance||999) - (b.distance||999);
+      }
+    });
+
+    bidCount.textContent = filtered.length + ' bid' + (filtered.length !== 1 ? 's' : '');
+
+    if(filtered.length === 0){
+      results.innerHTML = '<div class="cb-empty"><div class="cb-empty-icon">🔍</div>'
+        + 'No <strong>' + currentFilter + '</strong> bids in this area. Try "All" or a different location.</div>';
+      return;
+    }
+
+    var html = '<div class="cb-grid">';
+    filtered.forEach(function(b){
+      var cc = b.category || 'other';
+      var ci = cc==='corn'?'🌽':cc==='soybeans'?'🫘':cc==='wheat'?'🌾':'🌱';
+      var cashStr = b.cashPrice != null ? '$' + b.cashPrice.toFixed(2) : '—';
+      var bN = b.basis, bStr = '—', bCls = 'flat';
+      if(bN != null){
+        var cents = Math.abs(bN) > 5 ? bN : bN * 100;
+        bStr = (cents >= 0 ? '+' : '') + cents.toFixed(0) + '¢';
+        bCls = cents > 0 ? 'pos' : cents < 0 ? 'neg' : 'flat';
+      }
+      var distStr = b.distance != null ? b.distance.toFixed(0) + ' mi' : '';
+      var del = b.deliveryMonth || '';
+      if(!del && b.deliveryStart) del = b.deliveryStart;
+
+      html += '<div class="cb-card">'
+        + '<div class="cb-card-head"><span class="cb-card-fac" title="'+escHtml(b.facility)+'">'+escHtml(b.facility)+'</span>'
+        + (distStr ? '<span class="cb-card-dist">'+distStr+'</span>' : '')
+        + '</div>'
+        + '<div class="cb-card-loc">'+escHtml(b.city)+(b.city&&b.state?', ':'')+escHtml(b.state)+'</div>'
+        + '<span class="cb-card-comm '+cc+'">'+ci+' '+escHtml(b.commodity)+'</span>'
+        + '<div class="cb-card-prices">'
+          + '<div class="cb-price-main"><span class="cb-price-label">Cash</span><span class="cb-price-val">'+cashStr+'</span></div>'
+          + '<div class="cb-price-main"><span class="cb-price-label">Basis</span><span class="cb-basis-val '+bCls+'">'+bStr+'</span></div>'
+        + '</div>'
+        + (del ? '<div class="cb-card-delivery">Delivery: '+escHtml(del)+'</div>' : '')
+        + (b.phone ? '<div class="cb-card-phone"><a href="tel:'+b.phone.replace(/\D/g,'')+'">'+escHtml(b.phone)+'</a></div>' : '')
+        + '</div>';
+    });
+    html += '</div>';
+    results.innerHTML = html;
+  }
+
+  function doSearch(zip){
+    zip = (zip || zipInput.value || '').trim().replace(/\D/g,'');
+    if(zip.length < 5){
+      zipInput.style.borderColor = 'var(--red, #ef4444)';
+      setTimeout(function(){ zipInput.style.borderColor = ''; }, 1500);
+      return;
+    }
+    zipInput.value = zip;
+    zipInput.style.borderColor = '';
+    goBtn.disabled = true;
+    goBtn.textContent = 'Searching…';
+
+    results.innerHTML = '<div class="cb-skeleton">'
+      + '<div class="cb-skel"></div><div class="cb-skel"></div><div class="cb-skel"></div>'
+      + '<div class="cb-skel"></div><div class="cb-skel"></div><div class="cb-skel"></div></div>';
+
+    var radius = parseInt(radiusSelect.value, 10) || 50;
+
+    fetchBids(zip, radius, function(err, bids){
+      goBtn.disabled = false;
+      goBtn.textContent = 'Search';
+
+      if(err && bids.length === 0){
+        results.innerHTML = '<div class="cb-empty"><div class="cb-empty-icon">⚠️</div>'
+          + 'Could not fetch cash bids right now. Please try again in a moment.'
+          + '<br><br><span style="font-size:.75rem;color:var(--text-muted)">Error: '+escHtml(String(err))+'</span></div>';
+        return;
+      }
+
+      currentBids = bids;
+      statusBar.style.display = 'flex';
+      filterBar.style.display = 'flex';
+      sortBar.style.display = 'flex';
+      statusLabel.textContent = 'Bids within ' + radius + ' mi of ZIP ' + zip;
+      statusMeta.textContent = 'Barchart OnDemand · Just now';
+
+      currentFilter = 'all';
+      document.querySelectorAll('.cb-filt').forEach(function(btn){
+        btn.classList.toggle('active', btn.getAttribute('data-filter') === 'all');
+      });
+
+      renderBids(currentBids);
+
+      try{
+        var params = new URLSearchParams(window.location.search);
+        params.set('zip', zip);
+        params.set('r', radius);
+        history.replaceState(null, '', '?' + params.toString());
+      }catch(e){}
+    });
+  }
+
+  goBtn.addEventListener('click', function(){ doSearch(); });
+  zipInput.addEventListener('keydown', function(e){ if(e.key === 'Enter') doSearch(); });
+  radiusSelect.addEventListener('change', function(){
+    if(zipInput.value.trim().length === 5) doSearch();
+  });
+
+  document.querySelectorAll('.cb-filt').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.cb-filt').forEach(function(b){ b.classList.remove('active'); });
+      btn.classList.add('active');
+      currentFilter = btn.getAttribute('data-filter');
+      renderBids(currentBids);
+    });
+  });
+
+  sortSelect.addEventListener('change', function(){
+    currentSort = sortSelect.value;
+    renderBids(currentBids);
+  });
+
+  /* ── Geo detection ── */
+  function latLngToZip(lat, lng, cb){
+    fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json&zoom=10&addressdetails=1',{
+      headers:{'User-Agent':'AGSIST/1.0'}
+    })
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        var zip = (d.address && d.address.postcode) ? d.address.postcode.split('-')[0] : null;
+        var label = '';
+        if(d.address) label = (d.address.city||d.address.town||d.address.village||'')+(d.address.state?', '+d.address.state:'');
+        cb(zip, label);
+      })
+      .catch(function(){ cb(null, ''); });
+  }
+
+  function doGeoDetect(){
+    if(!navigator.geolocation){
+      geoTxt.textContent = 'Location not available — enter ZIP above';
+      return;
+    }
+    navigator.geolocation.getCurrentPosition(
+      function(pos){
+        var lat = pos.coords.latitude, lng = pos.coords.longitude;
+        latLngToZip(lat, lng, function(zip, label){
+          if(zip){
+            geoTxt.textContent = '📍 ' + (label || 'ZIP ' + zip);
+            geoUseBtn.style.display = 'inline';
+            geoUseBtn.textContent = 'Search ' + zip;
+            geoUseBtn.onclick = function(){
+              zipInput.value = zip;
+              doSearch(zip);
+            };
+            if(!zipInput.value.trim()){
+              zipInput.value = zip;
+              doSearch(zip);
+            }
+          } else {
+            geoTxt.textContent = '📍 Located but could not determine ZIP';
+          }
+        });
+      },
+      function(){ geoTxt.textContent = 'Location unavailable — enter ZIP above'; },
+      {timeout:8000, maximumAge:300000}
+    );
+  }
+
+  // Check AGSIST_GEO from geo.js
+  if(window.AGSIST_GEO && window.AGSIST_GEO.lat && window.AGSIST_GEO.zip){
+    var gz = String(window.AGSIST_GEO.zip).slice(0,5);
+    var gl = (window.AGSIST_GEO.city||'')+', '+(window.AGSIST_GEO.state||'');
+    geoTxt.textContent = '📍 ' + gl;
+    geoUseBtn.style.display = 'inline';
+    geoUseBtn.textContent = 'Search ' + gz;
+    geoUseBtn.onclick = function(){ zipInput.value = gz; doSearch(gz); };
+    if(!zipInput.value.trim()){ zipInput.value = gz; doSearch(gz); }
+  } else {
+    doGeoDetect();
+  }
+
+  // URL params: ?zip=54660&r=50
+  (function(){
+    var params = new URLSearchParams(window.location.search);
+    var z = params.get('zip');
+    var r = params.get('r');
+    if(z && /^\d{5}$/.test(z)){
+      zipInput.value = z;
+      if(r && ['25','50','100','150','250'].indexOf(r) >= 0) radiusSelect.value = r;
+      setTimeout(function(){ doSearch(z); }, 100);
+    }
+  })();
+
+})();
 </script>
 </body>
 </html>
