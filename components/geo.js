@@ -8,10 +8,11 @@
  *   3. Open-Meteo         — weather
  *   4. Nominatim OSM      — reverse geocoding
  *
- * AUDIT v6 — 2026-03-03
- *   FIX 1: Crypto moved from CoinGecko/corsproxy to prices.json (server-side yfinance)
- *   FIX 2: Removed all corsproxy.io and CoinGecko dependencies
- *   FIX 3: Added bitcoin, ripple, kaspa to PRICE_MAP for unified price pipeline
+ * AUDIT v7 — 2026-03-03
+ *   FIX 1: Crypto prev-close was overwriting price element — pc-btc.replace('pcp-','pcprev-')
+ *          returned 'pc-btc' unchanged (same element!). Now uses explicit prefix detection
+ *          AND guards against prevElId === priceEl so prev never overwrites the price display.
+ *   (v6 fixes preserved: crypto to yfinance, removed CoinGecko/corsproxy)
  *   (v5 fixes preserved: urea temp gate, spray frozen, prediction markets v2)
  */
 
@@ -486,7 +487,24 @@ function applyPriceResult(key, q, close, open, netChg, pctChg) {
   var chgObj   = fmtChange(close, open, meta.grain, netChg, pctChg);
   if (meta.priceEl) updatePriceEl(meta.priceEl, priceTxt);
   if (meta.chgEl)   updatePriceEl(meta.chgEl, chgObj.text, chgObj.cls);
-  var prevEl = document.getElementById(meta.priceEl ? meta.priceEl.replace('pcp-','pcprev-') : '');
+
+  // ── Previous close ──────────────────────────────────────────
+  // Build prev element ID from the price element ID:
+  //   pcp-gold  → pcprev-gold   (commodities/indices)
+  //   pc-btc    → pcprev-btc    (crypto)
+  // CRITICAL: the old code used a single .replace('pcp-','pcprev-') which
+  // was a no-op for crypto IDs (pc-btc has no 'pcp-' prefix). The result
+  // resolved to the price element itself, overwriting "68560" with
+  // "prev: 68793 BTC-USD". Guard: prevElId must differ from priceEl.
+  var prevElId = '';
+  if (meta.priceEl) {
+    if (meta.priceEl.indexOf('pcp-') === 0) {
+      prevElId = 'pcprev-' + meta.priceEl.slice(4);
+    } else if (meta.priceEl.indexOf('pc-') === 0) {
+      prevElId = 'pcprev-' + meta.priceEl.slice(3);
+    }
+  }
+  var prevEl = (prevElId && prevElId !== meta.priceEl) ? document.getElementById(prevElId) : null;
   if (prevEl && open != null) {
     var prevTxt = meta.grain ? '$' + (parseFloat(open)/100).toFixed(2) : parseFloat(open).toFixed(meta.dec) + (meta.suffix||'');
     prevEl.textContent = 'prev: ' + prevTxt + ' ' + (q && q.ticker ? q.ticker : '');
