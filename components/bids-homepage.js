@@ -3,6 +3,12 @@
 // 1. Wires the "Find Bids" button to navigate to /cash-bids?zip=VALUE
 // 2. Reads /data/bids.json (pre-fetched national grid) for passive display
 //
+// FIX v2 — 2026-03-03
+//   "Detecting your location…" was never cleared when bids.json was missing
+//   or returned empty. Now the geo bar is updated immediately when
+//   loadHomepageBids() is called (meaning geo resolved), regardless of
+//   whether bids data exists.
+//
 // DEPLOY: /components/bids-homepage.js
 // ═══════════════════════════════════════════════════════════════════════
 
@@ -85,14 +91,45 @@
     return R*2*Math.asin(Math.sqrt(a));
   }
 
+  // ── Update the geo detection bar ──
+  // Called as soon as we know geo resolved, BEFORE bids data loads.
+  // This ensures "Detecting your location…" is never left hanging.
+  function updateGeoBar(label){
+    var geoTxt = document.getElementById('bids-geo-txt');
+    var geoBar = document.getElementById('bids-geo-bar');
+
+    // label may be ", " if Nominatim hasn't resolved yet — treat as empty
+    var cleanLabel = (label || '').replace(/^[,\s]+$/,'').trim();
+
+    if(geoTxt){
+      if(cleanLabel){
+        geoTxt.textContent = '📍 ' + cleanLabel;
+      } else {
+        geoTxt.textContent = '📍 Location found';
+      }
+    }
+
+    // Swap the blinking dot to solid (stop the animation)
+    if(geoBar){
+      var dot = geoBar.querySelector('span[style*="animation"]');
+      if(dot){
+        dot.style.animation = 'none';
+        dot.style.background = 'var(--green)';
+      }
+    }
+  }
+
   // ── Load cached bids from /data/bids.json ──
   function loadHomepageBids(lat, lng, label){
     if(LOADED) return;
     var area = document.getElementById('bids-list-area');
-    var geoTxt = document.getElementById('bids-geo-txt');
     if(!area) return;
 
     LOADED = true;
+
+    // ── Immediately clear "Detecting your location…" ──
+    // Geo resolved if we got here — don't leave it hanging
+    updateGeoBar(label);
 
     fetch('/data/bids.json?v=' + Date.now())
       .then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
@@ -138,6 +175,8 @@
           return;
         }
 
+        // Update geo bar with "Bids near" label now that we have results
+        var geoTxt = document.getElementById('bids-geo-txt');
         if(geoTxt && label) geoTxt.textContent = '📍 Bids near ' + label;
 
         var html = '';
@@ -199,7 +238,15 @@
     if(attempts < maxAttempts){
       setTimeout(tryLoad, 500);
     } else {
+      // Gave up waiting — clear the detecting message so it doesn't hang
       console.warn('[AGSIST] Homepage bids: gave up waiting for geo after 15s');
+      var geoTxt = document.getElementById('bids-geo-txt');
+      if(geoTxt) geoTxt.textContent = 'Location unavailable';
+      var geoBar = document.getElementById('bids-geo-bar');
+      if(geoBar){
+        var dot = geoBar.querySelector('span[style*="animation"]');
+        if(dot){ dot.style.animation = 'none'; dot.style.background = 'var(--red,#ef4444)'; }
+      }
     }
   }
 

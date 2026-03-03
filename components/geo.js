@@ -8,10 +8,12 @@
  *   3. Open-Meteo         — weather
  *   4. Nominatim OSM      — reverse geocoding
  *
- * AUDIT v7 — 2026-03-03
+ * AUDIT v8 — 2026-03-03
  *   FIX 1: Crypto prev-close was overwriting price element — pc-btc.replace('pcp-','pcprev-')
  *          returned 'pc-btc' unchanged (same element!). Now uses explicit prefix detection
  *          AND guards against prevElId === priceEl so prev never overwrites the price display.
+ *   FIX 2: propagateLocation now updates bids-geo-txt once Nominatim resolves city name,
+ *          so the "Detecting your location…" / "Location found" text gets the real name.
  *   (v6 fixes preserved: crypto to yfinance, removed CoinGecko/corsproxy)
  *   (v5 fixes preserved: urea temp gate, spray frozen, prediction markets v2)
  */
@@ -258,6 +260,16 @@ function propagateLocation(lat, lon, label) {
 
       var radarLbl = document.getElementById('wx-loc-label');
       if (radarLbl && name) radarLbl.textContent = name;
+
+      // Update bids geo bar with resolved location name
+      // (bids-homepage.js may have already fired with blank label)
+      var bidsGeoTxt = document.getElementById('bids-geo-txt');
+      if (bidsGeoTxt && name) {
+        var cur = bidsGeoTxt.textContent || '';
+        if (cur.indexOf('Location found') !== -1 || cur.indexOf('Detecting') !== -1) {
+          bidsGeoTxt.textContent = '📍 ' + name;
+        }
+      }
 
       if (zip) {
         var bidsZip = document.getElementById('bids-zip');
