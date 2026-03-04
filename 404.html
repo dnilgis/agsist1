@@ -4,23 +4,28 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Page Not Found — AGSIST</title>
-  <meta name="robots" content="noindex">
+  <meta name="robots" content="noindex, nofollow">
   <link rel="stylesheet"                          href="/components/styles.css">
   <link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
   <link rel="apple-touch-icon"                    href="/img/apple-touch-icon.png">
   <style>
     .not-found{display:flex;flex-direction:column;align-items:center;justify-content:center;
-      min-height:60vh;text-align:center;padding:2rem;}
-    .not-found .code{font-size:6rem;font-weight:900;color:var(--gold);line-height:1;margin-bottom:.5rem;}
-    .not-found h1{font-size:1.5rem;color:var(--text);margin-bottom:1rem;}
-    .not-found p{color:var(--text-dim);max-width:440px;line-height:1.7;margin-bottom:2rem;}
-    .not-found-links{display:flex;gap:1rem;flex-wrap:wrap;justify-content:center;}
-    .not-found-links a{padding:.6rem 1.4rem;border-radius:6px;font-size:.9rem;font-weight:600;
+      min-height:60vh;text-align:center;padding:2rem 1.5rem;}
+    .not-found .code{font-family:'Oswald',sans-serif;font-size:5rem;font-weight:900;color:var(--gold);line-height:1;margin-bottom:.35rem;}
+    .not-found h1{font-size:1.4rem;color:var(--text);margin-bottom:.75rem;}
+    .not-found p{color:var(--text-dim);max-width:440px;line-height:1.7;margin-bottom:2rem;font-size:.92rem;}
+    .nf-links{display:flex;gap:.65rem;flex-wrap:wrap;justify-content:center;margin-bottom:1.5rem;}
+    .nf-links a{padding:.55rem 1.2rem;border-radius:6px;font-size:.85rem;font-weight:600;
       background:var(--surface);color:var(--text);border:1px solid var(--border);text-decoration:none;
-      transition:background .2s;}
-    .not-found-links a:hover{background:var(--surface-hover);}
-    .not-found-links a.primary{background:var(--gold);color:#000;border-color:var(--gold);}
+      transition:background .15s,border-color .15s;}
+    .nf-links a:hover{background:var(--surface2);border-color:var(--gold);}
+    .nf-links a.primary{background:var(--gold);color:#0a1a0a;border-color:var(--gold);}
+    .nf-links a.primary:hover{background:#d4a03a;}
+    .nf-tools{display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;}
+    .nf-tools a{font-size:.78rem;color:var(--text-muted);text-decoration:none;padding:.3rem .7rem;
+      border:1px solid var(--border);border-radius:5px;transition:color .15s,border-color .15s;}
+    .nf-tools a:hover{color:var(--gold);border-color:var(--gold);}
   </style>
   <link rel="manifest" href="/manifest.json">
 </head>
@@ -30,12 +35,19 @@
   <main id="main" tabindex="-1">
     <div class="not-found">
       <div class="code">404</div>
-      <h1>This page doesn't exist</h1>
-      <p>The page you're looking for may have moved, been renamed, or might be coming soon as we build out AGSIST.</p>
-      <div class="not-found-links">
-        <a href="/"          class="primary">← Dashboard</a>
+      <h1>This field's not planted yet</h1>
+      <p>The page you're looking for may have moved, been renamed, or is still being built. Head back to the dashboard or try one of these:</p>
+      <div class="nf-links">
+        <a href="/" class="primary">← Dashboard</a>
+        <a href="/daily">AGSIST Daily</a>
+        <a href="/cash-bids">Cash Bids</a>
+      </div>
+      <div class="nf-tools">
         <a href="/spray">Spray Advisory</a>
         <a href="/urea">Urea Risk</a>
+        <a href="/breakeven">Break-Even</a>
+        <a href="/fast-facts">Fast Facts</a>
+        <a href="/corn-futures-prices">Corn Prices</a>
         <a href="/developer">Developer</a>
       </div>
     </div>
