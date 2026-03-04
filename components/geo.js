@@ -8,9 +8,9 @@
  *   3. Open-Meteo         — weather
  *   4. Nominatim OSM      — reverse geocoding
  *
- * AUDIT v9 — 2026-03-04
- *   Daily Briefing v3: overnight surprises, conviction badges, farmer actions,
- *   bottom lines, heat section, market mood badge. Backward compatible with v2 JSON.
+ * AUDIT v10 — 2026-03-04
+ *   Calls window.loadHomepageBids() after ZIP resolves in propagateLocation().
+ *   (v9: Daily Briefing v3 — overnight surprises, conviction, market mood)
  *   (v8 fixes preserved: crypto prev-close, bids-geo-txt update)
  *   (v6 fixes preserved: crypto to yfinance, removed CoinGecko/corsproxy)
  *   (v5 fixes preserved: urea temp gate, spray frozen, prediction markets v2)
@@ -251,6 +251,11 @@ function propagateLocation(lat, lon, label) {
         window.AGSIST_GEO.city = city;
         window.AGSIST_GEO.state = st;
         window.AGSIST_GEO.zip = zip;
+      }
+
+      // ── v10: Trigger homepage bids with resolved ZIP ──
+      if (typeof window.loadHomepageBids === 'function' && zip) {
+        window.loadHomepageBids(lat, lon, name, zip);
       }
 
       var wxLoc = document.getElementById('wx-loc');

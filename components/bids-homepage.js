@@ -1,263 +1,283 @@
-// ═══════════════════════════════════════════════════════════════════════
-// bids-homepage.js — Homepage Cash Bids card wiring
-// 1. Wires the "Find Bids" button to navigate to /cash-bids?zip=VALUE
-// 2. Reads /data/bids.json (pre-fetched national grid) for passive display
+// ═══════════════════════════════════════════════════════════════════
+// bids-homepage.js — Homepage Cash Bids Preview
+// Uses Barchart OnDemand API directly (same as /cash-bids page).
+// Groups results by elevator, shows top 3 nearest with commodity rows.
 //
-// FIX v2 — 2026-03-03
-//   "Detecting your location…" was never cleared when bids.json was missing
-//   or returned empty. Now the geo bar is updated immediately when
-//   loadHomepageBids() is called (meaning geo resolved), regardless of
-//   whether bids data exists.
+// Called by geo.js after ZIP resolves via propagateLocation():
+//   window.loadHomepageBids(lat, lng, label, zip)
 //
 // DEPLOY: /components/bids-homepage.js
-// ═══════════════════════════════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════════════════
 
 (function(){
   'use strict';
 
-  var LOADED = false;
+  var API_KEY = 'd3f0e9bd96636187a70426233ec41b59';
+  var BASE_URL = 'https://ondemand.websol.barchart.com/getGrainBids.json';
+  var MAX_ELEVATORS = 3;
+  var MAX_BIDS_PER_COMMODITY = 3;
 
-  // ── Wire the "Find Bids" button and ZIP input ──
-  // geo.js renders a ZIP input and button into the bids card,
-  // but never wires the click handler. We do it here.
-  function wireSearchButton(){
-    // Find the bids card — look for the card containing bids-list-area
-    var area = document.getElementById('bids-list-area');
-    if(!area) return;
+  // ── Helpers ─────────────────────────────────────────────────────
+  function classifyCommodity(name){
+    var n = (name || '').toLowerCase();
+    if(n.indexOf('corn') >= 0) return 'corn';
+    if(n.indexOf('soy') >= 0 || n.indexOf('bean') >= 0) return 'soybeans';
+    if(n.indexOf('wheat') >= 0 || n.indexOf('hrw') >= 0 || n.indexOf('srw') >= 0 || n.indexOf('hrs') >= 0) return 'wheat';
+    return 'other';
+  }
 
-    // Walk up to find the card container
-    var card = area.closest('.dash-card') || area.closest('section') || area.parentElement;
-    if(!card) return;
+  function escHtml(s){
+    if(!s) return '';
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
 
-    // Find any input and button inside the card
-    var zipInput = card.querySelector('input[type="text"], input[type="tel"], input[inputmode="numeric"]');
-    var goBtn = card.querySelector('button');
+  function basisCents(bN){
+    if(bN == null) return null;
+    return Math.abs(bN) < 5 ? bN * 100 : bN;
+  }
 
-    // Also try finding by common patterns
-    if(!zipInput) zipInput = document.getElementById('bids-zip-input') || document.getElementById('bids-zip');
-    if(!goBtn) goBtn = document.getElementById('bids-go-btn') || document.getElementById('bids-go');
+  function formatBasis(bN){
+    var cents = basisCents(bN);
+    if(cents == null) return { str:'\u2014', cls:'muted' };
+    return {
+      str: (cents >= 0 ? '+' : '') + cents.toFixed(0) + '\u00a2',
+      cls: cents > 0 ? 'pos' : cents < 0 ? 'neg' : 'muted'
+    };
+  }
 
-    function doNavigate(){
-      var zip = zipInput ? (zipInput.value || '').trim().replace(/\D/g,'') : '';
-      if(zip.length >= 5){
-        window.location.href = '/cash-bids?zip=' + zip.slice(0,5);
-      } else if(zip.length > 0){
-        // Flash the input to indicate invalid
-        if(zipInput){
-          zipInput.style.borderColor = '#ef4444';
-          setTimeout(function(){ zipInput.style.borderColor = ''; }, 1500);
-        }
-      } else {
-        // No zip entered, just go to the page
-        window.location.href = '/cash-bids';
+  var COMM_ORDER = ['corn','soybeans','wheat','other'];
+  var COMM_ICONS = { corn:'\ud83c\udf3d', soybeans:'\ud83e\udeb6', wheat:'\ud83c\udf3e', other:'\ud83c\udf31' };
+  var COMM_NAMES = { corn:'Corn', soybeans:'Soybeans', wheat:'Wheat', other:'Other' };
+  var COMM_COLORS = { corn:'var(--gold)', soybeans:'var(--green)', wheat:'#ca8a3c', other:'var(--text-muted)' };
+
+  // ── Flatten Barchart response (same logic as /cash-bids) ───────
+  function flattenBarchartResponse(data){
+    var flat = [];
+    var raw = data.results || data.bids || data.data || [];
+    if(!Array.isArray(raw)) return flat;
+
+    raw.forEach(function(item){
+      if(item.bids && Array.isArray(item.bids)){
+        var facName = item.company || item.name || item.locationName || 'Unknown';
+        var branchName = (typeof item.location === 'string') ? item.location : '';
+        item.bids.forEach(function(bid){
+          flat.push({
+            facility: facName, branch: branchName,
+            city: item.city || '', state: item.state || '',
+            distance: parseFloat(item.distance || bid.distance) || null,
+            phone: item.phone || '',
+            commodity: bid.commodity || bid.commodity_display_name || bid.commodityName || '',
+            cashPrice: parseFloat(bid.cashprice || bid.cashPrice) || null,
+            basis: parseFloat(bid.basis) || null,
+            deliveryMonth: bid.deliveryMonth || bid.delivery_month || '',
+            deliveryStart: bid.deliveryStart || bid.delivery_start || '',
+            category: classifyCommodity(bid.commodity || bid.commodity_display_name || bid.commodityName || '')
+          });
+        });
+      } else if(item.commodity || item.commodityName || item.cashprice !== undefined || item.cashPrice !== undefined){
+        flat.push({
+          facility: item.company || item.name || item.facility || item.locationName || 'Unknown',
+          branch: (typeof item.location === 'string') ? item.location : '',
+          city: item.city || '', state: item.state || '',
+          distance: parseFloat(item.distance) || null,
+          phone: item.phone || '',
+          commodity: item.commodity || item.commodity_display_name || item.commodityName || '',
+          cashPrice: parseFloat(item.cashprice || item.cashPrice) || null,
+          basis: parseFloat(item.basis) || null,
+          deliveryMonth: item.deliveryMonth || item.delivery_month || '',
+          deliveryStart: item.deliveryStart || item.delivery_start || '',
+          category: classifyCommodity(item.commodity || item.commodity_display_name || item.commodityName || '')
+        });
       }
-    }
-
-    if(goBtn){
-      goBtn.addEventListener('click', function(e){
-        e.preventDefault();
-        doNavigate();
-      });
-    }
-
-    if(zipInput){
-      zipInput.addEventListener('keydown', function(e){
-        if(e.key === 'Enter'){
-          e.preventDefault();
-          doNavigate();
-        }
-      });
-    }
-
-    // Also wire the "Enter ZIP" link if it exists
-    var enterZipLink = card.querySelector('a[href="#"]');
-    if(enterZipLink && zipInput){
-      enterZipLink.addEventListener('click', function(e){
-        e.preventDefault();
-        zipInput.focus();
-      });
-    }
-
-    console.log('[AGSIST] Bids card wired:', goBtn ? 'button found' : 'no button', zipInput ? 'input found' : 'no input');
+    });
+    return flat;
   }
 
-  // ── Haversine distance ──
-  function haversine(lat1,lng1,lat2,lng2){
-    var R=3958.8,d2r=Math.PI/180;
-    var dLat=(lat2-lat1)*d2r,dLng=(lng2-lng1)*d2r;
-    var a=Math.sin(dLat/2)*Math.sin(dLat/2)+
-          Math.cos(lat1*d2r)*Math.cos(lat2*d2r)*
-          Math.sin(dLng/2)*Math.sin(dLng/2);
-    return R*2*Math.asin(Math.sqrt(a));
+  // ── Group flat bids → elevator objects ──────────────────────────
+  function groupByElevator(bids){
+    var map = {};
+    bids.forEach(function(b){
+      var key = (b.facility||'') + '||' + (b.branch||'') + '||' + (b.city||'');
+      if(!map[key]){
+        map[key] = {
+          facility: b.facility, branch: b.branch,
+          city: b.city, state: b.state,
+          distance: b.distance, phone: b.phone,
+          commodities: {}
+        };
+      }
+      var elev = map[key];
+      var cat = b.category || 'other';
+      if(!elev.commodities[cat]) elev.commodities[cat] = [];
+      elev.commodities[cat].push(b);
+    });
+    return Object.keys(map).map(function(k){ return map[k]; });
   }
 
-  // ── Update the geo detection bar ──
-  // Called as soon as we know geo resolved, BEFORE bids data loads.
-  // This ensures "Detecting your location…" is never left hanging.
-  function updateGeoBar(label){
+  // ── Render one elevator (compact, for homepage card) ────────────
+  function renderElevatorHTML(elev){
+    var distStr = elev.distance != null ? elev.distance.toFixed(0) + ' mi' : '';
+    var cityState = (elev.city||'') + (elev.city && elev.state ? ', ' : '') + (elev.state||'');
+
+    var html = '<div style="padding:.55rem 0;border-bottom:1px solid var(--border)">';
+
+    // Elevator header
+    html += '<div style="display:flex;align-items:baseline;justify-content:space-between;gap:.4rem;margin-bottom:.3rem">';
+    html += '<div style="min-width:0;overflow:hidden">';
+    html += '<div style="font-size:.82rem;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escHtml(elev.facility) + '</div>';
+    if(cityState){
+      html += '<div style="font-size:.62rem;color:var(--text-muted)">' + escHtml(cityState) + '</div>';
+    }
+    html += '</div>';
+    if(distStr){
+      html += '<span style="font-family:\'JetBrains Mono\',monospace;font-size:.62rem;font-weight:700;color:var(--text-muted);white-space:nowrap;flex-shrink:0">' + distStr + '</span>';
+    }
+    html += '</div>';
+
+    // Commodity sections
+    COMM_ORDER.forEach(function(cat){
+      var catBids = elev.commodities[cat];
+      if(!catBids || catBids.length === 0) return;
+
+      // Sort by delivery date
+      catBids.sort(function(a,b){
+        return (a.deliveryStart||a.deliveryMonth||'').localeCompare(b.deliveryStart||b.deliveryMonth||'');
+      });
+
+      var shown = catBids.slice(0, MAX_BIDS_PER_COMMODITY);
+      var overflow = catBids.length - shown.length;
+
+      // Commodity label
+      html += '<div style="display:flex;align-items:center;gap:.3rem;margin:.2rem 0 .1rem;font-size:.58rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:' + COMM_COLORS[cat] + '">'
+        + '<span style="font-size:.72rem">' + COMM_ICONS[cat] + '</span> ' + COMM_NAMES[cat]
+        + '</div>';
+
+      // Bid rows
+      shown.forEach(function(bid){
+        var cashStr = bid.cashPrice != null ? '$' + bid.cashPrice.toFixed(2) : '\u2014';
+        var basis = formatBasis(bid.basis);
+        var del = bid.deliveryMonth || bid.deliveryStart || 'Spot';
+        var bColor = basis.cls === 'pos' ? 'var(--green)' : basis.cls === 'neg' ? 'var(--red,#ef4444)' : 'var(--text-muted)';
+
+        html += '<div style="display:grid;grid-template-columns:1fr auto auto;gap:.1rem .45rem;align-items:baseline;padding:.1rem .15rem">';
+        html += '<span style="font-size:.7rem;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + escHtml(del) + '</span>';
+        html += '<span style="font-family:\'JetBrains Mono\',monospace;font-size:.82rem;font-weight:700;color:var(--text);text-align:right;white-space:nowrap">' + cashStr + '</span>';
+        html += '<span style="font-family:\'JetBrains Mono\',monospace;font-size:.68rem;font-weight:700;color:' + bColor + ';text-align:right;white-space:nowrap;min-width:40px">' + basis.str + '</span>';
+        html += '</div>';
+      });
+
+      if(overflow > 0){
+        html += '<div style="font-size:.6rem;color:var(--text-muted);padding:.02rem .15rem">+' + overflow + ' more</div>';
+      }
+    });
+
+    html += '</div>';
+    return html;
+  }
+
+  // ── Main load function ──────────────────────────────────────────
+  function loadHomepageBids(lat, lng, label, zip){
+    var area = document.getElementById('bids-list-area');
     var geoTxt = document.getElementById('bids-geo-txt');
-    var geoBar = document.getElementById('bids-geo-bar');
-
-    // label may be ", " if Nominatim hasn't resolved yet — treat as empty
-    var cleanLabel = (label || '').replace(/^[,\s]+$/,'').trim();
-
-    if(geoTxt){
-      if(cleanLabel){
-        geoTxt.textContent = '📍 ' + cleanLabel;
-      } else {
-        geoTxt.textContent = '📍 Location found';
-      }
-    }
-
-    // Swap the blinking dot to solid (stop the animation)
-    if(geoBar){
-      var dot = geoBar.querySelector('span[style*="animation"]');
-      if(dot){
-        dot.style.animation = 'none';
-        dot.style.background = 'var(--green)';
-      }
-    }
-  }
-
-  // ── Load cached bids from /data/bids.json ──
-  function loadHomepageBids(lat, lng, label){
-    if(LOADED) return;
-    var area = document.getElementById('bids-list-area');
     if(!area) return;
 
-    LOADED = true;
-
-    // ── Immediately clear "Detecting your location…" ──
-    // Geo resolved if we got here — don't leave it hanging
-    updateGeoBar(label);
-
-    fetch('/data/bids.json?v=' + Date.now())
-      .then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
-      .then(function(data){
-        var bids = data.bids || [];
-        var grid = data.zip_grid || [];
-
-        if(!bids.length){
-          area.innerHTML = '<div style="text-align:center;padding:1rem;font-size:.82rem;color:var(--text-muted)">'
-            + 'No bids data available yet.<br><a href="/cash-bids" style="color:var(--gold)">Search any ZIP →</a></div>';
-          return;
-        }
-
-        var nearZips = grid
-          .map(function(z){ return {zip:z.zip, dist:haversine(lat,lng,z.lat,z.lng)}; })
-          .sort(function(a,b){ return a.dist-b.dist; })
-          .slice(0, 4);
-        var zipSet = {};
-        nearZips.forEach(function(z){ zipSet[z.zip]=true; });
-
-        var nearby = bids
-          .filter(function(b){ return zipSet[b.sourceZip]; })
-          .map(function(b){
-            b._d = (b.lat!=null && b.lng!=null) ? haversine(lat,lng,b.lat,b.lng) : (b.distance||999);
-            return b;
-          })
-          .filter(function(b){ return b._d <= 75; })
-          .sort(function(a,b){ return a._d - b._d; });
-
-        var seen = {};
-        var unique = [];
-        nearby.forEach(function(b){
-          var key = b.facility + '|' + b.commodity;
-          if(!seen[key]){ seen[key]=true; unique.push(b); }
-        });
-
-        var top = unique.slice(0, 5);
-
-        if(top.length === 0){
-          area.innerHTML = '<div style="text-align:center;padding:1rem;font-size:.82rem;color:var(--text-muted)">'
-            + '<div style="font-size:1.2rem;margin-bottom:.3rem">📍</div>'
-            + 'No elevator bids found nearby.<br><a href="/cash-bids" style="color:var(--gold)">Search any ZIP →</a></div>';
-          return;
-        }
-
-        // Update geo bar with "Bids near" label now that we have results
-        var geoTxt = document.getElementById('bids-geo-txt');
-        if(geoTxt && label) geoTxt.textContent = '📍 Bids near ' + label;
-
-        var html = '';
-        top.forEach(function(b){
-          var ci = (b.category==='corn')?'🌽':(b.category==='soybeans')?'🫘':(b.category==='wheat')?'🌾':'🌱';
-          var cashStr = b.cashPrice != null ? '$' + b.cashPrice.toFixed(2) : '—';
-          var bN = b.basis, bStr = '—', bColor = 'var(--text-muted)';
-          if(bN != null){
-            var cents = Math.abs(bN) > 5 ? bN : bN * 100;
-            bStr = (cents >= 0 ? '+' : '') + cents.toFixed(0) + '¢';
-            bColor = cents > 0 ? 'var(--green)' : cents < 0 ? 'var(--red,#ef4444)' : 'var(--text-muted)';
-          }
-          var distStr = b._d != null ? b._d.toFixed(0) + ' mi' : '';
-
-          html += '<div style="display:flex;align-items:center;gap:.65rem;padding:.55rem 0;border-bottom:1px solid var(--border)">'
-            + '<span style="font-size:1rem;flex-shrink:0">' + ci + '</span>'
-            + '<div style="flex:1;min-width:0">'
-              + '<div style="font-size:.8rem;font-weight:600;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + (b.facility||'Unknown') + '</div>'
-              + '<div style="font-size:.68rem;color:var(--text-muted)">' + (b.commodity||'') + (distStr ? ' · ' + distStr : '') + '</div>'
-            + '</div>'
-            + '<div style="text-align:right;flex-shrink:0">'
-              + '<div style="font-family:\'JetBrains Mono\',monospace;font-size:.88rem;font-weight:700;color:var(--text)">' + cashStr + '</div>'
-              + '<div style="font-family:\'JetBrains Mono\',monospace;font-size:.72rem;font-weight:600;color:' + bColor + '">' + bStr + '</div>'
-            + '</div>'
-          + '</div>';
-        });
-
-        html += '<a href="/cash-bids" style="display:block;text-align:center;padding:.65rem 0;font-size:.78rem;color:var(--gold);font-weight:600;text-decoration:none;margin-top:.3rem">View All Cash Bids →</a>';
-        area.innerHTML = html;
-        console.log('[AGSIST] Homepage bids: ' + top.length + ' shown');
-      })
-      .catch(function(err){
-        console.warn('[AGSIST] Homepage bids load failed:', err);
-        area.innerHTML = '<div style="text-align:center;padding:1rem;font-size:.82rem;color:var(--text-muted)">'
-          + 'No bids data available yet.<br><a href="/cash-bids" style="color:var(--gold)">Search any ZIP →</a></div>';
-      });
-  }
-
-  // Expose globally so geo.js CAN call it directly
-  window.loadHomepageBids = loadHomepageBids;
-
-  // ── Poll for AGSIST_GEO since geolocation is async ──
-  var attempts = 0;
-  var maxAttempts = 30; // 30 x 500ms = 15 seconds
-
-  function tryLoad(){
-    if(LOADED) return;
-    attempts++;
-
-    if(window.AGSIST_GEO && window.AGSIST_GEO.lat){
-      loadHomepageBids(
-        window.AGSIST_GEO.lat,
-        window.AGSIST_GEO.lng,
-        (window.AGSIST_GEO.city || '') + ', ' + (window.AGSIST_GEO.state || '')
-      );
+    // Need ZIP for Barchart API
+    if(!zip){
+      area.innerHTML = '<div style="text-align:center;padding:1rem;font-size:.82rem;color:var(--text-muted)">'
+        + 'Enter your ZIP to see nearby cash bids.<br><a href="/cash-bids" style="color:var(--gold)">Search any ZIP \u2192</a></div>';
       return;
     }
 
-    if(attempts < maxAttempts){
-      setTimeout(tryLoad, 500);
-    } else {
-      // Gave up waiting — clear the detecting message so it doesn't hang
-      console.warn('[AGSIST] Homepage bids: gave up waiting for geo after 15s');
-      var geoTxt = document.getElementById('bids-geo-txt');
-      if(geoTxt) geoTxt.textContent = 'Location unavailable';
-      var geoBar = document.getElementById('bids-geo-bar');
-      if(geoBar){
-        var dot = geoBar.querySelector('span[style*="animation"]');
-        if(dot){ dot.style.animation = 'none'; dot.style.background = 'var(--red,#ef4444)'; }
-      }
+    // Update geo bar
+    if(geoTxt){
+      geoTxt.textContent = label ? ('\ud83d\udccd ' + label) : ('\ud83d\udccd ZIP ' + zip);
     }
+
+    // Show loading skeleton
+    area.innerHTML = '<div aria-label="Loading cash bids">'
+      + '<div style="height:36px;background:var(--surface2);border-radius:6px;margin-bottom:.4rem;opacity:.4"></div>'
+      + '<div style="height:36px;background:var(--surface2);border-radius:6px;margin-bottom:.4rem;opacity:.35"></div>'
+      + '<div style="height:36px;background:var(--surface2);border-radius:6px;opacity:.3"></div>'
+      + '</div>';
+
+    var url = BASE_URL + '?apikey=' + API_KEY
+      + '&zipCode=' + encodeURIComponent(zip)
+      + '&maxDistance=50&getAllBids=1';
+
+    fetch(url)
+      .then(function(r){ return r.ok ? r.json() : Promise.reject('HTTP ' + r.status); })
+      .then(function(data){
+        var bids = flattenBarchartResponse(data);
+        bids = bids.filter(function(b){ return b.cashPrice !== null || b.basis !== null; });
+
+        if(bids.length === 0){
+          area.innerHTML = '<div style="text-align:center;padding:1rem;font-size:.82rem;color:var(--text-muted)">'
+            + '<div style="font-size:1.2rem;margin-bottom:.3rem">\ud83d\udccd</div>'
+            + 'No elevator bids found within 50 mi.<br>'
+            + '<a href="/cash-bids?zip=' + escHtml(zip) + '" style="color:var(--gold)">Try wider search \u2192</a></div>';
+          return;
+        }
+
+        var elevators = groupByElevator(bids);
+        elevators.sort(function(a,b){ return (a.distance||999) - (b.distance||999); });
+
+        var top = elevators.slice(0, MAX_ELEVATORS);
+        var totalElevators = elevators.length;
+
+        // Column labels
+        var html = '<div style="display:grid;grid-template-columns:1fr auto auto;gap:.1rem .45rem;padding:0 .15rem .15rem;'
+          + 'font-family:\'JetBrains Mono\',monospace;font-size:.5rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);opacity:.65">'
+          + '<span>Delivery</span><span style="text-align:right">Cash</span><span style="text-align:right">Basis</span></div>';
+
+        top.forEach(function(elev){
+          html += renderElevatorHTML(elev);
+        });
+
+        // Footer link
+        var extra = totalElevators - MAX_ELEVATORS;
+        html += '<a href="/cash-bids?zip=' + escHtml(zip) + '" style="display:block;text-align:center;padding:.55rem 0 .1rem;font-size:.76rem;color:var(--gold);font-weight:600;text-decoration:none">';
+        if(extra > 0){
+          html += extra + ' more elevator' + (extra > 1 ? 's' : '') + ' nearby \u2014 View All \u2192';
+        } else {
+          html += 'View All Cash Bids \u2192';
+        }
+        html += '</a>';
+
+        area.innerHTML = html;
+        console.log('[AGSIST] Homepage bids: ' + top.length + ' elevators (' + bids.length + ' total bids)');
+      })
+      .catch(function(err){
+        console.warn('[AGSIST] Homepage bids fetch failed:', err);
+        area.innerHTML = '<div style="text-align:center;padding:1rem;font-size:.82rem;color:var(--text-muted)">'
+          + 'Cash bids unavailable right now.<br><a href="/cash-bids" style="color:var(--gold)">Search cash bids \u2192</a></div>';
+      });
   }
 
-  // ── Initialize ──
-  // Wire button immediately (DOM should be ready since script is at bottom)
-  wireSearchButton();
+  // ── lookupBids — called from homepage ZIP entry ─────────────────
+  function lookupBids(){
+    var zipEl = document.getElementById('bids-zip');
+    var zip = zipEl ? zipEl.value.trim() : '';
+    if(!zip || zip.length !== 5 || isNaN(zip)) return;
 
-  // Also wire after a short delay in case geo.js renders the card async
-  setTimeout(wireSearchButton, 1000);
-  setTimeout(wireSearchButton, 3000);
+    // Geocode ZIP for label, then load bids
+    fetch('https://geocoding-api.open-meteo.com/v1/search?name=' + zip + '&count=1&language=en&format=json&countryCode=US')
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if(d.results && d.results.length){
+          var r = d.results[0];
+          var label = r.name + (r.admin1 ? ', ' + r.admin1.substring(0,2) : '');
+          loadHomepageBids(r.latitude, r.longitude, label, zip);
+        } else {
+          loadHomepageBids(null, null, 'ZIP ' + zip, zip);
+        }
+      })
+      .catch(function(){
+        loadHomepageBids(null, null, 'ZIP ' + zip, zip);
+      });
+  }
 
-  // Start polling for geo data
-  tryLoad();
+  // Expose globally
+  window.loadHomepageBids = loadHomepageBids;
+  window.lookupBids = lookupBids;
+
 })();
