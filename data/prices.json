@@ -1,5 +1,5 @@
 {
-  "fetched": "2026-03-04T19:54:33Z",
+  "fetched": "2026-03-04T20:22:32Z",
   "ok": 22,
   "failed": 0,
   "quotes": {
@@ -89,73 +89,73 @@
     },
     "crude": {
       "ticker": "CL=F",
-      "close": 74.57,
+      "close": 74.68,
       "open": 75.45,
-      "netChange": -0.88,
-      "pctChange": -1.1663
+      "netChange": -0.77,
+      "pctChange": -1.0205
     },
     "natgas": {
       "ticker": "NG=F",
-      "close": 2.91,
+      "close": 2.909,
       "open": 3.027,
-      "netChange": -0.117,
-      "pctChange": -3.8652
+      "netChange": -0.118,
+      "pctChange": -3.8982
     },
     "gold": {
       "ticker": "GC=F",
-      "close": 5142.2002,
+      "close": 5140.6001,
       "open": 5166.3999,
-      "netChange": -24.1997,
-      "pctChange": -0.4684
+      "netChange": -25.7998,
+      "pctChange": -0.4994
     },
     "silver": {
       "ticker": "SI=F",
-      "close": 83.63,
+      "close": 83.38,
       "open": 84.705,
-      "netChange": -1.075,
-      "pctChange": -1.2691
+      "netChange": -1.325,
+      "pctChange": -1.5643
     },
     "dollar": {
       "ticker": "DX=F",
-      "close": 98.8,
+      "close": 98.725,
       "open": 99.15,
-      "netChange": -0.35,
-      "pctChange": -0.353
+      "netChange": -0.425,
+      "pctChange": -0.4286
     },
     "treasury10": {
       "ticker": "^TNX",
-      "close": 4.075,
+      "close": 4.08,
       "open": 4.056,
-      "netChange": 0.019,
-      "pctChange": 0.4684
+      "netChange": 0.024,
+      "pctChange": 0.5917
     },
     "sp500": {
       "ticker": "^GSPC",
-      "close": 6885.37012,
+      "close": 6870.68994,
       "open": 6816.58984,
-      "netChange": 68.78028,
-      "pctChange": 1.009
+      "netChange": 54.1001,
+      "pctChange": 0.7937
     },
     "bitcoin": {
       "ticker": "BTC-USD",
-      "close": 73702.50781,
+      "close": 73475.61719,
       "open": 68300.28125,
-      "netChange": 5402.22656,
-      "pctChange": 7.9095
+      "netChange": 5175.33594,
+      "pctChange": 7.5773
     },
     "ripple": {
       "ticker": "XRP-USD",
-      "close": 1.46656,
+      "close": 1.45864,
       "open": 1.36069,
-      "netChange": 0.10587,
-      "pctChange": 7.7806
+      "netChange": 0.09795,
+      "pctChange": 7.1986
     },
     "kaspa": {
       "ticker": "KAS-USD",
-      "close": 0.03243,
+      "close": 0.0322,
       "open": 0.03052,
-      "netChange": 0.00191,
-      "pctChange": 6.2582
+      "netChange": 0.00168,
+      "pctChange": 5.5046
     }
   }
 }
