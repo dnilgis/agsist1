@@ -1,5 +1,5 @@
 {
-  "fetched": "2026-03-04T21:54:59Z",
+  "fetched": "2026-03-04T22:21:14Z",
   "ok": 22,
   "failed": 0,
   "quotes": {
@@ -89,38 +89,38 @@
     },
     "crude": {
       "ticker": "CL=F",
-      "close": 76.0,
+      "close": 76.11,
       "open": 75.45,
-      "netChange": 0.55,
-      "pctChange": 0.729
+      "netChange": 0.66,
+      "pctChange": 0.8748
     },
     "natgas": {
       "ticker": "NG=F",
-      "close": 2.926,
+      "close": 2.933,
       "open": 3.027,
-      "netChange": -0.101,
-      "pctChange": -3.3366
+      "netChange": -0.094,
+      "pctChange": -3.1054
     },
     "gold": {
       "ticker": "GC=F",
-      "close": 5147.8999,
+      "close": 5151.6001,
       "open": 5166.3999,
-      "netChange": -18.5,
-      "pctChange": -0.3581
+      "netChange": -14.7998,
+      "pctChange": -0.2865
     },
     "silver": {
       "ticker": "SI=F",
-      "close": 83.63,
+      "close": 83.765,
       "open": 84.705,
-      "netChange": -1.075,
-      "pctChange": -1.2691
+      "netChange": -0.94,
+      "pctChange": -1.1097
     },
     "dollar": {
       "ticker": "DX=F",
-      "close": 98.745,
+      "close": 98.775,
       "open": 99.15,
-      "netChange": -0.405,
-      "pctChange": -0.4085
+      "netChange": -0.375,
+      "pctChange": -0.3782
     },
     "treasury10": {
       "ticker": "^TNX",
@@ -138,24 +138,24 @@
     },
     "bitcoin": {
       "ticker": "BTC-USD",
-      "close": 73276.46875,
+      "close": 73271.32812,
       "open": 68300.28125,
-      "netChange": 4976.1875,
-      "pctChange": 7.2857
+      "netChange": 4971.04687,
+      "pctChange": 7.2782
     },
     "ripple": {
       "ticker": "XRP-USD",
-      "close": 1.44912,
+      "close": 1.4491,
       "open": 1.36069,
-      "netChange": 0.08843,
-      "pctChange": 6.4989
+      "netChange": 0.08841,
+      "pctChange": 6.4974
     },
     "kaspa": {
       "ticker": "KAS-USD",
-      "close": 0.03192,
+      "close": 0.03187,
       "open": 0.03052,
-      "netChange": 0.0014,
-      "pctChange": 4.5872
+      "netChange": 0.00135,
+      "pctChange": 4.4233
     }
   }
 }
