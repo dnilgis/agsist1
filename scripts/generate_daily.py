@@ -49,8 +49,10 @@ except ImportError:
 # CONFIGURATION
 # ═══════════════════════════════════════════════════════════════════
 
-PRICES_PATH = Path(__file__).parent / "data" / "prices.json"
-OUTPUT_PATH = Path(__file__).parent / "data" / "daily.json"
+# Script lives in scripts/ — resolve paths relative to repo root
+REPO_ROOT = Path(__file__).resolve().parent.parent
+PRICES_PATH = REPO_ROOT / "data" / "prices.json"
+OUTPUT_PATH = REPO_ROOT / "data" / "daily.json"
 ANTHROPIC_API = "https://api.anthropic.com/v1/messages"
 MODEL = "claude-sonnet-4-20250514"
 
@@ -645,8 +647,8 @@ Your job isn't to report prices — farmers have a ticker. Tell them what prices
 # ARCHIVE — Static page generation + index
 # ═══════════════════════════════════════════════════════════════════
 
-ARCHIVE_JSON_DIR = Path(__file__).parent / "data" / "daily-archive"
-ARCHIVE_HTML_DIR = Path(__file__).parent / "daily"
+ARCHIVE_JSON_DIR = REPO_ROOT / "data" / "daily-archive"
+ARCHIVE_HTML_DIR = REPO_ROOT / "daily"
 
 
 def html_esc(s):
