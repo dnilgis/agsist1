@@ -27,6 +27,9 @@ jobs:
         with:
           python-version: '3.12'
 
+      - name: Install dependencies
+        run: pip install feedparser requests
+
       - name: Generate daily briefing
         env:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -36,6 +39,6 @@ jobs:
         run: |
           git config user.name "AGSIST Bot"
           git config user.email "bot@agsist.com"
-          git add data/daily.json
+          git add data/daily.json data/daily-archive/ daily/
           git diff --staged --quiet || git commit -m "📰 AGSIST Daily — $(date -u +%Y-%m-%d)"
           git push
