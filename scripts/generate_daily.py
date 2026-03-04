@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-AGSIST Daily Briefing Generator — v3
+AGSIST Daily Briefing Generator — v3.1
 ═══════════════════════════════════════════════════════════════════
 Generates the daily agricultural intelligence briefing via Claude API.
 Designed to be run by GitHub Actions every morning (5:00 AM CT).
@@ -19,6 +19,7 @@ Data pipeline:
   3. Fetch USDA calendar data
   4. Call Claude API with enriched prompt + market data
   5. Write /data/daily.json
+  6. Archive: save /data/daily-archive/DATE.json + /daily/DATE.html + update index.json
 
 Env vars required:
   ANTHROPIC_API_KEY — Claude API key
@@ -641,6 +642,421 @@ Your job isn't to report prices — farmers have a ticker. Tell them what prices
 
 
 # ═══════════════════════════════════════════════════════════════════
+# ARCHIVE — Static page generation + index
+# ═══════════════════════════════════════════════════════════════════
+
+ARCHIVE_JSON_DIR = Path(__file__).parent / "data" / "daily-archive"
+ARCHIVE_HTML_DIR = Path(__file__).parent / "daily"
+
+
+def html_esc(s):
+    """Minimal HTML escaping."""
+    if not s:
+        return ""
+    return str(s).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;").replace('"', "&quot;")
+
+
+def generate_archive_html(briefing, date_iso):
+    """Generate a fully server-rendered static HTML page for one day's briefing."""
+
+    date_display = briefing.get("date", date_iso)
+    headline = html_esc(briefing.get("headline", "AGSIST Daily Briefing"))
+    subheadline = html_esc(briefing.get("subheadline", ""))
+    lead = html_esc(briefing.get("lead", ""))
+    meta = briefing.get("meta", {})
+    mood = meta.get("market_mood", "")
+    heat_idx = meta.get("heat_section", -1)
+    surprises = briefing.get("surprises", [])
+    surprise_count = meta.get("overnight_surprises_count", 0)
+
+    # Build surprise banner HTML
+    surprise_html = ""
+    if surprise_count > 0:
+        names = []
+        for s in surprises:
+            arrow = "▲" if s.get("direction") == "up" else "▼"
+            names.append(f'{s.get("commodity","")} {arrow}{abs(s.get("pct_change",0)):.1f}%')
+        surprise_html = f'''<div class="dv3-surprise-banner" style="display:flex">
+      <span class="surprise-icon">⚡</span>
+      <span class="surprise-text"><strong>Overnight Surprise{"s" if surprise_count > 1 else ""}:</strong> {" · ".join(names) if names else f"{surprise_count} unusual move{'s' if surprise_count > 1 else ''}"}</span>
+    </div>'''
+
+    # Build mood badge HTML
+    mood_html = ""
+    if mood:
+        mood_colors = {
+            "bullish":  ("var(--green)", "rgba(58,139,60,.08)", "rgba(58,139,60,.22)"),
+            "bearish":  ("var(--red)", "rgba(184,76,42,.08)", "rgba(184,76,42,.22)"),
+            "mixed":    ("var(--gold)", "rgba(218,165,32,.08)", "rgba(218,165,32,.22)"),
+            "cautious": ("var(--blue)", "rgba(74,143,186,.08)", "rgba(74,143,186,.22)"),
+            "volatile": ("var(--orange)", "rgba(200,122,40,.08)", "rgba(200,122,40,.22)"),
+        }
+        mood_icons = {"bullish": "📈", "bearish": "📉", "mixed": "↔️", "cautious": "⚠️", "volatile": "🔥"}
+        mc = mood_colors.get(mood, mood_colors["mixed"])
+        mi = mood_icons.get(mood, "📊")
+        mood_html = f'<span class="dv3-mood" style="display:inline-flex;color:{mc[0]};background:{mc[1]};border:1px solid {mc[2]}">{mi} {mood.capitalize()}</span>'
+
+    # Build sections HTML
+    sections_html = ""
+    for i, sec in enumerate(briefing.get("sections", [])):
+        cls = "dv3-sec"
+        if sec.get("overnight_surprise"):
+            cls += " dv3-sec--surprise"
+        if i == heat_idx:
+            cls += " dv3-sec--heat"
+
+        icon = html_esc(sec.get("icon", "📊"))
+        title = html_esc(sec.get("title", ""))
+        body = sec.get("body", "")  # May contain <strong> tags
+        bottom_line = html_esc(sec.get("bottom_line", ""))
+        farmer_action = html_esc(sec.get("farmer_action", ""))
+        conviction = sec.get("conviction_level", "")
+
+        conviction_html = ""
+        if conviction:
+            cv_colors = {
+                "high":   ("var(--green)", "rgba(58,139,60,.10)", "rgba(58,139,60,.25)"),
+                "medium": ("var(--gold)", "rgba(218,165,32,.10)", "rgba(218,165,32,.25)"),
+                "low":    ("var(--text-muted)", "var(--surface2)", "var(--border)"),
+            }
+            cv = cv_colors.get(conviction, cv_colors["medium"])
+            conviction_html = f'<span class="dv3-sec-conviction" style="color:{cv[0]};background:{cv[1]};border:1px solid {cv[2]}">{conviction.upper()} CONVICTION</span>'
+
+        bottom_html = f'<div class="dv3-sec-bottomline">{bottom_line}</div>' if bottom_line else ""
+        action_html = f'<div class="dv3-sec-action">🎯 {farmer_action}</div>' if farmer_action else ""
+
+        sections_html += f'''
+    <div class="{cls}" style="position:relative">
+      <div class="dv3-sec-header">
+        <span class="dv3-sec-icon">{icon}</span>
+        <span class="dv3-sec-title">{title}</span>
+        {conviction_html}
+      </div>
+      <div class="dv3-sec-body">{body}</div>
+      {bottom_html}
+      {action_html}
+    </div>'''
+
+    # One Number
+    one_num = briefing.get("one_number", {})
+    one_num_html = ""
+    if one_num:
+        one_num_html = f'''<div class="dv3-one-number">
+        <div class="dv3-one-number-label">📊 THE NUMBER</div>
+        <div class="dv3-one-number-val">{html_esc(one_num.get("value", "—"))}</div>
+        <div class="dv3-one-number-unit">{html_esc(one_num.get("unit", ""))}</div>
+        <div class="dv3-one-number-ctx">{html_esc(one_num.get("context", ""))}</div>
+      </div>'''
+
+    # Quote
+    quote = briefing.get("daily_quote", {})
+    quote_html = ""
+    if quote:
+        qt = quote.get("text", "").strip('""\u201c\u201d')
+        qa = quote.get("attribution", "").lstrip("\u2014\u2013- ")
+        quote_html = f'''<div class="dv3-quote-card">
+        <div class="dv3-quote-label">💬 DAILY QUOTE</div>
+        <p class="dv3-quote-text">\u201c{html_esc(qt)}\u201d</p>
+        <cite class="dv3-quote-attr">\u2014 {html_esc(qa)}</cite>
+      </div>'''
+
+    # The More You Know
+    tmyk = briefing.get("the_more_you_know", {})
+    tmyk_html = ""
+    if tmyk:
+        tmyk_html = f'''<div class="dv3-tmyk">
+      <div class="dv3-tmyk-label">🧠 THE MORE YOU KNOW</div>
+      <div class="dv3-tmyk-title">{html_esc(tmyk.get("title", ""))}</div>
+      <div class="dv3-tmyk-body">{html_esc(tmyk.get("body", ""))}</div>
+    </div>'''
+
+    # Watch list
+    watch = briefing.get("watch_list", [])
+    watch_items = ""
+    for item in watch:
+        watch_items += f'''<li class="dv3-watch-item">
+        <span class="dv3-watch-time">{html_esc(item.get("time", ""))}</span>
+        <span class="dv3-watch-desc">{html_esc(item.get("desc", ""))}</span>
+      </li>'''
+    watch_html = ""
+    if watch:
+        watch_html = f'''<div class="dv3-watch">
+      <div class="dv3-watch-label">📅 TODAY'S WATCH LIST</div>
+      <ul class="dv3-watch-list">{watch_items}</ul>
+    </div>'''
+
+    source = html_esc(briefing.get("source_summary", "USDA · CME Group · Open-Meteo"))
+    gen_at = briefing.get("generated_at", "")
+
+    # Prev/next nav will be injected by update_archive_index after all pages exist
+    # For now, just link back to latest and archive
+
+    # Build the full page
+    page = f'''<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AGSIST Daily — {html_esc(date_display)}: {headline}</title>
+<meta name="description" content="{headline} — {html_esc(lead[:160])}">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://agsist.com/daily/{date_iso}">
+<meta property="og:title" content="AGSIST Daily — {html_esc(date_display)}">
+<meta property="og:description" content="{headline}">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://agsist.com/daily/{date_iso}">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&family=Oswald:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="/components/styles.css">
+<link rel="icon" type="image/png" href="/images/corn-favicon-32.png" sizes="32x32">
+<link rel="apple-touch-icon" href="/images/corn-favicon-180.png">
+<script type="application/ld+json">
+{{
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": "{headline}",
+  "datePublished": "{date_iso}",
+  "dateModified": "{gen_at}",
+  "description": "{html_esc(lead[:200])}",
+  "author": {{"@type": "Organization", "name": "AGSIST", "url": "https://agsist.com"}},
+  "publisher": {{"@type": "Organization", "name": "AGSIST", "url": "https://agsist.com"}},
+  "mainEntityOfPage": {{"@type": "WebPage", "@id": "https://agsist.com/daily/{date_iso}"}},
+  "isPartOf": {{"@type": "WebSite", "name": "AGSIST", "url": "https://agsist.com"}},
+  "breadcrumb": {{
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      {{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://agsist.com"}},
+      {{"@type": "ListItem", "position": 2, "name": "Daily Briefing", "item": "https://agsist.com/daily"}},
+      {{"@type": "ListItem", "position": 3, "name": "{html_esc(date_display)}", "item": "https://agsist.com/daily/{date_iso}"}}
+    ]
+  }}
+}}
+</script>
+<style>
+.dv3-page{{max-width:900px;margin:0 auto;padding:2rem 1.25rem}}
+.dv3-header{{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:2px solid var(--border)}}
+.dv3-eyebrow{{display:inline-flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:.75rem;padding:.3rem .75rem;background:rgba(58,139,60,.06);border:1px solid rgba(58,139,60,.18);border-radius:3px}}
+.dv3-eyebrow-dot{{width:7px;height:7px;border-radius:50%;background:var(--text-muted)}}
+.dv3-date{{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text-muted);letter-spacing:.08em;margin-bottom:.6rem;text-transform:uppercase}}
+.dv3-headline{{font-family:'Oswald',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;line-height:1.15;color:var(--text);margin-bottom:.6rem;letter-spacing:-.01em;text-transform:uppercase}}
+.dv3-subheadline{{font-size:.92rem;color:var(--gold);font-weight:600;margin-bottom:.75rem}}
+.dv3-lead{{font-size:1.05rem;line-height:1.75;color:var(--text-dim);max-width:720px}}
+.dv3-surprise-banner{{display:none;align-items:center;gap:.6rem;padding:.65rem 1rem;background:linear-gradient(135deg,rgba(218,165,32,.06) 0%,rgba(240,145,58,.04) 100%);border:1px solid rgba(218,165,32,.20);border-radius:var(--r-md);margin-bottom:1.25rem}}
+.dv3-surprise-banner .surprise-icon{{font-size:1.1rem;flex-shrink:0}}
+.dv3-surprise-banner .surprise-text{{font-size:.85rem;color:var(--text-dim);line-height:1.45}}
+.dv3-surprise-banner .surprise-text strong{{color:var(--gold);font-weight:700}}
+.dv3-mood{{display:none;align-items:center;gap:.3rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.22rem .6rem;border-radius:3px;white-space:nowrap;margin-left:.75rem}}
+.dv3-topbar{{display:grid;grid-template-columns:1fr 1fr;gap:1.25rem;margin-bottom:2rem}}
+.dv3-one-number{{background:var(--surface);border:2px solid var(--border-g);border-radius:var(--r-md);padding:1.2rem 1.4rem}}
+.dv3-one-number-label{{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:.5rem}}
+.dv3-one-number-val{{font-family:'Oswald',sans-serif;font-size:3.2rem;font-weight:700;color:var(--gold);line-height:1;margin-bottom:.15rem}}
+.dv3-one-number-unit{{font-size:.85rem;color:var(--text-dim);margin-bottom:.4rem}}
+.dv3-one-number-ctx{{font-size:.88rem;line-height:1.6;color:var(--text-dim)}}
+.dv3-quote-card{{background:var(--surface);border:2px solid rgba(218,165,32,.15);border-radius:var(--r-md);padding:1.2rem 1.4rem;display:flex;flex-direction:column;justify-content:center}}
+.dv3-quote-label{{font-family:'JetBrains Mono',monospace;font-size:.64rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.6rem}}
+.dv3-quote-text{{font-size:.95rem;font-style:italic;color:var(--text-dim);line-height:1.65;margin-bottom:.35rem}}
+.dv3-quote-attr{{font-size:.76rem;color:var(--text-muted)}}
+.dv3-sections{{display:flex;flex-direction:column;gap:1.25rem;margin-bottom:2rem}}
+.dv3-sec{{background:var(--surface);border:2px solid var(--border);border-radius:var(--r-md);padding:1.2rem 1.4rem;position:relative;transition:border-color .2s}}
+.dv3-sec:hover{{border-color:var(--border-g)}}
+.dv3-sec--surprise{{border-color:rgba(218,165,32,.30)!important;background:linear-gradient(135deg,var(--surface) 0%,rgba(218,165,32,.03) 100%)}}
+.dv3-sec--surprise::before{{content:'⚡ OVERNIGHT SURPRISE';position:absolute;top:-.55rem;right:.75rem;font-family:'JetBrains Mono',monospace;font-size:.5rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:var(--gold);padding:.12rem .55rem;border-radius:2px}}
+.dv3-sec--heat{{border-color:rgba(58,139,60,.35)!important}}
+.dv3-sec--heat::after{{content:'🔥 TOP STORY';position:absolute;top:-.55rem;left:.75rem;font-family:'JetBrains Mono',monospace;font-size:.5rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#fff;background:var(--green);padding:.12rem .55rem;border-radius:2px}}
+.dv3-sec-header{{display:flex;align-items:center;gap:.55rem;margin-bottom:.65rem}}
+.dv3-sec-icon{{font-size:1.3rem;flex-shrink:0}}
+.dv3-sec-title{{font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);flex:1}}
+.dv3-sec-conviction{{font-family:'JetBrains Mono',monospace;font-size:.55rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.15rem .45rem;border-radius:3px;white-space:nowrap}}
+.dv3-sec-body{{font-size:.95rem;line-height:1.75;color:var(--text-dim);margin-bottom:.65rem}}
+.dv3-sec-body strong{{color:var(--text)}}
+.dv3-sec-bottomline{{font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;color:var(--text);padding:.5rem .75rem;background:var(--surface2);border-radius:var(--r-sm);border-left:3px solid var(--gold);margin-bottom:.5rem;line-height:1.45}}
+.dv3-sec-action{{font-size:.82rem;font-weight:600;color:var(--green);padding:.45rem .7rem;background:rgba(58,139,60,.04);border:1px solid rgba(58,139,60,.15);border-radius:var(--r-sm);line-height:1.45}}
+.dv3-tmyk{{background:linear-gradient(135deg,var(--surface) 0%,rgba(74,143,186,.03) 100%);border:2px solid rgba(74,143,186,.20);border-radius:var(--r-md);padding:1.2rem 1.4rem;margin-bottom:2rem}}
+.dv3-tmyk-label{{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--blue);margin-bottom:.55rem}}
+.dv3-tmyk-title{{font-size:1rem;font-weight:700;color:var(--text);margin-bottom:.35rem}}
+.dv3-tmyk-body{{font-size:.92rem;line-height:1.75;color:var(--text-dim)}}
+.dv3-watch{{background:var(--surface);border:2px solid var(--border);border-radius:var(--r-md);padding:1.2rem 1.4rem;margin-bottom:2rem}}
+.dv3-watch-label{{font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:.75rem}}
+.dv3-watch-list{{list-style:none;padding:0;margin:0}}
+.dv3-watch-item{{display:flex;gap:.75rem;align-items:flex-start;padding:.55rem 0;border-bottom:1px solid var(--border)}}
+.dv3-watch-item:last-child{{border-bottom:none;padding-bottom:0}}
+.dv3-watch-time{{font-family:'JetBrains Mono',monospace;color:var(--gold);font-weight:600;font-size:.85rem;white-space:nowrap;flex-shrink:0;min-width:72px}}
+.dv3-watch-desc{{color:var(--text-dim);font-size:.88rem;line-height:1.55}}
+.dv3-source{{font-size:.68rem;color:var(--text-muted);text-align:center;padding:.75rem 0;border-top:1px solid var(--border);margin-bottom:2rem}}
+.dv3-nav{{display:flex;justify-content:space-between;align-items:center;padding:1rem 0;border-top:2px solid var(--border);border-bottom:2px solid var(--border);margin-bottom:2rem}}
+.dv3-nav a{{display:inline-flex;align-items:center;gap:.35rem;font-size:.85rem;font-weight:600;color:var(--green);transition:opacity .15s}}
+.dv3-nav a:hover{{opacity:.8}}
+.dv3-nav-center{{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em}}
+@media(max-width:640px){{.dv3-page{{padding:1.25rem .9rem}}.dv3-topbar{{grid-template-columns:1fr}}.dv3-one-number-val{{font-size:2.4rem}}.dv3-sec{{padding:.85rem 1rem}}.dv3-sec--surprise::before,.dv3-sec--heat::after{{font-size:.45rem;padding:.08rem .4rem}}}}
+@media(max-width:380px){{.dv3-headline{{font-size:1.6rem}}.dv3-one-number-val{{font-size:2rem}}.dv3-sec-action{{display:none}}}}
+</style>
+</head>
+<body>
+<a class="skip" href="#main-content">Skip to content</a>
+<div id="site-header"></div>
+<main id="main-content">
+<div class="dv3-page">
+  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a> / <a href="/daily">Daily Briefing</a> / <strong>{html_esc(date_display)}</strong></nav>
+
+  <article>
+    <header class="dv3-header">
+      <div style="display:flex;align-items:center;flex-wrap:wrap;gap:.5rem">
+        <div class="dv3-eyebrow"><span class="dv3-eyebrow-dot"></span> AGSIST DAILY — ARCHIVE</div>
+        {mood_html}
+      </div>
+      <div class="dv3-date">{html_esc(date_display)}</div>
+      <h1 class="dv3-headline">{headline}</h1>
+      {"<p class='dv3-subheadline'>" + subheadline + "</p>" if subheadline else ""}
+      {surprise_html}
+      <p class="dv3-lead">{lead}</p>
+    </header>
+
+    <div class="dv3-topbar">
+      {one_num_html}
+      {quote_html}
+    </div>
+
+    <div class="dv3-sections">
+      {sections_html}
+    </div>
+
+    {tmyk_html}
+    {watch_html}
+
+    <div class="dv3-source">
+      {source} · Generated by AGSIST AI
+    </div>
+  </article>
+
+  <nav class="dv3-nav" aria-label="Briefing navigation" id="dv3-archive-nav">
+    <span></span>
+    <span class="dv3-nav-center"><a href="/daily">← Latest Briefing</a></span>
+    <span></span>
+  </nav>
+
+  <div style="text-align:center;padding:1.5rem 0">
+    <a href="/daily" class="btn-gold">Today's Briefing →</a>
+    <div style="margin-top:.75rem">
+      <a href="/daily#archive" style="font-size:.82rem;color:var(--text-muted)">Browse All Briefings →</a>
+    </div>
+  </div>
+</div>
+</main>
+<div id="site-footer"></div>
+<script src="/components/loader.js"></script>
+<script>
+// Load prev/next nav from archive index
+(function(){{
+  fetch('/data/daily-archive/index.json',{{cache:'no-store'}})
+    .then(function(r){{return r.ok?r.json():null}})
+    .then(function(idx){{
+      if(!idx||!idx.briefings)return;
+      var current='{date_iso}';
+      var entries=idx.briefings;
+      var curIdx=-1;
+      for(var i=0;i<entries.length;i++){{if(entries[i].date===current){{curIdx=i;break}}}}
+      if(curIdx<0)return;
+      var nav=document.getElementById('dv3-archive-nav');
+      if(!nav)return;
+      var prev=curIdx<entries.length-1?entries[curIdx+1]:null;
+      var next=curIdx>0?entries[curIdx-1]:null;
+      var spans=nav.querySelectorAll('span');
+      if(prev&&spans[0])spans[0].innerHTML='<a href="/daily/'+prev.date+'">← '+prev.date+'</a>';
+      if(next&&spans[2])spans[2].innerHTML='<a href="/daily/'+next.date+'">'+next.date+' →</a>';
+    }}).catch(function(){{}});
+}})();
+</script>
+</body>
+</html>'''
+
+    return page
+
+
+def update_archive_index(briefing, date_iso):
+    """Update or create the archive index.json with today's entry."""
+
+    index_path = ARCHIVE_JSON_DIR / "index.json"
+
+    # Load existing index or start fresh
+    if index_path.exists():
+        with open(index_path) as f:
+            index = json.load(f)
+    else:
+        index = {"briefings": [], "updated": ""}
+
+    entries = index.get("briefings", [])
+
+    # Build entry for today
+    headline = briefing.get("headline", "")
+    teaser = briefing.get("teaser", "")
+    if not teaser and briefing.get("lead"):
+        teaser = briefing["lead"][:140] + ("…" if len(briefing.get("lead", "")) > 140 else "")
+    meta = briefing.get("meta", {})
+    surprise_count = meta.get("overnight_surprises_count", 0)
+
+    entry = {
+        "date": date_iso,
+        "date_display": briefing.get("date", date_iso),
+        "headline": headline,
+        "teaser": teaser,
+        "market_mood": meta.get("market_mood", ""),
+        "surprise_count": surprise_count,
+        "sections": len(briefing.get("sections", [])),
+        "url": f"/daily/{date_iso}",
+    }
+
+    # Replace existing entry for same date, or insert at front
+    found = False
+    for i, e in enumerate(entries):
+        if e.get("date") == date_iso:
+            entries[i] = entry
+            found = True
+            break
+    if not found:
+        entries.insert(0, entry)
+
+    # Keep sorted newest-first
+    entries.sort(key=lambda x: x.get("date", ""), reverse=True)
+
+    index["briefings"] = entries
+    index["updated"] = datetime.now(timezone.utc).isoformat()
+    index["count"] = len(entries)
+
+    with open(index_path, "w") as f:
+        json.dump(index, f, indent=2, ensure_ascii=False)
+
+    return len(entries)
+
+
+def save_archive(briefing):
+    """Save today's briefing to the archive (JSON + static HTML)."""
+
+    date_iso = datetime.now().strftime("%Y-%m-%d")
+
+    # Ensure directories exist
+    ARCHIVE_JSON_DIR.mkdir(parents=True, exist_ok=True)
+    ARCHIVE_HTML_DIR.mkdir(parents=True, exist_ok=True)
+
+    # 1. Save JSON backup
+    json_path = ARCHIVE_JSON_DIR / f"{date_iso}.json"
+    with open(json_path, "w") as f:
+        json.dump(briefing, f, indent=2, ensure_ascii=False)
+    print(f"  📁 Archive JSON: {json_path}")
+
+    # 2. Generate static HTML page
+    html_content = generate_archive_html(briefing, date_iso)
+    html_path = ARCHIVE_HTML_DIR / f"{date_iso}.html"
+    with open(html_path, "w") as f:
+        f.write(html_content)
+    print(f"  📄 Archive HTML: {html_path}")
+
+    # 3. Update archive index
+    count = update_archive_index(briefing, date_iso)
+    print(f"  📋 Archive index: {count} briefings")
+
+
+# ═══════════════════════════════════════════════════════════════════
 # MAIN
 # ═══════════════════════════════════════════════════════════════════
 
@@ -683,6 +1099,10 @@ def main():
         json.dump(briefing, f, indent=2, ensure_ascii=False)
 
     print(f"  ✅ Written to {OUTPUT_PATH}")
+
+    # Archive: save JSON backup + generate static HTML page + update index
+    print("  Archiving briefing...")
+    save_archive(briefing)
     print(f"  Headline: {briefing.get('headline', 'N/A')}")
     print(f"  Sections: {len(briefing.get('sections', []))}")
     print(f"  Surprises: {len(surprises)}")
