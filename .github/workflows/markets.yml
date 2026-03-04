@@ -2,9 +2,8 @@ name: Fetch Prediction Markets
 
 on:
   schedule:
-    # Once daily at 6:00 AM CT (11:00 UTC)
-    # Runs alongside daily briefing generation
-    - cron: '0 11 * * *'
+    # Every 6 hours — keeps prediction markets fresher
+    - cron: '0 5,11,17,23 * * *'
   workflow_dispatch:  # Manual trigger for testing
 
 permissions:
