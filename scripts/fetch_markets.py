@@ -11,8 +11,7 @@ v6 changes (2026-03-04):
     Kalshi's ?search= parameter + event-based fetching.
   • Polymarket: Uses both ?_q= and ?tag_slug= query styles, with URL-
     encoded multi-word queries.
-  • CURATED FALLBACK: If both APIs return 0 ag-relevant results, injects
-    a set of curated "always-relevant" markets from known active slugs.
+  • If both APIs return 0 results, output is clean empty state (no fake data).
   • Kalshi pagination is now per-search-query (max 3 pages each) instead
     of blind pagination of the full catalog.
   • Better error reporting and graceful degradation.
@@ -745,101 +744,7 @@ def _process_polymarket_item(m, markets, seen):
 
 
 # ═════════════════════════════════════════════════════════════════
-# 9. CURATED FALLBACK MARKETS
-# ═════════════════════════════════════════════════════════════════
-# If both APIs return 0 ag-relevant markets, show these always-valid
-# markets with estimated probabilities. Updated monthly.
-
-CURATED_MARKETS = [
-    {
-        "platform": "Editorial",
-        "ticker": "AGSIST-RECESSION",
-        "title": "Will the US enter a recession in 2026?",
-        "yes": 30, "no": 70,
-        "volume_24h": 0,
-        "close_time": "2026-12-31T23:59:00Z",
-        "time_left": "Closes Dec 2026",
-        "url": "https://polymarket.com",
-        "relevance": 40,
-        "tier": 3,
-        "category": "Economy & Markets",
-        "why_it_matters": "Recessions reduce ethanol and feed demand, lower land values, and tighten farm credit access.",
-    },
-    {
-        "platform": "Editorial",
-        "ticker": "AGSIST-FED-CUTS",
-        "title": "Will the Fed cut rates before July 2026?",
-        "yes": 45, "no": 55,
-        "volume_24h": 0,
-        "close_time": "2026-07-01T23:59:00Z",
-        "time_left": "Closes Jul 2026",
-        "url": "https://kalshi.com",
-        "relevance": 40,
-        "tier": 3,
-        "category": "Economy & Markets",
-        "why_it_matters": "Rate cuts lower operating loan costs and can weaken the dollar, boosting grain export competitiveness.",
-    },
-    {
-        "platform": "Editorial",
-        "ticker": "AGSIST-TARIFF",
-        "title": "Will new US agricultural tariffs be imposed in 2026?",
-        "yes": 55, "no": 45,
-        "volume_24h": 0,
-        "close_time": "2026-12-31T23:59:00Z",
-        "time_left": "Closes Dec 2026",
-        "url": "https://kalshi.com",
-        "relevance": 70,
-        "tier": 2,
-        "category": "Trade & Policy",
-        "why_it_matters": "Tariffs directly impact export demand for US grains and invite retaliatory measures from trading partners.",
-    },
-    {
-        "platform": "Editorial",
-        "ticker": "AGSIST-DROUGHT",
-        "title": "Will the US Corn Belt experience severe drought in summer 2026?",
-        "yes": 25, "no": 75,
-        "volume_24h": 0,
-        "close_time": "2026-09-30T23:59:00Z",
-        "time_left": "Closes Sep 2026",
-        "url": "https://www.drought.gov",
-        "relevance": 100,
-        "tier": 1,
-        "category": "Weather & Climate",
-        "why_it_matters": "Drought is the single biggest yield risk — Corn Belt drought can move corn prices $1+/bu in weeks.",
-    },
-    {
-        "platform": "Editorial",
-        "ticker": "AGSIST-BIRDFLU",
-        "title": "Will H5N1 bird flu cause another major US poultry cull in 2026?",
-        "yes": 40, "no": 60,
-        "volume_24h": 0,
-        "close_time": "2026-12-31T23:59:00Z",
-        "time_left": "Closes Dec 2026",
-        "url": "https://www.aphis.usda.gov",
-        "relevance": 70,
-        "tier": 2,
-        "category": "Commodities",
-        "why_it_matters": "Bird flu outbreaks spike egg prices and cut feed demand, with downstream effects across the protein complex.",
-    },
-    {
-        "platform": "Editorial",
-        "ticker": "AGSIST-CPI-3",
-        "title": "Will US CPI inflation stay above 3% through June 2026?",
-        "yes": 35, "no": 65,
-        "volume_24h": 0,
-        "close_time": "2026-07-15T23:59:00Z",
-        "time_left": "Closes Jul 2026",
-        "url": "https://www.bls.gov/cpi/",
-        "relevance": 40,
-        "tier": 3,
-        "category": "Economy & Markets",
-        "why_it_matters": "Persistent inflation keeps input costs elevated while squeezing consumer purchasing power for food.",
-    },
-]
-
-
-# ═════════════════════════════════════════════════════════════════
-# 10. RANKING
+# 9. RANKING
 # ═════════════════════════════════════════════════════════════════
 
 def composite_score(market):
@@ -873,11 +778,6 @@ def main():
 
     top_markets = deduped[:20]
 
-    # v6: If APIs returned nothing, use curated fallback
-    if not top_markets:
-        print("\n  ⚠ No live markets found — using curated fallback markets")
-        top_markets = CURATED_MARKETS[:]
-
     # Group by category
     categories = {}
     for m in top_markets:
@@ -899,7 +799,6 @@ def main():
         "version":        2,
         "count":          len(top_markets),
         "total_found":    len(combined),
-        "is_curated":     len(combined) == 0,
         "tier_breakdown": {
             "direct_ag":    tier_counts[100],
             "trade_energy": tier_counts[70],
@@ -920,8 +819,6 @@ def main():
     print(f"  Direct ag:    {tier_counts[100]}")
     print(f"  Trade/energy: {tier_counts[70]}")
     print(f"  Macro/weather:{tier_counts[40]}")
-    if len(combined) == 0:
-        print(f"  Using curated fallback: {len(top_markets)} markets")
     if top_markets:
         print(f"\n  Top 10:")
         for i, m in enumerate(top_markets[:10], 1):
