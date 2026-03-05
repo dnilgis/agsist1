@@ -6,6 +6,14 @@
    Brand alignment v10 — 2026-03-04
    Palette: forest green, warm gold, muted red, institutional borders
 
+   v11 FIXES (iOS Safari scroll / grid blowout):
+   FIX v11-1: .window-wrap overflow:hidden REMOVED — killed iOS touch scroll on .hourly-scroll
+   FIX v11-2: .mix-card overflow:hidden REMOVED — killed iOS touch scroll on .nozzle-table-wrap
+   FIX v11-3: .pg mobile grid-template-columns: 1fr → minmax(0,1fr) — 1fr has auto min-size
+              which allowed nozzle table (min-width:520px) to blow out viewport
+   FIX v11-4: .nozzle-table-wrap max-width:100% added as belt-and-suspenders
+   FIX v11-5: .pg > div { min-width:0 } — anonymous left column missing this, could expand past viewport
+
    v10 FIXES (mobile overflow):
    FIX v10-1: overflow-x:hidden fallback before clip (iOS <16 compat)
    FIX v10-2: overscroll-behavior-x:none (prevent horizontal bounce)
@@ -237,6 +245,12 @@ body {
   box-sizing: border-box; /* v10 */
 }
 
+/* FIX v11-5: anonymous grid children need min-width:0 or their content
+   (e.g. nozzle table min-width:520px) can push the column wider than viewport */
+.pg > div {
+  min-width: 0;
+}
+
 /* ── Section Header Bar ──────────────────────────────────────────── */
 .section-bar {
   display: flex; align-items: center; justify-content: space-between;
@@ -309,11 +323,17 @@ body {
 }
 
 /* ── Hourly Spray Window ─────────────────────────────────────────── */
+/*
+  FIX v11-1: overflow:hidden REMOVED from .window-wrap
+  This was killing iOS Safari touch scrolling on the .hourly-scroll child.
+  On iOS, overflow:hidden on a parent prevents -webkit-overflow-scrolling:touch
+  from working on children. The hourly strip was stuck/unscrollable on iPhone.
+  Border-radius does NOT need overflow:hidden in modern browsers.
+*/
 .window-wrap {
   background: var(--surface); border: 2px solid var(--border);
   border-radius: var(--r-md, 6px); padding: 1.1rem;
   margin-bottom: 1.5rem;
-  overflow: hidden;
 }
 .window-head {
   font-family: 'JetBrains Mono', monospace;
@@ -447,9 +467,17 @@ body {
    TANK MIX ORDER GUIDE
 ═══════════════════════════════════════════════════════════════════ */
 .mix-section { margin-top: 2.5rem; min-width: 0; }
+/*
+  FIX v11-2: overflow:hidden REMOVED from .mix-card
+  Same iOS Safari issue as .window-wrap — the overflow:hidden was preventing
+  the nozzle-table-wrap (overflow-x:auto) inside from being touch-scrollable
+  on iPhone. Also: the nozzle table's min-width:520px was pushing .mix-card
+  wider than the viewport because overflow:hidden doesn't establish a new
+  scrollable context — it just clips visually while the layout still expands.
+*/
 .mix-card {
   background: var(--surface); border: 2px solid var(--border);
-  border-radius: var(--r-md, 6px); padding: 1.5rem; overflow: hidden;
+  border-radius: var(--r-md, 6px); padding: 1.5rem;
 }
 .mix-intro {
   font-size: .85rem; color: var(--text-dim); line-height: 1.75;
@@ -536,10 +564,15 @@ body {
 .tip-card-detail strong { color: var(--text-dim); }
 
 /* ── Nozzle Comparison Table ─────────────────────────────────────── */
-/* FIX v9-3: removed conflicting position: sticky, cleaned up pseudo-element */
+/*
+  FIX v11-4: max-width:100% added to .nozzle-table-wrap
+  Without this, the table's min-width:520px was the intrinsic width of the wrap,
+  which then pushed .mix-card wider than the viewport on mobile.
+*/
 .nozzle-table-wrap {
   overflow-x: auto; -webkit-overflow-scrolling: touch; margin: 1rem 0;
   position: relative;
+  max-width: 100%; /* FIX v11-4: prevent table from expanding parent beyond viewport */
 }
 .nozzle-table-wrap::after {
   content: '';
@@ -735,10 +768,17 @@ body {
 ═══════════════════════════════════════════════════════════════════ */
 
 /* Tablet: single column, sidebar stays BELOW content */
+/*
+  FIX v11-3: grid-template-columns: minmax(0, 1fr) instead of 1fr
+  CSS grid's 1fr has a minimum size of auto — meaning if content is wider
+  than available space, the column expands. minmax(0, 1fr) forces the
+  minimum to 0, allowing content to be clipped/scrolled internally instead
+  of blowing out the grid track and the page.
+*/
 @media (max-width: 1100px) {
   .hero-inner { grid-template-columns: 1fr; }
   .status-panel { max-width: 400px; }
-  .pg { grid-template-columns: 1fr; }
+  .pg { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* Mid-size phones / small tablets */
@@ -846,4 +886,3 @@ body {
   body { color: #000; background: #fff; }
   .fcard, .edu, .mix-card, .tip-card { break-inside: avoid; page-break-inside: avoid; }
 }
-</style>
