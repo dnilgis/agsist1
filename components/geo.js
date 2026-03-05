@@ -8,8 +8,9 @@
  *   3. Open-Meteo         — weather
  *   4. Nominatim OSM      — reverse geocoding
  *
- * AUDIT v10 — 2026-03-04
- *   Calls window.loadHomepageBids() after ZIP resolves in propagateLocation().
+ * AUDIT v11 — 2026-03-04
+ *   Added prefix:'$' to cattle, feeders, hogs, milk, meal, crude, natgas.
+ *   (v10: Calls window.loadHomepageBids() after ZIP resolves in propagateLocation())
  *   (v9: Daily Briefing v3 — overnight surprises, conviction, market mood)
  *   (v8 fixes preserved: crypto prev-close, bids-geo-txt update)
  *   (v6 fixes preserved: crypto to yfinance, removed CoinGecko/corsproxy)
@@ -265,7 +266,6 @@ function propagateLocation(lat, lon, label) {
       if (radarLbl && name) radarLbl.textContent = name;
 
       // Update bids geo bar with resolved location name
-      // (bids-homepage.js may have already fired with blank label)
       var bidsGeoTxt = document.getElementById('bids-geo-txt');
       if (bidsGeoTxt && name) {
         var cur = bidsGeoTxt.textContent || '';
@@ -400,14 +400,14 @@ var PRICE_MAP = {
   'beans-nov':  { label:"Beans Nov'26",  priceEl:'pcp-bean-nov',  chgEl:'pcc-bean-nov',  dec:2, grain:true  },
   'wheat':      { label:'Wheat',         priceEl:'pcp-wheat',     chgEl:'pcc-wheat',     dec:2, grain:true  },
   'oats':       { label:'Oats',          priceEl:'pcp-oats',      chgEl:'pcc-oats',      dec:2, grain:true  },
-  'cattle':     { label:'Live Cattle',   priceEl:'pcp-cattle',    chgEl:'pcc-cattle',    dec:2, grain:false },
-  'feeders':    { label:'Feeder Cattle', priceEl:'pcp-feeders',   chgEl:'pcc-feeders',   dec:2, grain:false },
-  'hogs':       { label:'Lean Hogs',     priceEl:'pcp-hogs',      chgEl:'pcc-hogs',      dec:2, grain:false },
-  'milk':       { label:'Class III Milk',priceEl:'pcp-milk',      chgEl:'pcc-milk',      dec:2, grain:false },
-  'meal':       { label:'Soy Meal',      priceEl:'pcp-meal',      chgEl:'pcc-meal',      dec:2, grain:false },
+  'cattle':     { label:'Live Cattle',   priceEl:'pcp-cattle',    chgEl:'pcc-cattle',    dec:2, grain:false, prefix:'$' },
+  'feeders':    { label:'Feeder Cattle', priceEl:'pcp-feeders',   chgEl:'pcc-feeders',   dec:2, grain:false, prefix:'$' },
+  'hogs':       { label:'Lean Hogs',     priceEl:'pcp-hogs',      chgEl:'pcc-hogs',      dec:2, grain:false, prefix:'$' },
+  'milk':       { label:'Class III Milk',priceEl:'pcp-milk',      chgEl:'pcc-milk',      dec:2, grain:false, prefix:'$' },
+  'meal':       { label:'Soy Meal',      priceEl:'pcp-meal',      chgEl:'pcc-meal',      dec:2, grain:false, prefix:'$' },
   'soyoil':     { label:'Soy Oil',       priceEl:'pcp-soyoil',    chgEl:'pcc-soyoil',    dec:2, grain:false },
-  'crude':      { label:'Crude Oil',     priceEl:'pcp-crude',     chgEl:'pcc-crude',     dec:2, grain:false },
-  'natgas':     { label:'Natural Gas',   priceEl:'pcp-natgas',    chgEl:'pcc-natgas',    dec:2, grain:false },
+  'crude':      { label:'Crude Oil',     priceEl:'pcp-crude',     chgEl:'pcc-crude',     dec:2, grain:false, prefix:'$' },
+  'natgas':     { label:'Natural Gas',   priceEl:'pcp-natgas',    chgEl:'pcc-natgas',    dec:2, grain:false, prefix:'$' },
   'gold':       { label:'Gold',          priceEl:'pcp-gold',      chgEl:'pcc-gold',      dec:0, grain:false, prefix:'$', comma:true },
   'silver':     { label:'Silver',        priceEl:'pcp-silver',    chgEl:'pcc-silver',    dec:2, grain:false, prefix:'$' },
   'dollar':     { label:'Dollar Index',  priceEl:'pcp-dollar',    chgEl:'pcc-dollar',    dec:2, grain:false },
@@ -510,14 +510,6 @@ function applyPriceResult(key, q, close, open, netChg, pctChg) {
   if (meta.priceEl) updatePriceEl(meta.priceEl, priceTxt);
   if (meta.chgEl)   updatePriceEl(meta.chgEl, chgObj.text, chgObj.cls);
 
-  // ── Previous close ──────────────────────────────────────────
-  // Build prev element ID from the price element ID:
-  //   pcp-gold  → pcprev-gold   (commodities/indices)
-  //   pc-btc    → pcprev-btc    (crypto)
-  // CRITICAL: the old code used a single .replace('pcp-','pcprev-') which
-  // was a no-op for crypto IDs (pc-btc has no 'pcp-' prefix). The result
-  // resolved to the price element itself, overwriting "68560" with
-  // "prev: 68793 BTC-USD". Guard: prevElId must differ from priceEl.
   var prevElId = '';
   if (meta.priceEl) {
     if (meta.priceEl.indexOf('pcp-') === 0) {
@@ -550,7 +542,6 @@ function applyPriceResult(key, q, close, open, netChg, pctChg) {
 
 // ─────────────────────────────────────────────────────────────────
 // PRIMARY PRICE SOURCE — data/prices.json
-// Fetches ALL prices including crypto (BTC, XRP, KAS) in one call
 // ─────────────────────────────────────────────────────────────────
 function fetchAllPrices() {
   fetch('/data/prices.json', { cache: 'no-store' })
@@ -623,7 +614,7 @@ function rebuildTickerLoop() {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// PREDICTION MARKETS v2 — Categories, Relevance Tiers, Why It Matters
+// PREDICTION MARKETS v2
 // ─────────────────────────────────────────────────────────────────
 
 var MARKET_CATEGORIES = {
@@ -826,8 +817,7 @@ function buildMarketCard(m, showExtras) {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// DAILY BRIEFING — v3 schema with overnight surprises, conviction,
-// bottom lines, farmer actions, heat sections
+// DAILY BRIEFING — v3 schema
 // ─────────────────────────────────────────────────────────────────
 function loadDailyBriefing() {
   fetch('/data/daily.json', { cache: 'no-store' })
@@ -855,7 +845,6 @@ function loadDailyBriefing() {
         el = document.getElementById('daily-number-context'); if (el) el.textContent = d.one_number.context;
       }
 
-      // Market mood badge (v3)
       var moodEl = document.getElementById('daily-mood');
       if (moodEl && d.meta && d.meta.market_mood) {
         var mood = d.meta.market_mood;
@@ -875,7 +864,6 @@ function loadDailyBriefing() {
         moodEl.style.display = 'inline-flex';
       }
 
-      // Overnight surprise banner (v3)
       var surpriseBanner = document.getElementById('daily-surprise-banner');
       var surpriseCount = (d.meta && d.meta.overnight_surprises_count) || 0;
       if (surpriseBanner) {
@@ -898,7 +886,6 @@ function loadDailyBriefing() {
         }
       }
 
-      // Sections with v3 fields
       var heatIdx = (d.meta && d.meta.heat_section != null) ? d.meta.heat_section : -1;
 
       if (d.sections && Array.isArray(d.sections)) {
@@ -911,11 +898,9 @@ function loadDailyBriefing() {
           el = document.getElementById('daily-section-' + n + '-body');
           if (el && sec.body) el.innerHTML = sec.body;
 
-          // Bottom line (v3)
           el = document.getElementById('daily-section-' + n + '-bottomline');
           if (el && sec.bottom_line) { el.textContent = sec.bottom_line; el.style.display = 'block'; }
 
-          // Conviction badge (v3)
           el = document.getElementById('daily-section-' + n + '-conviction');
           if (el && sec.conviction_level) {
             var cvColors = {
@@ -931,11 +916,9 @@ function loadDailyBriefing() {
             el.style.display = 'inline-block';
           }
 
-          // Farmer action (v3)
           el = document.getElementById('daily-section-' + n + '-action');
           if (el && sec.farmer_action) { el.textContent = '🎯 ' + sec.farmer_action; el.style.display = 'block'; }
 
-          // Overnight surprise flag + heat section (v3)
           var secEl = document.getElementById('daily-sec-' + n);
           if (secEl) {
             if (sec.overnight_surprise) secEl.classList.add('daily-sec--surprise');
