@@ -1272,7 +1272,6 @@ window.hydrateDaily = (function() {
 
       var stats = data.count + ' markets shown';
       if (age) stats += ' · ' + age;
-      if (data.is_curated) stats += ' · Editorial estimates';
 
       html += '<div style="grid-column:1/-1;text-align:center;font-size:.68rem;color:var(--text-muted);padding:.5rem 0;line-height:1.65">'
         + stats + '</div>';
