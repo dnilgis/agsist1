@@ -15,17 +15,20 @@
   <meta name="description" content="Free grain bin calculator for farmers. Calculate bushel capacity with peaked, level, or draw cone surfaces. Moisture shrink, storage volume, and market value for corn, soybeans, wheat, and more.">
   <meta name="keywords"    content="grain bin calculator, bushel capacity calculator, moisture shrink, grain storage calculator, bin volume, cone grain bin">
   <meta name="robots"      content="index, follow, max-snippet:-1, max-image-preview:large">
-  <link rel="canonical"    href="https://agsist.com/pages/grain-bin-calculator">
+  <link rel="canonical"    href="https://agsist.com/grain-bin-calculator">
 
   <meta property="og:type"         content="website">
   <meta property="og:site_name"    content="AGSIST">
+  <meta property="og:locale"       content="en_US">
   <meta property="og:title"        content="Grain Bin Calculator — AGSIST">
   <meta property="og:description"  content="Free grain bin calculator. Bushel capacity with peaked, level, or draw cone surfaces. Moisture shrink and market value.">
-  <meta property="og:url"          content="https://agsist.com/pages/grain-bin-calculator">
+  <meta property="og:url"          content="https://agsist.com/grain-bin-calculator">
   <meta property="og:image"        content="https://agsist.com/img/og/grain-bin-calculator.jpg">
   <meta property="og:image:width"  content="1200">
   <meta property="og:image:height" content="630">
+  <meta property="og:image:alt"    content="Grain Bin Calculator — AGSIST">
   <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:site"        content="@agsist">
   <meta name="twitter:title"       content="Grain Bin Calculator — AGSIST">
   <meta name="twitter:description" content="Free grain bin calculator. Bushel capacity and moisture shrink for any bin.">
   <meta name="twitter:image"       content="https://agsist.com/img/og/grain-bin-calculator.jpg">
@@ -38,7 +41,7 @@
         "@type": "SoftwareApplication",
         "name": "Grain Bin Calculator",
         "description": "Free grain bin storage calculator for bushel capacity, moisture shrink, and market value with peaked/level/draw grain surface profiles.",
-        "url": "https://agsist.com/pages/grain-bin-calculator",
+        "url": "https://agsist.com/grain-bin-calculator",
         "applicationCategory": "UtilitiesApplication",
         "operatingSystem": "Web",
         "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" }
@@ -47,8 +50,8 @@
         "@type": "BreadcrumbList",
         "itemListElement": [
           { "@type": "ListItem", "position": 1, "name": "Home",                 "item": "https://agsist.com/" },
-          { "@type": "ListItem", "position": 2, "name": "Tools",                "item": "https://agsist.com/pages/tools" },
-          { "@type": "ListItem", "position": 3, "name": "Grain Bin Calculator", "item": "https://agsist.com/pages/grain-bin-calculator" }
+          { "@type": "ListItem", "position": 2, "name": "Tools",                "item": "https://agsist.com/tools" },
+          { "@type": "ListItem", "position": 3, "name": "Grain Bin Calculator", "item": "https://agsist.com/grain-bin-calculator" }
         ]
       }
     ]
@@ -56,10 +59,6 @@
   </script>
 
   <style>
-    /* ══════════════════════════════════════════════════════════════
-       GRAIN BIN CALCULATOR — Embedded Styles
-       Brand alignment v1 — 2026-03-02
-       ══════════════════════════════════════════════════════════════ */
     html, body { overflow-x: hidden; width: 100%; }
     .panel { overflow: visible; }
     .panel-body { overflow-x: hidden; }
@@ -75,7 +74,6 @@
       text-transform: uppercase; letter-spacing: .08em; margin-bottom: 8px;
     }
 
-    /* Radio pill group */
     .pill-group {
       display: flex; gap: 0; border: 2px solid var(--border);
       border-radius: 4px; overflow: hidden; margin-bottom: 16px;
@@ -92,7 +90,6 @@
     .pill-group input { display: none; }
     .pill-group input:checked + label { background: var(--green); color: #fff; }
 
-    /* Input grids */
     .input-grid { display: grid; gap: 12px; margin-bottom: 16px; }
     .input-grid.cols-2 { grid-template-columns: 1fr 1fr; }
     .input-grid.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
@@ -107,7 +104,6 @@
     }
     .input-grid input:focus, .input-grid select:focus { outline: none; border-color: var(--green); }
 
-    /* Crop select (full width, outside grid) */
     .crop-select {
       width: 100%; padding: 8px 10px; margin-bottom: 16px;
       font-family: 'JetBrains Mono', monospace; font-size: 0.82rem;
@@ -116,7 +112,6 @@
     }
     .crop-select:focus { outline: none; border-color: var(--green); }
 
-    /* Grain depth slider row */
     .depth-row {
       display: flex; align-items: center; gap: 12px;
       margin-bottom: 16px; padding: 10px 12px;
@@ -135,7 +130,6 @@
       min-width: 52px; text-align: right;
     }
 
-    /* SVG bin visualization */
     .bin-viz-wrap {
       padding: 16px 8px 8px; margin-top: 8px;
       background: var(--bg); border: 2px solid var(--border); border-radius: 4px;
@@ -148,10 +142,8 @@
       text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px;
     }
 
-    /* Result rows — monospace values */
     .result-value { font-family: 'JetBrains Mono', monospace; }
 
-    /* Value box */
     .value-box {
       margin-top: 16px; padding: 14px;
       background: var(--bg); border-radius: 4px; border: 2px solid var(--border);
@@ -173,7 +165,6 @@
     }
     .value-price-row input:focus { outline: none; border-color: var(--green); }
 
-    /* Moisture target cards */
     .moist-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 12px; }
     .moist-card { background: var(--bg); padding: 10px; border-radius: 4px; border: 2px solid var(--border); }
     .moist-card-label { font-size: .68rem; color: var(--text-dim); }
@@ -182,7 +173,6 @@
       font-size: 1.05rem; font-weight: 700; color: var(--gold);
     }
 
-    /* Formula note */
     .formula-note {
       margin-top: 16px; padding: 12px;
       background: var(--bg); border-radius: 4px; border-left: 3px solid var(--green);
@@ -193,7 +183,6 @@
       font-family: 'JetBrains Mono', monospace; font-size: .72rem; color: var(--gold);
     }
 
-    /* Reference table */
     .ref-table {
       width: 100%; border-collapse: collapse;
       font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
@@ -226,7 +215,7 @@
 
   <main id="main">
     <nav class="breadcrumb">
-      <a href="/">Home</a> → <a href="/pages/tools">Tools</a> → Grain Bin Calculator
+      <a href="/">Home</a> → <a href="/tools">Tools</a> → Grain Bin Calculator
     </nav>
 
     <div class="grid-2">
@@ -290,7 +279,7 @@
             <div><label>Pack Factor (%)</label><input type="number" id="pack" value="0" step="0.5" inputmode="decimal" oninput="calc()"></div>
           </div>
 
-          <!-- ─── SVG Bin Visualization ─────────────────────────── -->
+          <!-- SVG Bin Visualization -->
           <div class="bin-viz-wrap">
             <div class="bin-viz-label">Cross-Section View</div>
             <svg id="bin-svg" viewBox="0 0 280 310" xmlns="http://www.w3.org/2000/svg">
@@ -314,56 +303,31 @@
                   <stop offset="100%" stop-color="#4a4a44"/>
                 </linearGradient>
               </defs>
-
-              <!-- Bin roof -->
               <path id="svg-roof" d="" fill="url(#roof-grad)" stroke="#8a8a82" stroke-width="1.5" stroke-linejoin="round"/>
-
-              <!-- Bin walls -->
-              <rect id="svg-walls" x="55" y="65" width="170" height="180" rx="2"
-                    fill="none" stroke="url(#wall-grad)" stroke-width="3"/>
-
-              <!-- Wall rings -->
+              <rect id="svg-walls" x="55" y="65" width="170" height="180" rx="2" fill="none" stroke="url(#wall-grad)" stroke-width="3"/>
               <g id="svg-rings" stroke="#6a6a62" stroke-width="0.8" opacity="0.5"></g>
-
-              <!-- Grain fill (clipped to bin body) -->
               <clipPath id="bin-clip"><rect id="clip-rect" x="57" y="66" width="166" height="178"/></clipPath>
               <path id="svg-grain" d="" fill="url(#grain-tex)" clip-path="url(#bin-clip)"/>
-
-              <!-- Grain surface highlight line (inside bin) -->
-              <path id="svg-surface" d="" fill="none" stroke="#daa520" stroke-width="2" opacity="0.8"
-                    clip-path="url(#bin-clip)"/>
-
-              <!-- Peaked cone above eave (not clipped) -->
+              <path id="svg-surface" d="" fill="none" stroke="#daa520" stroke-width="2" opacity="0.8" clip-path="url(#bin-clip)"/>
               <path id="svg-above" d="" fill="url(#grain-tex)" opacity="0.85"/>
               <path id="svg-above-line" d="" fill="none" stroke="#daa520" stroke-width="2" opacity="0.8"/>
-
-              <!-- Dimension: diameter -->
               <g font-family="'JetBrains Mono',monospace" font-size="10" fill="#8a8a82">
                 <line x1="55" y1="258" x2="225" y2="258" stroke="#6a6a62" stroke-width="1"/>
                 <line x1="55" y1="254" x2="55" y2="262" stroke="#6a6a62" stroke-width="1"/>
                 <line x1="225" y1="254" x2="225" y2="262" stroke="#6a6a62" stroke-width="1"/>
                 <text id="dim-d" x="140" y="272" text-anchor="middle">30 ft ⌀</text>
               </g>
-
-              <!-- Dimension: height -->
               <g font-family="'JetBrains Mono',monospace" font-size="10" fill="#8a8a82">
                 <line x1="240" y1="65" x2="240" y2="245" stroke="#6a6a62" stroke-width="1"/>
                 <line x1="236" y1="65" x2="244" y2="65" stroke="#6a6a62" stroke-width="1"/>
                 <line x1="236" y1="245" x2="244" y2="245" stroke="#6a6a62" stroke-width="1"/>
                 <text id="dim-h" x="258" y="160" text-anchor="middle" transform="rotate(90,258,160)">24 ft</text>
               </g>
-
-              <!-- Bushel count in grain -->
-              <text id="cap-num" x="140" y="200" text-anchor="middle"
-                    font-family="'JetBrains Mono',monospace" font-size="18" font-weight="700"
-                    fill="#fff" opacity="0.9" style="text-shadow:0 1px 6px rgba(0,0,0,0.9)">--</text>
-              <text id="cap-unit" x="140" y="216" text-anchor="middle"
-                    font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700"
-                    fill="#daa520" opacity="0.7">BUSHELS</text>
+              <text id="cap-num" x="140" y="200" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="18" font-weight="700" fill="#fff" opacity="0.9" style="text-shadow:0 1px 6px rgba(0,0,0,0.9)">--</text>
+              <text id="cap-unit" x="140" y="216" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="9" font-weight="700" fill="#daa520" opacity="0.7">BUSHELS</text>
             </svg>
           </div>
 
-          <!-- Reference table -->
           <div style="margin-top:16px">
             <div class="section-label">Common Round Bin Capacities (Level Fill)</div>
             <div style="overflow-x:auto">
@@ -407,7 +371,6 @@
           <div class="result-row"><span class="result-label">Dry Bushels</span>          <span class="result-value" id="rDryBu">--</span></div>
           <div class="result-row"><span class="result-label">Bushels Lost</span>         <span class="result-value negative" id="rLost">--</span></div>
 
-          <!-- Market value -->
           <div class="value-box">
             <div class="value-price-row">
               <label>Market Price ($/bu)</label>
@@ -418,7 +381,6 @@
             <div class="result-row" style="border:none"><span class="result-label">Shrink Cost</span><span class="result-value negative" id="rShrinkCost">--</span></div>
           </div>
 
-          <!-- Moisture targets -->
           <div style="margin-top:20px">
             <div class="section-label">Safe Storage Moisture Targets</div>
             <div class="moist-grid">
@@ -429,7 +391,6 @@
             </div>
           </div>
 
-          <!-- Formulas -->
           <div class="formula-note">
             <strong>Formulas Used</strong><br>
             <code>Cylinder = π × r² × h</code><br>
@@ -452,7 +413,6 @@
   <script src="/components/loader.js"></script>
 
   <script>
-  /* ── CONSTANTS ──────────────────────────────────────────────── */
   var CROPS = {
     corn:     { lb: 56, std: 15.5 },
     soybeans: { lb: 60, std: 13.0 },
@@ -462,9 +422,8 @@
     sorghum:  { lb: 56, std: 14.0 }
   };
   var BU_PER_CUFT = 0.8036;
-  var TAN_25      = 0.4663;  /* tan(25°) angle of repose */
+  var TAN_25      = 0.4663;
 
-  /* ── HELPERS ────────────────────────────────────────────────── */
   function $(id)   { return document.getElementById(id); }
   function fN(n)   { return Math.round(n).toLocaleString(); }
   function shape()  { return document.querySelector('input[name="shape"]:checked').value; }
@@ -480,7 +439,6 @@
     syncDepth();
   }
 
-  /* ── GRAIN DEPTH SLIDER ─────────────────────────────────────── */
   function syncDepth() {
     var maxH = shape() === 'round'
       ? (parseFloat($('height').value) || 24)
@@ -500,7 +458,6 @@
     return pct / 100 * maxH;
   }
 
-  /* ── MAIN CALCULATION ───────────────────────────────────────── */
   function calc() {
     syncDepth();
     var crop     = $('crop').value;
@@ -519,10 +476,8 @@
       eaveH = parseFloat($('height').value)   || 0;
       r     = d / 2;
       cylVol = Math.PI * r * r * gH;
-
       var coneH   = r * TAN_25;
       var coneVol = (1/3) * Math.PI * r * r * coneH;
-
       if (sf === 'peaked') { adjVol = coneVol;  adjLbl = 'Peaked Cone (+)'; }
       else if (sf === 'draw') { adjVol = -coneVol; adjLbl = 'Draw Cone (−)'; }
       else { adjVol = 0; adjLbl = 'Surface Adj.'; }
@@ -542,7 +497,6 @@
     var lostBu    = packedBu - dryBu;
     var weightT   = packedBu * cr.lb / 2000;
 
-    /* Populate result fields */
     $('rCylVol').textContent   = fN(cylVol) + ' ft³';
     $('rAdjLabel').textContent = adjLbl;
     $('rAdjVol').textContent   = (adjVol >= 0 ? '+' : '−') + fN(Math.abs(adjVol)) + ' ft³';
@@ -565,25 +519,16 @@
     drawBin(sh, sf, gH, eaveH, r, packedBu);
   }
 
-  /* ══════════════════════════════════════════════════════════════
-     SVG BIN VISUALIZATION
-     ══════════════════════════════════════════════════════════════ */
   var BL = 55, BR = 225, BM = 140, BT = 65, BB = 245;
-  var BH = BB - BT;  /* bin body height in SVG units */
+  var BH = BB - BT;
 
   function drawBin(sh, sf, gH, eaveH, r, bu) {
     var diam = parseFloat($('diameter').value) || 30;
-
-    /* Roof */
     if (sh === 'round') {
-      $('svg-roof').setAttribute('d',
-        'M '+BL+' '+BT+' L '+BM+' '+(BT-30)+' L '+BR+' '+BT+' Z');
+      $('svg-roof').setAttribute('d','M '+BL+' '+BT+' L '+BM+' '+(BT-30)+' L '+BR+' '+BT+' Z');
     } else {
-      $('svg-roof').setAttribute('d',
-        'M '+(BL-5)+' '+BT+' L '+BM+' '+(BT-15)+' L '+(BR+5)+' '+BT+' Z');
+      $('svg-roof').setAttribute('d','M '+(BL-5)+' '+BT+' L '+BM+' '+(BT-15)+' L '+(BR+5)+' '+BT+' Z');
     }
-
-    /* Wall rings (horizontal ribs for round bins) */
     var rings = '';
     if (sh === 'round') {
       var n = Math.min(8, Math.max(3, Math.round(eaveH / 4)));
@@ -593,48 +538,32 @@
       }
     }
     $('svg-rings').innerHTML = rings;
-
-    /* Grain fill ratio */
     var fillR = eaveH > 0 ? Math.min(1, gH / eaveH) : 0;
     var grainY = BB - (fillR * BH);
-
-    /* Cone height in SVG units */
     var coneSvg = 0;
     if (sh === 'round' && eaveH > 0) {
       coneSvg = (r * TAN_25 / eaveH) * BH;
       coneSvg = Math.min(coneSvg, 55);
     }
-
     var gPath = '', sPath = '', aPath = '', aLine = '';
-
     if (fillR > 0) {
-      /* Base grain fill — flat rectangle from floor to grain surface */
       gPath = 'M '+BL+' '+BB+' L '+BL+' '+grainY+' L '+BR+' '+grainY+' L '+BR+' '+BB+' Z';
       sPath = 'M '+BL+' '+grainY+' L '+BR+' '+grainY;
-
       if (sh === 'round' && sf === 'draw' && fillR > 0.08) {
-        /* Draw: V dip in center */
         var drawY = Math.min(BB - 4, grainY + coneSvg);
-        gPath = 'M '+BL+' '+BB+' L '+BL+' '+grainY+
-                ' L '+BM+' '+drawY+' L '+BR+' '+grainY+
-                ' L '+BR+' '+BB+' Z';
+        gPath = 'M '+BL+' '+BB+' L '+BL+' '+grainY+' L '+BM+' '+drawY+' L '+BR+' '+grainY+' L '+BR+' '+BB+' Z';
         sPath = 'M '+BL+' '+grainY+' L '+BM+' '+drawY+' L '+BR+' '+grainY;
       }
-
       if (sh === 'round' && sf === 'peaked') {
-        /* Peaked cone above grain surface (rendered outside clip) */
         var peakY = grainY - coneSvg;
         aPath = 'M '+BL+' '+grainY+' L '+BM+' '+peakY+' L '+BR+' '+grainY+' Z';
         aLine = 'M '+BL+' '+grainY+' L '+BM+' '+peakY+' L '+BR+' '+grainY;
       }
     }
-
     $('svg-grain').setAttribute('d', gPath);
     $('svg-surface').setAttribute('d', sPath);
     $('svg-above').setAttribute('d', aPath);
     $('svg-above-line').setAttribute('d', aLine);
-
-    /* Dimension labels */
     if (sh === 'round') {
       $('dim-d').textContent = diam + ' ft ⌀';
       $('dim-h').textContent = eaveH + ' ft';
@@ -644,8 +573,6 @@
       $('dim-d').textContent = l + ' × ' + w + ' ft';
       $('dim-h').textContent = (parseFloat($('rheight').value) || 10) + ' ft';
     }
-
-    /* Capacity text — centered in grain area */
     var tY = fillR > 0.25 ? (grainY + BB) / 2 : BB - 20;
     $('cap-num').setAttribute('y', tY);
     $('cap-unit').setAttribute('y', tY + 17);
@@ -654,7 +581,6 @@
     $('cap-unit').setAttribute('opacity', fillR > 0.12 ? '0.7' : '0.25');
   }
 
-  /* ── INIT ───────────────────────────────────────────────────── */
   toggleShape();
   calc();
   </script>

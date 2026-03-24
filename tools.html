@@ -11,27 +11,52 @@
   <link rel="apple-touch-icon"                    href="/img/apple-touch-icon.png">
   <link rel="manifest"                            href="/manifest.json">
 
-  <title>Free Farm Tools & Ag Calculators | AGSIST</title>
+  <title>Free Farm Tools &amp; Ag Calculators | AGSIST</title>
   <meta name="description" content="Free farm tools and agricultural calculators from AGSIST. Break-even analysis, grain bin capacity, nutrient removal, spray timing, urea risk, GDU tracker, and more.">
   <meta name="keywords"    content="farm calculators, agricultural tools, break even calculator, grain bin calculator, spray timing, urea volatilization, GDU calculator">
   <meta name="robots"      content="index, follow, max-snippet:-1, max-image-preview:large">
-  <link rel="canonical"    href="https://agsist.com/pages/tools">
+  <link rel="canonical"    href="https://agsist.com/tools">
 
   <meta property="og:type"         content="website">
   <meta property="og:site_name"    content="AGSIST">
-  <meta property="og:title"        content="Free Farm Tools & Calculators — AGSIST">
-  <meta property="og:description"  content="Free agricultural tools: break-even analysis, grain bin calculator, spray timing, urea risk, and more.">
+  <meta property="og:locale"       content="en_US">
+  <meta property="og:title"        content="Free Farm Tools &amp; Calculators — AGSIST">
+  <meta property="og:description"  content="Free agricultural tools: break-even analysis, grain bin calculator, spray timing, urea risk, and more. No login. No ads.">
   <meta property="og:url"          content="https://agsist.com/tools">
   <meta property="og:image"        content="https://agsist.com/img/og/agsist.jpg">
+  <meta property="og:image:width"  content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt"    content="Free Farm Tools &amp; Calculators — AGSIST">
   <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:site"        content="@agsist">
+  <meta name="twitter:title"       content="Free Farm Tools &amp; Calculators — AGSIST">
+  <meta name="twitter:description" content="Free agricultural tools: break-even analysis, grain bin calculator, spray timing, urea risk, and more. No login. No ads.">
+  <meta name="twitter:image"       content="https://agsist.com/img/og/agsist.jpg">
 
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "Home",  "item": "https://agsist.com/" },
-      { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://agsist.com/pages/tools" }
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home",  "item": "https://agsist.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Tools", "item": "https://agsist.com/tools" }
+        ]
+      },
+      {
+        "@type": "ItemList",
+        "name": "Free Farm Tools & Calculators",
+        "url": "https://agsist.com/tools",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Spray Timing Advisor",      "url": "https://agsist.com/spray" },
+          { "@type": "ListItem", "position": 2, "name": "Urea Volatilization Risk",  "url": "https://agsist.com/urea" },
+          { "@type": "ListItem", "position": 3, "name": "Break-Even Calculator",     "url": "https://agsist.com/breakeven" },
+          { "@type": "ListItem", "position": 4, "name": "Grain Bin Calculator",      "url": "https://agsist.com/grain-bin-calculator" },
+          { "@type": "ListItem", "position": 5, "name": "Agricultural Fast Facts",   "url": "https://agsist.com/fast-facts" },
+          { "@type": "ListItem", "position": 6, "name": "GDU Tracker",               "url": "https://agsist.com/gdu-calculator" }
+        ]
+      }
     ]
   }
   </script>
@@ -55,7 +80,6 @@
       margin: 0;
     }
 
-    /* Category heading */
     .cat-label {
       font-size: 0.7rem;
       color: var(--text-dim);
@@ -67,7 +91,6 @@
       border-bottom: 1px solid var(--border);
     }
 
-    /* Tool grid */
     .tools-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -133,8 +156,6 @@
       text-transform: uppercase;
       letter-spacing: 0.5px;
     }
-
-    /* New badge */
     .tool-card .badge-new {
       position: absolute;
       top: 12px;
@@ -170,7 +191,7 @@
     </nav>
 
     <div class="page-header">
-      <h1>🛠️ Farm Tools & Calculators</h1>
+      <h1>🛠️ Farm Tools &amp; Calculators</h1>
       <p>Free tools built for corn, soybean, and grain farmers. No login. No ads.</p>
     </div>
 
@@ -222,7 +243,7 @@
     </div>
 
     <!-- Reference & Data -->
-    <div class="cat-label">Reference & Data</div>
+    <div class="cat-label">Reference &amp; Data</div>
     <div class="tools-grid">
       <a href="/fast-facts" class="tool-card">
         <span class="badge-new">New</span>
@@ -239,7 +260,7 @@
       </a>
     </div>
 
-    <!-- Crop Tracking — Coming Soon -->
+    <!-- Crop Tracking -->
     <div class="cat-label">Crop Tracking</div>
     <div class="tools-grid">
       <a href="/gdu-calculator" class="tool-card">
@@ -256,7 +277,7 @@
       </a>
     </div>
 
-    <!-- Market Data — Coming Soon -->
+    <!-- Market Data -->
     <div class="cat-label">Market Data</div>
     <div class="tools-grid">
       <a href="/" class="tool-card">
