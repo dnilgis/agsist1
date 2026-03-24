@@ -1,6 +1,16 @@
 {
   "briefings": [
     {
+      "date": "2026-03-24",
+      "date_display": "Tuesday, March 24, 2026",
+      "headline": "CRUDE OIL CRATERS 10% — GRAIN COMPLEX FOLLOWS",
+      "teaser": "Energy markets imploded overnight — here's what it means for your spring planting budget.",
+      "market_mood": "volatile",
+      "surprise_count": 8,
+      "sections": 4,
+      "url": "/daily/2026-03-24"
+    },
+    {
       "date": "2026-03-23",
       "date_display": "Monday, March 23, 2026",
       "headline": "GOLD CRASHES HARDEST IN YEARS",
@@ -141,6 +151,6 @@
       "url": "/daily/2026-03-04"
     }
   ],
-  "updated": "2026-03-23T12:08:32.549768+00:00",
-  "count": 14
+  "updated": "2026-03-24T12:34:02.122403+00:00",
+  "count": 15
 }
