@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="/components/styles.css">
 <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.json">
 
@@ -90,7 +91,7 @@
         {
           "@type": "Question",
           "name": "What is the difference between SRW and HRW wheat futures?",
-          "acceptedAnswer": { "@type": "Answer", "text": "SRW (soft red winter) wheat trades on CBOT as the ZW contract and is grown primarily in the eastern Midwest. HRW (hard red winter) wheat trades on the Kansas City Board of Trade as the KE contract and is the dominant class grown in Kansas, Oklahoma, and Texas. HRW commands a premium for higher protein content used in bread flour. AGSIST displays the CBOT SRW contract. For HRW pricing, compare the KE premium over ZW in the market data." }
+          "acceptedAnswer": { "@type": "Answer", "text": "SRW (soft red winter) wheat trades on CBOT as the ZW contract and is grown primarily in the eastern Midwest. HRW (hard red winter) wheat trades on the Kansas City Board of Trade as the KE contract and is the dominant class grown in Kansas, Oklahoma, and Texas. HRW commands a premium for higher protein content used in bread flour. AGSIST displays the CBOT SRW contract." }
         },
         {
           "@type": "Question",
@@ -155,42 +156,12 @@
   <div class="ps"><span class="ps-dot" aria-hidden="true"></span><span id="status">Loading prices…</span></div>
 
   <div class="cg">
-    <div class="cc hi">
-      <div class="cc-lbl">Front Month (ZW)</div>
-      <div class="cc-p sk" id="p-wheat">—</div>
-      <div class="cc-u">$/bu</div>
-      <div class="cc-c" id="c-wheat"></div>
-    </div>
-    <div class="cc">
-      <div class="cc-lbl">Corn (ZC)</div>
-      <div class="cc-p sk" id="p-corn">—</div>
-      <div class="cc-u">$/bu</div>
-      <div class="cc-c" id="c-corn"></div>
-    </div>
-    <div class="cc">
-      <div class="cc-lbl">Soybeans (ZS)</div>
-      <div class="cc-p sk" id="p-beans">—</div>
-      <div class="cc-u">$/bu</div>
-      <div class="cc-c" id="c-beans"></div>
-    </div>
-    <div class="cc">
-      <div class="cc-lbl">Oats (ZO)</div>
-      <div class="cc-p sk" id="p-oats">—</div>
-      <div class="cc-u">$/bu</div>
-      <div class="cc-c" id="c-oats"></div>
-    </div>
-    <div class="cc">
-      <div class="cc-lbl">Crude Oil (CL)</div>
-      <div class="cc-p sk" id="p-crude">—</div>
-      <div class="cc-u">$/bbl</div>
-      <div class="cc-c" id="c-crude"></div>
-    </div>
-    <div class="cc">
-      <div class="cc-lbl">Dollar Index (DX)</div>
-      <div class="cc-p sk" id="p-dollar">—</div>
-      <div class="cc-u">DXY</div>
-      <div class="cc-c" id="c-dollar"></div>
-    </div>
+    <div class="cc hi"><div class="cc-lbl">Front Month (ZW)</div><div class="cc-p sk" id="p-wheat">—</div><div class="cc-u">$/bu</div><div class="cc-c" id="c-wheat"></div></div>
+    <div class="cc"><div class="cc-lbl">Corn (ZC)</div><div class="cc-p sk" id="p-corn">—</div><div class="cc-u">$/bu</div><div class="cc-c" id="c-corn"></div></div>
+    <div class="cc"><div class="cc-lbl">Soybeans (ZS)</div><div class="cc-p sk" id="p-beans">—</div><div class="cc-u">$/bu</div><div class="cc-c" id="c-beans"></div></div>
+    <div class="cc"><div class="cc-lbl">Oats (ZO)</div><div class="cc-p sk" id="p-oats">—</div><div class="cc-u">$/bu</div><div class="cc-c" id="c-oats"></div></div>
+    <div class="cc"><div class="cc-lbl">Crude Oil (CL)</div><div class="cc-p sk" id="p-crude">—</div><div class="cc-u">$/bbl</div><div class="cc-c" id="c-crude"></div></div>
+    <div class="cc"><div class="cc-lbl">Dollar Index (DX)</div><div class="cc-p sk" id="p-dollar">—</div><div class="cc-u">DXY</div><div class="cc-c" id="c-dollar"></div></div>
   </div>
 
   <div class="rng">
@@ -200,10 +171,7 @@
   </div>
 
   <div class="cp">
-    <div class="cp-head">
-      <h2>📈 Wheat Front Month — Interactive Chart</h2>
-      <span class="cp-src">Chart by TradingView</span>
-    </div>
+    <div class="cp-head"><h2>📈 Wheat Front Month — Interactive Chart</h2><span class="cp-src">Chart by TradingView</span></div>
     <div id="tv-chart" style="height:480px"></div>
   </div>
 
@@ -255,7 +223,6 @@
 <div id="site-footer"></div>
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script src="/components/loader.js"></script>
-
 <script>
 function grain$(v) { return '$' + (v / 100).toFixed(2); }
 function raw$(v, d) { return v.toFixed(d || 2); }

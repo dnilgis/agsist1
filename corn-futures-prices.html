@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="/components/styles.css">
 <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.json">
 
@@ -115,18 +116,10 @@
 </script>
 
 <style>
-/* ── Futures Page ───────────────────────────────────────────── */
 .fut { max-width: 1100px; margin: 0 auto; padding: 0 16px 2.5rem }
 .bc { font-size: .75rem; color: var(--text-dim); margin: 12px 0 }
 .bc a { color: var(--gold); text-decoration: none }
-
-/* Hero */
-.ph {
-  background: linear-gradient(135deg, var(--surface) 0%, rgba(230,176,66,.05) 100%);
-  border: 1px solid var(--border); border-radius: 12px;
-  padding: 1.2rem 1.4rem; margin-bottom: 8px;
-  display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap;
-}
+.ph { background: linear-gradient(135deg, var(--surface) 0%, rgba(230,176,66,.05) 100%); border: 1px solid var(--border); border-radius: 12px; padding: 1.2rem 1.4rem; margin-bottom: 8px; display: flex; align-items: center; gap: 1.2rem; flex-wrap: wrap; }
 .ph-icon { font-size: 2.6rem; flex-shrink: 0 }
 .ph-info h1 { font-size: 1.05rem; color: var(--text); margin: 0 0 2px 0 }
 .ph-exch { font-size: .7rem; color: var(--text-dim) }
@@ -135,36 +128,23 @@
 .ph-unit { font-size: .72rem; color: var(--text-dim) }
 .ph-chg { font-size: .88rem; font-weight: 700; margin-top: 2px }
 .up { color: var(--green) } .dn { color: var(--red) }
-
-/* Status */
 .ps { display: flex; align-items: center; gap: 6px; font-size: .7rem; color: var(--text-dim); margin-bottom: 12px }
 .ps-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s infinite }
 @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.3} }
-
-/* Skeleton */
 .sk { color: var(--text-dim); animation: blink 1.4s ease-in-out infinite }
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
-
-/* Contract cards */
 .cg { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 8px; margin-bottom: 14px }
-.cc {
-  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-  padding: 10px; text-align: center; transition: border-color .2s;
-}
+.cc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px; text-align: center; transition: border-color .2s; }
 .cc:hover { border-color: var(--border-g) }
 .cc.hi { border-color: var(--gold); background: rgba(230,176,66,.04) }
 .cc-lbl { font-size: .6rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: .5px; margin-bottom: 2px }
 .cc-p { font-family: 'Oswald', sans-serif; font-size: 1.25rem; font-weight: 700; color: var(--text) }
 .cc-u { font-size: .6rem; color: var(--text-dim) }
 .cc-c { font-size: .72rem; font-weight: 600; margin-top: 2px }
-
-/* Chart */
 .cp { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 14px }
 .cp-head { padding: 9px 14px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center }
 .cp-head h2 { margin: 0; font-size: .85rem; color: var(--gold) }
 .cp-src { font-size: .6rem; color: var(--text-muted) }
-
-/* 52-week range */
 .rng { margin-bottom: 14px; padding: 10px 14px; background: var(--surface); border: 1px solid var(--border); border-radius: 10px }
 .rng-lbl { font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin-bottom: 6px }
 .rng-bar { position: relative; height: 6px; background: var(--surface2); border-radius: 3px; margin-bottom: 4px }
@@ -172,34 +152,21 @@
 .rng-dot { position: absolute; top: -3px; width: 12px; height: 12px; border-radius: 50%; background: var(--gold); border: 2px solid var(--surface); transition: left .5s }
 .rng-labels { display: flex; justify-content: space-between; font-size: .7rem }
 .rng-lo { color: var(--text-dim) } .rng-hi { color: var(--text-dim) } .rng-cur { color: var(--gold); font-weight: 700 }
-
-/* Context */
 .xg { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px; margin-bottom: 14px }
 .xc { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 11px }
 .xc h4 { font-size: .8rem; color: var(--gold); margin: 0 0 6px 0 }
 .xr { display: flex; justify-content: space-between; font-size: .74rem; padding: 2px 0; border-bottom: 1px solid rgba(255,255,255,.03) }
 .xr:last-child { border: none }
 .xl { color: var(--text-dim) } .xv { color: var(--text); font-weight: 600 }
-
-/* Related */
 .rl { font-size: .68rem; color: var(--text-dim); text-transform: uppercase; letter-spacing: .5px; font-weight: 600; margin: 14px 0 6px }
 .rg { display: grid; grid-template-columns: repeat(auto-fill, minmax(145px, 1fr)); gap: 6px }
-.ra {
-  display: flex; flex-direction: column; align-items: center; text-align: center;
-  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
-  padding: 10px; text-decoration: none; transition: border-color .2s;
-}
+.ra { display: flex; flex-direction: column; align-items: center; text-align: center; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 10px; text-decoration: none; transition: border-color .2s; }
 .ra:hover { border-color: var(--border-g) }
 .ra-i { font-size: 1.2rem; margin-bottom: 3px }
 .ra-n { font-size: .8rem; font-weight: 600; color: var(--text) }
 .ra-d { font-size: .65rem; color: var(--text-dim); margin-top: 1px }
-
 .disc { font-size: .68rem; color: var(--text-dim); text-align: center; padding: 8px; border-top: 1px solid var(--border); margin-top: 14px }
-
-@media (max-width: 520px) {
-  .ph { padding: .9rem } .ph-icon { font-size: 2rem } .ph-val { font-size: 1.7rem }
-  .cg { grid-template-columns: repeat(2, 1fr) }
-}
+@media (max-width: 520px) { .ph { padding: .9rem } .ph-icon { font-size: 2rem } .ph-val { font-size: 1.7rem } .cg { grid-template-columns: repeat(2, 1fr) } }
 </style>
 </head>
 <body>
@@ -224,61 +191,25 @@
   <div class="ps"><span class="ps-dot" aria-hidden="true"></span><span id="status">Loading prices…</span></div>
 
   <div class="cg">
-    <div class="cc hi">
-      <div class="cc-lbl">Front Month (ZC)</div>
-      <div class="cc-p sk" id="p-corn">—</div>
-      <div class="cc-u">$/bu</div>
-      <div class="cc-c" id="c-corn"></div>
-    </div>
-    <div class="cc">
-      <div class="cc-lbl">Dec '26 (ZCZ26)</div>
-      <div class="cc-p sk" id="p-corndec">—</div>
-      <div class="cc-u">$/bu</div>
-      <div class="cc-c" id="c-corndec"></div>
-    </div>
-    <div class="cc">
-      <div class="cc-lbl">Soybeans (ZS)</div>
-      <div class="cc-p sk" id="p-beans">—</div>
-      <div class="cc-u">$/bu</div>
-      <div class="cc-c" id="c-beans"></div>
-    </div>
-    <div class="cc">
-      <div class="cc-lbl">Wheat (ZW)</div>
-      <div class="cc-p sk" id="p-wheat">—</div>
-      <div class="cc-u">$/bu</div>
-      <div class="cc-c" id="c-wheat"></div>
-    </div>
-    <div class="cc">
-      <div class="cc-lbl">Crude Oil (CL)</div>
-      <div class="cc-p sk" id="p-crude">—</div>
-      <div class="cc-u">$/bbl</div>
-      <div class="cc-c" id="c-crude"></div>
-    </div>
-    <div class="cc">
-      <div class="cc-lbl">Dollar Index (DX)</div>
-      <div class="cc-p sk" id="p-dollar">—</div>
-      <div class="cc-u">DXY</div>
-      <div class="cc-c" id="c-dollar"></div>
-    </div>
+    <div class="cc hi"><div class="cc-lbl">Front Month (ZC)</div><div class="cc-p sk" id="p-corn">—</div><div class="cc-u">$/bu</div><div class="cc-c" id="c-corn"></div></div>
+    <div class="cc"><div class="cc-lbl">Dec '26 (ZCZ26)</div><div class="cc-p sk" id="p-corndec">—</div><div class="cc-u">$/bu</div><div class="cc-c" id="c-corndec"></div></div>
+    <div class="cc"><div class="cc-lbl">Soybeans (ZS)</div><div class="cc-p sk" id="p-beans">—</div><div class="cc-u">$/bu</div><div class="cc-c" id="c-beans"></div></div>
+    <div class="cc"><div class="cc-lbl">Wheat (ZW)</div><div class="cc-p sk" id="p-wheat">—</div><div class="cc-u">$/bu</div><div class="cc-c" id="c-wheat"></div></div>
+    <div class="cc"><div class="cc-lbl">Crude Oil (CL)</div><div class="cc-p sk" id="p-crude">—</div><div class="cc-u">$/bbl</div><div class="cc-c" id="c-crude"></div></div>
+    <div class="cc"><div class="cc-lbl">Dollar Index (DX)</div><div class="cc-p sk" id="p-dollar">—</div><div class="cc-u">DXY</div><div class="cc-c" id="c-dollar"></div></div>
   </div>
 
-  <!-- 52-week range -->
   <div class="rng" id="range-block">
     <div class="rng-lbl">52-Week Range — Corn Front Month</div>
     <div class="rng-bar"><div class="rng-fill" id="rng-fill"></div><div class="rng-dot" id="rng-dot"></div></div>
     <div class="rng-labels"><span class="rng-lo" id="rng-lo">—</span><span class="rng-cur" id="rng-cur">—</span><span class="rng-hi" id="rng-hi">—</span></div>
   </div>
 
-  <!-- TradingView Chart -->
   <div class="cp">
-    <div class="cp-head">
-      <h2>📈 Corn Front Month — Interactive Chart</h2>
-      <span class="cp-src">Chart by TradingView</span>
-    </div>
+    <div class="cp-head"><h2>📈 Corn Front Month — Interactive Chart</h2><span class="cp-src">Chart by TradingView</span></div>
     <div id="tv-chart" style="height:480px"></div>
   </div>
 
-  <!-- Market Context -->
   <div class="xg">
     <div class="xc">
       <h4>📋 Contract Specs</h4>
@@ -325,26 +256,13 @@
 </main>
 
 <div id="site-footer"></div>
-
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script src="/components/loader.js"></script>
-
 <script>
 function grain$(v) { return '$' + (v / 100).toFixed(2); }
 function raw$(v, d) { return v.toFixed(d || 2); }
-function chgTxt(net, pct) {
-  if (net == null) return { t: '', c: '' };
-  var s = net >= 0 ? '+' : '';
-  var a = net >= 0 ? '▲' : '▼';
-  return { t: a + ' ' + s + pct.toFixed(2) + '%', c: net >= 0 ? 'up' : 'dn' };
-}
-function setEl(id, txt, cls) {
-  var el = document.getElementById(id);
-  if (!el) return;
-  el.textContent = txt;
-  el.classList.remove('sk');
-  if (cls) { el.classList.remove('up','dn'); el.classList.add(cls); }
-}
+function chgTxt(net, pct) { if (net == null) return { t: '', c: '' }; var s = net >= 0 ? '+' : ''; var a = net >= 0 ? '▲' : '▼'; return { t: a + ' ' + s + pct.toFixed(2) + '%', c: net >= 0 ? 'up' : 'dn' }; }
+function setEl(id, txt, cls) { var el = document.getElementById(id); if (!el) return; el.textContent = txt; el.classList.remove('sk'); if (cls) { el.classList.remove('up','dn'); el.classList.add(cls); } }
 
 fetch('/data/prices.json', { cache: 'no-store' })
   .then(function(r) { return r.json(); })
@@ -359,17 +277,14 @@ fetch('/data/prices.json', { cache: 'no-store' })
       { key:'dollar',   p:'p-dollar',  c:'c-dollar',  grain:false },
     ];
     map.forEach(function(m) {
-      var d = q[m.key];
-      if (!d || d.close == null) return;
+      var d = q[m.key]; if (!d || d.close == null) return;
       setEl(m.p, m.grain ? grain$(d.close) : raw$(d.close));
-      var ch = chgTxt(d.netChange, d.pctChange);
-      setEl(m.c, ch.t, ch.c);
+      var ch = chgTxt(d.netChange, d.pctChange); setEl(m.c, ch.t, ch.c);
     });
     var corn = q.corn;
     if (corn && corn.close != null) {
       setEl('hero-price', grain$(corn.close));
-      var hc = chgTxt(corn.netChange, corn.pctChange);
-      setEl('hero-chg', hc.t, hc.c);
+      var hc = chgTxt(corn.netChange, corn.pctChange); setEl('hero-chg', hc.t, hc.c);
       if (corn.wk52_lo != null && corn.wk52_hi != null) {
         var lo = corn.wk52_lo, hi = corn.wk52_hi, cur = corn.close;
         var pct = Math.min(100, Math.max(0, ((cur - lo) / (hi - lo)) * 100));
@@ -384,30 +299,11 @@ fetch('/data/prices.json', { cache: 'no-store' })
     var age = mins < 2 ? 'Just updated' : mins < 60 ? mins + ' min ago' : Math.round(mins/60) + 'h ago';
     document.getElementById('status').textContent = 'Prices updated · ' + age;
   })
-  .catch(function() {
-    document.getElementById('status').textContent = 'Price data unavailable — market may be closed';
-  });
+  .catch(function() { document.getElementById('status').textContent = 'Price data unavailable — market may be closed'; });
 
 document.addEventListener('DOMContentLoaded', function() {
   if (typeof TradingView !== 'undefined') {
-    new TradingView.widget({
-      container_id: 'tv-chart',
-      autosize: true,
-      symbol: 'CBOT:ZC1!',
-      interval: 'D',
-      timezone: 'America/Chicago',
-      theme: 'dark',
-      style: '1',
-      locale: 'en',
-      toolbar_bg: '#1a2410',
-      enable_publishing: false,
-      hide_top_toolbar: false,
-      hide_legend: false,
-      save_image: false,
-      backgroundColor: '#1a2410',
-      gridColor: 'rgba(255,255,255,0.04)',
-      allow_symbol_change: true,
-    });
+    new TradingView.widget({ container_id: 'tv-chart', autosize: true, symbol: 'CBOT:ZC1!', interval: 'D', timezone: 'America/Chicago', theme: 'dark', style: '1', locale: 'en', toolbar_bg: '#1a2410', enable_publishing: false, hide_top_toolbar: false, hide_legend: false, save_image: false, backgroundColor: '#1a2410', gridColor: 'rgba(255,255,255,0.04)', allow_symbol_change: true });
   }
 });
 </script>

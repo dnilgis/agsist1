@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="/components/styles.css">
 <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.png">
 <link rel="apple-touch-icon" href="/img/apple-touch-icon.png">
 <link rel="manifest" href="/manifest.json">
 
@@ -156,42 +157,12 @@
   <div class="ps"><span class="ps-dot" aria-hidden="true"></span><span id="status">Loading prices…</span></div>
 
   <div class="cg">
-    <div class="cc hi">
-      <div class="cc-lbl">Front Month (ZS)</div>
-      <div class="cc-p sk" id="p-beans">—</div>
-      <div class="cc-u">$/bu</div>
-      <div class="cc-c" id="c-beans"></div>
-    </div>
-    <div class="cc">
-      <div class="cc-lbl">Nov '26 (ZSX26)</div>
-      <div class="cc-p sk" id="p-beansnov">—</div>
-      <div class="cc-u">$/bu</div>
-      <div class="cc-c" id="c-beansnov"></div>
-    </div>
-    <div class="cc">
-      <div class="cc-lbl">Corn (ZC)</div>
-      <div class="cc-p sk" id="p-corn">—</div>
-      <div class="cc-u">$/bu</div>
-      <div class="cc-c" id="c-corn"></div>
-    </div>
-    <div class="cc">
-      <div class="cc-lbl">Soy Meal (ZM)</div>
-      <div class="cc-p sk" id="p-meal">—</div>
-      <div class="cc-u">$/ton</div>
-      <div class="cc-c" id="c-meal"></div>
-    </div>
-    <div class="cc">
-      <div class="cc-lbl">Soy Oil (ZL)</div>
-      <div class="cc-p sk" id="p-soyoil">—</div>
-      <div class="cc-u">¢/lb</div>
-      <div class="cc-c" id="c-soyoil"></div>
-    </div>
-    <div class="cc">
-      <div class="cc-lbl">Dollar Index (DX)</div>
-      <div class="cc-p sk" id="p-dollar">—</div>
-      <div class="cc-u">DXY</div>
-      <div class="cc-c" id="c-dollar"></div>
-    </div>
+    <div class="cc hi"><div class="cc-lbl">Front Month (ZS)</div><div class="cc-p sk" id="p-beans">—</div><div class="cc-u">$/bu</div><div class="cc-c" id="c-beans"></div></div>
+    <div class="cc"><div class="cc-lbl">Nov '26 (ZSX26)</div><div class="cc-p sk" id="p-beansnov">—</div><div class="cc-u">$/bu</div><div class="cc-c" id="c-beansnov"></div></div>
+    <div class="cc"><div class="cc-lbl">Corn (ZC)</div><div class="cc-p sk" id="p-corn">—</div><div class="cc-u">$/bu</div><div class="cc-c" id="c-corn"></div></div>
+    <div class="cc"><div class="cc-lbl">Soy Meal (ZM)</div><div class="cc-p sk" id="p-meal">—</div><div class="cc-u">$/ton</div><div class="cc-c" id="c-meal"></div></div>
+    <div class="cc"><div class="cc-lbl">Soy Oil (ZL)</div><div class="cc-p sk" id="p-soyoil">—</div><div class="cc-u">¢/lb</div><div class="cc-c" id="c-soyoil"></div></div>
+    <div class="cc"><div class="cc-lbl">Dollar Index (DX)</div><div class="cc-p sk" id="p-dollar">—</div><div class="cc-u">DXY</div><div class="cc-c" id="c-dollar"></div></div>
   </div>
 
   <div class="rng" id="range-block">
@@ -201,10 +172,7 @@
   </div>
 
   <div class="cp">
-    <div class="cp-head">
-      <h2>📈 Soybean Front Month — Interactive Chart</h2>
-      <span class="cp-src">Chart by TradingView</span>
-    </div>
+    <div class="cp-head"><h2>📈 Soybean Front Month — Interactive Chart</h2><span class="cp-src">Chart by TradingView</span></div>
     <div id="tv-chart" style="height:480px"></div>
   </div>
 
@@ -256,7 +224,6 @@
 <div id="site-footer"></div>
 <script type="text/javascript" src="https://s3.tradingview.com/tv.js"></script>
 <script src="/components/loader.js"></script>
-
 <script>
 function grain$(v) { return '$' + (v / 100).toFixed(2); }
 function raw$(v, d) { return v.toFixed(d || 2); }
