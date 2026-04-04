@@ -66,9 +66,14 @@ def parse_rows(csv_text: str) -> list[dict]:
                     short_pos = int(row.get("M_Money_Positions_Short_All", 0) or 0)
                     net = long_pos - short_pos
                     date_str = row.get("Report_Date_as_MM_DD_YYYY", "").strip()
+                    dt = parse_date(date_str)
+                    if dt is None:
+                        print(f"  Skipping unparseable date: '{date_str}' for {key}", flush=True)
+                        continue
                     rows.append({
                         "commodity": key,
                         "date_str":  date_str,
+                        "dt":        dt,
                         "net":   net,
                         "long":  long_pos,
                         "short": short_pos,
@@ -79,13 +84,14 @@ def parse_rows(csv_text: str) -> list[dict]:
     return rows
 
 
-def parse_date(s: str) -> datetime:
-    for fmt in ("%m/%d/%Y", "%Y-%m-%d", "%m-%d-%Y"):
+def parse_date(s: str) -> datetime | None:
+    """Return None if date cannot be parsed (caller must filter these out)."""
+    for fmt in ("%m/%d/%Y", "%Y-%m-%d", "%m-%d-%Y", "%Y%m%d", "%d/%m/%Y"):
         try:
-            return datetime.strptime(s, fmt)
+            return datetime.strptime(s.strip(), fmt)
         except ValueError:
             pass
-    return datetime.min
+    return None
 
 
 def fmt_k(n: int) -> str:
@@ -116,10 +122,6 @@ def main():
     if not all_rows:
         print("ERROR: No COT rows fetched — aborting without overwriting existing file.")
         sys.exit(1)
-
-    # Attach datetime objects
-    for row in all_rows:
-        row["dt"] = parse_date(row["date_str"])
 
     all_rows.sort(key=lambda r: r["dt"])
 
