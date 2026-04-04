@@ -57,7 +57,11 @@ def parse_rows(csv_text: str) -> list[dict]:
     """
     rows = []
     reader = csv.DictReader(io.StringIO(csv_text))
+    headers_printed = False
     for row in reader:
+        if not headers_printed:
+            print(f"  CSV columns: {list(row.keys())[:10]}", flush=True)
+            headers_printed = True
         market = row.get("Market_and_Exchange_Names", "").strip()
         for key, target in TARGETS.items():
             if target.lower() in market.lower():
@@ -66,6 +70,14 @@ def parse_rows(csv_text: str) -> list[dict]:
                     short_pos = int(row.get("M_Money_Positions_Short_All", 0) or 0)
                     net = long_pos - short_pos
                     date_str = row.get("Report_Date_as_MM_DD_YYYY", "").strip()
+                    # Also try alternate column names
+                    if not date_str:
+                        for col in row:
+                            if 'date' in col.lower() or 'Date' in col:
+                                date_str = row[col].strip()
+                                if date_str:
+                                    print(f"  Found date in col '{col}': '{date_str}'", flush=True)
+                                    break
                     dt = parse_date(date_str)
                     if dt is None:
                         print(f"  Skipping unparseable date: '{date_str}' for {key}", flush=True)
