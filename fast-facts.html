@@ -1435,8 +1435,8 @@
 
     bind('stateSelect', 'change', function() {
       var abbr = $('stateSelect').value;
-      if (typeof AGSIST_GEO !== 'undefined' && AGSIST_GEO.setState) {
-        AGSIST_GEO.setState(abbr);
+      if (typeof AGSIST_STATE !== 'undefined' && AGSIST_STATE.setState) {
+        AGSIST_STATE.setState(abbr);
       }
       changeState(abbr);
     });
@@ -1445,13 +1445,13 @@
       var btn = $('detectBtn');
       btn.textContent = '⏳'; btn.disabled = true;
 
-      if (typeof AGSIST_GEO === 'undefined' || !AGSIST_GEO.detectLocation) {
+      if (typeof AGSIST_STATE === 'undefined' || !AGSIST_STATE.detectLocation) {
         btn.textContent = '📍 Detect'; btn.disabled = false;
         alert('Location detection unavailable. Please select your state manually.');
         return;
       }
 
-      AGSIST_GEO.detectLocation(
+      AGSIST_STATE.detectLocation(
         function(abbr) {
           $('stateSelect').value = abbr;
           changeState(abbr);
@@ -1478,8 +1478,8 @@
       }).join('');
 
     var initState = 'WI';
-    if (typeof AGSIST_GEO !== 'undefined' && AGSIST_GEO.getState) {
-      initState = AGSIST_GEO.getState() || 'WI';
+    if (typeof AGSIST_STATE !== 'undefined' && AGSIST_STATE.getState) {
+      initState = AGSIST_STATE.getState() || 'WI';
     }
     if (!STATE_DATA[initState]) initState = 'WI';
     sel.value = initState;
