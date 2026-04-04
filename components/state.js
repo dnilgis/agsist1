@@ -4,16 +4,20 @@
  * Lightweight US state detection via browser geolocation + reverse geocoding.
  * Used by: fastfacts, cash-bids, usda-calendar, and any state-aware page.
  *
+ * NOTE: Renamed from AGSIST_GEO → AGSIST_STATE (v2) to avoid namespace
+ * collision with geo.js which also sets window.AGSIST_GEO as a plain
+ * data object inside fetchWeather(). Update all callers accordingly.
+ *
  * API:
- *   AGSIST_GEO.getState()            → 'WI' (from localStorage or default)
- *   AGSIST_GEO.setState(abbr)        → saves to localStorage, fires event
- *   AGSIST_GEO.detectLocation(ok, fail) → browser geo → state abbr callback
+ *   AGSIST_STATE.getState()              → 'WI' (from localStorage or default)
+ *   AGSIST_STATE.setState(abbr)          → saves to localStorage, fires event
+ *   AGSIST_STATE.detectLocation(ok, fail) → browser geo → state abbr callback
  *
  * Event:
  *   window.dispatchEvent(new CustomEvent('agsist-state-change', {detail: 'MN'}))
  */
 
-window.AGSIST_GEO = (function () {
+window.AGSIST_STATE = (function () {
   'use strict';
 
   var DEFAULT_STATE = 'WI';
@@ -32,9 +36,6 @@ window.AGSIST_GEO = (function () {
 
   // Lat/lng → US state abbreviation via reverse geocode
   function latLngToState(lat, lng, cb) {
-    var url = 'https://geocoding-api.open-meteo.com/v1/search?name=' +
-              lat.toFixed(3) + ',' + lng.toFixed(3) + '&count=1&language=en&format=json';
-    // Use nominatim for reverse geocode (more reliable for state lookup)
     var nominatimUrl = 'https://nominatim.openstreetmap.org/reverse?lat=' +
                        lat + '&lon=' + lng + '&format=json&zoom=5&addressdetails=1';
     fetch(nominatimUrl, { headers: { 'Accept-Language': 'en-US' } })
