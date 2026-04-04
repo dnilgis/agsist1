@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6KXCTD5Z9H"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-6KXCTD5Z9H');</script>
+<link rel="preload" href="/components/styles.css" as="style">
+<link rel="stylesheet" href="/components/styles.css">
+<link rel="icon" type="image/x-icon" href="/img/favicon.ico">
+<link rel="apple-touch-icon"         href="/img/apple-touch-icon.png">
+<link rel="manifest"                 href="/manifest.json">
+<meta name="theme-color" content="#111a0a">
+
+<title>CFTC Commitment of Traders — Corn, Soybean &amp; Wheat Fund Positioning | AGSIST</title>
+<meta name="description" content="Weekly CFTC Commitment of Traders data for corn, soybeans, and wheat. See managed money net long/short positioning and 52-week historical chart. Free for farmers.">
+<meta name="author"  content="Farmers First Agri Service — AGSIST">
+<meta name="robots"  content="index, follow">
+<link rel="canonical" href="https://agsist.com/cot">
+<meta property="og:type"        content="website">
+<meta property="og:site_name"   content="AGSIST">
+<meta property="og:title"       content="CFTC Commitment of Traders — Grain Fund Positioning | AGSIST">
+<meta property="og:description" content="Weekly managed money positioning for corn, soybeans, and wheat. 52-week chart. Free for farmers.">
+<meta property="og:url"         content="https://agsist.com/cot">
+<meta property="og:image"       content="https://agsist.com/img/og/agsist.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "CFTC Commitment of Traders — Corn, Soybean & Wheat Fund Positioning",
+  "description": "Weekly CFTC Commitment of Traders data for corn, soybeans, and wheat managed money positioning with 52-week historical chart.",
+  "url": "https://agsist.com/cot",
+  "isPartOf": { "@type": "WebSite", "url": "https://agsist.com/" },
+  "breadcrumb": {
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "AGSIST", "item": "https://agsist.com/" },
+      { "@type": "ListItem", "position": 2, "name": "COT Report", "item": "https://agsist.com/cot" }
+    ]
+  }
+}
+</script>
+
+<style>
+/* ── Page layout ── */
+.cot-page { max-width: 900px; margin: 0 auto; padding: 0 1rem 3rem; }
+
+/* ── Page hero ── */
+.cot-hero {
+  padding: 1.4rem 0 .8rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.4rem;
+}
+.cot-eyebrow {
+  font-size: .62rem; font-weight: 700; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--gold);
+  display: flex; align-items: center; gap: .4rem; margin-bottom: .3rem;
+}
+.cot-page-title {
+  font-family: 'Oswald', sans-serif; font-size: 1.75rem; font-weight: 800;
+  color: var(--text); line-height: 1.1; margin: 0 0 .35rem;
+  text-transform: uppercase; letter-spacing: -.01em;
+}
+.cot-page-sub {
+  font-size: .84rem; color: var(--text-muted); line-height: 1.55; max-width: 620px;
+}
+
+/* ── Verdict banner ── */
+.cot-verdict-banner {
+  display: flex; align-items: center; gap: .75rem; flex-wrap: wrap;
+  padding: .7rem 1rem; border-radius: 10px; margin-bottom: 1.25rem;
+  border: 1px solid;
+}
+.cot-verdict-banner.long  { background: rgba(34,197,94,.06);  border-color: rgba(34,197,94,.2);  }
+.cot-verdict-banner.short { background: rgba(239,68,68,.06);  border-color: rgba(239,68,68,.2);  }
+.cot-verdict-banner.mixed { background: var(--surface);       border-color: var(--border);       }
+.cvb-badge {
+  font-family: 'Oswald', sans-serif; font-size: 1.4rem; font-weight: 800;
+  line-height: 1; white-space: nowrap;
+}
+.cvb-badge.long  { color: var(--green); }
+.cvb-badge.short { color: #ef4444; }
+.cvb-badge.mixed { color: var(--text-dim); }
+.cvb-text { font-size: .82rem; color: var(--text-muted); line-height: 1.5; flex: 1; }
+.cvb-date { font-family: 'JetBrains Mono', monospace; font-size: .62rem; color: var(--text-muted); }
+
+/* ── Summary cards ── */
+.cot-summary-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: .65rem; margin-bottom: 1.4rem;
+}
+@media (max-width: 540px) { .cot-summary-grid { grid-template-columns: 1fr; } }
+
+.cot-card {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: .85rem 1rem;
+}
+.cot-card-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: .55rem;
+}
+.cot-card-name { font-size: .72rem; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: .3rem; }
+.cot-card-verdict {
+  font-size: .6rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+  padding: .12rem .45rem; border-radius: 12px; border: 1px solid;
+}
+.cot-card-verdict.long  { color: var(--green); background: rgba(34,197,94,.08);  border-color: rgba(34,197,94,.25); }
+.cot-card-verdict.short { color: #ef4444;      background: rgba(239,68,68,.08);  border-color: rgba(239,68,68,.25); }
+.cot-card-verdict.flat  { color: var(--text-muted); background: var(--surface2); border-color: var(--border); }
+
+.cot-card-net {
+  font-family: 'Oswald', sans-serif; font-size: 2rem; font-weight: 800;
+  line-height: 1; margin-bottom: .1rem;
+}
+.cot-card-net.long  { color: var(--green); }
+.cot-card-net.short { color: #ef4444; }
+.cot-card-net.flat  { color: var(--text-dim); }
+
+.cot-card-chg { font-family: 'JetBrains Mono', monospace; font-size: .72rem; font-weight: 700; margin-bottom: .5rem; }
+.cot-card-chg.up { color: var(--green); }
+.cot-card-chg.dn { color: #ef4444; }
+.cot-card-chg.nc { color: var(--text-muted); }
+
+.cot-card-bar-wrap {
+  position: relative; height: 7px; border-radius: 4px;
+  background: var(--surface2); overflow: visible; margin-bottom: .22rem;
+}
+.cot-card-fill  { position: absolute; top: 0; height: 100%; border-radius: 4px; }
+.cot-card-zero  { position: absolute; top: -3px; width: 2px; height: 13px; background: rgba(255,255,255,.2); border-radius: 1px; z-index: 1; }
+.cot-card-dot   {
+  position: absolute; top: 50%; width: 11px; height: 11px; border-radius: 50%;
+  border: 2px solid var(--surface); box-shadow: 0 0 0 1.5px var(--border);
+  transform: translate(-50%,-50%); z-index: 2;
+}
+.cot-card-range-labels {
+  display: flex; justify-content: space-between;
+  font-size: .53rem; color: var(--text-muted); font-family: 'JetBrains Mono', monospace;
+}
+
+/* ── Chart section ── */
+.cot-chart-section {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 12px;
+  padding: 1rem 1.1rem; margin-bottom: 1.25rem;
+}
+.cot-chart-head {
+  display: flex; align-items: center; justify-content: space-between;
+  flex-wrap: wrap; gap: .5rem; margin-bottom: .9rem;
+}
+.cot-chart-title {
+  font-size: .72rem; font-weight: 700; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--text-muted);
+}
+.cot-chart-tabs { display: flex; gap: .3rem; }
+.cot-chart-tab {
+  padding: .2rem .6rem; border-radius: 4px; border: 1px solid var(--border);
+  background: var(--surface2); color: var(--text-dim);
+  font-family: 'JetBrains Mono', monospace; font-size: .65rem; font-weight: 700;
+  cursor: pointer; text-transform: uppercase; letter-spacing: .04em; transition: all .15s;
+}
+.cot-chart-tab:hover { border-color: var(--gold); color: var(--text); }
+.cot-chart-tab.active { background: var(--gold); color: #0a1a0a; border-color: var(--gold); }
+
+.cot-legend { display: flex; gap: .9rem; flex-wrap: wrap; margin-bottom: .65rem; }
+.cot-legend-item { display: flex; align-items: center; gap: .3rem; font-size: .68rem; color: var(--text-muted); }
+.cot-legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+.cot-canvas-wrap { position: relative; width: 100%; }
+canvas#cot-chart { width: 100%; height: 260px; display: block; }
+
+/* ── Explainer ── */
+.cot-explainer {
+  background: var(--surface); border: 1px solid var(--border); border-radius: 10px;
+  padding: 1rem 1.1rem; margin-bottom: 1.25rem;
+}
+.cot-explainer-title {
+  font-size: .68rem; font-weight: 700; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--blue); margin-bottom: .65rem;
+}
+.cot-explainer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+@media (max-width: 520px) { .cot-explainer-grid { grid-template-columns: 1fr; } }
+.cot-explainer-item h4 {
+  font-size: .78rem; font-weight: 700; color: var(--text); margin: 0 0 .2rem;
+}
+.cot-explainer-item p {
+  font-size: .76rem; color: var(--text-muted); line-height: 1.6; margin: 0;
+}
+
+/* ── Source footer ── */
+.cot-source {
+  font-size: .64rem; color: var(--text-muted); text-align: center;
+  padding-top: .6rem; border-top: 1px solid var(--border);
+}
+.cot-source a { color: var(--gold); text-decoration: none; }
+.cot-source a:hover { text-decoration: underline; }
+</style>
+</head>
+
+<body>
+<a href="#main" class="skip">Skip to content</a>
+<div id="site-header"></div>
+
+<main id="main" class="main cot-page">
+
+  <!-- Hero -->
+  <div class="cot-hero">
+    <div class="cot-eyebrow">📊 Market Intelligence · Updated Weekly</div>
+    <h1 class="cot-page-title">CFTC Commitment of Traders</h1>
+    <p class="cot-page-sub">What are the big funds doing in corn, soybean, and wheat futures? Managed money net positioning from the CFTC's weekly Disaggregated Futures-Only report. Updated every Saturday after Friday's release.</p>
+  </div>
+
+  <!-- Verdict banner -->
+  <div class="cot-verdict-banner mixed" id="cot-verdict-banner">
+    <div class="cvb-badge mixed" id="cvb-badge">—</div>
+    <div class="cvb-text" id="cvb-text">Loading fund positioning data…</div>
+    <div class="cvb-date" id="cvb-date">CFTC · Updated weekly</div>
+  </div>
+
+  <!-- Summary cards -->
+  <div class="cot-summary-grid" id="cot-summary-grid">
+    <div class="cot-card" id="card-corn">
+      <div class="cot-card-head">
+        <span class="cot-card-name">🌽 Corn</span>
+        <span class="cot-card-verdict flat" id="verdict-corn">—</span>
+      </div>
+      <div class="cot-card-net flat" id="net-corn">--</div>
+      <div class="cot-card-chg nc" id="chg-corn">Loading…</div>
+      <div class="cot-card-bar-wrap">
+        <div class="cot-card-fill"  id="fill-corn"></div>
+        <div class="cot-card-zero"  id="zero-corn"></div>
+        <div class="cot-card-dot"   id="dot-corn" style="background:var(--text-muted)"></div>
+      </div>
+      <div class="cot-card-range-labels">
+        <span id="min-corn">--</span><span>52-wk range</span><span id="max-corn">--</span>
+      </div>
+    </div>
+
+    <div class="cot-card" id="card-beans">
+      <div class="cot-card-head">
+        <span class="cot-card-name">🫘 Soybeans</span>
+        <span class="cot-card-verdict flat" id="verdict-beans">—</span>
+      </div>
+      <div class="cot-card-net flat" id="net-beans">--</div>
+      <div class="cot-card-chg nc" id="chg-beans">Loading…</div>
+      <div class="cot-card-bar-wrap">
+        <div class="cot-card-fill"  id="fill-beans"></div>
+        <div class="cot-card-zero"  id="zero-beans"></div>
+        <div class="cot-card-dot"   id="dot-beans" style="background:var(--text-muted)"></div>
+      </div>
+      <div class="cot-card-range-labels">
+        <span id="min-beans">--</span><span>52-wk range</span><span id="max-beans">--</span>
+      </div>
+    </div>
+
+    <div class="cot-card" id="card-wheat">
+      <div class="cot-card-head">
+        <span class="cot-card-name">🌾 Wheat</span>
+        <span class="cot-card-verdict flat" id="verdict-wheat">—</span>
+      </div>
+      <div class="cot-card-net flat" id="net-wheat">--</div>
+      <div class="cot-card-chg nc" id="chg-wheat">Loading…</div>
+      <div class="cot-card-bar-wrap">
+        <div class="cot-card-fill"  id="fill-wheat"></div>
+        <div class="cot-card-zero"  id="zero-wheat"></div>
+        <div class="cot-card-dot"   id="dot-wheat" style="background:var(--text-muted)"></div>
+      </div>
+      <div class="cot-card-range-labels">
+        <span id="min-wheat">--</span><span>52-wk range</span><span id="max-wheat">--</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart -->
+  <div class="cot-chart-section">
+    <div class="cot-chart-head">
+      <span class="cot-chart-title">Managed Money Net Position — 52 Weeks</span>
+      <div class="cot-chart-tabs" id="chart-tabs">
+        <button class="cot-chart-tab active" data-key="corn">Corn</button>
+        <button class="cot-chart-tab" data-key="beans">Beans</button>
+        <button class="cot-chart-tab" data-key="wheat">Wheat</button>
+        <button class="cot-chart-tab" data-key="all">All</button>
+      </div>
+    </div>
+    <div class="cot-legend" id="cot-legend">
+      <span class="cot-legend-item"><span class="cot-legend-dot" style="background:#e6b042"></span>Corn</span>
+      <span class="cot-legend-item"><span class="cot-legend-dot" style="background:#22c55e"></span>Soybeans</span>
+      <span class="cot-legend-item"><span class="cot-legend-dot" style="background:#5ba3e0"></span>Wheat</span>
+      <span class="cot-legend-item" style="margin-left:auto;font-size:.6rem">Contracts (thousands) · Source: CFTC</span>
+    </div>
+    <div class="cot-canvas-wrap">
+      <canvas id="cot-chart"></canvas>
+    </div>
+    <div id="cot-chart-msg" style="text-align:center;padding:2rem 0;font-size:.8rem;color:var(--text-muted)">Loading chart data…</div>
+  </div>
+
+  <!-- Explainer -->
+  <div class="cot-explainer">
+    <div class="cot-explainer-title">🧠 What Does This Mean for Farmers?</div>
+    <div class="cot-explainer-grid">
+      <div class="cot-explainer-item">
+        <h4>What is the COT Report?</h4>
+        <p>The CFTC releases Commitments of Traders data every Friday afternoon. It shows the net position of managed money — hedge funds and large speculators — in each commodity futures market. When funds are heavily long, prices are often stretched and vulnerable to selling. When they're heavily short, there's potential for a short-covering rally.</p>
+      </div>
+      <div class="cot-explainer-item">
+        <h4>How to Use It</h4>
+        <p>COT data is a sentiment indicator, not a timing tool. Extreme long positioning (near the 52-week high) can signal crowded trades that may unwind. Extreme short positioning can indicate pessimism that may reverse. Use it alongside fundamentals — a fund-short market with bullish supply news can move fast.</p>
+      </div>
+      <div class="cot-explainer-item">
+        <h4>What "Managed Money" Means</h4>
+        <p>This is the speculative money: CTAs, commodity pools, and hedge funds. They don't own grain — they trade paper. Their positions move prices in the short term, which affects basis and cash prices at your elevator. Large fund selling often corresponds to basis weakness at harvest.</p>
+      </div>
+      <div class="cot-explainer-item">
+        <h4>52-Week Range Context</h4>
+        <p>The bar gauge shows where current positioning sits within the last year's range. A dot near the top means funds are historically long — grain is more priced for good news. A dot near the bottom means funds are historically short — there's room for price improvement if fundamentals support it.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Source -->
+  <div class="cot-source">
+    Source: <a href="https://www.cftc.gov/MarketReports/CommitmentsofTraders/index.htm" target="_blank" rel="noopener">CFTC Commitments of Traders — Disaggregated Futures-Only</a> ·
+    Released every Friday by 3:30 PM ET · Updated here every Saturday morning ·
+    <a href="/">← AGSIST Dashboard</a>
+  </div>
+
+</main>
+
+<div id="site-footer"></div>
+<script src="/components/loader.js"></script>
+
+<script>
+(function(){
+'use strict';
+
+var COLORS = { corn: '#e6b042', beans: '#22c55e', wheat: '#5ba3e0' };
+var LABELS = { corn: 'Corn', beans: 'Soybeans', wheat: 'Wheat' };
+
+function fmtK(n) {
+  if (n == null || isNaN(n)) return '--';
+  var abs = Math.abs(n), sign = n >= 0 ? '+' : '-';
+  return sign + (abs >= 1000 ? (abs/1000).toFixed(1)+'k' : abs);
+}
+function fmtKShort(n) {
+  if (n == null || isNaN(n)) return '--';
+  var abs = Math.abs(n);
+  return (n < 0 ? '-' : '') + (abs >= 1000 ? Math.round(abs/1000)+'k' : Math.round(abs));
+}
+
+// ── Render summary card ───────────────────────────────────────────────────
+function renderCard(key, d) {
+  var net = d.net, prev = d.prev, min52 = d.min52, max52 = d.max52;
+  var range = (max52 - min52) || 1;
+  var isLong = net >= 0;
+  var cls = net > 5000 ? 'long' : net < -5000 ? 'short' : 'flat';
+
+  var netEl = document.getElementById('net-' + key);
+  if (netEl) { netEl.textContent = fmtK(net); netEl.className = 'cot-card-net ' + cls; }
+
+  var vEl = document.getElementById('verdict-' + key);
+  if (vEl) {
+    vEl.textContent = cls === 'long' ? 'Net Long' : cls === 'short' ? 'Net Short' : 'Flat';
+    vEl.className = 'cot-card-verdict ' + cls;
+  }
+
+  var chgEl = document.getElementById('chg-' + key);
+  if (chgEl && prev != null) {
+    var chg = net - prev;
+    chgEl.textContent = (chg >= 0 ? '▲' : '▼') + ' ' + fmtK(Math.abs(chg)) + ' wk/wk';
+    chgEl.className = 'cot-card-chg ' + (chg > 0 ? 'up' : chg < 0 ? 'dn' : 'nc');
+  }
+
+  var minEl = document.getElementById('min-' + key);
+  var maxEl = document.getElementById('max-' + key);
+  if (minEl) minEl.textContent = fmtKShort(min52);
+  if (maxEl) maxEl.textContent = fmtKShort(max52);
+
+  var zeroPct = Math.max(0, Math.min(100, (( 0   - min52) / range) * 100));
+  var currPct = Math.max(0, Math.min(100, ((net  - min52) / range) * 100));
+  var fillStart = Math.min(zeroPct, currPct);
+  var fillWidth = Math.abs(currPct - zeroPct);
+  var fillClr = isLong ? 'rgba(34,197,94,.35)' : 'rgba(239,68,68,.32)';
+  var dotClr  = isLong ? 'var(--green)' : '#ef4444';
+
+  var zeroEl = document.getElementById('zero-' + key);
+  var fillEl = document.getElementById('fill-' + key);
+  var dotEl  = document.getElementById('dot-'  + key);
+  if (zeroEl) zeroEl.style.left = zeroPct.toFixed(1) + '%';
+  if (fillEl) { fillEl.style.left = fillStart.toFixed(1)+'%'; fillEl.style.width = fillWidth.toFixed(1)+'%'; fillEl.style.background = fillClr; }
+  if (dotEl)  { dotEl.style.left = currPct.toFixed(1)+'%'; dotEl.style.background = dotClr; }
+}
+
+// ── Render verdict banner ─────────────────────────────────────────────────
+function renderVerdict(summary) {
+  var keys = ['corn', 'beans', 'wheat'];
+  var scores = [], netLong = 0;
+  keys.forEach(function(k) {
+    if (!summary[k]) return;
+    var d = summary[k];
+    var range = (d.max52 - d.min52) || 1;
+    scores.push((d.net - d.min52) / range);
+    if (d.net > 0) netLong++;
+  });
+  var avg = scores.length ? scores.reduce(function(a,b){return a+b;},0)/scores.length : 0.5;
+
+  var banner = document.getElementById('cot-verdict-banner');
+  var badge  = document.getElementById('cvb-badge');
+  var text   = document.getElementById('cvb-text');
+  var date   = document.getElementById('cvb-date');
+
+  var cls, badgeTxt, desc;
+  if (avg > 0.62 && netLong >= 2) {
+    cls = 'long'; badgeTxt = '📈 Funds Net Long';
+    desc = 'Managed money is positioned bullishly across most grains. Prices reflect optimism — be alert for potential selling if fundamentals disappoint.';
+  } else if (avg < 0.38 || netLong === 0) {
+    cls = 'short'; badgeTxt = '📉 Funds Net Short';
+    desc = 'Managed money is positioned bearishly. Prices reflect pessimism — a supply surprise or strong export demand could trigger a short-covering rally.';
+  } else {
+    cls = 'mixed'; badgeTxt = '↔ Mixed Positioning';
+    desc = 'Fund positioning is mixed across corn, soybeans, and wheat. No strong directional signal — watch individual commodity fundamentals.';
+  }
+
+  if (banner) banner.className = 'cot-verdict-banner ' + cls;
+  if (badge)  { badge.textContent = badgeTxt; badge.className = 'cvb-badge ' + cls; }
+  if (text)   text.textContent = desc;
+  if (date && summary.report_date) date.textContent = 'As of ' + summary.report_date + ' · CFTC Disaggregated';
+}
+
+// ── Mini canvas chart ─────────────────────────────────────────────────────
+var historyData = null;
+var activeKey   = 'corn';
+
+function drawChart(key) {
+  var canvas = document.getElementById('cot-chart');
+  var msg    = document.getElementById('cot-chart-msg');
+  if (!canvas || !historyData) return;
+
+  var history = historyData.history;
+  var keys = key === 'all' ? ['corn', 'beans', 'wheat'] : [key];
+
+  // Collect all dates
+  var allDates = [];
+  keys.forEach(function(k) {
+    (history[k] || []).forEach(function(r) { if (!allDates.includes(r.date)) allDates.push(r.date); });
+  });
+  allDates.sort();
+
+  if (!allDates.length) {
+    canvas.style.display = 'none';
+    if (msg) { msg.style.display = 'block'; msg.textContent = 'No chart data yet — runs Saturday after CFTC release.'; }
+    return;
+  }
+
+  canvas.style.display = 'block';
+  if (msg) msg.style.display = 'none';
+
+  var dpr = window.devicePixelRatio || 1;
+  var W = canvas.offsetWidth || 700;
+  var H = 260;
+  canvas.width  = W * dpr;
+  canvas.height = H * dpr;
+  canvas.style.width  = W + 'px';
+  canvas.style.height = H + 'px';
+
+  var ctx = canvas.getContext('2d');
+  ctx.scale(dpr, dpr);
+  ctx.clearRect(0, 0, W, H);
+
+  // Compute global min/max
+  var allNets = [];
+  keys.forEach(function(k) {
+    (history[k] || []).forEach(function(r) { allNets.push(r.net); });
+  });
+  if (!allNets.length) return;
+  var minNet = Math.min.apply(null, allNets);
+  var maxNet = Math.max.apply(null, allNets);
+  // Extend range to include zero
+  minNet = Math.min(minNet, 0);
+  maxNet = Math.max(maxNet, 0);
+  var pad = (maxNet - minNet) * 0.1 || 5000;
+  minNet -= pad; maxNet += pad;
+  var netRange = maxNet - minNet || 1;
+
+  var PAD = { top: 16, right: 16, bottom: 32, left: 52 };
+  var cW = W - PAD.left - PAD.right;
+  var cH = H - PAD.top  - PAD.bottom;
+
+  function xOf(i) { return PAD.left + (i / Math.max(allDates.length - 1, 1)) * cW; }
+  function yOf(n) { return PAD.top + (1 - (n - minNet) / netRange) * cH; }
+
+  // Zero line
+  var zeroY = yOf(0);
+  ctx.strokeStyle = 'rgba(255,255,255,.12)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath(); ctx.moveTo(PAD.left, zeroY); ctx.lineTo(PAD.left + cW, zeroY); ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Zero label
+  ctx.fillStyle = 'rgba(255,255,255,.25)';
+  ctx.font = '10px JetBrains Mono, monospace';
+  ctx.textAlign = 'right';
+  ctx.fillText('0', PAD.left - 4, zeroY + 4);
+
+  // Y axis labels
+  var yTicks = 4;
+  ctx.fillStyle = 'rgba(255,255,255,.35)';
+  ctx.font = '10px JetBrains Mono, monospace';
+  ctx.textAlign = 'right';
+  for (var t = 0; t <= yTicks; t++) {
+    var nVal = minNet + (t / yTicks) * netRange;
+    var yy = yOf(nVal);
+    var lbl = (nVal >= 1000 || nVal <= -1000)
+      ? (nVal >= 0 ? '+' : '') + Math.round(nVal / 1000) + 'k'
+      : Math.round(nVal);
+    ctx.fillText(lbl, PAD.left - 4, yy + 4);
+    ctx.strokeStyle = 'rgba(255,255,255,.05)';
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(PAD.left, yy); ctx.lineTo(PAD.left + cW, yy); ctx.stroke();
+  }
+
+  // X axis labels (every ~8 weeks)
+  ctx.fillStyle = 'rgba(255,255,255,.3)';
+  ctx.font = '9px JetBrains Mono, monospace';
+  ctx.textAlign = 'center';
+  var step = Math.max(1, Math.floor(allDates.length / 8));
+  allDates.forEach(function(d, i) {
+    if (i % step !== 0 && i !== allDates.length - 1) return;
+    var parts = d.split('-');
+    var lbl = (parts[1] || '') + '/' + (parts[2] || '').replace(/^0/,'');
+    ctx.fillText(lbl, xOf(i), H - 8);
+  });
+
+  // Draw series
+  keys.forEach(function(k) {
+    var pts = history[k] || [];
+    if (!pts.length) return;
+    var color = COLORS[k];
+
+    // Fill area
+    ctx.beginPath();
+    pts.forEach(function(r, i) {
+      var xi = allDates.indexOf(r.date);
+      var x = xOf(xi), y = yOf(r.net);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    // Close to zero line
+    var lastIdx = allDates.indexOf(pts[pts.length-1].date);
+    var firstIdx = allDates.indexOf(pts[0].date);
+    ctx.lineTo(xOf(lastIdx), zeroY);
+    ctx.lineTo(xOf(firstIdx), zeroY);
+    ctx.closePath();
+    ctx.fillStyle = color.replace('#','') === color
+      ? color + '22'
+      : color + '22';
+    // Use a transparent version
+    ctx.globalAlpha = 0.18;
+    ctx.fillStyle = color;
+    ctx.fill();
+    ctx.globalAlpha = 1;
+
+    // Line
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = keys.length === 1 ? 2 : 1.5;
+    ctx.lineJoin = 'round';
+    pts.forEach(function(r, i) {
+      var xi = allDates.indexOf(r.date);
+      var x = xOf(xi), y = yOf(r.net);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.stroke();
+
+    // Last dot
+    if (pts.length) {
+      var lastR = pts[pts.length - 1];
+      var lxi = allDates.indexOf(lastR.date);
+      ctx.beginPath();
+      ctx.arc(xOf(lxi), yOf(lastR.net), 4, 0, Math.PI * 2);
+      ctx.fillStyle = color;
+      ctx.fill();
+    }
+  });
+}
+
+function setActiveTab(key) {
+  activeKey = key;
+  document.querySelectorAll('.cot-chart-tab').forEach(function(btn) {
+    btn.classList.toggle('active', btn.dataset.key === key);
+  });
+  drawChart(key);
+}
+
+// ── Boot ──────────────────────────────────────────────────────────────────
+document.querySelectorAll('.cot-chart-tab').forEach(function(btn) {
+  btn.addEventListener('click', function() { setActiveTab(btn.dataset.key); });
+});
+
+// Load summary
+fetch('/data/cot.json')
+  .then(function(r) { if (!r.ok) throw new Error('no-cot'); return r.json(); })
+  .then(function(data) {
+    ['corn','beans','wheat'].forEach(function(k) {
+      if (data[k]) renderCard(k, data[k]);
+    });
+    renderVerdict(data);
+  })
+  .catch(function() {
+    var banner = document.getElementById('cot-verdict-banner');
+    var text   = document.getElementById('cvb-text');
+    if (text) text.textContent = 'COT data updates every Saturday after the CFTC Friday release.';
+    if (banner) banner.className = 'cot-verdict-banner mixed';
+  });
+
+// Load history for chart
+fetch('/data/cot-history.json')
+  .then(function(r) { if (!r.ok) throw new Error('no-hist'); return r.json(); })
+  .then(function(data) {
+    historyData = data;
+    drawChart(activeKey);
+  })
+  .catch(function() {
+    var msg = document.getElementById('cot-chart-msg');
+    if (msg) { msg.style.display = 'block'; msg.textContent = 'Chart data updates every Saturday after CFTC release.'; }
+    var canvas = document.getElementById('cot-chart');
+    if (canvas) canvas.style.display = 'none';
+  });
+
+// Redraw on resize
+window.addEventListener('resize', function() {
+  if (historyData) drawChart(activeKey);
+});
+
+})();
+</script>
+
+</body>
+</html>
