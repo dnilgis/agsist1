@@ -687,9 +687,9 @@ body{overflow-x:clip;max-width:100%}
     );
   }
 
-  if(window.AGSIST_GEO && window.AGSIST_GEO.lat && window.AGSIST_GEO.zip){
-    var gz = String(window.AGSIST_GEO.zip).slice(0,5);
-    var gl = (window.AGSIST_GEO.city||'')+', '+(window.AGSIST_GEO.state||'');
+  if(window.AGSIST_STATE && window.AGSIST_STATE.lat && window.AGSIST_STATE.zip){
+    var gz = String(window.AGSIST_STATE.zip).slice(0,5);
+    var gl = (window.AGSIST_STATE.city||'')+', '+(window.AGSIST_STATE.state||'');
     geoTxt.textContent = '📍 ' + gl;
     geoUseBtn.style.display = 'inline';
     geoUseBtn.textContent = 'Search ' + gz;
