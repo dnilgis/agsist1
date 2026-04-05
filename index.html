@@ -180,7 +180,7 @@
   .ratio-label{font-size:.62rem;color:var(--text-muted);font-weight:600;margin-top:.15rem;letter-spacing:.03em}
   .ratio-right{
     flex:1;min-width:0;
-    display:flex;flex-direction:column;justify-content:space-between;
+    display:flex;flex-direction:column;gap:.6rem;
   }
   .ratio-gauge-track{
     position:relative;height:9px;border-radius:5px;margin-bottom:.3rem;
@@ -235,6 +235,15 @@
     margin-bottom:.6rem;
   }
   .cot-widget-title{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);}
+  .cot-caption{font-size:.65rem;color:var(--text-muted);line-height:1.4;margin-bottom:.5rem;padding-bottom:.5rem;border-bottom:1px solid var(--border);}
+  .cot-dir{
+    font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;
+    letter-spacing:.06em;text-transform:uppercase;padding:.1rem .32rem;border-radius:3px;
+    flex-shrink:0;
+  }
+  .cot-dir.long{color:var(--green);background:rgba(34,197,94,.1);}
+  .cot-dir.short{color:#ef4444;background:rgba(239,68,68,.1);}
+  .cot-dir.nc{color:var(--text-muted);background:var(--surface2);}
   .cot-verdict{
     display:inline-flex;align-items:center;gap:.3rem;
     padding:.25rem .65rem;border-radius:20px;
@@ -874,42 +883,43 @@
           <span class="cot-widget-title">📊 CFTC COT — Fund Positioning</span>
           <span class="cot-verdict mixed" id="cot-verdict">Loading…</span>
         </div>
+        <div class="cot-caption">Net contracts held long vs short by large money managers. Bar shows where that position sits within the past 52 weeks.</div>
         <div class="cot-rows" id="cot-rows">
           <div>
             <div class="cot-row-top">
               <div class="cot-label"><span class="cot-comm-icon">🌽</span><span class="cot-comm-name">Corn</span></div>
-              <div class="cot-right"><span class="cot-net" id="cot-corn-net">--</span><span class="cot-chg nc" id="cot-corn-chg">--</span></div>
+              <div class="cot-right"><span class="cot-dir nc" id="cot-corn-dir">--</span><span class="cot-net" id="cot-corn-net">--</span><span class="cot-chg nc" id="cot-corn-chg">--</span></div>
             </div>
             <div class="cot-bar-wrap">
               <div class="cot-bar-fill" id="cot-corn-fill"></div>
               <div class="cot-zero-mark" id="cot-corn-zero"></div>
               <div class="cot-bar-dot" id="cot-corn-dot" style="background:var(--text-muted)"></div>
             </div>
-            <div class="cot-bar-labels"><span id="cot-corn-min">--</span><span>52-wk range · contracts</span><span id="cot-corn-max">--</span></div>
+            <div class="cot-bar-labels"><span id="cot-corn-min">--</span><span>52-wk range</span><span id="cot-corn-max">--</span></div>
           </div>
           <div>
             <div class="cot-row-top">
               <div class="cot-label"><span class="cot-comm-icon">🫘</span><span class="cot-comm-name">Soybeans</span></div>
-              <div class="cot-right"><span class="cot-net" id="cot-beans-net">--</span><span class="cot-chg nc" id="cot-beans-chg">--</span></div>
+              <div class="cot-right"><span class="cot-dir nc" id="cot-beans-dir">--</span><span class="cot-net" id="cot-beans-net">--</span><span class="cot-chg nc" id="cot-beans-chg">--</span></div>
             </div>
             <div class="cot-bar-wrap">
               <div class="cot-bar-fill" id="cot-beans-fill"></div>
               <div class="cot-zero-mark" id="cot-beans-zero"></div>
               <div class="cot-bar-dot" id="cot-beans-dot" style="background:var(--text-muted)"></div>
             </div>
-            <div class="cot-bar-labels"><span id="cot-beans-min">--</span><span>52-wk range · contracts</span><span id="cot-beans-max">--</span></div>
+            <div class="cot-bar-labels"><span id="cot-beans-min">--</span><span>52-wk range</span><span id="cot-beans-max">--</span></div>
           </div>
           <div>
             <div class="cot-row-top">
               <div class="cot-label"><span class="cot-comm-icon">🌾</span><span class="cot-comm-name">Wheat</span></div>
-              <div class="cot-right"><span class="cot-net" id="cot-wheat-net">--</span><span class="cot-chg nc" id="cot-wheat-chg">--</span></div>
+              <div class="cot-right"><span class="cot-dir nc" id="cot-wheat-dir">--</span><span class="cot-net" id="cot-wheat-net">--</span><span class="cot-chg nc" id="cot-wheat-chg">--</span></div>
             </div>
             <div class="cot-bar-wrap">
               <div class="cot-bar-fill" id="cot-wheat-fill"></div>
               <div class="cot-zero-mark" id="cot-wheat-zero"></div>
               <div class="cot-bar-dot" id="cot-wheat-dot" style="background:var(--text-muted)"></div>
             </div>
-            <div class="cot-bar-labels"><span id="cot-wheat-min">--</span><span>52-wk range · contracts</span><span id="cot-wheat-max">--</span></div>
+            <div class="cot-bar-labels"><span id="cot-wheat-min">--</span><span>52-wk range</span><span id="cot-wheat-max">--</span></div>
           </div>
         </div>
         <div class="cot-footer">
@@ -1378,16 +1388,19 @@
   function fmtKShort(n){if(n==null||isNaN(n))return'--';var abs=Math.abs(n);if(abs>=1000)return(n<0?'-':'')+Math.round(abs/1000)+'k';return String(Math.round(n));}
   function renderCOTRow(key,d){
     var netEl=document.getElementById('cot-'+key+'-net'),chgEl=document.getElementById('cot-'+key+'-chg');
+    var dirEl=document.getElementById('cot-'+key+'-dir');
     var fillEl=document.getElementById('cot-'+key+'-fill'),zeroEl=document.getElementById('cot-'+key+'-zero');
     var dotEl=document.getElementById('cot-'+key+'-dot'),minEl=document.getElementById('cot-'+key+'-min'),maxEl=document.getElementById('cot-'+key+'-max');
     var net=d.net,prev=d.prev,min52=d.min52,max52=d.max52,range=(max52-min52)||1;
-    if(netEl)netEl.textContent=fmtK(net);
+    var isLong=net>=0;
+    if(netEl){netEl.textContent=fmtK(net);netEl.style.color=isLong?'var(--green)':'#ef4444';}
+    if(dirEl){dirEl.textContent=isLong?'LONG':'SHORT';dirEl.className='cot-dir '+(isLong?'long':'short');}
     if(chgEl&&prev!=null){var chg=net-prev;chgEl.textContent=(chg>=0?'▲':'▼')+fmtK(Math.abs(chg)).replace(/^[+-]/,'');chgEl.className='cot-chg '+(chg>0?'up':chg<0?'dn':'nc');}
     if(minEl)minEl.textContent=fmtKShort(min52);if(maxEl)maxEl.textContent=fmtKShort(max52);
     var zeroPct=Math.max(0,Math.min(100,((0-min52)/range)*100));
     var currPct=Math.max(0,Math.min(100,((net-min52)/range)*100));
     var fillStart=Math.min(zeroPct,currPct),fillWidth=Math.abs(currPct-zeroPct);
-    var isLong=net>=0,fillClr=isLong?'rgba(34,197,94,.4)':'rgba(239,68,68,.38)',dotClr=isLong?'var(--green)':'#ef4444';
+    var fillClr=isLong?'rgba(34,197,94,.4)':'rgba(239,68,68,.38)',dotClr=isLong?'var(--green)':'#ef4444';
     if(zeroEl)zeroEl.style.left=zeroPct.toFixed(1)+'%';
     if(fillEl){fillEl.style.left=fillStart.toFixed(1)+'%';fillEl.style.width=fillWidth.toFixed(1)+'%';fillEl.style.background=fillClr;}
     if(dotEl){dotEl.style.left=currPct.toFixed(1)+'%';dotEl.style.background=dotClr;}
@@ -1479,20 +1492,29 @@ fetch('/data/crop-progress.json')
     if(data.report_date){var d=document.getElementById('crop-date');if(d)d.textContent='As of '+fmtDate(data.report_date)+' · NASS';}
     if(data.week){var wb=document.getElementById('crop-week-badge');if(wb)wb.textContent='Week '+data.week;}
     if(!data.in_season){var rows=document.getElementById('crop-rows');if(rows)rows.innerHTML='<div class="crop-offseason">🌨️ Off season — resumes April<br><span style="font-size:.65rem;margin-top:.2rem;display:block">Last season data shown when available</span></div>';}
+    var allNull=true;
     ['corn','soybeans'].forEach(function(comm){
       var key=comm==='soybeans'?'bean':comm;
       var d=data[comm];if(!d)return;
       var geEl=document.getElementById('crop-'+key+'-ge');
-      if(geEl){geEl.textContent=fmtPct(d.good_excellent);geEl.className='crop-ge-val '+geClass(d.good_excellent);}
+      if(geEl){
+        if(d.good_excellent!=null){geEl.textContent=fmtPct(d.good_excellent);geEl.className='crop-ge-val '+geClass(d.good_excellent);allNull=false;}
+        else{geEl.textContent='—';geEl.className='crop-ge-val fair';}
+      }
       var wkChg=fmtChg(d.good_excellent,d.good_excellent_prev_week,'%');
       var yrChg=fmtChg(d.good_excellent,d.good_excellent_prev_year,'%');
       var wkEl=document.getElementById('crop-'+key+'-wk');var yrEl=document.getElementById('crop-'+key+'-yr');
       if(wkEl){wkEl.textContent=wkChg.txt;wkEl.className='crop-chg '+wkChg.cls;}
       if(yrEl){yrEl.textContent=yrChg.txt;yrEl.className='crop-chg '+yrChg.cls;}
       var plantEl=document.getElementById('crop-'+key+'-plant');var barEl=document.getElementById('crop-'+key+'-bar');
-      if(plantEl)plantEl.textContent=fmtPct(d.planting_pct);
+      if(plantEl)plantEl.textContent=d.planting_pct!=null?fmtPct(d.planting_pct):'—';
       if(barEl)barEl.style.width=Math.min(d.planting_pct||0,100)+'%';
+      if(d.planting_pct!=null)allNull=false;
     });
+    if(allNull&&data.in_season!==false){
+      var rows=document.getElementById('crop-rows');
+      if(rows)rows.innerHTML='<div class="crop-offseason">🌱 Season starting — ratings begin once planting gets underway.<br><span style="font-size:.65rem;margin-top:.25rem;display:block">Typically mid-April for WI &amp; MN</span></div>';
+    }
   })
   .catch(function(){
     var d=document.getElementById('crop-date');if(d)d.textContent='Data pending · Mon 4pm ET';
