@@ -1,6 +1,17 @@
 {
   "briefings": [
     {
+      "date": "2026-04-05",
+      "date_display": "Sunday, April 5, 2026",
+      "headline": "ENERGY RALLY PAUSES — GRAINS READY FOR MONDAY TEST",
+      "teaser": "Energy costs stabilize but grain weakness demands attention as planting season heats up.",
+      "market_mood": "cautious",
+      "surprise_count": 0,
+      "sections": 4,
+      "url": "/daily/2026-04-05",
+      "market_closed": true
+    },
+    {
       "date": "2026-04-03",
       "date_display": "Friday, April 3, 2026",
       "headline": "CRUDE EXPLODES 7% — GRAINS SLIP ON PROFIT-TAKING",
@@ -231,6 +242,6 @@
       "url": "/daily/2026-03-04"
     }
   ],
-  "updated": "2026-04-03T12:04:58.064387+00:00",
-  "count": 23
+  "updated": "2026-04-05T12:00:02.090546+00:00",
+  "count": 24
 }
