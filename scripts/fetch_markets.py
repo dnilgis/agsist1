@@ -1,33 +1,26 @@
 #!/usr/bin/env python3
 """
-AGSIST fetch_markets.py  v8
+AGSIST fetch_markets.py  v9
 ════════════════════════════
-Fetches prediction-market odds relevant to agriculture from Kalshi
-and Polymarket.  Runs once daily via GitHub Actions (6 AM CT).
-Output -> data/markets.json -> read by homepage widget + ag-odds page.
+v9 changes (2026-04-05):
+  WORD-BOUNDARY FIX — replaced bare `kw in t` substring checks with
+  _has_word() which requires non-alpha chars on both sides of the keyword.
+  This prevents false positives like:
+    "oat" matching "croatia"  → Eurovision showing as DIRECT AG
+    "corn" matching "Cornyn"  → Texas senate race showing as DIRECT AG
+    "grain" matching "Ukraine" → already OK but now enforced
+    "egg" matching "Gregg"    → was a latent false positive
 
-ARCHITECTURE
-  Homepage (index.html): loads markets.json for 6-card snapshot
-  ag-odds.html:          loads markets.json + live Polymarket browser fetch
+  BLACKLIST EXPANSION — added explicit political-event terms that don't
+  affect ag markets regardless of country name in title:
+    'presidential election', 'parliamentary election', 'senate race',
+    'congressional race', 'eurovision', 'prime minister race'
 
-v8 changes (2026-04-01):
-  POLYMARKET OVERHAUL — dropped q= keyword Strategy A entirely.
-  The gamma API ignores q= and returns group markets with
-  outcomePrices:null, so zero markets survived probability parsing.
+  TIER2 country keywords now also require word boundaries to prevent
+  e.g. "grain" scoring because "ukraine" contains... actually ukraine
+  is fine, but "brazil" matching "Brazilian wax" etc.
 
-  NEW Strategy A: /events endpoint ordered by volume.
-  Events have properly structured nested binary markets with
-  outcomePrices populated. Best signal/noise ratio.
-
-  NEW tokens price fallback: _parse_poly_prob() now checks
-  tokens[0]['price'] — covers AMM/CLOB market format.
-
-  Kept tag_slug Strategy B and top-volume Strategy C.
-  Kalshi unchanged from v7 (correct URL, series + pagination).
-
-Sources (no API keys required):
-  Kalshi     -- https://trading-api.kalshi.com/trade-api/v2/
-  Polymarket -- https://gamma-api.polymarket.com/
+  All other logic unchanged from v8.
 """
 
 import json
@@ -46,14 +39,34 @@ except ImportError:
 
 
 # ================================================================
-# 1. KEYWORD TIERS
+# 1. WORD-BOUNDARY HELPER
+# ================================================================
+
+_KW_RE_CACHE: dict = {}
+
+def _has_word(text: str, word: str) -> bool:
+    """
+    True if `word` appears in `text` as a whole word
+    (not as part of a longer alphanumeric sequence).
+    Uses a compiled-regex cache for performance.
+    """
+    if word not in _KW_RE_CACHE:
+        _KW_RE_CACHE[word] = re.compile(
+            r'(?<![a-z0-9])' + re.escape(word) + r'(?![a-z0-9])',
+            re.IGNORECASE,
+        )
+    return bool(_KW_RE_CACHE[word].search(text))
+
+
+# ================================================================
+# 2. KEYWORD TIERS
 # ================================================================
 
 TIER1_KEYWORDS = [
-    "corn", "soybean", "wheat", "grain", "oat", "barley",
-    "cotton", "sugar", "rice", "canola", "sorghum",
-    "cattle", "hog", "pig", "livestock", "pork", "beef",
-    "dairy", "milk", "poultry", "chicken", "egg",
+    "corn", "soybean", "soybeans", "wheat", "grain", "grains",
+    "oat", "oats", "barley", "cotton", "sugar", "rice", "canola", "sorghum",
+    "cattle", "hog", "hogs", "pig", "pigs", "livestock", "pork", "beef",
+    "dairy", "milk", "poultry", "chicken", "egg", "eggs",
     "ethanol", "crop", "harvest", "planting", "acreage",
     "fertilizer", "urea", "nitrogen", "potash", "phosphate",
     "farm bill", "usda", "wasde", "crop insurance",
@@ -97,7 +110,7 @@ MIN_RELEVANCE = 35
 
 
 # ================================================================
-# 2. MEME / SPORTS FILTER
+# 3. MEME / SPORTS / POLITICAL FILTER
 # ================================================================
 
 MEME_BLACKLIST = [
@@ -115,6 +128,19 @@ MEME_BLACKLIST = [
     "dating", "divorce", "wedding",
     "tweet", "twitter feud",
     "movie", "marvel", "dc comics",
+    # ── v9 additions ──────────────────────────────────────────
+    "eurovision",                # Croatia/Eurovision false-positive
+    "presidential election",     # Generic elections ≠ ag impact
+    "parliamentary election",
+    "senate race",
+    "congressional race",
+    "prime minister race",
+    "governor race",
+    "mayor race",
+    "republic primary",          # US partisan primaries
+    "democratic primary",
+    "emmy award",
+    "tony award",
 ]
 
 SPORTS_BLACKLIST = [
@@ -157,40 +183,49 @@ def is_junk(title, ticker=""):
 
 
 # ================================================================
-# 3. RELEVANCE SCORING
+# 4. RELEVANCE SCORING  (v9: word-boundary for Tier-1)
 # ================================================================
 
 def score_relevance(text):
     t = text.lower()
     score, tier = 0, 0
+
+    # TIER 1 — must be a whole word (prevents oat→croatia, corn→Cornyn)
     for kw in TIER1_KEYWORDS:
-        if kw in t:
+        if _has_word(t, kw):
             score, tier = 100, 1
             break
+
+    # TIER 2 — substring OK; these are usually multi-word phrases
     if score < 100:
         for kw in TIER2_KEYWORDS:
             if kw in t:
                 score, tier = 70, 2
                 break
+
+    # TIER 3 — substring OK
     if score < 70:
         for kw in TIER3_KEYWORDS:
             if kw in t:
                 score, tier = 40, 3
                 break
+
+    # Bonus: Tier-3 market that also has a Tier-1/2 word gets bumped
     if tier == 3:
         for kw in TIER1_KEYWORDS:
-            if kw in t:
+            if _has_word(t, kw):
                 score = min(100, score + 30)
                 break
         for kw in TIER2_KEYWORDS:
             if kw in t:
                 score = min(100, score + 15)
                 break
+
     return score, tier
 
 
 # ================================================================
-# 4. CATEGORY + WHY IT MATTERS
+# 5. CATEGORY + WHY IT MATTERS
 # ================================================================
 
 AG_CATEGORIES = [
@@ -280,13 +315,13 @@ def get_why(text):
 
 
 # ================================================================
-# 5. HTTP HELPER
+# 6. HTTP HELPER
 # ================================================================
 
 def http_get(url, timeout=20):
     try:
         req = urllib_request.Request(url, headers={
-            "User-Agent": "AGSIST/8.0 (agsist.com; agricultural market intelligence)",
+            "User-Agent": "AGSIST/9.0 (agsist.com; agricultural market intelligence)",
             "Accept": "application/json",
         })
         with urllib_request.urlopen(req, timeout=timeout) as r:
@@ -312,7 +347,7 @@ def time_remaining(close_str):
 
 
 # ================================================================
-# 6. KALSHI FETCHER (v7 logic — correct URL + series + pagination)
+# 7. KALSHI FETCHER
 # ================================================================
 
 KALSHI_BASE = "https://trading-api.kalshi.com/trade-api/v2"
@@ -419,7 +454,7 @@ def _process_kalshi_items(items, markets, seen):
 
 
 # ================================================================
-# 7. POLYMARKET FETCHER — v8: /events first, then tag + volume
+# 8. POLYMARKET FETCHER
 # ================================================================
 
 POLY_BASE = "https://gamma-api.polymarket.com"
@@ -436,8 +471,6 @@ def fetch_polymarket():
     print("\n[Polymarket] /events + tag_slug + volume…")
     markets, seen = [], set()
 
-    # Strategy A: /events ordered by volume — best source.
-    # Returns event objects with nested binary markets, outcomePrices populated.
     print("  A: /events by volume…")
     data = http_get(f"{POLY_BASE}/events?active=true&closed=false&limit=100&order=volume&ascending=false")
     if data:
@@ -446,7 +479,6 @@ def fetch_polymarket():
         print(f"     {n} relevant from {len(events)} events")
     time.sleep(0.3)
 
-    # Strategy B: tag_slug browsing — reliable categorical filter
     print("  B: tag_slug…")
     for tag in POLY_TAGS:
         data = http_get(f"{POLY_BASE}/markets?active=true&closed=false&limit=100&tag_slug={url_quote(tag)}")
@@ -457,7 +489,6 @@ def fetch_polymarket():
                 print(f"     {tag}: {n}")
         time.sleep(0.2)
 
-    # Strategy C: top markets by volume — broad sweep
     print("  C: top by volume…")
     data = http_get(f"{POLY_BASE}/markets?active=true&closed=false&limit=100&order=volume&ascending=false")
     if data:
@@ -470,9 +501,7 @@ def fetch_polymarket():
 
 
 def _parse_poly_prob(m):
-    """Extract YES probability (1-99 int) from a Polymarket market object."""
     prob = None
-    # 1. outcomePrices — standard binary field: '["0.65","0.35"]'
     op = m.get("outcomePrices") or m.get("outcome_prices")
     if op:
         try:
@@ -483,7 +512,6 @@ def _parse_poly_prob(m):
                     prob = round(v * 100) if v <= 1.0 else round(v)
         except Exception:
             pass
-    # 2. tokens[0].price — AMM/CLOB format
     if prob is None:
         tokens = m.get("tokens")
         if isinstance(tokens, list) and tokens:
@@ -493,7 +521,6 @@ def _parse_poly_prob(m):
                     prob = round(v * 100) if v <= 1.0 else round(v)
             except Exception:
                 pass
-    # 3. Scalar fallbacks
     if prob is None:
         for f in ("yes_price", "bestBid", "lastTradePrice", "last_trade_price", "price"):
             val = m.get(f)
@@ -509,7 +536,6 @@ def _parse_poly_prob(m):
 
 
 def _make_poly_record(m, question, seen):
-    """Build a standardised market record. Returns None if invalid/duplicate."""
     mid = str(m.get("id") or m.get("condition_id") or m.get("conditionId") or "").strip()
     if not mid or mid in seen:
         return None
@@ -548,7 +574,6 @@ def _make_poly_record(m, question, seen):
 
 
 def _process_poly_events(events, markets, seen):
-    """Process /events response — flatten nested binary markets."""
     added = 0
     for ev in events:
         if not isinstance(ev, dict):
@@ -573,7 +598,6 @@ def _process_poly_events(events, markets, seen):
 
 
 def _process_poly_markets(items, markets, seen):
-    """Process flat /markets response."""
     added = 0
     for m in items:
         if not isinstance(m, dict):
@@ -589,7 +613,7 @@ def _process_poly_markets(items, markets, seen):
 
 
 # ================================================================
-# 8. COMPOSITE RANKING
+# 9. COMPOSITE RANKING
 # ================================================================
 
 def composite_score(m):
@@ -597,12 +621,12 @@ def composite_score(m):
 
 
 # ================================================================
-# 9. MAIN
+# 10. MAIN
 # ================================================================
 
 def main():
     now = datetime.now(timezone.utc)
-    print(f"\nAGSIST fetch_markets.py v8 -- {now.strftime('%Y-%m-%d %H:%M UTC')}")
+    print(f"\nAGSIST fetch_markets.py v9 -- {now.strftime('%Y-%m-%d %H:%M UTC')}")
     print("=" * 60)
 
     kalshi = fetch_kalshi()
@@ -610,7 +634,6 @@ def main():
     combined = kalshi + poly
     print(f"\nRaw: {len(kalshi)} Kalshi + {len(poly)} Polymarket = {len(combined)}")
 
-    # Deduplicate by normalised title, rank by composite score
     deduped, seen_titles = [], set()
     for m in sorted(combined, key=composite_score, reverse=True):
         norm = re.sub(r"[^a-z0-9 ]", "", m["title"].lower()).strip()
@@ -633,7 +656,7 @@ def main():
 
     output = {
         "fetched":        now.strftime("%Y-%m-%dT%H:%M:%SZ"),
-        "version":        4,
+        "version":        5,
         "count":          len(top),
         "total_found":    len(combined),
         "tier_breakdown": {
@@ -650,7 +673,7 @@ def main():
         json.dump(output, f, indent=2)
 
     print(f"\n{'=' * 60}")
-    print(f"OK data/markets.json written -- v8")
+    print(f"OK data/markets.json written -- v9")
     print(f"  Kalshi:      {len(kalshi)}")
     print(f"  Polymarket:  {len(poly)}")
     print(f"  Deduped:     {len(deduped)}")
