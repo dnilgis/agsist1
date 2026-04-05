@@ -162,7 +162,7 @@
     background:linear-gradient(135deg,var(--surface) 0%,rgba(34,197,94,.025) 100%);
     border:1px solid var(--border);border-radius:12px;
     padding:.9rem 1.1rem;
-    display:flex;flex-direction:column; /* fills grid height */
+    display:flex;flex-direction:column;
   }
   .ratio-widget-head{
     display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.4rem;
@@ -171,7 +171,7 @@
   .ratio-widget-title{font-size:.62rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);}
   .ratio-body{
     display:flex;align-items:flex-start;gap:1rem;flex-wrap:nowrap;
-    flex:1; /* fills remaining height */
+    flex:1;
   }
   .ratio-num-block{flex-shrink:0;text-align:center;min-width:70px;padding-top:.1rem;}
   .ratio-big{font-family:'Oswald',sans-serif;font-size:2.4rem;font-weight:800;line-height:1;color:var(--text);transition:color .4s;}
@@ -828,7 +828,6 @@
             <div class="ratio-label">Nov Beans ÷ Dec Corn</div>
           </div>
           <div class="ratio-right">
-            <!-- top group: gauge + meta -->
             <div>
               <div class="ratio-gauge-track" id="ratio-gauge-track">
                 <div class="ratio-gauge-dot" id="ratio-gauge-dot" style="left:50%;background:var(--text-muted)"></div>
@@ -844,7 +843,6 @@
                 <span>Nov Beans: <strong id="ratio-beans-price" style="color:var(--text)">--</strong></span>
               </div>
             </div>
-            <!-- bottom group: historical note + links -->
             <div>
               <div style="font-size:.62rem;color:var(--text-muted);line-height:1.5;margin-bottom:.3rem">
                 Historically: <strong style="color:var(--gold)">&lt;2.4</strong> favors corn · <strong style="color:var(--text-dim)">2.4–2.6</strong> neutral · <strong style="color:var(--green)">&gt;2.6</strong> favors beans
@@ -935,7 +933,6 @@
         <span class="crop-week-badge" id="crop-week-badge">USDA · Mon 4pm ET</span>
       </div>
       <div class="crop-rows" id="crop-rows">
-
         <div>
           <div class="crop-row-head">
             <div class="crop-comm-label"><span class="crop-comm-icon">🌽</span><span class="crop-comm-name">Corn</span></div>
@@ -951,7 +948,6 @@
             <div class="crop-plant-bar"><div class="crop-plant-fill" id="crop-corn-bar" style="width:0%"></div></div>
           </div>
         </div>
-
         <div>
           <div class="crop-row-head">
             <div class="crop-comm-label"><span class="crop-comm-icon">🫘</span><span class="crop-comm-name">Soybeans</span></div>
@@ -967,7 +963,6 @@
             <div class="crop-plant-bar"><div class="crop-plant-fill" id="crop-bean-bar" style="width:0%"></div></div>
           </div>
         </div>
-
       </div>
       <div class="crop-footer">
         <span class="crop-footer-date" id="crop-date">USDA NASS · Weekly</span>
@@ -982,7 +977,6 @@
         <span class="export-mkt-yr" id="export-mkt-yr">USDA FAS · Thu 8:30am</span>
       </div>
       <div class="export-rows" id="export-rows">
-
         <div>
           <div class="export-row-head">
             <div class="export-comm-label"><span class="export-comm-icon">🌽</span><span class="export-comm-name">Corn</span></div>
@@ -993,7 +987,6 @@
             <span class="export-pace-pct on-track" id="exp-corn-pct">--%</span>
           </div>
         </div>
-
         <div>
           <div class="export-row-head">
             <div class="export-comm-label"><span class="export-comm-icon">🫘</span><span class="export-comm-name">Soybeans</span></div>
@@ -1004,7 +997,6 @@
             <span class="export-pace-pct on-track" id="exp-bean-pct">--%</span>
           </div>
         </div>
-
         <div>
           <div class="export-row-head">
             <div class="export-comm-label"><span class="export-comm-icon">🌾</span><span class="export-comm-name">Wheat</span></div>
@@ -1015,7 +1007,6 @@
             <span class="export-pace-pct on-track" id="exp-wheat-pct">--%</span>
           </div>
         </div>
-
       </div>
       <div class="export-footer">
         <span class="export-footer-date" id="exp-date">USDA FAS · Weekly</span>
@@ -1432,139 +1423,69 @@
 })();
 </script>
 
-
 <!-- ── Tariff Widget ─────────────────────────────────────────── -->
 <script>
 (function(){
 'use strict';
-
-// Only show top 4 rows on homepage (China + one normal)
 var SHOW_COMMS = ['Soybeans','Corn','Wheat','Pork'];
-var SHOW_DEST  = 'China';
-
 function statusCls(s){return s==='elevated'?'elevated':s==='normal'?'normal':'mixed';}
 function statusIcon(s){return s==='elevated'?'🚨':s==='normal'?'✅':'⚠️';}
 function statusTxt(s){return s==='elevated'?'Trade War Active':s==='normal'?'Normal Trade':'Mixed';}
-
-function fmtDate(iso){
-  if(!iso)return'—';
-  try{var d=new Date(iso+'T12:00:00');return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
-  catch(e){return iso;}
-}
-
+function fmtDate(iso){if(!iso)return'—';try{var d=new Date(iso+'T12:00:00');return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}catch(e){return iso;}}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-
 fetch('/data/tariffs.json')
   .then(function(r){if(!r.ok)throw new Error('no-tariffs');return r.json();})
   .then(function(data){
-
-    var badge = document.getElementById('tariff-badge');
-    var cls = statusCls(data.status);
-    if(badge){
-      badge.className = 'tariff-status-badge '+cls;
-      badge.textContent = statusIcon(data.status)+' '+statusTxt(data.status);
-    }
-
-    var dateEl = document.getElementById('tariff-date');
-    if(dateEl) dateEl.textContent = 'Updated '+fmtDate(data.updated);
-
-    // Show China rows for key commodities only
-    var rows = (data.rows||[]).filter(function(r){
-      return r.destination.indexOf('China')>=0 && SHOW_COMMS.indexOf(r.commodity)>=0;
-    }).slice(0,4);
-
-    var container = document.getElementById('tariff-rows');
-    if(container && rows.length){
-      container.innerHTML = rows.map(function(row){
-        var sc = statusCls(row.status);
-        return '<div class="tariff-row">'
-          +'<span class="tariff-row-icon">'+esc(row.icon)+'</span>'
-          +'<span class="tariff-row-comm">'+esc(row.commodity)+'</span>'
-          +'<span class="tariff-row-dest">→ '+esc(row.destination)+'</span>'
-          +'<span class="tariff-row-rate '+sc+'">'+esc(row.rate)+'</span>'
-          +'</div>';
+    var badge=document.getElementById('tariff-badge');
+    var cls=statusCls(data.status);
+    if(badge){badge.className='tariff-status-badge '+cls;badge.textContent=statusIcon(data.status)+' '+statusTxt(data.status);}
+    var dateEl=document.getElementById('tariff-date');
+    if(dateEl) dateEl.textContent='Updated '+fmtDate(data.updated);
+    var rows=(data.rows||[]).filter(function(r){return r.destination.indexOf('China')>=0&&SHOW_COMMS.indexOf(r.commodity)>=0;}).slice(0,4);
+    var container=document.getElementById('tariff-rows');
+    if(container&&rows.length){
+      container.innerHTML=rows.map(function(row){
+        var sc=statusCls(row.status);
+        return '<div class="tariff-row"><span class="tariff-row-icon">'+esc(row.icon)+'</span><span class="tariff-row-comm">'+esc(row.commodity)+'</span><span class="tariff-row-dest">→ '+esc(row.destination)+'</span><span class="tariff-row-rate '+sc+'">'+esc(row.rate)+'</span></div>';
       }).join('');
     }
-
   })
-  .catch(function(){
-    var badge = document.getElementById('tariff-badge');
-    if(badge){badge.className='tariff-status-badge mixed';badge.textContent='Data unavailable';}
-  });
+  .catch(function(){var badge=document.getElementById('tariff-badge');if(badge){badge.className='tariff-status-badge mixed';badge.textContent='Data unavailable';}});
 })();
 </script>
-
 
 <!-- ── Crop Progress Widget ─────────────────────────────────── -->
 <script>
 (function(){
 'use strict';
-
-function fmtPct(n){ return n==null?'--':n+'%'; }
-function fmtChg(cur,prev,suffix){
-  if(cur==null||prev==null) return {txt:'--',cls:'nc'};
-  var d=cur-prev;
-  return {txt:(d>=0?'▲+':'▼')+Math.abs(d)+(suffix||''),cls:d>0?'up':d<0?'dn':'nc'};
-}
-function geClass(v){ if(v==null)return'fair'; return v>=60?'good':v>=40?'fair':'poor'; }
-
-function fmtDate(iso){
-  if(!iso)return'—';
-  try{var d=new Date(iso+'T12:00:00');return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
-  catch(e){return iso;}
-}
-
+function fmtPct(n){return n==null?'--':n+'%';}
+function fmtChg(cur,prev,suffix){if(cur==null||prev==null)return{txt:'--',cls:'nc'};var d=cur-prev;return{txt:(d>=0?'▲+':'▼')+Math.abs(d)+(suffix||''),cls:d>0?'up':d<0?'dn':'nc'};}
+function geClass(v){if(v==null)return'fair';return v>=60?'good':v>=40?'fair':'poor';}
+function fmtDate(iso){if(!iso)return'—';try{var d=new Date(iso+'T12:00:00');return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}catch(e){return iso;}}
 fetch('/data/crop-progress.json')
   .then(function(r){if(!r.ok)throw new Error('no-cp');return r.json();})
   .then(function(data){
-
-    if(data.report_date){
-      var d=document.getElementById('crop-date');
-      if(d) d.textContent='As of '+fmtDate(data.report_date)+' · NASS';
-    }
-    if(data.week){
-      var wb=document.getElementById('crop-week-badge');
-      if(wb) wb.textContent='Week '+data.week;
-    }
-
-    if(!data.in_season){
-      var rows=document.getElementById('crop-rows');
-      if(rows) rows.innerHTML='<div class="crop-offseason">🌨️ Off season — resumes April<br><span style="font-size:.65rem;margin-top:.2rem;display:block">Last season data shown when available</span></div>';
-      // Still try to show last data if available
-    }
-
+    if(data.report_date){var d=document.getElementById('crop-date');if(d)d.textContent='As of '+fmtDate(data.report_date)+' · NASS';}
+    if(data.week){var wb=document.getElementById('crop-week-badge');if(wb)wb.textContent='Week '+data.week;}
+    if(!data.in_season){var rows=document.getElementById('crop-rows');if(rows)rows.innerHTML='<div class="crop-offseason">🌨️ Off season — resumes April<br><span style="font-size:.65rem;margin-top:.2rem;display:block">Last season data shown when available</span></div>';}
     ['corn','soybeans'].forEach(function(comm){
-      var key = comm==='soybeans'?'bean':comm;
-      var d = data[comm];
-      if(!d) return;
-
-      var geEl = document.getElementById('crop-'+key+'-ge');
-      if(geEl){
-        geEl.textContent = fmtPct(d.good_excellent);
-        geEl.className = 'crop-ge-val '+geClass(d.good_excellent);
-      }
-
-      var wkChg = fmtChg(d.good_excellent, d.good_excellent_prev_week, '%');
-      var yrChg = fmtChg(d.good_excellent, d.good_excellent_prev_year, '%');
-      var wkEl=document.getElementById('crop-'+key+'-wk');
-      var yrEl=document.getElementById('crop-'+key+'-yr');
+      var key=comm==='soybeans'?'bean':comm;
+      var d=data[comm];if(!d)return;
+      var geEl=document.getElementById('crop-'+key+'-ge');
+      if(geEl){geEl.textContent=fmtPct(d.good_excellent);geEl.className='crop-ge-val '+geClass(d.good_excellent);}
+      var wkChg=fmtChg(d.good_excellent,d.good_excellent_prev_week,'%');
+      var yrChg=fmtChg(d.good_excellent,d.good_excellent_prev_year,'%');
+      var wkEl=document.getElementById('crop-'+key+'-wk');var yrEl=document.getElementById('crop-'+key+'-yr');
       if(wkEl){wkEl.textContent=wkChg.txt;wkEl.className='crop-chg '+wkChg.cls;}
       if(yrEl){yrEl.textContent=yrChg.txt;yrEl.className='crop-chg '+yrChg.cls;}
-
-      var plantEl=document.getElementById('crop-'+key+'-plant');
-      var barEl=document.getElementById('crop-'+key+'-bar');
-      if(plantEl) plantEl.textContent=fmtPct(d.planting_pct);
-      if(barEl) barEl.style.width=Math.min(d.planting_pct||0,100)+'%';
+      var plantEl=document.getElementById('crop-'+key+'-plant');var barEl=document.getElementById('crop-'+key+'-bar');
+      if(plantEl)plantEl.textContent=fmtPct(d.planting_pct);
+      if(barEl)barEl.style.width=Math.min(d.planting_pct||0,100)+'%';
     });
-
   })
   .catch(function(){
-    var d=document.getElementById('crop-date');
-    if(d) d.textContent='Data pending · Mon 4pm ET';
-    ['corn-ge','corn-wk','corn-yr','bean-ge','bean-wk','bean-yr'].forEach(function(id){
-      var el=document.getElementById('crop-'+id);
-      if(el) el.textContent='—';
-    });
+    var d=document.getElementById('crop-date');if(d)d.textContent='Data pending · Mon 4pm ET';
+    ['corn-ge','corn-wk','corn-yr','bean-ge','bean-wk','bean-yr'].forEach(function(id){var el=document.getElementById('crop-'+id);if(el)el.textContent='—';});
   });
 })();
 </script>
@@ -1573,56 +1494,25 @@ fetch('/data/crop-progress.json')
 <script>
 (function(){
 'use strict';
-
-function fmtMT(n){
-  if(n==null||isNaN(n))return'--';
-  if(Math.abs(n)>=1000000) return (n/1000000).toFixed(2)+'M MT';
-  if(Math.abs(n)>=1000)    return Math.round(n/1000)+'k MT';
-  return n+' MT';
-}
-function paceClass(pct){
-  if(pct==null)return'on-track';
-  // Expected pace = days elapsed / 365 * 100 — rough signal
-  return pct>=85?'on-track':pct>=70?'lagging':'behind';
-}
-function fmtDate(iso){
-  if(!iso)return'—';
-  try{var d=new Date(iso+'T12:00:00');return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}
-  catch(e){return iso;}
-}
-
+function fmtMT(n){if(n==null||isNaN(n))return'--';if(Math.abs(n)>=1000000)return(n/1000000).toFixed(2)+'M MT';if(Math.abs(n)>=1000)return Math.round(n/1000)+'k MT';return n+' MT';}
+function paceClass(pct){if(pct==null)return'on-track';return pct>=85?'on-track':pct>=70?'lagging':'behind';}
+function fmtDate(iso){if(!iso)return'—';try{var d=new Date(iso+'T12:00:00');return d.toLocaleDateString('en-US',{month:'short',day:'numeric'});}catch(e){return iso;}}
 fetch('/data/export-sales.json')
   .then(function(r){if(!r.ok)throw new Error('no-exp');return r.json();})
   .then(function(data){
-
-    var dateEl=document.getElementById('exp-date');
-    if(dateEl) dateEl.textContent='Week of '+fmtDate(data.report_date)+' · FAS';
-
-    var mktEl=document.getElementById('export-mkt-yr');
-    if(mktEl&&data.marketing_year) mktEl.textContent=data.marketing_year+' mkt yr';
-
+    var dateEl=document.getElementById('exp-date');if(dateEl)dateEl.textContent='Week of '+fmtDate(data.report_date)+' · FAS';
+    var mktEl=document.getElementById('export-mkt-yr');if(mktEl&&data.marketing_year)mktEl.textContent=data.marketing_year+' mkt yr';
     var map={'corn':'corn','soybeans':'bean','wheat':'wheat'};
     Object.keys(map).forEach(function(comm){
-      var key=map[comm];
-      var d=data[comm];
-      if(!d) return;
-
-      var wkEl=document.getElementById('exp-'+key+'-wk');
-      if(wkEl) wkEl.textContent=d.weekly_net_mt!=null?'+'+fmtMT(d.weekly_net_mt):'pending';
-
-      var pct=d.pct_of_target;
-      var cls=paceClass(pct);
-      var barEl=document.getElementById('exp-'+key+'-bar');
-      var pctEl=document.getElementById('exp-'+key+'-pct');
+      var key=map[comm];var d=data[comm];if(!d)return;
+      var wkEl=document.getElementById('exp-'+key+'-wk');if(wkEl)wkEl.textContent=d.weekly_net_mt!=null?'+'+fmtMT(d.weekly_net_mt):'pending';
+      var pct=d.pct_of_target;var cls=paceClass(pct);
+      var barEl=document.getElementById('exp-'+key+'-bar');var pctEl=document.getElementById('exp-'+key+'-pct');
       if(barEl){barEl.style.width=Math.min(pct||0,100)+'%';barEl.className='export-pace-fill '+cls;}
       if(pctEl){pctEl.textContent=pct!=null?pct+'%':'--';pctEl.className='export-pace-pct '+cls;}
     });
-
   })
-  .catch(function(){
-    var d=document.getElementById('exp-date');
-    if(d) d.textContent='Data pending · Thu 8:30am ET';
-  });
+  .catch(function(){var d=document.getElementById('exp-date');if(d)d.textContent='Data pending · Thu 8:30am ET';});
 })();
 </script>
 
@@ -1630,47 +1520,19 @@ fetch('/data/export-sales.json')
 <script>
 (function(){
 'use strict';
-
-function fmtDate(iso){
-  if(!iso)return'—';
-  try{var d=new Date(iso+'T12:00:00');return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
-  catch(e){return iso;}
-}
+function fmtDate(iso){if(!iso)return'—';try{var d=new Date(iso+'T12:00:00');return d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}catch(e){return iso;}}
 function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-
 fetch('/data/fertilizer.json')
   .then(function(r){if(!r.ok)throw new Error('no-fert');return r.json();})
   .then(function(data){
-
-    var dateEl=document.getElementById('fert-date');
-    if(dateEl) dateEl.textContent='Updated '+fmtDate(data.updated);
-
-    var grid=document.getElementById('fert-grid');
-    if(!grid||!data.prices||!data.prices.length) return;
-
+    var dateEl=document.getElementById('fert-date');if(dateEl)dateEl.textContent='Updated '+fmtDate(data.updated);
+    var grid=document.getElementById('fert-grid');if(!grid||!data.prices||!data.prices.length)return;
     grid.innerHTML=data.prices.map(function(p){
-      var chg=p.price-p.prev;
-      var chgCls=chg>0?'up':chg<0?'dn':'nc';
-      var chgArrow=chg>0?'▲':chg<0?'▼':'—';
-      var chgStr=chgArrow+(chg!==0?'$'+Math.abs(chg):'');
-      return '<div class="fert-card">'
-        +'<div class="fert-card-head">'
-        +'<span class="fert-name">'+esc(p.icon)+' '+esc(p.name)+'</span>'
-        +'<span class="fert-sym">'+esc(p.symbol)+'</span>'
-        +'</div>'
-        +'<div class="fert-price">$'+p.price+'</div>'
-        +'<div class="fert-chg">'
-        +'<span class="fert-chg-val '+chgCls+'">'+esc(chgStr)+'</span>'
-        +'<span class="fert-loc"> · '+esc(p.location)+'</span>'
-        +'</div>'
-        +'</div>';
+      var chg=p.price-p.prev;var chgCls=chg>0?'up':chg<0?'dn':'nc';var chgArrow=chg>0?'▲':chg<0?'▼':'—';var chgStr=chgArrow+(chg!==0?'$'+Math.abs(chg):'');
+      return '<div class="fert-card"><div class="fert-card-head"><span class="fert-name">'+esc(p.icon)+' '+esc(p.name)+'</span><span class="fert-sym">'+esc(p.symbol)+'</span></div><div class="fert-price">$'+p.price+'</div><div class="fert-chg"><span class="fert-chg-val '+chgCls+'">'+esc(chgStr)+'</span><span class="fert-loc"> · '+esc(p.location)+'</span></div></div>';
     }).join('');
-
   })
-  .catch(function(){
-    var d=document.getElementById('fert-date');
-    if(d) d.textContent='Update data/fertilizer.json';
-  });
+  .catch(function(){var d=document.getElementById('fert-date');if(d)d.textContent='Update data/fertilizer.json';});
 })();
 </script>
 
@@ -1680,37 +1542,204 @@ fetch('/data/fertilizer.json')
 <script>
 (function(){
 'use strict';
-var POLY='https://gamma-api.polymarket.com',MAX_CARDS=6;
-var T1=['corn','soybean','wheat','grain','oat','cattle','hog','livestock','pork','beef','dairy','milk','poultry','chicken','egg','ethanol','crop','harvest','fertilizer','urea','nitrogen','usda','wasde','food price','food inflation','grocery','bushel'];
-var T2=['tariff','trade war','china trade','china import','china export','brazil','ukraine','crude oil','natural gas','diesel','oil price','opec','supply chain','rail strike','bird flu','avian influenza'];
-var T3=['interest rate','federal reserve','fed funds','rate cut','rate hike','cut rate','fomc','inflation','cpi','recession','gdp','unemployment','dollar','currency','drought','hurricane','flood','fed cut','tariffs'];
-var SKIP=['nfl','nba','mlb','nhl','playoff','super bowl','world series','oscar','grammy','netflix','celebrity','kardashian','dogecoin','nft','tiktok','instagram','youtube','marvel','disney','movie','box office'];
-function scoreM(t){var s=t.toLowerCase();for(var i=0;i<SKIP.length;i++){if(s.indexOf(SKIP[i])>=0)return null;}for(var a=0;a<T1.length;a++){if(s.indexOf(T1[a])>=0)return{score:100,tier:1};}for(var b=0;b<T2.length;b++){if(s.indexOf(T2[b])>=0)return{score:70,tier:2};}for(var c=0;c<T3.length;c++){if(s.indexOf(T3[c])>=0)return{score:40,tier:3};}return null;}
-var WHY=[['egg','Egg prices signal avian flu pressure and poultry feed demand.'],['grocery','Grocery prices reflect the entire ag supply chain from field to shelf.'],['food price','Food price changes affect consumer ag demand from farm to shelf.'],['food inflation','Food inflation erodes purchasing power and shifts protein demand.'],['corn','Corn price moves affect feed costs, ethanol margins, and farm revenue.'],['soybean','Soybeans drive export revenue — any policy shift moves US ag exports.'],['wheat','Wheat prices set the tone for global food costs and compete for acres.'],['cattle','Cattle prices reflect packer demand and feed efficiency for feedlots.'],['tariff','Tariffs directly impact export demand for US grains — moves basis fast.'],['trade','Trade policy shifts can redirect global grain flows overnight.'],['china','China is the world\'s largest soybean buyer — policy shifts move markets.'],['crude oil','Oil prices drive diesel and fertilizer costs — every $10/bbl hits budgets.'],['oil','Energy costs flow to planting, spraying, drying, and hauling expenses.'],['natural gas','Natural gas is the primary input for nitrogen fertilizer — spikes raise urea costs.'],['fertilizer','Fertilizer is the largest variable input cost — price moves hit margins hard.'],['interest rate','Rate changes affect land values, operating loans, and storage carry costs.'],['fed','Fed policy drives the dollar, which affects grain export competitiveness.'],['inflation','Inflation erodes margins when input costs rise faster than commodity prices.'],['cpi','CPI drives Fed rate decisions which cascade to farm lending and land values.'],['recession','Slowdowns reduce ethanol demand and can weaken feed grain consumption.'],['drought','Drought is the single biggest yield risk — moves corn and bean prices fast.'],['hurricane','Hurricanes disrupt Gulf exports and can damage late-season crops.'],['bird flu','Bird flu outbreaks spike egg prices and cut poultry feed demand.']];
-function getWhy(t){var s=t.toLowerCase();for(var i=0;i<WHY.length;i++){if(s.indexOf(WHY[i][0])>=0)return WHY[i][1];}return'Affects agricultural commodity prices, input costs, or farm policy.';}
-function pc(n){return n>=70?'var(--green)':n>=50?'var(--gold)':n>=30?'var(--text-dim)':'#ef4444';}
-function barBg(n){var rgb=n>=70?'34,197,94':n>=50?'230,176,66':n>=30?'140,140,130':'239,68,68';return'linear-gradient(90deg,rgba('+rgb+',.9),rgba('+rgb+',.3))';}
-function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
-function tLeft(iso){if(!iso)return'';try{var d=(new Date(iso).getTime()-Date.now())/86400000;if(d<0)return'';if(d<1)return'Today';if(d<2)return'Tomorrow';if(d<=30)return Math.round(d)+'d left';return'~'+Math.round(d/30)+'mo';}catch(e){return'';}}
-var seenM={},markets=[];
-function parseProb(m){var prob=null;var op=m.outcomePrices||m.outcome_prices;if(op){try{var pr=typeof op==='string'?JSON.parse(op):op;if(Array.isArray(pr)&&pr.length){var v=parseFloat(pr[0]);if(!isNaN(v))prob=Math.round(v<=1?v*100:v);}}catch(e){}}if(prob==null&&m.tokens&&Array.isArray(m.tokens)&&m.tokens.length>0){try{var tp=parseFloat(m.tokens[0].price);if(!isNaN(tp)&&tp>0)prob=Math.round(tp<=1?tp*100:tp);}catch(e){}}if(prob==null){['yes_price','bestBid','lastTradePrice','last_trade_price','price'].forEach(function(f){if(prob!=null)return;var v=m[f];if(v!=null){try{var n=parseFloat(v);if(!isNaN(n)&&n>0)prob=Math.round(n<=1?n*100:n);}catch(e){}}});}return(prob!=null&&prob>0&&prob<100)?prob:null;}
-function addItems(items){items.forEach(function(m){var title=(m.question||m.title||m.name||'').trim();if(!title)return;var id=String(m.id||m.condition_id||m.conditionId||title).slice(0,30);if(seenM[id])return;var rel=scoreM(title);if(!rel)return;var prob=parseProb(m);if(prob==null)return;var vol=0;['volume','volume24hr','volume_num','volumeNum','liquidityNum'].forEach(function(f){if(!vol&&m[f])try{vol=parseFloat(m[f]);}catch(e){}});var slug=m.slug||m.eventSlug||'';var url=slug?'https://polymarket.com/event/'+slug:(m.url||'https://polymarket.com');var ed=m.endDate||m.end_date_iso||m.endDateIso||m.endDateTimestamp||'';if(ed){try{if(new Date(ed)<new Date())return;}catch(e){}}seenM[id]=true;markets.push({title:title.slice(0,100),yes:prob,url:url,tier:rel.tier,score:rel.score,vol:vol,ed:ed});});}
-function addEvents(events){events.forEach(function(ev){var evTitle=(ev.title||ev.name||'').trim();var mArr=ev.markets||[];if(mArr.length>0){mArr.forEach(function(m){if(!m.question&&evTitle)m.question=evTitle;addItems([m]);});}});}
-function renderMarkets(){
-  markets.sort(function(a,b){return(b.score*1.5+Math.log10(Math.max(b.vol,1))*10)-(a.score*1.5+Math.log10(Math.max(a.vol,1))*10);});
-  var deduped=[],nt={};markets.forEach(function(m){var k=m.title.toLowerCase().replace(/[^a-z0-9]/g,'');if(!nt[k]){nt[k]=true;deduped.push(m);}});markets=deduped.slice(0,MAX_CARDS);
-  var grid=document.getElementById('kalshi-grid'),footer=document.getElementById('kalshi-footer');if(!grid)return;
-  if(!markets.length){grid.innerHTML='<div style="grid-column:1/-1;text-align:center;padding:1rem;font-size:.78rem;color:var(--text-muted)">No markets available · <a href=\'/ag-odds\' style=\'color:var(--gold)\'>View Ag Odds →</a></div>';return;}
-  grid.innerHTML='';
-  markets.forEach(function(m){var pct=m.yes,tl=tLeft(m.ed);var a=document.createElement('a');a.className='km-card';a.href=m.url;a.target='_blank';a.rel='noopener noreferrer';a.dataset.tier=String(m.tier);
-    a.innerHTML='<div class="km-card-row"><div class="km-card-title">'+esc(m.title)+'</div><div class="km-card-pct" style="color:'+pc(pct)+'">'+pct+'%</div></div><div class="km-bar-track"><div class="km-bar-fill" style="width:'+pct+'%;background:'+barBg(pct)+'"></div></div><div class="km-why">'+esc(getWhy(m.title))+'</div><div class="km-card-foot"><span class="km-plat p">Polymarket</span>'+(tl?'<span class="km-tl">⏱ '+esc(tl)+'</span>':'')+'</div>';
-    grid.appendChild(a);});
-  if(footer)footer.style.display='block';
+
+var POLY = 'https://gamma-api.polymarket.com';
+var MAX_CARDS = 4;
+
+function hasKw(text, kw) {
+  var i = text.indexOf(kw);
+  while (i >= 0) {
+    var before = i === 0 || /[^a-z0-9]/.test(text[i - 1]);
+    var after  = i + kw.length >= text.length || /[^a-z0-9]/.test(text[i + kw.length]);
+    if (before && after) return true;
+    i = text.indexOf(kw, i + 1);
+  }
+  return false;
 }
-function gj(url){return fetch(url).then(function(r){return r.ok?r.json():null;}).catch(function(){return null;});}
-function toArr(d){if(!d)return[];if(Array.isArray(d))return d;return d.results||d.markets||d.events||d.data||[];}
-var fetches=[gj(POLY+'/events?active=true&closed=false&limit=100&order=volume&ascending=false'),gj(POLY+'/markets?active=true&closed=false&limit=100&tag_slug=politics'),gj(POLY+'/markets?active=true&closed=false&limit=100&tag_slug=economics'),gj(POLY+'/markets?active=true&closed=false&limit=100&tag_slug=trade'),gj(POLY+'/markets?active=true&closed=false&limit=100&tag_slug=energy'),gj(POLY+'/markets?active=true&closed=false&limit=100&tag_slug=climate'),gj(POLY+'/markets?active=true&closed=false&limit=100&tag_slug=commodities'),gj(POLY+'/markets?active=true&closed=false&limit=100&order=volume&ascending=false')];
-Promise.all(fetches).then(function(results){var loading=document.getElementById('kalshi-loading');if(loading)loading.style.display='none';var evData=toArr(results[0]);if(evData.length&&evData[0]&&evData[0].markets!==undefined){addEvents(evData);}else{addItems(evData);}for(var i=1;i<results.length;i++){addItems(toArr(results[i]));}renderMarkets();}).catch(function(){var loading=document.getElementById('kalshi-loading');if(loading)loading.innerHTML='<a href="/ag-odds" style="color:var(--gold)">View ag prediction markets →</a>';});
+
+var T1 = ['corn','soybeans','soybean','wheat','grain','grains','oat','oats',
+  'barley','cotton','sugar','rice','cattle','hogs','hog','pig','livestock',
+  'pork','beef','dairy','milk','poultry','chicken','egg','eggs','ethanol',
+  'crop','harvest','planting','acreage','fertilizer','urea','nitrogen',
+  'potash','phosphate','usda','wasde','crop insurance','food price',
+  'food inflation','grocery','bushel','yield','feedlot'];
+var T2 = ['tariff','tariffs','trade war','trade deal','china trade',
+  'china import','china export','brazil','argentina','ukraine',
+  'black sea grain','usmca','wto','trade dispute','export ban',
+  'retaliatory tariff','crude oil','natural gas','diesel','gasoline',
+  'oil price','opec','pipeline','biofuel','supply chain','rail strike',
+  'railroad','bird flu','avian influenza','farm labor'];
+var T3 = ['interest rate','rate cut','rate hike','fed funds','fomc',
+  'powell','inflation','cpi','recession','gdp','unemployment',
+  'dollar index','drought','hurricane','flood','el nino','la nina',
+  'heat wave','frost','freeze'];
+
+var SKIP = [
+  'nfl','nba','mlb','nhl','mls','wnba','ncaa','march madness','super bowl',
+  'world series','stanley cup','playoff','playoffs','championship game',
+  'all-star','premier league','la liga','champions league','world cup',
+  'olympics','lakers','celtics','warriors','chiefs','eagles','cowboys',
+  'yankees','dodgers','mvp award','rushing yards','batting',
+  'oscar','grammy','emmy','golden globe','eurovision','box office',
+  'netflix','disney','celebrity','kardashian','beyonce','album',
+  'spotify','tiktok','instagram','youtube','viral','dogecoin',
+  'shiba','nft','movie','marvel','dc comics','reality tv',
+  'presidential election','parliamentary election','senate race',
+  'congressional race','prime minister race','governor race',
+  'mayor race','republican primary','democratic primary',
+];
+
+function scoreM(t) {
+  var s = t.toLowerCase();
+  for (var h = 0; h < SKIP.length; h++) { if (s.indexOf(SKIP[h]) >= 0) return null; }
+  for (var a = 0; a < T1.length; a++) { if (hasKw(s, T1[a])) return { score: 100, tier: 1 }; }
+  for (var b = 0; b < T2.length; b++) { if (s.indexOf(T2[b]) >= 0) return { score: 70, tier: 2 }; }
+  for (var c = 0; c < T3.length; c++) { if (s.indexOf(T3[c]) >= 0) return { score: 40, tier: 3 }; }
+  return null;
+}
+
+var WHY = [
+  ['egg','Egg prices signal avian flu pressure and poultry feed demand.'],
+  ['grocery','Grocery prices reflect the entire ag supply chain from field to shelf.'],
+  ['food price','Food price changes affect consumer ag demand from farm to shelf.'],
+  ['food inflation','Food inflation erodes purchasing power and shifts protein demand.'],
+  ['corn','Corn price moves affect feed costs, ethanol margins, and farm revenue.'],
+  ['soybean','Soybeans drive export revenue — any policy shift moves US ag exports.'],
+  ['wheat','Wheat prices set global food costs and compete for acres with corn.'],
+  ['cattle','Cattle prices reflect packer demand and feed efficiency for feedlots.'],
+  ['tariff','Tariffs directly impact US grain export demand — moves basis fast.'],
+  ['trade','Trade policy shifts can redirect global grain flows overnight.'],
+  ['china','China is the world\'s largest soybean buyer — policy shifts move markets.'],
+  ['crude oil','Oil prices drive diesel and fertilizer costs — every $10/bbl hits your budget.'],
+  ['oil','Energy costs flow through to planting, spraying, drying, and hauling.'],
+  ['natural gas','Natural gas is the primary input for nitrogen fertilizer — spikes raise urea.'],
+  ['fertilizer','Fertilizer is the largest variable input cost — price moves squeeze margins.'],
+  ['interest rate','Rate changes affect land values, operating loans, and grain storage carry.'],
+  ['fed','Fed policy drives the dollar, which affects grain export competitiveness.'],
+  ['inflation','Inflation erodes margins when input costs rise faster than commodity prices.'],
+  ['recession','Slowdowns reduce ethanol demand and can weaken feed grain consumption.'],
+  ['drought','Drought is the single biggest yield risk — moves corn and bean prices fast.'],
+  ['hurricane','Hurricanes disrupt Gulf exports and can damage late-season crops.'],
+  ['bird flu','Bird flu outbreaks spike egg prices and cut poultry feed demand.'],
+  ['brazil','Brazil\'s soybean crop competes directly with US exports for global buyers.'],
+  ['ukraine','Black Sea grain disruptions affect global wheat and corn supply.'],
+];
+function getWhy(t) {
+  var s = t.toLowerCase();
+  for (var i = 0; i < WHY.length; i++) { if (s.indexOf(WHY[i][0]) >= 0) return WHY[i][1]; }
+  return 'Affects agricultural commodity prices, input costs, or farm policy.';
+}
+
+function pc(n) { return n >= 70 ? 'var(--green)' : n >= 50 ? 'var(--gold)' : n >= 30 ? 'var(--text-dim)' : '#ef4444'; }
+function barBg(n) { var rgb = n >= 70 ? '34,197,94' : n >= 50 ? '230,176,66' : n >= 30 ? '140,140,130' : '239,68,68'; return 'linear-gradient(90deg,rgba(' + rgb + ',.9),rgba(' + rgb + ',.3))'; }
+function esc(s) { return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function tLeft(iso) {
+  if (!iso) return '';
+  try { var d = (new Date(iso).getTime() - Date.now()) / 86400000; if (d < 0) return ''; if (d < 1) return 'Today'; if (d < 2) return 'Tomorrow'; if (d <= 30) return Math.round(d) + 'd left'; return '~' + Math.round(d / 30) + 'mo'; } catch(e) { return ''; }
+}
+
+var TIER_LABELS = { 1: 'DIRECT AG', 2: 'TRADE / ENERGY', 3: 'MACRO' };
+var TIER_COLORS = {
+  1: 'color:var(--green);border-color:rgba(34,197,94,.25);background:rgba(34,197,94,.06)',
+  2: 'color:var(--gold);border-color:rgba(230,176,66,.25);background:rgba(230,176,66,.06)',
+  3: 'color:var(--blue);border-color:rgba(91,163,224,.25);background:rgba(91,163,224,.06)',
+};
+
+var seenM = {}, markets = [];
+
+function parseProb(m) {
+  var prob = null;
+  var op = m.outcomePrices || m.outcome_prices;
+  if (op) { try { var pr = typeof op === 'string' ? JSON.parse(op) : op; if (Array.isArray(pr) && pr.length) { var v = parseFloat(pr[0]); if (!isNaN(v)) prob = Math.round(v <= 1 ? v * 100 : v); } } catch(e) {} }
+  if (prob == null && m.tokens && Array.isArray(m.tokens) && m.tokens.length > 0) { try { var tp = parseFloat(m.tokens[0].price); if (!isNaN(tp) && tp > 0) prob = Math.round(tp <= 1 ? tp * 100 : tp); } catch(e) {} }
+  if (prob == null) { ['yes_price','bestBid','lastTradePrice','last_trade_price','price'].forEach(function(f) { if (prob != null) return; var v = m[f]; if (v != null) { try { var n = parseFloat(v); if (!isNaN(n) && n > 0) prob = Math.round(n <= 1 ? n * 100 : n); } catch(e) {} } }); }
+  return (prob != null && prob > 0 && prob < 100) ? prob : null;
+}
+
+function addItems(items) {
+  items.forEach(function(m) {
+    var title = (m.question || m.title || m.name || '').trim();
+    if (!title) return;
+    var id = String(m.id || m.condition_id || m.conditionId || title).slice(0, 30);
+    if (seenM[id]) return;
+    var rel = scoreM(title); if (!rel) return;
+    var prob = parseProb(m); if (prob == null) return;
+    var vol = 0; ['volume','volume24hr','volume_num','volumeNum','liquidityNum'].forEach(function(f) { if (!vol && m[f]) try { vol = parseFloat(m[f]); } catch(e) {} });
+    var slug = m.slug || m.eventSlug || '';
+    var url = slug ? 'https://polymarket.com/event/' + slug : (m.url || 'https://polymarket.com');
+    var ed = m.endDate || m.end_date_iso || m.endDateIso || '';
+    if (ed) { try { if (new Date(ed) < new Date()) return; } catch(e) {} }
+    seenM[id] = true;
+    markets.push({ title: title.slice(0, 100), yes: prob, url: url, tier: rel.tier, score: rel.score, vol: vol, ed: ed, why: getWhy(title) });
+  });
+}
+
+function addEvents(events) {
+  events.forEach(function(ev) {
+    var evTitle = (ev.title || ev.name || '').trim();
+    var mArr = ev.markets || [];
+    if (mArr.length > 0) { mArr.forEach(function(m) { if (!m.question && evTitle) m.question = evTitle; addItems([m]); }); }
+  });
+}
+
+function renderMarkets() {
+  markets.sort(function(a, b) { return (b.score * 1.5 + Math.log10(Math.max(b.vol, 1)) * 10) - (a.score * 1.5 + Math.log10(Math.max(a.vol, 1)) * 10); });
+  var deduped = [], nt = {};
+  markets.forEach(function(m) { var k = m.title.toLowerCase().replace(/[^a-z0-9]/g, ''); if (!nt[k]) { nt[k] = true; deduped.push(m); } });
+  markets = deduped.slice(0, MAX_CARDS);
+
+  var grid = document.getElementById('kalshi-grid');
+  var footer = document.getElementById('kalshi-footer');
+  if (!grid) return;
+
+  if (!markets.length) {
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:1rem;font-size:.78rem;color:var(--text-muted)">No ag-relevant markets found today · <a href="/ag-odds" style="color:var(--gold)">Browse Ag Odds →</a></div>';
+    return;
+  }
+
+  grid.innerHTML = '';
+  markets.forEach(function(m) {
+    var pct = m.yes, tl = tLeft(m.ed);
+    var tierLbl = TIER_LABELS[m.tier] || 'MACRO';
+    var tierStyle = TIER_COLORS[m.tier] || TIER_COLORS[3];
+    var a = document.createElement('a');
+    a.className = 'km-card'; a.href = m.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.dataset.tier = String(m.tier);
+    a.innerHTML =
+      '<div class="km-card-row"><div class="km-card-title">' + esc(m.title) + '</div><div class="km-card-pct" style="color:' + pc(pct) + '">' + pct + '%</div></div>'
+      + '<div class="km-bar-track"><div class="km-bar-fill" style="width:' + pct + '%;background:' + barBg(pct) + '"></div></div>'
+      + '<div class="km-why">' + esc(m.why) + '</div>'
+      + '<div class="km-card-foot"><span class="km-plat p">Polymarket</span>'
+      + '<span style="font-family:\'JetBrains Mono\',monospace;font-size:.55rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:.1rem .38rem;border-radius:3px;border:1px solid;' + tierStyle + '">' + tierLbl + '</span>'
+      + (tl ? '<span class="km-tl">⏱ ' + esc(tl) + '</span>' : '') + '</div>';
+    grid.appendChild(a);
+  });
+  if (footer) footer.style.display = 'block';
+}
+
+function gj(url) { return fetch(url).then(function(r) { return r.ok ? r.json() : null; }).catch(function() { return null; }); }
+function toArr(d) { if (!d) return []; if (Array.isArray(d)) return d; return d.results || d.markets || d.events || d.data || []; }
+
+var fetches = [
+  gj(POLY + '/events?active=true&closed=false&limit=100&order=volume&ascending=false'),
+  gj(POLY + '/markets?active=true&closed=false&limit=100&tag_slug=economics'),
+  gj(POLY + '/markets?active=true&closed=false&limit=100&tag_slug=trade'),
+  gj(POLY + '/markets?active=true&closed=false&limit=100&tag_slug=energy'),
+  gj(POLY + '/markets?active=true&closed=false&limit=100&tag_slug=commodities'),
+  gj(POLY + '/markets?active=true&closed=false&limit=100&order=volume&ascending=false'),
+];
+
+Promise.all(fetches).then(function(results) {
+  var loading = document.getElementById('kalshi-loading');
+  if (loading) loading.style.display = 'none';
+  var evData = toArr(results[0]);
+  if (evData.length && evData[0] && evData[0].markets !== undefined) { addEvents(evData); } else { addItems(evData); }
+  for (var i = 1; i < results.length; i++) { addItems(toArr(results[i])); }
+  renderMarkets();
+}).catch(function() {
+  var loading = document.getElementById('kalshi-loading');
+  if (loading) loading.innerHTML = '<a href="/ag-odds" style="color:var(--gold)">View ag prediction markets →</a>';
+});
+
 })();
 </script>
 
