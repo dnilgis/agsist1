@@ -5,6 +5,10 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6KXCTD5Z9H"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-6KXCTD5Z9H');</script>
+<link rel="preconnect" href="https://api.open-meteo.com">
+<link rel="preconnect" href="https://nominatim.openstreetmap.org">
+<link rel="preconnect" href="https://geocoding-api.open-meteo.com">
+<link rel="preload" href="/components/styles.css" as="style">
 <link rel="stylesheet" href="/components/styles.css">
 <link rel="icon" type="image/x-icon" href="/img/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
@@ -31,9 +35,161 @@
 <meta name="twitter:title" content="Spray Advisory — Is It Safe to Spray Today? | AGSIST">
 <meta name="twitter:description" content="Real-time spray advisory: wind, temp, humidity, inversion risk at your location. 24-hour window, tank mix order guide. Free for farmers.">
 <meta name="twitter:image" content="https://agsist.com/img/og/spray.jpg">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "SoftwareApplication",
+      "name": "AGSIST Spray Advisory",
+      "applicationCategory": "UtilitiesApplication",
+      "operatingSystem": "Web",
+      "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+      "url": "https://agsist.com/spray",
+      "description": "Real-time spray advisory tool for farmers. Shows wind speed, temperature, humidity, thermal inversion risk, and a 24-hour spray window forecast based on your exact location.",
+      "isPartOf": { "@id": "https://agsist.com/#website" }
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://agsist.com/spray#webpage",
+      "url": "https://agsist.com/spray",
+      "name": "Spray Advisory — Is It Safe to Spray Today? | AGSIST",
+      "description": "Real-time spray advisory for farmers showing wind, temperature, humidity, and inversion risk at your location. Free 24-hour spray window forecast.",
+      "dateModified": "2026-04-07",
+      "isPartOf": { "@id": "https://agsist.com/#website" },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://agsist.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Spray Advisory", "item": "https://agsist.com/spray" }
+        ]
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "What wind speed is safe for spraying herbicides?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The ideal wind speed for spraying herbicides is 3 to 10 mph. Below 3 mph, thermal inversions can trap fine droplets near the ground, causing unpredictable drift. Above 10 mph, mechanical drift can carry spray off-target. Above 15 mph, most applications should be stopped entirely. Always check your specific product label, as some herbicides like dicamba require winds under 10 mph by law."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is a thermal inversion and why is it dangerous for spraying?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "A thermal inversion occurs when a layer of warm air sits above cooler air near the ground, trapping fine spray droplets in a stable, non-mixing air layer. Instead of dispersing upward, droplets remain suspended near the surface and can drift horizontally for miles — landing on sensitive crops, waterways, or residences. Inversions are most common on calm, clear evenings after sunset and during early morning hours. Signs of an inversion include smoke that rises then flattens horizontally, dust that hangs and moves sideways, and ground fog in low areas. Do not spray when any inversion indicator is present."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What temperature is too hot to spray dicamba or 2,4-D?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Most dicamba product labels (XtendiMax, Engenia, Tavium) restrict applications when temperatures are at or above 85–90°F or when temperatures are forecast to exceed those levels within a few hours of application. Above 85°F, dicamba and 2,4-D ester can volatilize off the leaf surface hours after application, even under calm wind conditions. Volatilization drift is invisible and can travel much farther than mechanical drift. Always follow the specific label requirements for the product you are using, as requirements vary by formulation and registration."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the best time of day to spray herbicides?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Mid-morning — roughly 9 a.m. to noon — is typically the best spray window. By mid-morning, overnight thermal inversions have usually broken as the sun heats the ground, temperatures are still moderate before afternoon peaks, morning dew on leaf surfaces has dried, and winds are beginning to pick up to the ideal 3–10 mph range. Avoid evening applications, which carry high inversion risk as the ground cools. Early morning applications (before 9 a.m.) are often marginal due to lingering inversions and dew on canopies."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "How long after spraying does it need to stay dry?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The rain-free period varies by herbicide class. Most contact herbicides (paraquat, glufosinate) require at least 30 minutes to 1 hour of dry conditions for basic uptake, but 2–4 hours for optimal results. Systemic herbicides like glyphosate need 4–6 hours minimum dry time for adequate translocation. Dicamba formulations typically require 1–4 hours without rain. ALS inhibitors (sulfonylureas, imidazolinones) need 1–2 hours. Always check your product label for the specific rain-free period, as these are legal requirements, not guidelines."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What humidity is too low for spraying herbicides?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Relative humidity below 40% creates conditions where fine spray droplets evaporate rapidly in flight before reaching the leaf surface, reducing efficacy and increasing the percentage of drift-prone particles in the air. Below 30% humidity, switch to larger droplet nozzles (coarse or very coarse classification) to reduce evaporation. Below 20% RH, application is generally not recommended for contact herbicides. High humidity — above 90% — increases disease risk if fungicide applications are involved, but is not generally a constraint for herbicides."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "Do I need special nozzles to spray dicamba?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "Yes. All three EPA-approved dicamba formulations for Xtend soybeans — XtendiMax, Engenia, and Tavium — require use of approved nozzles that produce ultra-coarse to extremely coarse droplets (ASABE classification). Air induction nozzles (AITTJ, TTI, AI series) are the most commonly approved type. Standard flat fan nozzles are not approved for dicamba applications in soybeans. Using an unapproved nozzle is a federal label violation. Check the approved nozzle list on the specific product label before every application."
+          }
+        },
+        {
+          "@type": "Question",
+          "name": "What is the correct tank mix order for herbicides?",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "The correct tank mix order is: 1) Fill tank 50–75% with water, 2) Add ammonium sulfate (AMS) or water conditioner, 3) Start agitation, 4) Add dry formulations (WP, WDG, DF), 5) Add liquid flowables and suspension concentrates (SC), 6) Add emulsifiable concentrates (EC), 7) Add water-soluble liquids (SL), 8) Add adjuvants, surfactants, and crop oils last, 9) Top off with water. Always perform a jar test before mixing a new product combination. Never mix concentrates together directly."
+          }
+        }
+      ]
+    }
+  ]
+}
+</script>
+
 <link rel="manifest" href="/manifest.json">
 <link rel="stylesheet" href="/css/spray.css">
-<style>button,a,[role="button"]{touch-action:manipulation;}</style>
+<style>button,a,[role="button"]{touch-action:manipulation;}
+/* h2 semantic reset — preserve .edu-title etc. styles from external CSS */
+h2.edu-title,h2.dicamba-box-head,h2.window-head,h3.inv-title,h3.nozzle-card-head,h3.s-card-title,h3.sc-title{margin:0;font-size:inherit;font-weight:inherit;line-height:inherit;}
+/* iOS Safari zoom prevention — inputs need ≥16px */
+.zip-in,.spray-zip-input{font-size:1rem!important;}
+
+/* ── Dicamba callout box ── */
+.dicamba-box{background:rgba(240,96,96,.07);border:1.5px solid rgba(240,96,96,.3);border-radius:12px;padding:1.4rem 1.5rem;margin-bottom:1.5rem}
+.dicamba-box-head{font-size:.72rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--red);margin-bottom:.8rem;display:flex;align-items:center;gap:.45rem}
+.dicamba-rules{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+@media(max-width:600px){.dicamba-rules{grid-template-columns:1fr}}
+.dicamba-rule{background:rgba(240,96,96,.06);border:1px solid rgba(240,96,96,.15);border-radius:8px;padding:.7rem .85rem;font-size:.8rem;line-height:1.6;color:var(--text-dim)}
+.dicamba-rule strong{color:var(--text);display:block;margin-bottom:.15rem}
+
+/* ── Rain-free period table ── */
+.rfp-table-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:10px;border:1px solid var(--border);margin-bottom:1.5rem}
+.rfp-table{width:100%;border-collapse:collapse;font-size:.79rem}
+.rfp-table thead tr{background:rgba(58,139,60,.12)}
+.rfp-table th{padding:.65rem .85rem;text-align:left;font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text-muted);white-space:nowrap}
+.rfp-table td{padding:.6rem .85rem;border-top:1px solid var(--border);color:var(--text-dim);vertical-align:top}
+.rfp-table td:first-child{color:var(--text);font-weight:600}
+.rfp-table tr:hover td{background:rgba(255,255,255,.025)}
+.rfp-min{color:var(--gold);font-weight:700}
+.rfp-opt{color:var(--green);font-weight:700}
+
+/* ── Seasonal calendar ── */
+.season-section{margin-bottom:2rem}
+.season-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:.75rem}
+.season-card{background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:.9rem 1rem}
+.season-card-month{font-size:.68rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--gold);margin-bottom:.3rem}
+.season-card-title{font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:.4rem}
+.season-card-body{font-size:.78rem;color:var(--text-dim);line-height:1.65}
+.season-card-tag{display:inline-block;margin-top:.5rem;padding:.15rem .55rem;border-radius:20px;font-size:.64rem;font-weight:700;letter-spacing:.06em}
+.tag-pre{background:rgba(91,163,224,.15);color:var(--blue)}
+.tag-post{background:rgba(62,207,110,.15);color:var(--green)}
+.tag-fung{background:rgba(230,176,66,.15);color:var(--gold)}
+.tag-burn{background:rgba(240,96,96,.15);color:var(--red)}
+
+/* ── FAQ section ── */
+.faq-section{margin-bottom:2rem}
+.faq-list{display:flex;flex-direction:column;gap:.6rem}
+.faq-item{background:var(--surface);border:1px solid var(--border);border-radius:10px;overflow:hidden}
+.faq-q{width:100%;display:flex;justify-content:space-between;align-items:center;gap:1rem;padding:.9rem 1.1rem;background:none;border:none;color:var(--text);font-size:.86rem;font-weight:700;text-align:left;cursor:pointer;touch-action:manipulation}
+.faq-q:hover{background:rgba(255,255,255,.035)}
+.faq-chevron{color:var(--text-muted);font-size:.75rem;transition:transform .2s;flex-shrink:0}
+.faq-a{max-height:0;overflow:hidden;transition:max-height .3s ease,padding .2s ease;font-size:.82rem;color:var(--text-dim);line-height:1.75;padding:0 1.1rem}
+.faq-item.open .faq-a{max-height:400px;padding:.1rem 1.1rem .9rem}
+.faq-item.open .faq-chevron{transform:rotate(90deg)}
+</style>
 </head>
 <body>
 <a href="#main" class="skip">Skip to content</a>
@@ -64,6 +220,8 @@
     <a href="#section-mixorder" class="jump-link">🧪 Tank Mix Order</a>
     <a href="#section-tips" class="jump-link">💡 Tips &amp; Tricks</a>
     <a href="#section-nozzles" class="jump-link">🔧 Nozzle Guide</a>
+    <a href="#section-season" class="jump-link">📅 Spray Calendar</a>
+    <a href="#section-faq" class="jump-link">❓ FAQ</a>
   </nav>
 
   <div class="loc-setup" id="loc-setup">
@@ -74,7 +232,7 @@
       <button class="btn-q" id="btn-show-zip">Enter ZIP Instead</button>
     </div>
     <div class="zip-row" id="spray-zip-row">
-      <input type="text" class="zip-in" id="spray-zip" placeholder="ZIP code" maxlength="5" inputmode="numeric">
+      <input type="text" class="zip-in" id="spray-zip" placeholder="ZIP code" maxlength="5" inputmode="numeric" style="font-size:1rem">
       <button class="btn-g" id="btn-zip-go">Go →</button>
     </div>
   </div>
@@ -135,9 +293,10 @@
           <div class="window-legend">🟢 Good window · 🟡 Marginal — proceed with care · 🔴 Do not spray · 🥶 Frozen · Scroll to see full 24h</div>
         </div>
       </div>
+
       <!-- EDU SECTION -->
       <div class="edu fade-up" id="section-factors">
-        <div class="edu-title"><span aria-hidden="true">🎓</span> Why These Conditions Matter</div>
+        <h2 class="edu-title"><span aria-hidden="true">🎓</span> Why These Conditions Matter</h2>
         <div class="edu-grid">
           <div class="edu-card"><div class="edu-card-icon" aria-hidden="true">💨</div><div class="edu-card-title">The Wind Window: 3–10 mph</div><div class="edu-card-text">Calm conditions under 3 mph allow fine droplets to hang in the air and drift unpredictably. Over 10 mph, mechanical drift carries droplets off-target. The 3–10 mph range is your safe zone.</div><div class="edu-card-tip edu-card-tip-green">Ideal: 3–10 mph · Consistent direction</div></div>
           <div class="edu-card"><div class="edu-card-icon" aria-hidden="true">🌡️</div><div class="edu-card-title">Temperature &amp; Volatilization</div><div class="edu-card-text">Heat causes certain active ingredients — particularly dicamba, 2,4-D ester, and clopyralid — to volatilize off the leaf surface hours after application. Above 85°F this off-gassing risk increases sharply.</div><div class="edu-card-tip edu-card-tip-gold">Critical above 85°F for dicamba/2,4-D</div></div>
@@ -147,7 +306,7 @@
           <div class="edu-card"><div class="edu-card-icon" aria-hidden="true">🏷️</div><div class="edu-card-title">The Label is the Law — Always</div><div class="edu-card-text">Every pesticide label specifies wind speed limits, temperature restrictions, and mandatory buffer distances. This tool provides general guidance — but the product label is the legal requirement and the final word.</div><div class="edu-card-tip edu-card-tip-blue">Label requirements supersede all general guidance</div></div>
         </div>
         <div class="inv-box">
-          <div class="inv-title"><span aria-hidden="true">🌫️</span> Understanding Thermal Inversions</div>
+          <h3 class="inv-title"><span aria-hidden="true">🌫️</span> Understanding Thermal Inversions</h3>
           <div class="inv-grid">
             <div>
               <div class="inv-intro">A thermal inversion traps fine spray droplets in a shallow, stable air layer close to the ground. Those droplets ride horizontal air movement — potentially drifting miles before settling on sensitive crops, waterways, or residences.</div>
@@ -171,9 +330,46 @@
         </div>
       </div>
 
+      <!-- DICAMBA RULES CALLOUT -->
+      <div class="fade-up" style="margin-bottom:2rem">
+        <div class="dicamba-box">
+          <h2 class="dicamba-box-head">⛔ Dicamba Application Rules — Know Before You Spray</h2>
+          <p style="font-size:.82rem;color:var(--text-dim);line-height:1.7;margin-bottom:.9rem">Dicamba drift complaints have resulted in billions in crop damage claims and ongoing regulatory pressure. These are EPA label requirements — violations carry civil and criminal penalties. Verify against your specific product label before every application.</p>
+          <div class="dicamba-rules">
+            <div class="dicamba-rule"><strong>Wind Speed</strong>Under 10 mph at application time. No gusty, variable wind conditions. Measure at boom height, not cab height.</div>
+            <div class="dicamba-rule"><strong>Temperature</strong>Most labels restrict application at or above 85–90°F. Check your specific product. Volatilization can occur hours after application on hot days.</div>
+            <div class="dicamba-rule"><strong>Nozzles</strong>Only EPA-approved air induction nozzles (AITTJ, TTI, AI). Standard flat fan nozzles are a federal label violation. Verify against the approved nozzle list on your label.</div>
+            <div class="dicamba-rule"><strong>Buffer Zones</strong>Mandatory downwind buffer distances vary by label and application site. Typically 110–220 ft from non-target areas. Check your specific label.</div>
+            <div class="dicamba-rule"><strong>Application Timing</strong>No application within 45 days of soybean harvest. R1 (flowering) is often the cutoff — check your label for the specific growth stage restriction.</div>
+            <div class="dicamba-rule"><strong>Record Keeping</strong>All three approved dicamba products require detailed application records including wind speed, direction, temperature, and nozzle type. Keep records for a minimum of 2 years.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RAIN-FREE PERIOD TABLE -->
+      <div class="fade-up" style="margin-bottom:2rem">
+        <h2 class="edu-title"><span aria-hidden="true">🌧️</span> Rain-Free Period by Herbicide Class</h2>
+        <p style="font-size:.82rem;color:var(--text-dim);line-height:1.7;margin-bottom:.9rem">Rain-free periods are the minimum time needed after application for adequate product absorption. Always check your specific product label — these are general guidelines by class, not legal requirements. Systemic herbicides need more time to translocate through the plant.</p>
+        <div class="rfp-table-wrap">
+          <table class="rfp-table">
+            <thead><tr><th>Herbicide Class / Example Products</th><th>Minimum Rain-Free</th><th>Optimal Dry Time</th><th>Notes</th></tr></thead>
+            <tbody>
+              <tr><td>Contact — Glufosinate (Liberty)</td><td class="rfp-min">4 hrs</td><td class="rfp-opt">4–8 hrs</td><td>Contact action — needs full leaf coverage. Rain before 4 hrs significantly reduces activity. Sunlight needed for activation.</td></tr>
+              <tr><td>Contact — Paraquat (Gramoxone)</td><td class="rfp-min">30 min</td><td class="rfp-opt">1–2 hrs</td><td>Very fast uptake — most effective when absorbed before rain. Cell destruction begins within minutes of contact.</td></tr>
+              <tr><td>Systemic — Glyphosate (Roundup)</td><td class="rfp-min">4 hrs</td><td class="rfp-opt">6–8 hrs</td><td>Must translocate through phloem — needs more time than contact products. 6+ hrs in cool, cloudy conditions.</td></tr>
+              <tr><td>Dicamba (XtendiMax, Engenia, Tavium)</td><td class="rfp-min">1 hr</td><td class="rfp-opt">4 hrs</td><td>Check your specific label — some require 4 hrs minimum. Volatilization risk continues after rain if temps rise.</td></tr>
+              <tr><td>ALS Inhibitors — Sulfonylureas, IMIs</td><td class="rfp-min">1 hr</td><td class="rfp-opt">2–4 hrs</td><td>Absorbed relatively quickly. Some sulfonylureas have soil activity that continues post-rain regardless.</td></tr>
+              <tr><td>PPO Inhibitors — Cobra, Flexstar, Cadet</td><td class="rfp-min">4 hrs</td><td class="rfp-opt">4–8 hrs</td><td>Contact + some systemic activity. Efficacy drops sharply with early rainfall. Best when applied to dry canopy.</td></tr>
+              <tr><td>ACCase Inhibitors — Select, Poast</td><td class="rfp-min">1 hr</td><td class="rfp-opt">2 hrs</td><td>Grass herbicides with rapid uptake. Relatively forgiving — rain after 1 hr typically maintains good performance.</td></tr>
+              <tr><td>Fungicides — Strobilurins, Triazoles</td><td class="rfp-min">1–2 hrs</td><td class="rfp-opt">2–4 hrs</td><td>Systemic fungicides are absorbed quickly. Protectant fungicides (contact) need longer dry periods to form a residual film on the leaf.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- MIX ORDER -->
       <div class="mix-section fade-up" id="section-mixorder">
-        <div class="edu-title"><span aria-hidden="true">🧪</span> Tank Mix Order Guide</div>
+        <h2 class="edu-title"><span aria-hidden="true">🧪</span> Tank Mix Order Guide</h2>
         <div class="mix-card">
           <div class="mix-intro">Getting the mix order wrong causes clumping, gelling, clogged nozzles, reduced efficacy, and crop damage. Always do a jar test first.</div>
           <div class="mix-steps">
@@ -208,7 +404,7 @@
 
       <!-- TIPS -->
       <div class="tips-section fade-up" id="section-tips">
-        <div class="edu-title"><span aria-hidden="true">💡</span> Sprayer Tips &amp; Tricks</div>
+        <h2 class="edu-title"><span aria-hidden="true">💡</span> Sprayer Tips &amp; Tricks</h2>
         <div class="tips-grid">
           <div class="tip-card"><div class="tip-card-icon" aria-hidden="true">🔧</div><div class="tip-card-title">Nozzle Selection Makes or Breaks Your Application</div><div class="tip-card-text">Air induction nozzles (AITTJ, AI, TTI) produce larger, air-filled droplets that resist drift and are required on most dicamba labels. Flat fan nozzles give better coverage for contact herbicides but produce more fines. Dual-fan nozzles split the pattern for better canopy penetration.</div><div class="tip-card-detail"><strong>Rule of thumb:</strong> In wind over 8 mph or humidity under 50%, move up one nozzle size from your standard.</div></div>
           <div class="tip-card"><div class="tip-card-icon" aria-hidden="true">⚡</div><div class="tip-card-title">Speed &amp; Pressure — The Drift Multipliers</div><div class="tip-card-text">Higher pressure creates smaller droplets. A 10% increase in pressure can increase the volume of drift-prone fines by 20–30%. Keep pressure at the low end of the nozzle manufacturer's recommended range.</div><div class="tip-card-detail"><strong>Target:</strong> 30–40 PSI for most flat fans, 40–60 PSI for air induction. Boom height: 18–20 inches above target for 110° nozzles.</div></div>
@@ -223,7 +419,7 @@
         </div>
 
         <div class="mix-card" id="section-nozzles" style="margin-top:1rem">
-          <div class="nozzle-card-head"><span aria-hidden="true">🔧</span> Nozzle Type Comparison</div>
+          <h3 class="nozzle-card-head"><span aria-hidden="true">🔧</span> Nozzle Type Comparison</h3>
           <div class="nozzle-card-sub">Droplet size classification follows ASABE S572.3. Always verify against the specific product label.</div>
           <div class="nozzle-table-wrap">
             <table class="nozzle-table">
@@ -240,7 +436,124 @@
           <div class="nozzle-table-note">Source: ASABE S572.3 standards. Dicamba approval based on EPA-approved labels for XtendiMax, Engenia, and Tavium as of 2025. Always verify against your specific product label before application.</div>
         </div>
       </div>
+
+      <!-- SEASONAL SPRAY CALENDAR -->
+      <div class="season-section fade-up" id="section-season">
+        <h2 class="edu-title"><span aria-hidden="true">📅</span> Seasonal Spray Calendar — Wisconsin &amp; Minnesota</h2>
+        <p style="font-size:.82rem;color:var(--text-dim);line-height:1.7;margin-bottom:.9rem">Application windows by month for the Upper Midwest. Timing and conditions shift year to year — use this as a planning reference and always confirm current conditions before application.</p>
+        <div class="season-grid">
+          <div class="season-card">
+            <div class="season-card-month">April</div>
+            <div class="season-card-title">Burndown &amp; Pre-Emerge Corn</div>
+            <div class="season-card-body">Burndown glyphosate/2,4-D on cereal rye and winter annuals. Pre-emerge corn (atrazine, acetochlor). Variable temps — watch for frost. Inversion risk high on cold, calm nights.</div>
+            <span class="season-card-tag tag-pre">PRE</span> <span class="season-card-tag tag-burn">BURNDOWN</span>
+          </div>
+          <div class="season-card">
+            <div class="season-card-month">May</div>
+            <div class="season-card-title">Pre-Emerge Beans &amp; Post Corn</div>
+            <div class="season-card-body">Pre-emerge soybean programs (PPO + chlorimuron). POST corn V2–V5. Wind and temp stabilizing. Watch for rapid temperature swings — prime inversion risk period in cool, dry springs.</div>
+            <span class="season-card-tag tag-pre">PRE</span> <span class="season-card-tag tag-post">POST</span>
+          </div>
+          <div class="season-card">
+            <div class="season-card-month">June</div>
+            <div class="season-card-title">POST Soybeans &amp; Residual Layby</div>
+            <div class="season-card-body">POST soybean V1–V3 before canopy closure. Dicamba window (V2–R1). Waterhemp pressure peaks. Hot, windy days — afternoon applications high risk for dicamba volatilization.</div>
+            <span class="season-card-tag tag-post">POST</span>
+          </div>
+          <div class="season-card">
+            <div class="season-card-month">July</div>
+            <div class="season-card-title">Corn Fungicide &amp; Late POST</div>
+            <div class="season-card-body">Corn fungicide window VT–R1. Late POST soybean before R1. Peak heat risk. Early morning applications critical — dicamba often prohibited above 85°F. Scout for escape weeds.</div>
+            <span class="season-card-tag tag-post">POST</span> <span class="season-card-tag tag-fung">FUNGICIDE</span>
+          </div>
+          <div class="season-card">
+            <div class="season-card-month">August</div>
+            <div class="season-card-title">Soybean Fungicide &amp; Layby</div>
+            <div class="season-card-body">Soybean fungicide R3 if disease pressure warrants. Monitoring for late season escapes. Minimal herbicide opportunities as canopy is closed. Still watch inversion risk on warm, clear nights.</div>
+            <span class="season-card-tag tag-fung">FUNGICIDE</span>
+          </div>
+          <div class="season-card">
+            <div class="season-card-month">Sept–Oct</div>
+            <div class="season-card-title">Harvest Aid &amp; Cover Crop Burndown</div>
+            <div class="season-card-body">Harvest aid soybeans (paraquat, sodium chlorate). Cover crop burndown post-harvest. Cool temps return — inversions common in calm fall nights. Watch for early frost timing and label restrictions.</div>
+            <span class="season-card-tag tag-burn">BURNDOWN</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ SECTION -->
+      <div class="faq-section fade-up" id="section-faq">
+        <h2 class="edu-title"><span aria-hidden="true">❓</span> Frequently Asked Questions</h2>
+        <div class="faq-list" id="faq-list">
+
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+              What wind speed is safe for spraying herbicides?
+              <span class="faq-chevron" aria-hidden="true">▶</span>
+            </button>
+            <div class="faq-a">The ideal window is <strong>3 to 10 mph</strong>. Below 3 mph, calm air allows thermal inversions to trap fine droplets near the ground — they drift unpredictably. Above 10 mph, mechanical drift carries product off-target. Above 15 mph, most applications should stop. Dicamba labels legally require winds under 10 mph. Always measure at boom height, not in the cab.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+              What is a thermal inversion and how do I know if one is present?
+              <span class="faq-chevron" aria-hidden="true">▶</span>
+            </button>
+            <div class="faq-a">An inversion occurs when warm air traps cooler air (and your spray) near the ground in a stable, non-mixing layer. Spray droplets can drift miles horizontally. Look for: <strong>smoke that rises then flattens</strong>, dust that hangs sideways rather than dispersing, or ground fog in low spots and drainage areas. Inversions are most common on calm, clear evenings after sunset. If you see any of these signs, do not spray — no label override exists for inversion conditions.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+              What temperature is too hot to spray dicamba?
+              <span class="faq-chevron" aria-hidden="true">▶</span>
+            </button>
+            <div class="faq-a">Most approved dicamba labels restrict application at or above <strong>85–90°F</strong>, or when temperatures are forecast to reach those levels within a few hours of application. Above 85°F, dicamba can volatilize off the leaf surface hours after application — this is a secondary, invisible drift that is separate from mechanical drift. Volatilization drift can travel farther than wind-driven mechanical drift. Check your specific product label (XtendiMax, Engenia, and Tavium each have their own requirements).</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+              What is the best time of day to spray?
+              <span class="faq-chevron" aria-hidden="true">▶</span>
+            </button>
+            <div class="faq-a"><strong>Mid-morning — 9 a.m. to noon</strong> — is typically the best window. Overnight inversions have broken as the sun heats the ground. Temperatures are still moderate before afternoon peaks. Morning dew has dried. Winds are picking up into the ideal 3–10 mph range. Avoid evening applications: inversions form quickly after sunset on calm, clear evenings, and are impossible to see until drift damage appears days later.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+              How long after spraying does it need to stay dry?
+              <span class="faq-chevron" aria-hidden="true">▶</span>
+            </button>
+            <div class="faq-a">Rain-free periods vary by product class. Contact herbicides like glufosinate need <strong>4+ hours</strong>. Glyphosate needs <strong>4–6 hours</strong> minimum for translocation. Dicamba labels typically require <strong>1–4 hours</strong> — check your specific label. ALS inhibitors need <strong>1–2 hours</strong>. Always check the product label for the specific requirement. These are legal requirements, not suggestions. See the rain-free period table above for a full breakdown by class.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+              What humidity is too low for spraying?
+              <span class="faq-chevron" aria-hidden="true">▶</span>
+            </button>
+            <div class="faq-a">Below <strong>40% relative humidity</strong>, fine spray droplets evaporate in flight before reaching the leaf — reducing efficacy and increasing drift-prone particles. Below 30%, switch to larger droplet nozzles (coarse or very coarse classification). The fix is simple: go to coarser nozzles, increase carrier volume, and spray during higher-humidity windows (morning or after a cloud cover). This tool will flag low humidity conditions in the factor breakdown.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+              Do I need special nozzles for dicamba?
+              <span class="faq-chevron" aria-hidden="true">▶</span>
+            </button>
+            <div class="faq-a">Yes — it is a federal label requirement. All three EPA-approved dicamba formulations require air induction nozzles that produce ultra-coarse to extremely coarse droplets (ASABE classification). The AITTJ, TTI, and AI nozzle series are most commonly approved. <strong>Standard flat fan nozzles are a violation.</strong> The approved nozzle list is printed on your product label. Using an unapproved nozzle exposes you to civil and potentially criminal penalties and eliminates your legal protection if a neighbor files a drift complaint.</div>
+          </div>
+
+          <div class="faq-item">
+            <button class="faq-q" aria-expanded="false">
+              Can I spray if rain is in the forecast?
+              <span class="faq-chevron" aria-hidden="true">▶</span>
+            </button>
+            <div class="faq-a">It depends on timing and amount. Check the rain-free period for your specific product (see table above). If you can complete the required dry window before rain arrives, you can proceed. The risk is if rain arrives earlier than forecast — always build in a buffer. Some herbicides (especially systemic ones like glyphosate) need 6+ hours to translocate adequately. Light rain (under 0.1 inch) on a contact herbicide that has absorbed for 4+ hours may cause minimal reduction; heavy rain on a freshly applied product is a near-total loss.</div>
+          </div>
+
+        </div>
+      </div>
     </div>
+
     <!-- SIDEBAR -->
     <div class="sidebar fade-up" id="edu2">
       <div class="sc">
@@ -306,6 +619,16 @@
 <script>
 (function(){
   'use strict';
+  // FAQ accordion
+  document.getElementById('faq-list').addEventListener('click',function(e){
+    var btn=e.target.closest('.faq-q');
+    if(!btn)return;
+    var item=btn.closest('.faq-item');
+    var open=item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(function(x){x.classList.remove('open');x.querySelector('.faq-q').setAttribute('aria-expanded','false');});
+    if(!open){item.classList.add('open');btn.setAttribute('aria-expanded','true');}
+  });
+
   var prefersReducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   if(!prefersReducedMotion){var io=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting){x.target.classList.add('vis');io.unobserve(x.target);}});},{threshold:.08});document.querySelectorAll('.fade-up').forEach(function(el){io.observe(el);});}
   else{document.querySelectorAll('.fade-up').forEach(function(el){el.classList.add('vis');});}
