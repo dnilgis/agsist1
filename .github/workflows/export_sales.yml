@@ -20,6 +20,12 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Install dependencies
+        # FIX: was only 'pip install requests' — fetch_export_sales.py imports
+        # beautifulsoup4 (from bs4 import BeautifulSoup) for HTML parsing in
+        # Strategy 2 (ESR HTML report). Without it, workflow crashed every Thursday.
+        run: pip install requests beautifulsoup4
+
       - name: Fetch USDA FAS Export Sales
         run: python scripts/fetch_export_sales.py
 

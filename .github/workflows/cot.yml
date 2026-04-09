@@ -23,11 +23,13 @@ jobs:
       - name: Fetch CFTC COT data
         run: python scripts/fetch_cot.py
 
-      - name: Commit data/cot.json
+      - name: Commit COT data
         run: |
           git config user.name "AGSIST Bot"
           git config user.email "bot@agsist.com"
-          git add data/cot.json
+          # FIX: was only adding cot.json — cot-history.json (used by COT chart page)
+          # was never committed, leaving the chart page perpetually stale
+          git add data/cot.json data/cot-history.json
           git diff --staged --quiet || git commit -m "chore: update COT data $(date +%F)"
           git pull --rebase origin main
           git push
