@@ -9,22 +9,24 @@
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-6KXCTD5Z9H');</script>
 <link rel="preload" href="/components/styles.css" as="style">
 <link rel="stylesheet" href="/components/styles.css">
-<link rel="icon" type="image/x-icon" href="/img/favicon.ico">
-<link rel="apple-touch-icon"         href="/img/apple-touch-icon.png">
-<link rel="manifest"                 href="/manifest.json">
+<link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
+<link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.png">
+<link rel="apple-touch-icon"                    href="/img/apple-touch-icon.png">
+<link rel="manifest"                            href="/manifest.json">
 <meta name="theme-color" content="#111a0a">
 
 <title>Fertilizer Prices Today — Urea, Anhydrous, DAP &amp; Potash | AGSIST</title>
 <meta name="description" content="Current fertilizer prices for urea, anhydrous ammonia, DAP, UAN-32, and potash. Weekly benchmarks for corn and soybean farmers in Wisconsin and Minnesota.">
 <meta name="keywords" content="fertilizer prices today, urea price per ton, anhydrous ammonia price, DAP fertilizer price, potash price, UAN-32 price, nitrogen fertilizer cost, farm input prices Midwest, Wisconsin fertilizer prices, Minnesota fertilizer prices">
-<meta name="author"  content="Farmers First Agri Service — AGSIST">
+<meta name="author"  content="Sigurd Lindquist — Farmers First Agri Service">
 <meta name="robots"  content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <link rel="canonical" href="https://agsist.com/fertilizer">
 <meta property="og:type"         content="website">
 <meta property="og:site_name"    content="AGSIST">
 <meta property="og:locale"       content="en_US">
 <meta property="og:title"        content="Fertilizer Prices Today — Urea, Anhydrous, DAP &amp; Potash | AGSIST">
-<meta property="og:description"  content="Weekly fertilizer prices for urea, anhydrous, DAP, UAN-32, and potash. Free for grain farmers in Wisconsin and Minnesota.">
+<meta property="og:description"  content="Weekly fertilizer prices for urea, anhydrous, DAP, UAN-32, and potash. For grain farmers in Wisconsin and Minnesota.">
 <meta property="og:url"          content="https://agsist.com/fertilizer">
 <meta property="og:image"        content="https://agsist.com/img/og/agsist.jpg">
 <meta property="og:image:width"  content="1200">
@@ -34,7 +36,7 @@
 <meta name="twitter:site"        content="@agsist">
 <meta name="twitter:creator"     content="@agsist">
 <meta name="twitter:title"       content="Fertilizer Prices Today — Urea, Anhydrous, DAP &amp; Potash | AGSIST">
-<meta name="twitter:description" content="Weekly urea, anhydrous, DAP, UAN-32, and potash prices for corn and soybean farmers. Free on AGSIST.">
+<meta name="twitter:description" content="Weekly urea, anhydrous, DAP, UAN-32, and potash prices for corn and soybean farmers. Updated on AGSIST.">
 <meta name="twitter:image"       content="https://agsist.com/img/og/agsist.jpg">
 
 <script type="application/ld+json">
@@ -140,7 +142,7 @@ button,a,[role="button"]{touch-action:manipulation;}
 .ngc-unit{font-size:.65rem;color:var(--text-muted)}
 
 /* Explainer grid */
-.fert-explainer{display:grid;grid-template-columns:1fr 1fr;gap:.75rem;margin-bottom:1.25rem}
+.fert-explainer{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:.75rem;margin-bottom:1.25rem}
 @media(max-width:560px){
   .fert-explainer{grid-template-columns:1fr}
   .fert-cards{grid-template-columns:1fr 1fr}
@@ -170,9 +172,9 @@ button,a,[role="button"]{touch-action:manipulation;}
 <a href="#main" class="skip">Skip to content</a>
 <div id="site-header"></div>
 
-<main id="main" class="main fert-page">
+<main id="main" tabindex="-1" class="main fert-page">
 
-  <nav class="breadcrumb"><a href="/">Home</a> → Fertilizer Prices</nav>
+  <nav class="breadcrumb" aria-label="Breadcrumb"><a href="/">Home</a> → Fertilizer Prices</nav>
 
   <div class="fert-hero">
     <div class="fert-eyebrow">🧪 Input Costs · Updated Weekly</div>
@@ -237,7 +239,8 @@ button,a,[role="button"]{touch-action:manipulation;}
     Prices sourced from <a href="https://dtn.com" target="_blank" rel="noopener">DTN</a> and
     <a href="https://www.ams.usda.gov/market-news/fertilizers" target="_blank" rel="noopener">USDA AMS</a> weekly reports.
     Not a quote — verify with your dealer before purchasing. ·
-    <a href="/">← AGSIST Dashboard</a>
+    <a href="/">← AGSIST Dashboard</a> ·
+    Built by <a href="/about">Sigurd Lindquist</a> · <a href="tel:+17157972428">715-797-2428</a>
   </div>
 
 </main>
@@ -304,7 +307,7 @@ fetch('/data/prices.json')
   .then(function(data){
     if(!data)return;
     var q=data.quotes||{};
-    var ng=q.natgas||q['NG=F']||null;
+    var ng=q.natgas||null;
     if(!ng)return;
     var price=ng.close||ng.price||ng.last||null;
     var el=document.getElementById('natgas-price');

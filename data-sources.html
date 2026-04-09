@@ -3,10 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111a0a">
   <title>Data Sources — AGSIST</title>
   <meta name="description" content="Full transparency on every data source used by AGSIST: commodity prices, weather, geocoding, cash bids, and the Farmers First Ag Index.">
   <meta name="keywords"    content="AGSIST data sources, agricultural data transparency, grain price data source, farm weather data, yfinance commodity prices">
-  <meta name="author"      content="Farmers First Agri Service — AGSIST">
+  <meta name="author"      content="Sigurd Lindquist — Farmers First Agri Service">
   <meta name="robots"      content="index, follow">
   <link rel="canonical"    href="https://agsist.com/data-sources">
 
@@ -30,6 +31,7 @@
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-6KXCTD5Z9H"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-6KXCTD5Z9H');</script>
 
+  <link rel="preload" href="/components/styles.css" as="style">
   <link rel="stylesheet"                          href="/components/styles.css">
   <link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
@@ -37,6 +39,7 @@
   <link rel="apple-touch-icon"                    href="/img/apple-touch-icon.png">
   <link rel="manifest"                            href="/manifest.json">
   <style>
+    /* v3: solo voice, clean Cash Bids card */
     button,a,[role="button"]{touch-action:manipulation;}
     .info-page{max-width:820px;margin:0 auto;padding:3rem 1.5rem 5rem;}
     .info-page h1{font-size:2rem;color:var(--gold);margin-bottom:.5rem;}
@@ -47,6 +50,9 @@
     .info-page a{color:var(--gold);}
     .info-card{background:var(--surface);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1rem 0;}
     .info-card h3{font-size:1rem;color:var(--gold);margin-bottom:.5rem;}
+    .built-by{margin-top:2.5rem;padding-top:1.25rem;border-top:1px solid var(--border);font-size:.85rem;color:var(--text-dim);line-height:1.7;}
+    .built-by strong{color:var(--text);}
+    .built-by a{color:var(--gold);}
   </style>
 </head>
 <body>
@@ -63,7 +69,7 @@
         <p><strong>Used for:</strong> Corn, soybean, wheat, live cattle, lean hog, crude oil, natural gas, gold, silver, Dollar Index, 10-yr Treasury futures, and cryptocurrency prices.</p>
         <p><strong>Delay:</strong> 15 minutes minimum during market hours.</p>
         <p><strong>Update frequency:</strong> Every 30 minutes via GitHub Actions during weekday trading hours.</p>
-        <p><a href="https://finance.yahoo.com" target="_blank" rel="noopener">finance.yahoo.com</a> — free market data via the yfinance Python library.</p>
+        <p><a href="https://finance.yahoo.com" target="_blank" rel="noopener">finance.yahoo.com</a> — market data via the yfinance Python library.</p>
       </div>
 
       <h2>Weather</h2>
@@ -71,7 +77,7 @@
         <h3>🌤 Open-Meteo</h3>
         <p><strong>Used for:</strong> Hourly temperature, wind speed, wind direction, humidity, precipitation probability, and derived spray/urea risk calculations.</p>
         <p><strong>Update frequency:</strong> Every hour.</p>
-        <p><a href="https://open-meteo.com" target="_blank" rel="noopener">open-meteo.com</a> — free, open-source weather API.</p>
+        <p><a href="https://open-meteo.com" target="_blank" rel="noopener">open-meteo.com</a> — open-source weather API.</p>
       </div>
       <div class="info-card">
         <h3>🌧 NOAA / National Weather Service</h3>
@@ -93,30 +99,37 @@
 
       <h2>USDA Reports</h2>
       <div class="info-card">
-        <h3>🌾 USDA APIs</h3>
-        <p><strong>Used for:</strong> USDA report calendar (WASDE, Crop Progress, Grain Stocks, Acreage, Cattle on Feed) via the USDA Economic Research Service and NASS APIs. Report dates extended through October 2026.</p>
-        <p><a href="https://www.usda.gov" target="_blank" rel="noopener">usda.gov</a> — public APIs, no key required.</p>
+        <h3>🌾 USDA</h3>
+        <p><strong>Used for:</strong> Report calendar (WASDE, Crop Progress, Grain Stocks, Acreage, Cattle on Feed) via USDA Economic Research Service and NASS APIs.</p>
+        <p><a href="https://www.usda.gov" target="_blank" rel="noopener">usda.gov</a> — public APIs.</p>
       </div>
 
       <h2>Geocoding</h2>
       <div class="info-card">
         <h3>📍 Nominatim / OpenStreetMap</h3>
-        <p><strong>Used for:</strong> Reverse geocoding browser lat/lng to city, state, and ZIP code. No personal location data is stored on our servers.</p>
+        <p><strong>Used for:</strong> Reverse geocoding browser lat/lng to city, state, and ZIP code. No personal location data is stored on my servers.</p>
       </div>
 
       <h2>Farmers First Ag Index (FFAI)</h2>
       <div class="info-card">
         <h3>📈 Farmers First Agri Service — Proprietary</h3>
-        <p>The FFAI is a composite index calculated by Farmers First Agri Service from publicly available agricultural economic data. Available at <a href="https://farmers1st.com" target="_blank" rel="noopener">farmers1st.com</a>.</p>
+        <p>The FFAI is a composite index calculated by Sigurd Lindquist at Farmers First Agri Service from publicly available agricultural economic data. <a href="https://farmers1st.com" target="_blank" rel="noopener">farmers1st.com →</a></p>
       </div>
 
       <h2>Cash Bids</h2>
       <div class="info-card">
         <h3>🚜 Barchart OnDemand</h3>
-        <p>Local elevator cash bids are sourced from the Barchart OnDemand API. A Cloudflare Worker proxy to protect the API key is pending deployment. See <a href="/developer">Developer docs</a> for integration details.</p>
+        <p>Local elevator cash bids are sourced from the Barchart OnDemand API.</p>
       </div>
 
-      <p>See a data issue? <a href="/contact">Contact us</a>.</p>
+      <p>See a data issue? <a href="/contact">Contact me directly</a>.</p>
+
+      <div class="built-by">
+        Built and maintained by <strong>Sigurd Lindquist</strong> — Farmers First Agri Service<br>
+        📞 <a href="tel:+17157972428">715-797-2428</a> &nbsp;·&nbsp;
+        🌐 <a href="https://farmers1st.com" target="_blank" rel="noopener">farmers1st.com</a>
+      </div>
+
     </div>
   </main>
   <div id="site-footer"></div>

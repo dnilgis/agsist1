@@ -3,50 +3,140 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#111a0a">
+
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-6KXCTD5Z9H"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-6KXCTD5Z9H');</script>
+
   <title>Accessibility Statement — AGSIST</title>
-  <meta name="description" content="Accessibility Statement for AGSIST Agricultural Support Services.">
+  <meta name="description" content="Accessibility Statement for AGSIST. Built with keyboard navigation, skip links, sufficient color contrast, and WCAG 2.1 AA as the target.">
+  <meta name="author"  content="Sigurd Lindquist — Farmers First Agri Service">
   <meta name="robots" content="index, follow">
-  <link rel="canonical" href="https://agsist.com/legal/accessibility">
+  <link rel="canonical" href="https://agsist.com/accessibility">
+
+  <meta property="og:type"        content="website">
+  <meta property="og:site_name"   content="AGSIST">
+  <meta property="og:locale"      content="en_US">
+  <meta property="og:title"       content="Accessibility Statement — AGSIST">
+  <meta property="og:description" content="Accessibility statement for AGSIST — keyboard navigation, skip links, WCAG 2.1 AA target, and a real person to contact if something is broken.">
+  <meta property="og:url"         content="https://agsist.com/accessibility">
+  <meta property="og:image"       content="https://agsist.com/img/og/agsist.jpg">
+  <meta name="twitter:card"       content="summary_large_image">
+  <meta name="twitter:site"       content="@agsist">
+  <meta name="twitter:creator"    content="@agsist">
+  <meta name="twitter:title"      content="Accessibility Statement — AGSIST">
+  <meta name="twitter:description" content="AGSIST is built with accessibility in mind. Skip links, keyboard nav, color contrast, ARIA labels on every page.">
+  <meta name="twitter:image"      content="https://agsist.com/img/og/agsist.jpg">
+
+  <link rel="preload" href="/components/styles.css" as="style">
   <link rel="stylesheet"                          href="/components/styles.css">
   <link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
+  <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.png">
   <link rel="apple-touch-icon"                    href="/img/apple-touch-icon.png">
+  <link rel="manifest"                            href="/manifest.json">
+
   <style>
-    .legal-page{max-width:780px;margin:0 auto;padding:3rem 1.5rem 5rem;}
-    .legal-page h1{font-size:1.8rem;color:var(--gold);margin-bottom:.5rem;}
-    .legal-page .updated{color:var(--text-dim);font-size:.85rem;margin-bottom:2.5rem;}
-    .legal-page h2{font-size:1.1rem;color:var(--text);margin:2rem 0 .75rem;font-weight:700;}
-    .legal-page p,.legal-page li{color:var(--text-dim);line-height:1.8;font-size:.95rem;}
-    .legal-page ul{padding-left:1.5rem;margin:.5rem 0 1rem;}
-    .legal-page a{color:var(--gold);}
+    /* v2: full meta stack, GA, skip link, touch-action, Sigurd contact */
+    button,a,[role="button"]{touch-action:manipulation;}
+
+    .legal-page {
+      max-width: 740px;
+      margin: 0 auto;
+      padding: 2.5rem 1.5rem 4rem;
+    }
+    .legal-page h1 {
+      font-family: 'Oswald', sans-serif;
+      font-size: clamp(1.6rem, 3.5vw, 2rem);
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: .25rem;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+    }
+    .legal-page .updated {
+      color: var(--text-muted);
+      font-size: .78rem;
+      margin-bottom: 2rem;
+    }
+    .legal-page h2 {
+      font-size: .95rem;
+      color: var(--text);
+      font-weight: 700;
+      margin: 1.75rem 0 .5rem;
+      padding-bottom: .3rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .legal-page p, .legal-page li {
+      color: var(--text-dim);
+      line-height: 1.8;
+      font-size: .88rem;
+    }
+    .legal-page p + p { margin-top: .6rem }
+    .legal-page ul {
+      padding-left: 1.3rem;
+      margin: .4rem 0 .75rem;
+    }
+    .legal-page li { margin-bottom: .3rem }
+    .legal-page a { color: var(--gold); transition: opacity .15s }
+    .legal-page a:hover { opacity: .8 }
+    .contact-line {
+      margin-top: 1.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+      font-size: .85rem;
+      color: var(--text-dim);
+    }
+    @media (max-width: 520px) {
+      .legal-page { padding: 1.5rem .9rem 3rem }
+      .legal-page h1 { font-size: 1.4rem }
+      .legal-page h2 { font-size: .88rem }
+      .legal-page p, .legal-page li { font-size: .82rem }
+    }
   </style>
-  <link rel="manifest" href="/manifest.json">
 </head>
 <body>
+  <a href="#main" class="skip">Skip to content</a>
   <div id="site-header"></div>
+
   <main id="main" tabindex="-1">
     <div class="legal-page">
       <h1>Accessibility Statement</h1>
-      <p class="updated">Last updated: February 2026</p>
-      
-<h2>Our Commitment</h2>
-<p>AGSIST is committed to ensuring digital accessibility for people with disabilities. We continually improve the user experience and apply relevant accessibility standards.</p>
-<h2>Standards</h2>
-<p>We aim to conform to the Web Content Accessibility Guidelines (WCAG) 2.1 at Level AA. This includes:</p>
-<ul>
-  <li>Sufficient color contrast ratios in both dark and light modes</li>
-  <li>Keyboard navigation support throughout the site</li>
-  <li>Skip-to-main-content link at the top of every page</li>
-  <li>Descriptive alt text on all images</li>
-  <li>ARIA labels on interactive elements</li>
-  <li>Responsive design that works at all zoom levels</li>
-</ul>
-<h2>Known Limitations</h2>
-<p>Some real-time data tables and charts may have limited screen reader support. We are actively working to improve these components.</p>
-<h2>Feedback</h2>
-<p>If you experience accessibility barriers on AGSIST, please contact us at <a href="mailto:accessibility@agsist.com">accessibility@agsist.com</a>. We aim to respond within 5 business days.</p>
+      <p class="updated">Last updated: April 2026</p>
+
+      <h2>Commitment</h2>
+      <p>AGSIST is built and maintained by one person with the goal of being usable by everyone — including people with disabilities. Accessibility isn't an afterthought here; it's part of the build standard on every page.</p>
+
+      <h2>Standards</h2>
+      <p>AGSIST targets WCAG 2.1 Level AA compliance. Every page in the site is built with:</p>
+      <ul>
+        <li>A skip-to-main-content link at the top of every page</li>
+        <li>Sufficient color contrast in dark mode (the primary interface)</li>
+        <li>Full keyboard navigation support</li>
+        <li>Descriptive alt text on all images</li>
+        <li>ARIA labels on interactive elements</li>
+        <li>Proper landmark regions (<code>main</code>, <code>nav</code>, <code>footer</code>)</li>
+        <li>Responsive layout that works at all zoom levels</li>
+        <li><code>touch-action: manipulation</code> on all interactive elements to prevent iOS double-tap delay</li>
+        <li>Minimum font size of .62rem enforced across all components</li>
+      </ul>
+
+      <h2>Known Limitations</h2>
+      <p>Some real-time data tables and embedded charts (radar, drought monitor) have limited screen reader support. These are identified as areas actively being improved. No content on this site is exclusively communicated through color alone.</p>
+
+      <h2>Feedback</h2>
+      <p>If you run into an accessibility barrier on AGSIST, please contact me directly. I'm a solo developer and I take these reports seriously — it's the fastest way to get something fixed.</p>
+
+      <div class="contact-line">
+        <strong style="color:var(--text)">Sigurd Lindquist</strong> — AGSIST / Farmers First Agri Service<br>
+        📞 <a href="tel:+17157972428">715-797-2428</a> &nbsp;·&nbsp;
+        ✉ <a href="/contact">Contact page</a> &nbsp;·&nbsp;
+        🌐 <a href="https://farmers1st.com" target="_blank" rel="noopener">farmers1st.com</a>
+      </div>
 
     </div>
   </main>
+
   <div id="site-footer"></div>
   <script src="/components/loader.js"></script>
 </body>
