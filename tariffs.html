@@ -3,12 +3,12 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-6KXCTD5Z9H"></script>
 <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-6KXCTD5Z9H');</script>
-<link rel="preload" href="/components/styles.css" as="style">
-<link rel="stylesheet" href="/components/styles.css">
+<link rel="preload" href="/components/styles.css?v=10" as="style">
+<link rel="stylesheet" href="/components/styles.css?v=10">
 <link rel="icon" type="image/x-icon"             href="/img/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32"  href="/img/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16"  href="/img/favicon-16.png">
@@ -19,9 +19,10 @@
 <title>Ag Tariff Tracker — Trade Policy Impact on Grain | AGSIST</title>
 <meta name="description" content="Current tariff rates on US corn, soybean, wheat, and pork exports to China, Canada, Mexico, and the EU. Updated as trade policy changes. Free for farmers.">
 <meta name="keywords" content="agricultural tariffs 2025, corn export tariffs China, soybean tariffs, US China trade war agriculture, grain export tariffs, farm trade policy, USDA export sales, tariff impact on corn prices">
-<meta name="author"  content="Farmers First Agri Service — AGSIST">
+<meta name="author"  content="Sigurd Lindquist">
 <meta name="robots"  content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <link rel="canonical" href="https://agsist.com/tariffs">
+
 <meta property="og:type"         content="website">
 <meta property="og:site_name"    content="AGSIST">
 <meta property="og:locale"       content="en_US">
@@ -48,6 +49,7 @@
       "url": "https://agsist.com/tariffs",
       "name": "Ag Tariff Tracker — US Trade Policy Impact on Grain & Livestock",
       "description": "Current tariff rates on US corn, soybean, wheat, and pork exports to China, Canada, Mexico, and the EU. Updated as trade policy changes.",
+      "dateModified": "2026-04-10",
       "isPartOf": { "@type": "WebSite", "url": "https://agsist.com/" },
       "breadcrumb": {
         "@type": "BreadcrumbList",
@@ -79,6 +81,11 @@
           "@type": "Question",
           "name": "What should farmers watch to track tariff impacts?",
           "acceptedAnswer": { "@type": "Answer", "text": "Monitor USDA export sales reports every Thursday at 8:30am ET to watch whether weekly net sales are holding up. Watch Brazil's harvest pace and currency — a cheap Brazilian real with high tariffs on US beans is a double headwind. Consider selling into any tariff-relief rally rather than waiting for a full resolution." }
+        },
+        {
+          "@type": "Question",
+          "name": "How do tariffs affect Wisconsin and Minnesota grain farmers specifically?",
+          "acceptedAnswer": { "@type": "Answer", "text": "WI and MN farmers are heavily exposed to soybean tariffs — both states have large soybean acreage and depend on export demand to support prices. When China applies retaliatory tariffs, basis at WI and MN elevators often widens 15–40 cents, meaning the local cash price farmers receive falls faster than Chicago Board of Trade futures. Corn is somewhat less exposed but still affected through reduced export competition." }
         }
       ]
     }
@@ -87,10 +94,16 @@
 </script>
 
 <style>
-/* ── v5: Batch 5 audit — favicon-16, title fix, border-radii 12→8px on cards ── */
-button,a,[role="button"]{touch-action:manipulation;}
+html { overflow-x: hidden; overflow-x: clip; width: 100%; }
+body { overflow-x: hidden; overflow-x: clip; width: 100%; }
+button,a,[role="button"] { touch-action: manipulation; }
 
 .tariff-page { max-width: 900px; margin: 0 auto; padding: 0 1rem 3rem; }
+
+/* Breadcrumb */
+.breadcrumb { max-width: 900px; margin: 0 auto; padding: .65rem 1rem 0; font-size: .78rem; color: var(--text-dim); }
+.breadcrumb a { color: var(--text-dim); text-decoration: none; }
+.breadcrumb a:hover { color: var(--gold); }
 
 /* Hero */
 .tariff-hero { padding: 1.4rem 0 .9rem; border-bottom: 1px solid var(--border); margin-bottom: 1.25rem; }
@@ -98,7 +111,7 @@ button,a,[role="button"]{touch-action:manipulation;}
 .tariff-page-title { font-family: 'Oswald', sans-serif; font-size: 1.75rem; font-weight: 800; color: var(--text); line-height: 1.1; margin: 0 0 .35rem; text-transform: uppercase; letter-spacing: -.01em; }
 .tariff-page-sub { font-size: .84rem; color: var(--text-muted); line-height: 1.55; max-width: 640px; }
 
-/* Status banner — widget-level (12px) */
+/* Status banner */
 .tariff-status-banner {
   display: flex; align-items: flex-start; gap: .85rem;
   padding: .85rem 1rem; border-radius: 12px; margin-bottom: 1.25rem; border: 1px solid;
@@ -108,16 +121,14 @@ button,a,[role="button"]{touch-action:manipulation;}
 .tariff-status-banner.mixed    { background: rgba(230,176,66,.06); border-color: rgba(230,176,66,.20); }
 .tsb-icon { font-size: 1.5rem; flex-shrink: 0; line-height: 1; margin-top: .05rem; }
 .tsb-body { flex: 1; }
-.tsb-label {
-  font-family: 'Oswald', sans-serif; font-size: 1.1rem; font-weight: 700; line-height: 1; margin-bottom: .2rem;
-}
+.tsb-label { font-family: 'Oswald', sans-serif; font-size: 1.1rem; font-weight: 700; line-height: 1; margin-bottom: .2rem; }
 .tsb-label.elevated { color: #ef4444; }
 .tsb-label.normal   { color: var(--green); }
 .tsb-label.mixed    { color: var(--gold); }
 .tsb-note { font-size: .8rem; color: var(--text-muted); line-height: 1.55; }
 .tsb-date { font-family: 'JetBrains Mono', monospace; font-size: .65rem; color: var(--text-muted); margin-top: .35rem; }
 
-/* Rate table — card (8px) */
+/* Rate table */
 .tariff-section { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 1.1rem; overflow: hidden; }
 .tariff-section-head {
   padding: .65rem 1rem; border-bottom: 1px solid var(--border);
@@ -135,9 +146,7 @@ button,a,[role="button"]{touch-action:manipulation;}
 .tariff-table tr:hover td { background: rgba(255,255,255,.015); }
 .tt-comm { display: flex; align-items: center; gap: .45rem; font-weight: 700; }
 .tt-icon { font-size: 1rem; line-height: 1; }
-.tt-rate {
-  font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: .88rem;
-}
+.tt-rate { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: .88rem; }
 .tt-rate.elevated { color: #ef4444; }
 .tt-rate.normal   { color: var(--green); }
 .tt-rate.mixed    { color: var(--gold); }
@@ -166,12 +175,20 @@ button,a,[role="button"]{touch-action:manipulation;}
 .tl-dot.low    { background: var(--green); box-shadow: 0 0 0 3px rgba(34,197,94,.15); }
 .tl-event { font-size: .78rem; color: var(--text); line-height: 1.5; flex: 1; }
 
-/* Explainer — cards (8px) */
-.tariff-explainer { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; margin-bottom: 1.25rem; }
-@media (max-width: 540px) { .tariff-explainer { grid-template-columns: 1fr; } }
+/* Explainer cards — fixed: minmax grid, no bare 1fr 1fr */
+.tariff-explainer { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: .75rem; margin-bottom: 1.25rem; }
 .te-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: .9rem 1rem; }
 .te-card h4 { font-size: .8rem; font-weight: 700; color: var(--text); margin: 0 0 .3rem; }
 .te-card p  { font-size: .76rem; color: var(--text-muted); line-height: 1.62; margin: 0; }
+
+/* WI/MN callout */
+.tariff-wi-mn { display: flex; gap: .7rem; align-items: flex-start; padding: .85rem 1rem; background: rgba(58,139,60,.05); border: 1px solid rgba(58,139,60,.18); border-radius: 8px; margin-bottom: 1.1rem; font-size: .8rem; color: var(--text-dim); line-height: 1.6; }
+.tariff-wi-mn strong { color: var(--green); }
+
+/* External links */
+.tariff-links { display: flex; gap: .5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.tariff-links a { display: inline-flex; align-items: center; gap: .3rem; padding: .4rem .8rem; border: 1px solid var(--border); border-radius: 8px; font-size: .75rem; color: var(--text-dim); text-decoration: none; background: var(--surface); transition: all .15s; min-height: 44px; }
+.tariff-links a:hover { border-color: var(--gold); color: var(--gold); }
 
 /* Source */
 .tariff-source { font-size: .65rem; color: var(--text-muted); text-align: center; padding-top: .65rem; border-top: 1px solid var(--border); }
@@ -179,12 +196,15 @@ button,a,[role="button"]{touch-action:manipulation;}
 .tariff-source a:hover { text-decoration: underline; }
 </style>
 </head>
-
 <body>
 <a href="#main" class="skip">Skip to content</a>
 <div id="site-header"></div>
 
-<main id="main" class="main tariff-page">
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">Home</a><span aria-hidden="true"> › </span><span>Tariff Tracker</span>
+</nav>
+
+<main id="main" tabindex="-1" class="tariff-page">
 
   <div class="tariff-hero">
     <div class="tariff-eyebrow">🏛️ Trade Policy · Updated as Policy Changes</div>
@@ -192,7 +212,6 @@ button,a,[role="button"]{touch-action:manipulation;}
     <p class="tariff-page-sub">Current tariff rates on US corn, soybean, wheat, and pork exports to key markets. Updated when policy changes. These rates directly affect grain basis, export demand, and cash prices at your elevator.</p>
   </div>
 
-  <!-- Status banner -->
   <div class="tariff-status-banner elevated" id="tariff-status-banner">
     <div class="tsb-icon">🚨</div>
     <div class="tsb-body">
@@ -202,7 +221,6 @@ button,a,[role="button"]{touch-action:manipulation;}
     </div>
   </div>
 
-  <!-- Rate table -->
   <div class="tariff-section">
     <div class="tariff-section-head">
       <span>Current Export Tariff Rates by Commodity &amp; Destination</span>
@@ -227,7 +245,6 @@ button,a,[role="button"]{touch-action:manipulation;}
     </div>
   </div>
 
-  <!-- Timeline -->
   <div class="tariff-section">
     <div class="tariff-section-head">Policy Timeline</div>
     <div class="timeline" id="tariff-timeline">
@@ -235,7 +252,17 @@ button,a,[role="button"]{touch-action:manipulation;}
     </div>
   </div>
 
-  <!-- Explainer -->
+  <!-- WI/MN specific callout -->
+  <div class="tariff-wi-mn">
+    <span style="font-size:1.3rem;flex-shrink:0">🌱</span>
+    <div>
+      <strong>Wisconsin &amp; Minnesota Exposure:</strong> Both states carry large soybean acreage with heavy reliance on export demand to support prices.
+      When China applies retaliatory tariffs, basis at WI and MN elevators often widens 15–40¢ — meaning the cash price you receive drops
+      faster than CBOT futures. Watch the <a href="/cash-bids" style="color:var(--gold)">Cash Bids page</a> for real-time basis movement
+      and the <a href="/markets" style="color:var(--gold)">Markets page</a> for futures context.
+    </div>
+  </div>
+
   <div class="tariff-explainer">
     <div class="te-card">
       <h4>Why Tariffs Move Grain Prices</h4>
@@ -255,6 +282,14 @@ button,a,[role="button"]{touch-action:manipulation;}
     </div>
   </div>
 
+  <div class="tariff-links">
+    <a href="https://apps.fas.usda.gov/gats/default.aspx" target="_blank" rel="noopener">📊 USDA Export Sales</a>
+    <a href="https://ustr.gov" target="_blank" rel="noopener">🏛 USTR Trade Policy</a>
+    <a href="/markets">📈 Grain Markets</a>
+    <a href="/cash-bids">💵 Cash Bids</a>
+    <a href="/usda-calendar">📅 USDA Calendar</a>
+  </div>
+
   <div class="tariff-source">
     Data sourced from <a href="https://ustr.gov" target="_blank" rel="noopener">USTR</a>,
     <a href="https://www.usda.gov/topics/trade" target="_blank" rel="noopener">USDA Trade</a>, and confirmed news reports.
@@ -265,7 +300,7 @@ button,a,[role="button"]{touch-action:manipulation;}
 </main>
 
 <div id="site-footer"></div>
-<script src="/components/loader.js"></script>
+<script src="/components/loader.js" defer></script>
 
 <script>
 (function(){
@@ -289,7 +324,6 @@ fetch('/data/tariffs.json')
   .then(function(r){if(!r.ok)throw new Error('no-tariffs');return r.json();})
   .then(function(data){
 
-    // Status banner
     var banner = document.getElementById('tariff-status-banner');
     var label  = document.getElementById('tsb-label');
     var note   = document.getElementById('tsb-note');
@@ -303,7 +337,6 @@ fetch('/data/tariffs.json')
     var upd = document.getElementById('tariff-updated');
     if(upd) upd.textContent = 'As of '+fmtDate(data.updated);
 
-    // Table
     var tbody = document.getElementById('tariff-tbody');
     if(tbody && data.rows && data.rows.length){
       tbody.innerHTML = data.rows.map(function(row){
@@ -319,7 +352,6 @@ fetch('/data/tariffs.json')
       }).join('');
     }
 
-    // Timeline
     var tl = document.getElementById('tariff-timeline');
     if(tl && data.timeline && data.timeline.length){
       tl.innerHTML = data.timeline.map(function(item){
@@ -335,6 +367,8 @@ fetch('/data/tariffs.json')
   .catch(function(){
     var note = document.getElementById('tsb-note');
     if(note) note.textContent = 'Tariff data unavailable — check back shortly.';
+    var tbody = document.getElementById('tariff-tbody');
+    if(tbody) tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:1.5rem;color:var(--text-muted);font-size:.78rem">Data unavailable — try refreshing.</td></tr>';
   });
 
 })();

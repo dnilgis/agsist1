@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#111a0a">
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-6KXCTD5Z9H"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-6KXCTD5Z9H');</script>
-  <link rel="preload" href="/components/styles.css" as="style">
-  <link rel="stylesheet" href="/components/styles.css">
+  <link rel="preload" href="/components/styles.css?v=10" as="style">
+  <link rel="stylesheet" href="/components/styles.css?v=10">
   <link rel="icon" type="image/x-icon"             href="/img/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32"  href="/img/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16"  href="/img/favicon-16.png">
@@ -19,7 +19,7 @@
   <title>USDA NASS Agricultural Data Explorer | AGSIST</title>
   <meta name="description" content="Explore USDA NASS crop yield, acreage, and price data by state. Visual query builder for custom NASS data pulls. Corn, soybean, and wheat statistics by state from 2010 to present.">
   <meta name="keywords" content="USDA NASS Quick Stats, agricultural data, corn yield by state, soybean yield, USDA crop statistics, NASS data explorer, farm data search">
-  <meta name="author"  content="Farmers First Agri Service — AGSIST">
+  <meta name="author"  content="Sigurd Lindquist">
   <meta name="robots"  content="index, follow">
   <link rel="canonical" href="https://agsist.com/usda-quick-stats">
 
@@ -42,32 +42,32 @@
 
   <script type="application/ld+json">
   {"@context":"https://schema.org","@graph":[
-    {"@type":"WebPage","url":"https://agsist.com/usda-quick-stats","name":"USDA NASS Agricultural Data Explorer | AGSIST","description":"Search and explore USDA NASS Quick Stats agricultural data. Corn and soybean yields, planted acres, and prices by state with a visual query builder.","dateModified":"2026-04-07","isPartOf":{"@type":"WebSite","url":"https://agsist.com/"},"breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://agsist.com/"},{"@type":"ListItem","position":2,"name":"USDA Quick Stats","item":"https://agsist.com/usda-quick-stats"}]}},
+    {"@type":"WebPage","url":"https://agsist.com/usda-quick-stats","name":"USDA NASS Agricultural Data Explorer | AGSIST","description":"Search and explore USDA NASS Quick Stats agricultural data. Corn and soybean yields, planted acres, and prices by state with a visual query builder.","dateModified":"2026-04-10","isPartOf":{"@type":"WebSite","url":"https://agsist.com/"},"breadcrumb":{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://agsist.com/"},{"@type":"ListItem","position":2,"name":"USDA Quick Stats","item":"https://agsist.com/usda-quick-stats"}]}},
     {"@type":"Dataset","name":"USDA NASS Quick Stats Agricultural Data","description":"National Agricultural Statistics Service data including crop yields, acreage, production, prices received, and livestock inventory by state.","url":"https://quickstats.nass.usda.gov","creator":{"@type":"GovernmentOrganization","name":"USDA National Agricultural Statistics Service","url":"https://www.nass.usda.gov"}},
     {"@type":"FAQPage","mainEntity":[
       {"@type":"Question","name":"What is USDA NASS Quick Stats?","acceptedAnswer":{"@type":"Answer","text":"USDA NASS Quick Stats is the National Agricultural Statistics Service's public database of crop production, acreage, yield, price, and livestock data at national, state, and county levels. Data is freely accessible via the Quick Stats website or API."}},
       {"@type":"Question","name":"How do I get historical corn yield data by state?","acceptedAnswer":{"@type":"Answer","text":"Use USDA NASS Quick Stats and select Commodity: CORN, Category: YIELD, Geography: STATE, and set your desired year range. AGSIST's pre-built query cards open these results directly."}},
-      {"@type":"Question","name":"Does USDA NASS have a free API?","acceptedAnswer":{"@type":"Answer","text":"Yes. USDA NASS offers a free API at quickstats.nass.usda.gov/api. A free API key is required and can be requested on the NASS website. The API returns data in JSON, CSV, or XML format."}}
+      {"@type":"Question","name":"Does USDA NASS have a free API?","acceptedAnswer":{"@type":"Answer","text":"Yes. USDA NASS offers a free API at quickstats.nass.usda.gov/api. A free API key is required and can be requested on the NASS website. The API returns data in JSON, CSV, or XML format."}},
+      {"@type":"Question","name":"Where can I find Wisconsin and Minnesota corn and soybean county yield data?","acceptedAnswer":{"@type":"Answer","text":"USDA NASS publishes county-level corn and soybean yields for Wisconsin and Minnesota annually. Use NASS Quick Stats with Geography set to COUNTY and State set to WI or MN. AGSIST provides direct query links for both states."}}
     ]}
   ]}
   </script>
 
   <style>
-    /* usda-quick-stats v2 — 2026-04-07 */
     *,*::before,*::after{box-sizing:border-box;}
-    html{overflow-x:hidden;overflow-x:clip;}
-    body{overflow-x:hidden;max-width:100%;width:100%;}
+    html { overflow-x: hidden; overflow-x: clip; width: 100%; }
+    body { overflow-x: hidden; overflow-x: clip; width: 100%; max-width: 100%; }
     button,a,[role="button"]{touch-action:manipulation;}
-    input[type="number"],input[type="text"]{font-size:1rem;}
+    input[type="number"],input[type="text"],select{font-size:1rem;}
     :root{--r8:8px;--r6:6px;}
 
     .qs-hero{background:linear-gradient(160deg,var(--bg)0%,var(--surface)100%);border-bottom:2px solid var(--border);padding:3rem 1.5rem 2.5rem;}
-    .qs-hero-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1fr auto;gap:2rem;align-items:center;}
+    .qs-hero-inner{max-width:1200px;margin:0 auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(340px,1fr));gap:2rem;align-items:center;}
     .qs-eyebrow{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);background:rgba(218,165,32,.06);border:1px solid rgba(218,165,32,.18);border-radius:3px;padding:.25rem .7rem;margin-bottom:.75rem;}
     .qs-h1{font-family:'Oswald',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:700;line-height:1.1;color:var(--text);text-transform:uppercase;letter-spacing:.01em;margin-bottom:.75rem;}
     .qs-h1 span{color:var(--gold);}
     .qs-sub{font-size:.95rem;line-height:1.75;color:var(--text-dim);max-width:540px;}
-    .qs-cta{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 1.5rem;background:var(--gold);color:#000;border-radius:var(--r8);font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;flex-shrink:0;}
+    .qs-cta{display:inline-flex;align-items:center;gap:.5rem;padding:.85rem 1.5rem;background:var(--gold);color:#000;border-radius:var(--r8);font-family:'JetBrains Mono',monospace;font-size:.8rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:.05em;white-space:nowrap;flex-shrink:0;min-height:48px;}
 
     .qs-main{max-width:1200px;margin:0 auto;padding:0 1rem 4rem;}
     .qs-bc{font-size:.82rem;color:var(--text-dim);padding-top:1rem;margin-bottom:1.5rem;}
@@ -86,14 +86,14 @@
     .exp-updated{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text-muted);}
     .ds-tabs{display:flex;gap:.4rem;overflow-x:auto;scrollbar-width:none;padding:.9rem 1rem .75rem;border-bottom:1px solid var(--border);}
     .ds-tabs::-webkit-scrollbar{display:none;}
-    .ds-tab{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.38rem .72rem;border:2px solid var(--border);border-radius:20px;background:var(--surface2);color:var(--text-dim);cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:36px;display:inline-flex;align-items:center;transition:all .15s;}
+    .ds-tab{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:.38rem .72rem;border:2px solid var(--border);border-radius:20px;background:var(--surface2);color:var(--text-dim);cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:44px;display:inline-flex;align-items:center;transition:all .15s;}
     .ds-tab.active{background:var(--gold);color:#000;border-color:var(--gold);}
     .ds-tab:hover:not(.active){border-color:var(--gold);color:var(--gold);}
     .exp-bar{display:flex;align-items:center;gap:.65rem;flex-wrap:wrap;padding:.7rem 1rem;border-bottom:1px solid var(--border);}
-    .exp-search{flex:1;min-width:150px;padding:.52rem .8rem;background:var(--surface2);border:2px solid var(--border);border-radius:var(--r6);font-family:inherit;font-size:.88rem;color:var(--text);outline:none;transition:border-color .15s;}
+    .exp-search{flex:1;min-width:150px;padding:.52rem .8rem;background:var(--surface2);border:2px solid var(--border);border-radius:var(--r6);font-family:inherit;font-size:.88rem;color:var(--text);outline:none;transition:border-color .15s;min-height:44px;}
     .exp-search:focus{border-color:var(--gold);}
     .exp-search::placeholder{color:var(--text-muted);}
-    .dl-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.52rem .9rem;background:none;border:2px solid var(--border);border-radius:var(--r6);font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);cursor:pointer;transition:all .15s;min-height:40px;}
+    .dl-btn{display:inline-flex;align-items:center;gap:.4rem;padding:.52rem .9rem;background:none;border:2px solid var(--border);border-radius:var(--r6);font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-dim);cursor:pointer;transition:all .15s;min-height:44px;}
     .dl-btn:hover:not(:disabled){border-color:var(--green);color:var(--green);}
     .dl-btn:disabled{opacity:.38;cursor:not-allowed;}
     .nass-tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;min-height:180px;}
@@ -111,7 +111,7 @@
     .nes-title{font-family:'Oswald',sans-serif;font-size:1.05rem;font-weight:700;text-transform:uppercase;color:var(--text);margin-bottom:.45rem;}
     .nes-text{font-size:.82rem;color:var(--text-dim);line-height:1.65;max-width:400px;margin-bottom:1rem;}
     .nes-text code{font-family:'JetBrains Mono',monospace;font-size:.78rem;background:var(--surface2);padding:.1rem .35rem;border-radius:3px;color:var(--gold);}
-    .nes-link{display:inline-flex;align-items:center;gap:.35rem;padding:.6rem 1.1rem;background:var(--gold);color:#000;border-radius:var(--r6);font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:.06em;}
+    .nes-link{display:inline-flex;align-items:center;gap:.35rem;padding:.6rem 1.1rem;background:var(--gold);color:#000;border-radius:var(--r6);font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;text-decoration:none;text-transform:uppercase;letter-spacing:.06em;min-height:44px;}
 
     /* Query builder */
     .qb-wrap{background:var(--surface);border:2px solid var(--border);border-radius:var(--r8);padding:1.4rem;margin-bottom:2rem;}
@@ -135,8 +135,13 @@
     .pq-card:hover{border-color:rgba(218,165,32,.3);}
     .pq-card h4{font-family:'Oswald',sans-serif;font-size:.88rem;font-weight:700;text-transform:uppercase;letter-spacing:.02em;margin:0 0 .5rem;line-height:1.2;}
     .pq-card p{font-size:.78rem;color:var(--text-dim);line-height:1.6;margin:0 0 .85rem;}
-    .pq-link{display:inline-flex;align-items:center;gap:.3rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid rgba(218,165,32,.3);border-radius:var(--r6);padding:.28rem .62rem;transition:all .15s;}
+    .pq-link{display:inline-flex;align-items:center;gap:.3rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid rgba(218,165,32,.3);border-radius:var(--r6);padding:.35rem .7rem;transition:all .15s;min-height:36px;}
     .pq-link:hover{background:rgba(218,165,32,.08);}
+    .pq-wi-mn{border-color:rgba(58,139,60,.3);}
+    .pq-wi-mn:hover{border-color:rgba(58,139,60,.5);}
+    .pq-wi-mn h4{color:var(--green);}
+    .pq-wi-mn .pq-link{color:var(--green);border-color:rgba(58,139,60,.3);}
+    .pq-wi-mn .pq-link:hover{background:rgba(58,139,60,.08);}
 
     /* About */
     .about-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:.85rem;}
@@ -147,9 +152,8 @@
     .about-card li strong{color:var(--text);}
     .about-card a{color:var(--gold);}
 
-    @media(max-width:860px){.qs-hero-inner{grid-template-columns:1fr;}.qs-cta{align-self:flex-start;}}
     @media(max-width:640px){.qs-hero{padding:2rem 1rem 1.5rem;}.qs-main{padding:0 .75rem 3rem;}.qb-wrap{padding:1rem;}}
-    @media(max-width:380px){.qs-hero{padding:1.5rem .65rem;}.qs-h1{font-size:1.6rem;}.qb-grid{grid-template-columns:1fr 1fr;}}
+    @media(max-width:380px){.qs-hero{padding:1.5rem .65rem;}.qs-h1{font-size:1.6rem;}.qb-grid{grid-template-columns:repeat(auto-fill,minmax(120px,1fr));}}
     @media(prefers-reduced-motion:reduce){.ds-tab,.btn-border,.pq-card,.pq-link,.dl-btn{transition:none;}}
   </style>
 </head>
@@ -162,17 +166,16 @@
       <div>
         <div class="qs-eyebrow">📊 USDA NASS</div>
         <h1 class="qs-h1">Agricultural Data <span>Explorer</span></h1>
-        <p class="qs-sub">Corn and soybean yields, planted acres, and prices by state — from USDA NASS Quick Stats. Explore pre-loaded datasets or build custom queries.</p>
+        <p class="qs-sub">Corn and soybean yields, planted acres, and prices by state — from USDA NASS Quick Stats. Explore pre-loaded datasets or build custom queries for any commodity, geography, or year range.</p>
       </div>
       <a class="qs-cta" href="https://quickstats.nass.usda.gov" target="_blank" rel="noopener">Open NASS ↗</a>
     </div>
   </section>
 
-  <main id="main">
+  <main id="main" tabindex="-1">
     <div class="qs-main">
       <nav class="qs-bc" aria-label="Breadcrumb"><a href="/">Home</a> → USDA Quick Stats</nav>
 
-      <!-- ── Data Explorer ─────────────────────────────────────── -->
       <h2 class="qs-sh">Data <span>Explorer</span></h2>
       <p class="qs-ss">Pre-loaded state-level datasets updated weekly via GitHub Actions. Select a dataset, filter by state, and download CSV.</p>
 
@@ -204,7 +207,6 @@
 
       <hr class="qs-hr">
 
-      <!-- ── Query Builder ─────────────────────────────────────── -->
       <h2 class="qs-sh">NASS <span>Query Builder</span></h2>
       <p class="qs-ss">Assemble any USDA NASS Quick Stats query and open the results — no account needed. Copy the URL to use in scripts or the NASS API.</p>
 
@@ -269,9 +271,8 @@
 
       <hr class="qs-hr">
 
-      <!-- ── Pre-Built Queries ─────────────────────────────────── -->
       <h2 class="qs-sh">Pre-Built <span>Queries</span></h2>
-      <p class="qs-ss">Click any card to open NASS results directly — no setup required.</p>
+      <p class="qs-ss">Click any card to open NASS results directly. WI &amp; MN queries highlighted in green.</p>
 
       <div class="pq-grid" style="margin-bottom:2rem">
         <div class="pq-card">
@@ -304,26 +305,36 @@
           <p>Season-average soybean prices received nationally. Track multi-year price cycles for forward marketing decisions.</p>
           <a class="pq-link" href="https://quickstats.nass.usda.gov/results/?commodity_desc=SOYBEANS&statisticcat_desc=PRICE+RECEIVED&agg_level_desc=NATIONAL&year__GE=2010" target="_blank" rel="noopener">Run Query →</a>
         </div>
-        <div class="pq-card">
-          <h4 style="color:var(--gold)">🌽 County Corn Yield — Wisconsin</h4>
-          <p>County-level corn yields for Wisconsin from 2015 to present. Useful for county APH benchmarking and basis analysis.</p>
+        <!-- WI/MN highlighted queries -->
+        <div class="pq-card pq-wi-mn">
+          <h4>🌽 County Corn Yield — Wisconsin</h4>
+          <p>County-level corn yields for Wisconsin from 2015 to present. Critical for county APH benchmarking and crop insurance planning.</p>
           <a class="pq-link" href="https://quickstats.nass.usda.gov/results/?commodity_desc=CORN&statisticcat_desc=YIELD&agg_level_desc=COUNTY&state_alpha=WI&year__GE=2015" target="_blank" rel="noopener">Run Query →</a>
         </div>
-        <div class="pq-card">
-          <h4 style="color:var(--gold)">🌽 County Corn Yield — Minnesota</h4>
-          <p>County-level corn yields for Minnesota. Critical reference for RMA APH adjustments and crop insurance planning.</p>
+        <div class="pq-card pq-wi-mn">
+          <h4>🌽 County Corn Yield — Minnesota</h4>
+          <p>County-level corn yields for Minnesota from 2015. Key reference for RMA APH adjustments and crop insurance planning.</p>
           <a class="pq-link" href="https://quickstats.nass.usda.gov/results/?commodity_desc=CORN&statisticcat_desc=YIELD&agg_level_desc=COUNTY&state_alpha=MN&year__GE=2015" target="_blank" rel="noopener">Run Query →</a>
+        </div>
+        <div class="pq-card pq-wi-mn">
+          <h4>🫘 County Soybean Yield — Wisconsin</h4>
+          <p>County soybean yields for Wisconsin — useful for benchmarking local APH against state averages and understanding production risk by county.</p>
+          <a class="pq-link" href="https://quickstats.nass.usda.gov/results/?commodity_desc=SOYBEANS&statisticcat_desc=YIELD&agg_level_desc=COUNTY&state_alpha=WI&year__GE=2015" target="_blank" rel="noopener">Run Query →</a>
+        </div>
+        <div class="pq-card pq-wi-mn">
+          <h4>🫘 County Soybean Yield — Minnesota</h4>
+          <p>County soybean yields for Minnesota from 2015. Essential context for southern MN soybean APH and production trend analysis.</p>
+          <a class="pq-link" href="https://quickstats.nass.usda.gov/results/?commodity_desc=SOYBEANS&statisticcat_desc=YIELD&agg_level_desc=COUNTY&state_alpha=MN&year__GE=2015" target="_blank" rel="noopener">Run Query →</a>
         </div>
         <div class="pq-card">
           <h4 style="color:var(--gold)">🌾 Winter Wheat Seeded Acres</h4>
-          <p>Winter wheat seeded acres by state. Released each January — key input for spring carry-out estimates.</p>
+          <p>Winter wheat seeded acres by state. Released each January — key input for spring carry-out estimates and basis analysis.</p>
           <a class="pq-link" href="https://quickstats.nass.usda.gov/results/?commodity_desc=WHEAT&class_desc=WINTER&statisticcat_desc=AREA+PLANTED&agg_level_desc=STATE&year__GE=2015" target="_blank" rel="noopener">Run Query →</a>
         </div>
       </div>
 
       <hr class="qs-hr">
 
-      <!-- ── About NASS ────────────────────────────────────────── -->
       <h2 class="qs-sh">About <span>NASS</span></h2>
       <p class="qs-ss">Key resources, API access, and release schedule for USDA National Agricultural Statistics Service data.</p>
 
@@ -363,7 +374,7 @@
         <div class="about-card">
           <h4>🔗 Related Resources</h4>
           <ul>
-            <li><a href="https://apps.fas.usda.gov/psdonline/app/index.html" target="_blank" rel="noopener">USDA PSD Online</a> — Global supply/demand data</li>
+            <li><a href="https://apps.fas.usda.gov/psdonline/app/index.html" target="_blank" rel="noopener">USDA PSD Online</a> — Global supply/demand</li>
             <li><a href="https://www.nass.usda.gov/Publications/index.php" target="_blank" rel="noopener">NASS Publications</a> — Full report archive</li>
             <li><a href="https://www.ers.usda.gov/data-products/" target="_blank" rel="noopener">USDA ERS Data</a> — Economic research</li>
             <li><a href="/usda-calendar">AGSIST USDA Calendar</a> — All report dates</li>
@@ -376,17 +387,16 @@
   </main>
 
   <div id="site-footer"></div>
-  <script src="/components/loader.js"></script>
+  <script src="/components/loader.js" defer></script>
   <script>
-  // Dataset config — files populated by scripts/fetch_nass.py + GitHub Actions
   const DS = {
-    'corn-yield':  {file:'/data/nass/corn-yield.json',  label:'Corn Yield',          unit:'bu/acre'},
-    'soy-yield':   {file:'/data/nass/soy-yield.json',   label:'Soybean Yield',       unit:'bu/acre'},
-    'wheat-yield': {file:'/data/nass/wheat-yield.json', label:'Wheat Yield',         unit:'bu/acre'},
-    'corn-acres':  {file:'/data/nass/corn-acres.json',  label:'Corn Acres Planted',  unit:'acres'},
-    'soy-acres':   {file:'/data/nass/soy-acres.json',   label:'Soybean Acres Planted',unit:'acres'},
-    'corn-price':  {file:'/data/nass/corn-price.json',  label:'Corn Price Received', unit:'$/bu'},
-    'soy-price':   {file:'/data/nass/soy-price.json',   label:'Soy Price Received',  unit:'$/bu'},
+    'corn-yield':  {file:'/data/nass/corn-yield.json',   label:'Corn Yield',           unit:'bu/acre'},
+    'soy-yield':   {file:'/data/nass/soy-yield.json',    label:'Soybean Yield',        unit:'bu/acre'},
+    'wheat-yield': {file:'/data/nass/wheat-yield.json',  label:'Wheat Yield',          unit:'bu/acre'},
+    'corn-acres':  {file:'/data/nass/corn-acres.json',   label:'Corn Acres Planted',   unit:'acres'},
+    'soy-acres':   {file:'/data/nass/soy-acres.json',    label:'Soybean Acres Planted',unit:'acres'},
+    'corn-price':  {file:'/data/nass/corn-price.json',   label:'Corn Price Received',  unit:'$/bu'},
+    'soy-price':   {file:'/data/nass/soy-price.json',    label:'Soy Price Received',   unit:'$/bu'},
   };
 
   let currentKey = 'corn-yield';
@@ -426,7 +436,6 @@
     const ds = DS[currentKey];
     const years = currentData.years || [];
 
-    // National (price) datasets
     if (currentData.type === 'national') {
       const vals = currentData.values || {};
       let html = `<table class="nass-tbl"><thead><tr><th>Year</th><th>${ds.unit}</th></tr></thead><tbody>`;
@@ -440,7 +449,6 @@
       return;
     }
 
-    // State-level datasets
     const rows = (currentData.rows || []).filter(r => !q || r.state.toLowerCase().includes(q));
     if (!rows.length) {
       wrap.innerHTML = '<div class="nass-empty-state"><div class="nes-icon">🔍</div><div class="nes-title">No States Match</div></div>';
@@ -484,7 +492,6 @@
     URL.revokeObjectURL(url);
   }
 
-  // Query builder
   let qbURL = '';
   function buildURL() {
     const commodity = document.getElementById('qb-commodity').value;
@@ -498,8 +505,7 @@
     if (yr) p.set('year__GE', yr);
     if (state && showState) p.set('state_alpha', state);
     qbURL = 'https://quickstats.nass.usda.gov/results/?' + p.toString();
-    const txt = document.getElementById('qb-url-txt');
-    txt.textContent = qbURL;
+    document.getElementById('qb-url-txt').textContent = qbURL;
   }
   function openNASS() { if (qbURL) window.open(qbURL, '_blank', 'noopener'); }
   async function copyURL() {
@@ -512,7 +518,6 @@
     } catch(e) {}
   }
 
-  // Init
   buildURL();
   loadDS('corn-yield');
   </script>

@@ -4,7 +4,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#111a0a">
-<link rel="stylesheet" href="/components/styles.css">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-6KXCTD5Z9H"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-6KXCTD5Z9H');</script>
+<link rel="preload" href="/components/styles.css?v=10" as="style">
+<link rel="stylesheet" href="/components/styles.css?v=10">
 <link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
 <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.png">
@@ -14,8 +19,8 @@
 <title>US Drought Monitor — Weekly Map &amp; Ag Impact | AGSIST</title>
 <meta name="description" content="Live US Drought Monitor map updated weekly. See drought conditions affecting corn, soybean, and wheat production regions. National, regional, and state views with agriculture impact assessment.">
 <meta name="keywords"    content="US drought monitor, drought map, corn drought conditions, soybean drought, wheat drought, agricultural drought, drought monitor USDA, drought impact on crops, farm drought conditions">
-<meta name="author"      content="Farmers First Agri Service — AGSIST">
-<meta name="robots"      content="index, follow">
+<meta name="author"      content="Sigurd Lindquist">
+<meta name="robots"      content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <link rel="canonical"    href="https://agsist.com/drought-monitor">
 
 <meta property="og:type"         content="website">
@@ -35,75 +40,176 @@
 <meta name="twitter:description" content="Weekly US drought conditions for corn, soybean &amp; wheat regions. National, state, and regional maps. Free for farmers.">
 <meta name="twitter:image"       content="https://agsist.com/img/og/agsist.jpg">
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-6KXCTD5Z9H"></script>
-<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-6KXCTD5Z9H');</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "WebPage",
+      "url": "https://agsist.com/drought-monitor",
+      "name": "US Drought Monitor — Weekly Map & Ag Impact | AGSIST",
+      "description": "Weekly US drought conditions for corn, soybean, and wheat production regions. National, state, and regional views updated every Thursday.",
+      "dateModified": "2026-04-10",
+      "isPartOf": { "@type": "WebSite", "url": "https://agsist.com/" },
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "AGSIST", "item": "https://agsist.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Drought Monitor", "item": "https://agsist.com/drought-monitor" }
+        ]
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "How does drought affect corn and soybean yields?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Corn is most vulnerable to drought during pollination (late July) and grain fill (August). A D2 drought during those weeks can cut yields 20–40%. Soybeans are most sensitive during pod set and fill — roughly late July through early September. Even a D1 abnormally dry condition during peak demand can reduce APH yields meaningfully." }
+        },
+        {
+          "@type": "Question",
+          "name": "What is D2 drought and what does it mean for farmers?",
+          "acceptedAnswer": { "@type": "Answer", "text": "D2 is Severe Drought on the US Drought Monitor scale. At D2 and above, crop and pasture losses become likely, water restrictions may begin, and some crop insurance products like WFRP and PRF are affected. D3 (Extreme) and D4 (Exceptional) mean widespread losses and major economic impacts for agriculture." }
+        },
+        {
+          "@type": "Question",
+          "name": "When is the US Drought Monitor updated?",
+          "acceptedAnswer": { "@type": "Answer", "text": "The US Drought Monitor is published every Thursday by 8:30 AM ET by the National Drought Mitigation Center, USDA, and NOAA. The map reflects conditions through the previous Tuesday. AGSIST links directly to the official NDMC map with no delay." }
+        },
+        {
+          "@type": "Question",
+          "name": "Does drought monitor status affect crop insurance?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Yes. Drought monitor designation is a trigger for several USDA crop insurance programs including Pasture, Rangeland, and Forage (PRF), Whole-Farm Revenue Protection (WFRP), and Livestock Forage Disaster Program (LFP). D2 or above for at least 8 weeks is a common qualifying threshold. Contact your crop insurance agent if D2+ conditions persist in your county." }
+        },
+        {
+          "@type": "Question",
+          "name": "Which states are most affected by drought in the Corn Belt?",
+          "acceptedAnswer": { "@type": "Answer", "text": "Drought impacts in the Corn Belt vary year to year. The western Corn Belt — Iowa, Nebraska, Kansas, South Dakota — tends to see more drought frequency. Wisconsin and Minnesota face periodic drought risk, particularly in the central and northwest regions. The drought monitor state view lets you check current conditions for any agricultural state." }
+        }
+      ]
+    }
+  ]
+}
+</script>
 
 <style>
-button,a,[role="button"]{touch-action:manipulation;}
+html { overflow-x: hidden; overflow-x: clip; width: 100%; }
+body { overflow-x: hidden; overflow-x: clip; width: 100%; }
+button,a,[role="button"] { touch-action: manipulation; }
 
 .dm-page { max-width: 1040px; margin: 0 auto; padding: 0 1rem 3rem; }
+
+/* Breadcrumb */
+.breadcrumb { max-width: 1040px; margin: 0 auto; padding: .65rem 1rem 0; font-size: .78rem; color: var(--text-dim); }
+.breadcrumb a { color: var(--text-dim); text-decoration: none; }
+.breadcrumb a:hover { color: var(--gold); }
+.breadcrumb span { margin: 0 .35rem; opacity: .45; }
+
+/* Hero */
 .dm-hero { padding: 1.2rem 0 1rem; border-bottom: 1px solid var(--border); margin-bottom: 1.25rem; }
 .dm-hero h1 { font-family: 'Oswald', sans-serif; font-size: 1.7rem; font-weight: 800; text-transform: uppercase; color: var(--text); margin: 0 0 .3rem; }
 .dm-hero p { color: var(--text-dim); font-size: .85rem; line-height: 1.6; max-width: 600px; margin: 0; }
-.dm-hero .dm-eyebrow { font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: .3rem; }
-.dm-updated { font-family: 'JetBrains Mono', monospace; font-size: .65rem; color: var(--text-muted); margin-top: .4rem; }
+.dm-eyebrow { font-size: .62rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--gold); margin-bottom: .3rem; }
+.dm-hero-meta { display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-top: .6rem; }
+.dm-updated { font-family: 'JetBrains Mono', monospace; font-size: .65rem; color: var(--text-muted); }
+.dm-next-update { font-family: 'JetBrains Mono', monospace; font-size: .65rem; color: var(--green); background: rgba(58,139,60,.08); border: 1px solid rgba(58,139,60,.2); padding: .15rem .5rem; border-radius: 4px; }
 
+/* Auto-detect banner */
+.dm-state-banner { display: flex; align-items: center; gap: .6rem; padding: .55rem .85rem; background: rgba(230,176,66,.06); border: 1px solid rgba(230,176,66,.18); border-radius: 8px; margin-bottom: 1rem; font-size: .78rem; color: var(--text-dim); }
+.dm-state-banner strong { color: var(--gold); }
+.dm-state-banner button { margin-left: auto; padding: .25rem .7rem; background: var(--gold); color: #0a1a0a; border: none; border-radius: 20px; font-size: .68rem; font-weight: 700; cursor: pointer; min-height: 28px; white-space: nowrap; }
+
+/* Tabs */
 .dm-tabs { display: flex; gap: .4rem; flex-wrap: wrap; margin-bottom: 1.1rem; }
-.dm-tab { padding: .45rem 1rem; border-radius: 20px; border: 2px solid var(--border); background: var(--surface); color: var(--text-dim); font-size: .78rem; font-weight: 600; cursor: pointer; transition: all .15s; white-space: nowrap; }
+.dm-tab { padding: .5rem 1rem; border-radius: 20px; border: 2px solid var(--border); background: var(--surface); color: var(--text-dim); font-size: .78rem; font-weight: 600; cursor: pointer; transition: all .15s; white-space: nowrap; min-height: 44px; display: inline-flex; align-items: center; }
 .dm-tab:hover { border-color: var(--gold); color: var(--text); }
 .dm-tab.active { background: var(--gold); color: #0a1a0a; border-color: var(--gold); font-weight: 700; }
 
+/* Map */
 .dm-map-wrap { position: relative; width: 100%; background: var(--surface); border: 2px solid var(--border); border-radius: 12px; overflow: hidden; margin-bottom: 1.25rem; }
 .dm-map-img { width: 100%; height: auto; display: block; }
-.dm-map-label { position: absolute; top: 10px; left: 12px; font-family: 'JetBrains Mono', monospace; font-size: .62rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; background: rgba(0,0,0,.55); color: #fff; padding: .2rem .5rem; border-radius: 4px; }
+.dm-map-label { position: absolute; top: 10px; left: 12px; font-family: 'JetBrains Mono', monospace; font-size: .62rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; background: rgba(0,0,0,.6); color: #fff; padding: .2rem .5rem; border-radius: 4px; }
 .dm-map-src { text-align: center; padding: .6rem; font-size: .65rem; color: var(--text-muted); border-top: 1px solid var(--border); }
 .dm-map-src a { color: var(--gold); text-decoration: none; }
 
+/* Legend */
 .dm-legend { display: flex; flex-wrap: wrap; gap: .6rem .9rem; margin-bottom: 1.25rem; padding: .9rem 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
-.dm-legend-title { font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-dim); width: 100%; margin-bottom: .15rem; }
+.dm-legend-title { font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-dim); width: 100%; margin-bottom: .1rem; }
 .dm-legend-item { display: flex; align-items: center; gap: .4rem; font-size: .76rem; color: var(--text-dim); }
 .dm-legend-dot { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
 
+/* State grid */
+.dm-state-prompt { font-size: .8rem; color: var(--text-dim); margin-bottom: .7rem; }
+.dm-state-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(72px, 1fr)); gap: .4rem; margin-bottom: 1.25rem; }
+.dm-state-btn { padding: .4rem .5rem; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text-dim); font-size: .72rem; font-weight: 600; cursor: pointer; text-align: center; transition: all .15s; min-height: 44px; display: flex; align-items: center; justify-content: center; }
+.dm-state-btn:hover { border-color: var(--gold); color: var(--text); }
+.dm-state-btn.active { background: rgba(230,176,66,.1); border-color: var(--gold); color: var(--gold); }
+
+/* Ag impact cards */
 .dm-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: .8rem; margin-bottom: 1.25rem; }
 .dm-card { background: var(--surface); border: 1px solid var(--border); border-radius: 8px; padding: .9rem 1rem; }
-.dm-card h3 { font-size: .82rem; color: var(--gold); margin: 0 0 .5rem; }
-.dm-card p { font-size: .78rem; color: var(--text-dim); line-height: 1.6; margin: 0; }
+.dm-card h3 { font-size: .82rem; color: var(--gold); margin: 0 0 .45rem; }
+.dm-card p { font-size: .78rem; color: var(--text-dim); line-height: 1.65; margin: 0; }
 
-.dm-state-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(88px, 1fr)); gap: .4rem; margin-bottom: 1.25rem; }
-.dm-state-btn { padding: .35rem .5rem; border-radius: 6px; border: 1px solid var(--border); background: var(--surface); color: var(--text-dim); font-size: .72rem; font-weight: 600; cursor: pointer; text-align: center; transition: all .15s; }
-.dm-state-btn:hover { border-color: var(--gold); color: var(--text); }
-.dm-state-btn.active { background: var(--surface2); border-color: var(--gold); color: var(--gold); }
+/* Stress calendar */
+.dm-stress-table { width: 100%; border-collapse: collapse; font-size: .75rem; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin-bottom: 1.25rem; }
+.dm-stress-table th { text-align: left; padding: .5rem .8rem; font-size: .62rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--text-muted); border-bottom: 1px solid var(--border); background: var(--bg); }
+.dm-stress-table td { padding: .5rem .8rem; border-bottom: 1px solid rgba(255,255,255,.04); color: var(--text-dim); vertical-align: middle; }
+.dm-stress-table tr:last-child td { border-bottom: none; }
+.dm-stress-high   { color: #ef4444; font-weight: 700; }
+.dm-stress-med    { color: var(--gold); }
+.dm-stress-low    { color: var(--text-muted); }
+.dm-section-label { font-size: .65rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-muted); margin: 0 0 .55rem; }
+
+/* Outlook links */
+.dm-outlook { display: flex; gap: .6rem; flex-wrap: wrap; margin-bottom: 1.5rem; }
+.dm-outlook a { display: inline-flex; align-items: center; gap: .35rem; padding: .45rem .9rem; border: 1px solid var(--border); border-radius: 8px; font-size: .75rem; color: var(--text-dim); text-decoration: none; background: var(--surface); transition: all .15s; min-height: 44px; }
+.dm-outlook a:hover { border-color: var(--gold); color: var(--gold); }
 </style>
 </head>
 <body>
 <a href="#main" class="skip">Skip to content</a>
 <div id="site-header"></div>
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+  <a href="/">Home</a><span aria-hidden="true"> › </span><span>Drought Monitor</span>
+</nav>
+
 <main id="main" tabindex="-1" class="dm-page">
+
+  <div id="dm-auto-banner" style="display:none" class="dm-state-banner">
+    <span>📍 Location detected: <strong id="dm-auto-state-name"></strong></span>
+    <button onclick="autoLoadState()">Show My State</button>
+  </div>
 
   <div class="dm-hero">
     <div class="dm-eyebrow">🗺 Drought Intelligence · Updated Weekly</div>
     <h1>US Drought Monitor</h1>
     <p>Weekly drought conditions for US crop regions. Select national, state, or regional views. Published every Thursday by the National Drought Mitigation Center, USDA, and NOAA.</p>
-    <div class="dm-updated" id="dm-updated">Updated: Thursday mornings · Source: droughtmonitor.unl.edu</div>
+    <div class="dm-hero-meta">
+      <div class="dm-updated">Source: droughtmonitor.unl.edu · Updated Thursdays by 8:30 AM ET</div>
+      <div class="dm-next-update" id="dm-next-update">Next update: —</div>
+    </div>
   </div>
 
-  <div class="dm-tabs" id="dm-view-tabs">
+  <div class="dm-tabs" id="dm-view-tabs" role="group" aria-label="Map view">
     <button class="dm-tab active" data-view="national">🌎 National</button>
     <button class="dm-tab" data-view="corn-belt">🌽 Corn Belt</button>
     <button class="dm-tab" data-view="plains">🌾 Plains</button>
-    <button class="dm-tab" data-view="state">📍 State</button>
+    <button class="dm-tab" data-view="state">📍 By State</button>
   </div>
 
   <div id="dm-map-section">
     <div class="dm-map-wrap">
       <img class="dm-map-img" id="dm-map-img"
         src="https://droughtmonitor.unl.edu/data/png/current/current_usdm.png"
-        alt="US Drought Monitor — current weekly map"
+        alt="US Drought Monitor — current weekly national map"
         loading="eager">
       <span class="dm-map-label" id="dm-map-label">US · National View</span>
       <div class="dm-map-src">
         Source: <a href="https://droughtmonitor.unl.edu" target="_blank" rel="noopener">droughtmonitor.unl.edu</a>
-        — National Drought Mitigation Center, USDA, NOAA
+        — National Drought Mitigation Center · USDA · NOAA
       </div>
     </div>
   </div>
@@ -118,50 +224,88 @@ button,a,[role="button"]{touch-action:manipulation;}
   </div>
 
   <div id="dm-state-section" style="display:none">
-    <p style="font-size:.8rem;color:var(--text-dim);margin-bottom:.7rem">Select a state:</p>
+    <p class="dm-state-prompt">Select a state to view its drought map:</p>
     <div class="dm-state-grid" id="dm-state-grid"></div>
   </div>
+
+  <div class="dm-section-label">Crop Stress Windows — When Drought Hurts Most</div>
+  <table class="dm-stress-table" aria-label="Crop drought stress calendar">
+    <thead>
+      <tr><th>Crop</th><th>Critical Period</th><th>Drought Risk</th><th>What's at Stake</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>🌽 Corn</td>
+        <td>Late July – August</td>
+        <td class="dm-stress-high">D1+ = High risk</td>
+        <td>Pollination failure; grain fill stunted. D2 during silking can cut yield 25–40%.</td>
+      </tr>
+      <tr>
+        <td>🌽 Corn</td>
+        <td>June (early growth)</td>
+        <td class="dm-stress-med">D2+ = Moderate risk</td>
+        <td>Root development impaired; plants stress before they can show it.</td>
+      </tr>
+      <tr>
+        <td>🫘 Soybeans</td>
+        <td>Late July – September</td>
+        <td class="dm-stress-high">D1+ = High risk</td>
+        <td>Pod set and seed fill — most water-sensitive stage. Yield loss compounds quickly.</td>
+      </tr>
+      <tr>
+        <td>🌾 Winter Wheat</td>
+        <td>Fall establishment &amp; spring green-up</td>
+        <td class="dm-stress-med">D1+ = Moderate risk</td>
+        <td>Poor tiller development; winter kill risk increases on shallow soils.</td>
+      </tr>
+      <tr>
+        <td>🌿 Hay / Pasture</td>
+        <td>May – August</td>
+        <td class="dm-stress-high">D0+ = Risk begins</td>
+        <td>First cutting reduced; recovery slows. Supplemental feed costs escalate at D2.</td>
+      </tr>
+    </tbody>
+  </table>
 
   <div class="dm-grid">
     <div class="dm-card">
       <h3>📅 Release Schedule</h3>
-      <p>Published every Thursday morning by 8:30 AM ET. The map reflects conditions through the preceding Tuesday. AGSIST links directly to the official map — no delay.</p>
+      <p>Published every Thursday by 8:30 AM ET. The map reflects conditions through the preceding Tuesday. AGSIST links directly to the official NDMC map with no delay or editorial delay.</p>
     </div>
     <div class="dm-card">
-      <h3>🌽 Ag Impact (D1+)</h3>
-      <p>D1 and above triggers short-term agricultural impacts: wilting, fire risk, pasture stress, and reduced hay yields. D2+ affects crop yields — especially corn at pollination and soybeans during pod fill.</p>
+      <h3>🏛 Crop Insurance Triggers</h3>
+      <p>D2 status affects Pasture/Range/Forage (PRF), Whole-Farm Revenue Protection (WFRP), and the Livestock Forage Disaster Program (LFP). Typically requires D2 or above for 8+ consecutive weeks. Contact your Farmers First agent if conditions persist.</p>
     </div>
     <div class="dm-card">
-      <h3>💧 When It Matters Most</h3>
-      <p>Corn is most vulnerable July–August (pollination, grain fill). Soybeans are sensitive July–September. Winter wheat is at risk during fall establishment and spring green-up.</p>
+      <h3>🗺 WI &amp; MN Watch Zones</h3>
+      <p>Northwest Wisconsin and southwest Minnesota face elevated drought frequency. Central WI sand counties drain fast and show drought stress first. Watch D1+ conditions in late June — they rarely self-correct without meaningful rain in 10 days.</p>
     </div>
     <div class="dm-card">
-      <h3>📊 Crop Insurance Note</h3>
-      <p>Drought monitor status affects eligibility for some crop insurance products (WFRP, PRF, Pasture/Range/Forage). Ask your Farmers First agent if D2+ conditions persist in your county.</p>
+      <h3>💧 Basis Impact</h3>
+      <p>Regional D2+ drought tightens local basis as elevators anticipate reduced receipts. Watch basis move in real time on the <a href="/cash-bids" style="color:var(--gold)">Cash Bids page</a>. A drought rally in futures often means basis simultaneously weakens — track both.</p>
     </div>
+  </div>
+
+  <div class="dm-section-label">External Drought Resources</div>
+  <div class="dm-outlook">
+    <a href="https://www.cpc.ncep.noaa.gov/products/expert_assessment/sdo_summary.php" target="_blank" rel="noopener">📊 CPC Drought Outlook</a>
+    <a href="https://droughtmonitor.unl.edu/Maps/MapArchive.aspx" target="_blank" rel="noopener">📁 USDM Map Archive</a>
+    <a href="https://www.nass.usda.gov/Publications/Todays_Reports/reports/prog0426.pdf" target="_blank" rel="noopener">🌱 Crop Progress Report</a>
+    <a href="/cash-bids">💵 Cash Bids</a>
+    <a href="/markets">📈 Grain Prices</a>
   </div>
 
 </main>
 <div id="site-footer"></div>
-<script src="/components/loader.js"></script>
+<script src="/components/loader.js" defer></script>
 <script>
 (function(){
+  'use strict';
+
   var VIEWS = {
-    national: {
-      src: 'https://droughtmonitor.unl.edu/data/png/current/current_usdm.png',
-      label: 'US · National View',
-      alt: 'US Drought Monitor — national view'
-    },
-    'corn-belt': {
-      src: 'https://droughtmonitor.unl.edu/data/png/current/current_usdm_Midwest.png',
-      label: 'Corn Belt · Midwest View',
-      alt: 'US Drought Monitor — Corn Belt / Midwest region'
-    },
-    plains: {
-      src: 'https://droughtmonitor.unl.edu/data/png/current/current_usdm_High Plains.png',
-      label: 'High Plains View',
-      alt: 'US Drought Monitor — High Plains region'
-    }
+    national:   { src: 'https://droughtmonitor.unl.edu/data/png/current/current_usdm.png',           label: 'US · National View',     alt: 'US Drought Monitor — national view' },
+    'corn-belt':{ src: 'https://droughtmonitor.unl.edu/data/png/current/current_usdm_Midwest.png',   label: 'Corn Belt · Midwest',    alt: 'US Drought Monitor — Corn Belt / Midwest' },
+    plains:     { src: 'https://droughtmonitor.unl.edu/data/png/current/current_usdm_High Plains.png', label: 'High Plains View',     alt: 'US Drought Monitor — High Plains' }
   };
 
   var AG_STATES = [
@@ -169,6 +313,51 @@ button,a,[role="button"]{touch-action:manipulation;}
     'MI','MN','MO','MS','MT','NC','ND','NE','NY','OH','OK','OR',
     'PA','SC','SD','TN','TX','VA','WA','WI','WY'
   ];
+
+  // Compute next Thursday
+  function nextThursday() {
+    var d = new Date();
+    var day = d.getDay(); // 0=Sun,4=Thu
+    var diff = (4 - day + 7) % 7 || 7;
+    d.setDate(d.getDate() + diff);
+    return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+  }
+  var el = document.getElementById('dm-next-update');
+  if (el) el.textContent = 'Next update: ' + nextThursday();
+
+  // AGSIST_STATE auto-detect
+  function checkAutoState() {
+    var S = window.AGSIST_STATE;
+    if (!S || !S.state) return;
+    var state = S.state.toUpperCase();
+    if (AG_STATES.indexOf(state) === -1) return;
+    var banner = document.getElementById('dm-auto-banner');
+    var nameEl = document.getElementById('dm-auto-state-name');
+    if (banner && nameEl) {
+      nameEl.textContent = S.stateName || state;
+      banner.style.display = 'flex';
+      window._autoState = state;
+    }
+  }
+
+  window.autoLoadState = function() {
+    if (!window._autoState) return;
+    // Switch to state tab
+    document.querySelectorAll('.dm-tab').forEach(function(t){ t.classList.remove('active'); });
+    var stTab = document.querySelector('[data-view="state"]');
+    if (stTab) stTab.classList.add('active');
+    document.getElementById('dm-state-section').style.display = 'block';
+    // Activate the state button
+    document.querySelectorAll('.dm-state-btn').forEach(function(b){
+      b.classList.remove('active');
+      if (b.textContent === window._autoState) {
+        b.classList.add('active');
+        loadStateMap(window._autoState);
+        setTimeout(function(){ b.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }, 100);
+      }
+    });
+    document.getElementById('dm-auto-banner').style.display = 'none';
+  };
 
   function setMap(view) {
     var img = document.getElementById('dm-map-img');
@@ -178,6 +367,14 @@ button,a,[role="button"]{touch-action:manipulation;}
     img.src = v.src;
     img.alt = v.alt;
     lbl.textContent = v.label;
+  }
+
+  function loadStateMap(st) {
+    var img = document.getElementById('dm-map-img');
+    var lbl = document.getElementById('dm-map-label');
+    img.src = 'https://droughtmonitor.unl.edu/data/png/current/current_usdm_' + st + '.png';
+    img.alt = 'US Drought Monitor — ' + st + ' state view';
+    lbl.textContent = st + ' · State View';
   }
 
   function buildStateGrid() {
@@ -190,11 +387,7 @@ button,a,[role="button"]{touch-action:manipulation;}
       btn.addEventListener('click', function() {
         document.querySelectorAll('.dm-state-btn').forEach(function(b){ b.classList.remove('active'); });
         btn.classList.add('active');
-        var img = document.getElementById('dm-map-img');
-        var lbl = document.getElementById('dm-map-label');
-        img.src = 'https://droughtmonitor.unl.edu/data/png/current/current_usdm_' + st + '.png';
-        img.alt = 'US Drought Monitor — ' + st + ' state view';
-        lbl.textContent = st + ' · State View';
+        loadStateMap(st);
       });
       grid.appendChild(btn);
     });
@@ -218,6 +411,9 @@ button,a,[role="button"]{touch-action:manipulation;}
   });
 
   buildStateGrid();
+
+  // Run after loader has a chance to set AGSIST_STATE
+  setTimeout(checkAutoState, 800);
 })();
 </script>
 </body>
