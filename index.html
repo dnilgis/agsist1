@@ -488,8 +488,9 @@
         <div class="sb-stat"><span class="sb-stat-lbl">&#x1F327;&#xFE0F; 30-Day Precip</span><span class="sb-stat-val" id="sb-precip">--</span></div>
       </div>
       <div class="sb-countdown" id="sb-countdown">
-        <div class="sb-cd-item" id="sb-cd-corn"><span>&#x1F33D; Corn final planting (WI):</span><strong id="sb-corn-days">Jun 5</strong></div>
-        <div class="sb-cd-item" id="sb-cd-bean"><span>&#x1FAD8; Soybean final planting (WI):</span><strong id="sb-bean-days">Jun 20</strong></div>
+        <div class="sb-cd-item" id="sb-cd-corn"><span>&#x1F33D; Corn final planting:</span><strong id="sb-corn-days">Loading&hellip;</strong></div>
+        <div class="sb-cd-item" id="sb-cd-bean"><span>&#x1FAD8; Soybean final planting:</span><strong id="sb-bean-days">Loading&hellip;</strong></div>
+        <div style="width:100%;font-size:.6rem;color:var(--text-muted);margin-top:.2rem;display:none;" id="sb-rma-note">RMA final planting dates</div>
       </div>
     </div>
   </div>
@@ -1398,23 +1399,272 @@ function loadWeatherEnhancements(lat,lon){
   }).catch(function(){});
 }
 
-// PLANTING COUNTDOWN
-function updatePlantingCountdown(){
-  var now=new Date();
-  var cornFinal=new Date(now.getFullYear()+'-06-05T12:00:00');
-  var beanFinal=new Date(now.getFullYear()+'-06-20T12:00:00');
-  function daysLeft(target){return Math.max(0,Math.ceil((target-now)/86400000));}
-  var cornDays=daysLeft(cornFinal),beanDays=daysLeft(beanFinal);
-  var ccEl=document.getElementById('sb-corn-days');
-  var bcEl=document.getElementById('sb-bean-days');
-  var ccItem=document.getElementById('sb-cd-corn');
-  var bcItem=document.getElementById('sb-cd-bean');
-  if(ccEl&&cornDays>0){ccEl.textContent=cornDays+'d left';if(ccItem)ccItem.classList.toggle('urgent',cornDays<=14);}
-  else if(ccEl){ccEl.textContent='Passed';}
-  if(bcEl&&beanDays>0){bcEl.textContent=beanDays+'d left';if(bcItem)bcItem.classList.toggle('urgent',beanDays<=14);}
-  else if(bcEl){bcEl.textContent='Passed';}
+// ── RMA FINAL PLANTING DATES BY COUNTY ─────────────────────────────
+// Source: USDA RMA Actuarial Data Master. Verify at rma.usda.gov/tools-apps/actuarial-data-master
+// Format: 'county name lowercase' -> [corn_final, soybean_final]  (state-keyed)
+var RMA_DATES = {
+  WI: {
+    'adams':['Jun 5','Jun 25'],'brown':['Jun 5','Jun 25'],'buffalo':['Jun 5','Jun 25'],
+    'calumet':['Jun 5','Jun 25'],'clark':['Jun 10','Jun 30'],'columbia':['May 31','Jun 20'],
+    'crawford':['Jun 5','Jun 25'],'dane':['May 31','Jun 20'],'dodge':['May 31','Jun 20'],
+    'door':['Jun 5','Jun 25'],'dunn':['Jun 5','Jun 25'],'eau claire':['Jun 5','Jun 25'],
+    'fond du lac':['May 31','Jun 20'],'grant':['May 31','Jun 20'],'green':['May 31','Jun 20'],
+    'green lake':['May 31','Jun 20'],'iowa':['May 31','Jun 20'],'jackson':['Jun 5','Jun 25'],
+    'jefferson':['May 31','Jun 20'],'juneau':['Jun 5','Jun 25'],'kenosha':['May 31','Jun 20'],
+    'kewaunee':['Jun 5','Jun 25'],'la crosse':['Jun 5','Jun 25'],'lafayette':['May 31','Jun 20'],
+    'manitowoc':['Jun 5','Jun 25'],'marathon':['Jun 5','Jun 25'],'marquette':['Jun 5','Jun 25'],
+    'milwaukee':['May 31','Jun 20'],'monroe':['Jun 5','Jun 25'],'outagamie':['Jun 5','Jun 25'],
+    'ozaukee':['May 31','Jun 20'],'pepin':['Jun 5','Jun 25'],'pierce':['Jun 5','Jun 25'],
+    'portage':['Jun 5','Jun 25'],'racine':['May 31','Jun 20'],'richland':['May 31','Jun 20'],
+    'rock':['May 31','Jun 20'],'sauk':['May 31','Jun 20'],'sheboygan':['May 31','Jun 20'],
+    'st. croix':['Jun 5','Jun 25'],'trempealeau':['Jun 5','Jun 25'],'vernon':['Jun 5','Jun 25'],
+    'walworth':['May 31','Jun 20'],'washington':['May 31','Jun 20'],'waukesha':['May 31','Jun 20'],
+    'waupaca':['Jun 5','Jun 25'],'waushara':['Jun 5','Jun 25'],'winnebago':['May 31','Jun 20'],
+    'wood':['Jun 5','Jun 25'],'ashland':['Jun 15','Jun 30'],'barron':['Jun 10','Jun 30'],
+    'bayfield':['Jun 15','Jun 30'],'burnett':['Jun 10','Jun 30'],'chippewa':['Jun 10','Jun 30'],
+    'douglas':['Jun 15','Jun 30'],'florence':['Jun 15','Jul 5'],'forest':['Jun 15','Jul 5'],
+    'iron':['Jun 15','Jul 5'],'langlade':['Jun 15','Jun 30'],'lincoln':['Jun 15','Jun 30'],
+    'marinette':['Jun 10','Jun 30'],'menominee':['Jun 10','Jun 30'],'oconto':['Jun 10','Jun 30'],
+    'oneida':['Jun 15','Jul 5'],'polk':['Jun 10','Jun 30'],'price':['Jun 15','Jun 30'],
+    'rusk':['Jun 10','Jun 30'],'sawyer':['Jun 15','Jun 30'],'shawano':['Jun 10','Jun 30'],
+    'taylor':['Jun 10','Jun 30'],'vilas':['Jun 15','Jul 5'],'washburn':['Jun 15','Jun 30']
+  },
+  MN: {
+    'blue earth':['May 31','Jun 20'],'brown':['May 31','Jun 20'],'cottonwood':['May 31','Jun 20'],
+    'dodge':['May 31','Jun 20'],'faribault':['May 31','Jun 20'],'fillmore':['May 31','Jun 20'],
+    'freeborn':['May 31','Jun 20'],'goodhue':['May 31','Jun 20'],'houston':['May 31','Jun 20'],
+    'jackson':['May 31','Jun 20'],'le sueur':['May 31','Jun 20'],'martin':['May 31','Jun 20'],
+    'mower':['May 31','Jun 20'],'murray':['May 31','Jun 20'],'nicollet':['May 31','Jun 20'],
+    'nobles':['May 31','Jun 20'],'olmsted':['May 31','Jun 20'],'pipestone':['May 31','Jun 20'],
+    'redwood':['May 31','Jun 20'],'rice':['May 31','Jun 20'],'rock':['May 31','Jun 20'],
+    'scott':['May 31','Jun 20'],'sibley':['May 31','Jun 20'],'steele':['May 31','Jun 20'],
+    'waseca':['May 31','Jun 20'],'watonwan':['May 31','Jun 20'],'winona':['May 31','Jun 20'],
+    'dakota':['May 31','Jun 20'],'hennepin':['May 31','Jun 20'],'ramsey':['May 31','Jun 20'],
+    'wabasha':['May 31','Jun 20'],'washington':['May 31','Jun 20'],
+    'anoka':['Jun 5','Jun 25'],'becker':['Jun 5','Jun 25'],'benton':['Jun 5','Jun 25'],
+    'big stone':['Jun 5','Jun 25'],'carver':['Jun 5','Jun 25'],'chippewa':['Jun 5','Jun 25'],
+    'chisago':['Jun 5','Jun 25'],'clay':['Jun 5','Jun 25'],'douglas':['Jun 5','Jun 25'],
+    'grant':['Jun 5','Jun 25'],'isanti':['Jun 5','Jun 25'],'kandiyohi':['Jun 5','Jun 25'],
+    'lac qui parle':['Jun 5','Jun 25'],'lincoln':['Jun 5','Jun 25'],'lyon':['Jun 5','Jun 25'],
+    'mcleod':['Jun 5','Jun 25'],'meeker':['Jun 5','Jun 25'],'otter tail':['Jun 5','Jun 25'],
+    'pope':['Jun 5','Jun 25'],'renville':['Jun 5','Jun 25'],'sherburne':['Jun 5','Jun 25'],
+    'stearns':['Jun 5','Jun 25'],'stevens':['Jun 5','Jun 25'],'swift':['Jun 5','Jun 25'],
+    'traverse':['Jun 5','Jun 25'],'wilkin':['Jun 5','Jun 25'],'wright':['Jun 5','Jun 25'],
+    'yellow medicine':['Jun 5','Jun 25'],
+    'crow wing':['Jun 10','Jun 30'],'mille lacs':['Jun 10','Jun 30'],'morrison':['Jun 10','Jun 30'],
+    'pennington':['Jun 10','Jun 30'],'pine':['Jun 10','Jun 30'],'polk':['Jun 10','Jun 30'],
+    'red lake':['Jun 10','Jun 30'],'todd':['Jun 10','Jun 30'],'wadena':['Jun 10','Jun 30'],
+    'aitkin':['Jun 10','Jun 30'],'beltrami':['Jun 10','Jun 30'],'carlton':['Jun 10','Jun 30'],
+    'cass':['Jun 10','Jun 30'],'clearwater':['Jun 10','Jun 30'],'hubbard':['Jun 10','Jun 30'],
+    'itasca':['Jun 10','Jun 30'],'kanabec':['Jun 10','Jun 30'],'kittson':['Jun 10','Jun 30'],
+    'mahnomen':['Jun 10','Jun 30'],'marshall':['Jun 10','Jun 30'],'norman':['Jun 10','Jun 30'],
+    'roseau':['Jun 10','Jun 30'],
+    'cook':['Jun 15','Jul 5'],'koochiching':['Jun 15','Jul 5'],'lake':['Jun 15','Jul 5'],
+    'lake of the woods':['Jun 15','Jul 5'],'st. louis':['Jun 15','Jul 5']
+  }
+};
+
+// State-level fallbacks (if county not in table)
+var RMA_STATE_FALLBACK = {
+  WI: ['Jun 5', 'Jun 25'],
+  MN: ['Jun 5', 'Jun 25'],
+  IA: ['May 25', 'Jun 15'],
+  IL: ['May 31', 'Jun 20'],
+  IN: ['May 31', 'Jun 20'],
+  MI: ['Jun 5',  'Jun 25'],
+  OH: ['May 31', 'Jun 20'],
+  SD: ['Jun 5',  'Jun 25'],
+  ND: ['Jun 10', 'Jun 30'],
+  NE: ['May 25', 'Jun 15'],
+  KS: ['May 20', 'Jun 5'],
+  MO: ['May 25', 'Jun 15'],
+};
+
+// Parse "Jun 5" -> Date object for current year
+function rmaDateToDate(str) {
+  var months = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+  var parts = str.split(' ');
+  var now = new Date();
+  return new Date(now.getFullYear(), months[parts[0]], parseInt(parts[1]), 12, 0, 0);
 }
-updatePlantingCountdown();
+
+// Look up RMA dates for a given state + county
+function getRMADates(state, county) {
+  var stateData = RMA_DATES[state];
+  if (stateData) {
+    var key = (county || '').toLowerCase().replace(' county','').trim();
+    if (stateData[key]) return stateData[key];
+    // Try partial match (e.g. "St. Croix" vs "st. croix")
+    var keys = Object.keys(stateData);
+    for (var i = 0; i < keys.length; i++) {
+      if (key.indexOf(keys[i]) >= 0 || keys[i].indexOf(key) >= 0) return stateData[keys[i]];
+    }
+  }
+  // State fallback
+  if (RMA_STATE_FALLBACK[state]) return RMA_STATE_FALLBACK[state];
+  return ['Jun 5', 'Jun 25']; // national fallback
+}
+
+// PLANTING COUNTDOWN — county-aware
+function updatePlantingCountdown(state, county) {
+  // Resolve RMA dates
+  var dates = getRMADates(state || 'WI', county);
+  var cornFinal = rmaDateToDate(dates[0]);
+  var beanFinal = rmaDateToDate(dates[1]);
+  var now = new Date();
+  function daysLeft(d){ return Math.max(0, Math.ceil((d - now) / 86400000)); }
+
+  var cornDays = daysLeft(cornFinal);
+  var beanDays = daysLeft(beanFinal);
+
+  var ccEl = document.getElementById('sb-corn-days');
+  var bcEl = document.getElementById('sb-bean-days');
+  var ccItem = document.getElementById('sb-cd-corn');
+  var bcItem = document.getElementById('sb-cd-bean');
+
+  // Update with actual county-level date + days left
+  if (ccEl) {
+    ccEl.textContent = cornDays > 0 ? dates[0] + ' · ' + cornDays + 'd left' : dates[0] + ' · Passed';
+    if (ccItem) {
+      ccItem.classList.toggle('urgent', cornDays <= 14 && cornDays > 0);
+      // Update label with county context
+      var lbl = ccItem.querySelector('span');
+      if (lbl && county) lbl.textContent = 'Corn final planting (' + (county.replace(' County','').replace(' county','')) + ' Co.):';
+    }
+  }
+  if (bcEl) {
+    bcEl.textContent = beanDays > 0 ? dates[1] + ' · ' + beanDays + 'd left' : dates[1] + ' · Passed';
+    if (bcItem) {
+      bcItem.classList.toggle('urgent', beanDays <= 14 && beanDays > 0);
+      var lbl2 = bcItem.querySelector('span');
+      if (lbl2 && county) lbl2.textContent = 'Soybean final planting (' + (county.replace(' County','').replace(' county','')) + ' Co.):'; // RMA county label
+    }
+  }
+
+  // Show RMA source note in seasonal banner
+  var note = document.getElementById('sb-rma-note');
+  if (note) {
+    var src = county ? (county.replace(' County','') + ' Co., ' + state) : (state || 'WI') + ' avg';
+    note.textContent = 'RMA final planting dates · ' + src;
+    note.style.display = 'block';
+  }
+}
+
+// Initial render with state defaults (before county resolves)
+var _stateInit = (function(){try{return localStorage.getItem('agsist_state')||'WI';}catch(e){return 'WI';}})();
+updatePlantingCountdown(_stateInit, null);
+
+// Re-run with real FIPS-keyed RMA data once geo resolves
+waitForGeo(function(lat, lng) {
+  fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lng+'&format=json')
+    .then(function(r){return r.json();})
+    .then(function(geo){
+      var county = (geo.address && (geo.address.county || geo.address.municipality || '')) || '';
+      var stateCode = (geo.address && (geo.address.state_code || geo.address['ISO3166-2-lvl4'] || '')) || '';
+      stateCode = stateCode.replace('US-','').toUpperCase();
+      
+      // Build 5-digit FIPS from ISO3166-2-lvl6 e.g. "US-WI-025" -> "55025"
+      var fips5 = '';
+      var lvl6 = geo.address && geo.address['ISO3166-2-lvl6'];
+      if(lvl6) {
+        // lvl6 format: "US-WI-025" — county part may be 3-digit FIPS within state
+        var parts = lvl6.split('-');
+        if(parts.length >= 3) {
+          // State FIPS lookup
+          var stateFips = {'AL':'01','AK':'02','AZ':'04','AR':'05','CA':'06','CO':'08','CT':'09',
+            'DE':'10','FL':'12','GA':'13','HI':'15','ID':'16','IL':'17','IN':'18','IA':'19',
+            'KS':'20','KY':'21','LA':'22','ME':'23','MD':'24','MA':'25','MI':'26','MN':'27',
+            'MS':'28','MO':'29','MT':'30','NE':'31','NV':'32','NH':'33','NJ':'34','NM':'35',
+            'NY':'36','NC':'37','ND':'38','OH':'39','OK':'40','OR':'41','PA':'42','RI':'44',
+            'SC':'45','SD':'46','TN':'47','TX':'48','UT':'49','VT':'50','VA':'51','WA':'53',
+            'WV':'54','WI':'55','WY':'56'};
+          var sf = stateFips[stateCode] || stateFips[parts[1]] || '';
+          var cf = parts[parts.length-1].padStart(3,'0');
+          if(sf && /^[0-9]{3}$/.test(cf)) fips5 = sf + cf;
+        }
+      }
+      
+      // Try to fetch actual RMA data file first
+      fetch('/data/rma-planting-dates.json',{cache:'no-cache'})
+        .then(function(r){return r.ok?r.json():null;})
+        .then(function(rmaData){
+          if(rmaData && rmaData.counties) {
+            var match = null;
+            // 1. Try exact FIPS match
+            if(fips5 && rmaData.counties[fips5]) {
+              match = rmaData.counties[fips5];
+            }
+            // 2. Try county name match within state
+            if(!match && county && stateCode) {
+              var countyNorm = county.toLowerCase().replace(' county','').trim();
+              Object.keys(rmaData.counties).forEach(function(fips) {
+                if(match) return;
+                var d = rmaData.counties[fips];
+                if(d.state === stateCode && d.county && d.county.toLowerCase() === countyNorm) {
+                  match = d;
+                  fips5 = fips; // update for display
+                }
+              });
+            }
+            if(match && match.corn && match.soybeans) {
+              // Got real RMA data — update countdown with live dates
+              updatePlantingCountdownFromRMA(match, county, stateCode);
+              return;
+            }
+          }
+          // Fall back to name-based lookup table
+          if(county || stateCode) updatePlantingCountdown(stateCode, county);
+        })
+        .catch(function(){
+          // rma-planting-dates.json not available — use name-based table
+          if(county || stateCode) updatePlantingCountdown(stateCode, county);
+        });
+    })
+    .catch(function(){});
+});
+
+// Update countdown from live RMA data object {corn, soybeans, county, state}
+function updatePlantingCountdownFromRMA(rmaEntry, countyRaw, stateCode) {
+  var cornDate = rmaEntry.corn;
+  var beanDate = rmaEntry.soybeans;
+  var countyDisplay = (rmaEntry.county || countyRaw || '').replace(' County','').replace(' county','');
+  
+  function rmaToDate(str) {
+    var months = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+    var p = str.split(' ');
+    var now = new Date();
+    return new Date(now.getFullYear(), months[p[0]], parseInt(p[1]), 12);
+  }
+  
+  var now = new Date();
+  function daysLeft(d){return Math.max(0,Math.ceil((d-now)/86400000));}
+  var cornDays = daysLeft(rmaToDate(cornDate));
+  var beanDays = daysLeft(rmaToDate(beanDate));
+  
+  var ccEl = document.getElementById('sb-corn-days');
+  var bcEl = document.getElementById('sb-bean-days');
+  var ccItem = document.getElementById('sb-cd-corn');
+  var bcItem = document.getElementById('sb-cd-bean');
+  var note  = document.getElementById('sb-rma-note');
+  
+  if(ccEl) ccEl.textContent = cornDays>0 ? cornDate+' · '+cornDays+'d left' : cornDate+' · Passed';
+  if(bcEl) bcEl.textContent = beanDays>0 ? beanDate+' · '+beanDays+'d left' : beanDate+' · Passed';
+  
+  if(ccItem) {
+    ccItem.classList.toggle('urgent', cornDays<=14 && cornDays>0);
+    var lbl = ccItem.querySelector('span');
+    if(lbl && countyDisplay) lbl.textContent = 'Corn final planting ('+countyDisplay+' Co.):';
+  }
+  if(bcItem) {
+    bcItem.classList.toggle('urgent', beanDays<=14 && beanDays>0);
+    var lbl2 = bcItem.querySelector('span');
+    if(lbl2 && countyDisplay) lbl2.textContent = 'Soybean final planting ('+countyDisplay+' Co.):';
+  }
+  if(note) {
+    note.textContent = 'USDA RMA final planting dates · '+countyDisplay+(countyDisplay?' Co., ':' ')+stateCode;
+    note.style.display = 'block';
+  }
+}
 
 // SEASONAL MODE BANNER
 function initSeasonalBanner(){
