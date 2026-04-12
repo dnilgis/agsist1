@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#111a0a">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,7 +16,7 @@
 <title>Agricultural Fast Facts &#8212; Complete On-Farm Reference | AGSIST</title>
 <meta name="description" content="The complete agricultural reference: corn N rates, P&amp;K by soil test, crop staging, pest thresholds, herbicide MOA, manure nutrient value calculator, GDU, soil pH, and state production stats. Free for farmers.">
 <meta name="author" content="Sigurd Lindquist">
-<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large">
+<meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
 <link rel="canonical" href="https://agsist.com/fast-facts">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="AGSIST">
@@ -291,6 +291,7 @@ body { overflow-x: hidden; overflow-x: clip; width: 100%; }
 </style>
 </head>
 <body>
+<noscript><div style="padding:1rem;background:#1a2a1a;color:#e6b042;font-family:sans-serif;text-align:center;border-bottom:2px solid #3a8b3c;font-size:.9rem">AGSIST requires JavaScript. Please enable JavaScript to use this agricultural reference tool.</div></noscript>
 <a href="#main" class="skip">Skip to content</a>
 <div id="site-header"></div>
 <main id="main" tabindex="-1" class="ff-page">
@@ -400,6 +401,7 @@ body { overflow-x: hidden; overflow-x: clip; width: 100%; }
   <tr class="tg"><td class="tl" colspan="6">Phosphorus Sources</td></tr>
   <tr><td class="tl">DAP</td><td>18</td><td class="hi">46</td><td class="ze">0</td><td>&mdash;</td><td>&mdash;</td></tr>
   <tr><td class="tl">MAP</td><td>11</td><td class="hi">52</td><td class="ze">0</td><td>&mdash;</td><td>&mdash;</td></tr>
+  <tr><td class="tl">MAP + Sulfur (12-40-0-10S)</td><td>12</td><td class="hi">40</td><td class="ze">0</td><td>10% S</td><td>&mdash;</td></tr>
   <tr><td class="tl">Triple Superphosphate (TSP)</td><td class="ze">0</td><td class="hi">46</td><td class="ze">0</td><td>&mdash;</td><td>&mdash;</td></tr>
   <tr><td class="tl">10-34-0 liquid</td><td>10</td><td class="hi">34</td><td class="ze">0</td><td>&mdash;</td><td>11.6</td></tr>
   <tr class="tg"><td class="tl" colspan="6">Potassium Sources</td></tr>
@@ -408,7 +410,7 @@ body { overflow-x: hidden; overflow-x: clip; width: 100%; }
   <tr><td class="tl">K-Mag</td><td class="ze">0</td><td class="ze">0</td><td class="hi">22</td><td>22% S, 11% Mg</td><td>&mdash;</td></tr>
   <tr><td class="tl">9-18-9 starter liquid</td><td>9</td><td>18</td><td>9</td><td>&mdash;</td><td>11.1</td></tr>
 </tbody></table></div>
-<div class="ff-note"><strong>Liquid weights:</strong> 1 gal water = 8.3 lb &middot; UAN 28% = 10.6 lb/gal &middot; UAN 32% = 11.1 lb/gal &middot; 10-34-0 = 11.6 lb/gal</div>
+<div class="ff-note"><strong>Liquid weights:</strong> 1 gal water = 8.34 lb &middot; UAN 28% = 10.6 lb/gal &middot; UAN 32% = 11.1 lb/gal &middot; 10-34-0 = 11.6 lb/gal</div>
 </div><!-- /tab-nitrogen -->
 
 <!-- ECONOMICS TAB -->
@@ -419,7 +421,7 @@ body { overflow-x: hidden; overflow-x: clip; width: 100%; }
   <div class="eco-price-card"><div class="eco-price-label">Soybeans</div><div class="eco-price-val" id="eco-bean-price">&mdash;</div><div class="eco-price-unit">$/bu CBOT</div></div>
   <div class="eco-price-card"><div class="eco-price-label">Wheat</div><div class="eco-price-val" id="eco-wheat-price">&mdash;</div><div class="eco-price-unit">$/bu CBOT</div></div>
   <div class="eco-price-card"><div class="eco-price-label">Urea N</div><div class="eco-price-val" id="eco-urea-price">&mdash;</div><div class="eco-price-unit">$/ton dealer</div></div>
-  <div class="eco-price-card"><div class="eco-price-label">DAP (P)</div><div class="eco-price-val" id="eco-dap-price">&mdash;</div><div class="eco-price-unit">$/ton</div></div>
+  <div class="eco-price-card"><div class="eco-price-label">P Source</div><div class="eco-price-val" id="eco-dap-price">&mdash;</div><div class="eco-price-unit">$/ton MAP+S</div></div>
   <div class="eco-price-card"><div class="eco-price-label">MOP (K)</div><div class="eco-price-val" id="eco-mop-price">&mdash;</div><div class="eco-price-unit">$/ton</div></div>
 </div>
 <div class="ff-h2">Input Cost Builder</div>
@@ -717,7 +719,7 @@ body { overflow-x: hidden; overflow-x: clip; width: 100%; }
 </div>
 <div class="ff-h2">Lime Requirement Calculator</div>
 <div class="ff-calc">
-  <div class="ff-calc-title">&#129683; Lime Rate Estimator (SMP Buffer Method)</div>
+  <div class="ff-calc-title">&#129683; Lime Rate Estimator (SMP Buffer — WI Calibration)</div>
   <div class="ff-cr">
     <div class="ff-cf"><label class="ff-cl" for="lime-buf">SMP Buffer pH</label><input class="ff-ci" id="lime-buf" type="number" value="6.5" step="0.1" min="5.0" max="7.0"></div>
     <div class="ff-cf"><label class="ff-cl" for="lime-target">Target pH</label>
@@ -727,7 +729,7 @@ body { overflow-x: hidden; overflow-x: clip; width: 100%; }
     </div>
     <div class="ff-cf"><label class="ff-cl" for="lime-cce">Lime Quality (% CCE)</label>
       <select class="ff-cs" id="lime-cce">
-        <option value="90">90% CCE (high quality)</option><option value="75" selected>75% CCE (typical aglime)</option><option value="60">60% CCE (low quality)</option><option value="custom">Custom&hellip;</option>
+        <option value="90">90% CCE (high quality)</option><option value="75" selected>75% CCE (typical aglime)</option><option value="60">60% CCE (low quality)</option><option value="98">98% CCE (pelletized)</option><option value="custom">Custom&hellip;</option>
       </select>
     </div>
     <div class="ff-cf" id="lime-cce-wrap" style="display:none"><label class="ff-cl" for="lime-cce-custom">Custom CCE %</label><input class="ff-ci" id="lime-cce-custom" type="number" value="75" step="1" min="20" max="100"></div>
@@ -736,13 +738,15 @@ body { overflow-x: hidden; overflow-x: clip; width: 100%; }
     <div class="ff-ri"><div class="ff-ril">Tons Pure CaCO&#x2083;/ac</div><div class="ff-riv" id="lime-pure">&mdash;</div></div>
     <div class="ff-ri"><div class="ff-ril">Tons Aglime/ac</div><div class="ff-riv green" id="lime-ag">&mdash;</div></div>
     <div class="ff-ri"><div class="ff-ril">Guidance</div><div class="ff-riv dim" id="lime-note">&mdash;</div></div>
+    <div class="ff-ri"><div class="ff-ril">Est. Cost/Acre</div><div class="ff-riv gold" id="lime-cost">&mdash;</div></div>
   </div>
+  <div class="ff-cn">Based on WI A2809 SMP buffer calibration. MN soils may differ by 0.5&ndash;1.0 ton/ac &mdash; consult UMN Extension for MN-calibrated recommendations.</div>
 </div>
 <div class="ff-h2">Micronutrient Reference &mdash; WI / MN</div>
 <div class="ff-tw"><table class="ff-t">
 <thead><tr><th>Nutrient</th><th class="tl">Responsive Crops</th><th>Deficient</th><th>Method</th><th>Typical Rate</th><th class="tl">Key Notes</th></tr></thead>
 <tbody>
-  <tr><td><strong>S</strong></td><td class="tl">Soybeans, alfalfa, small grains</td><td>&lt;10 ppm</td><td>KCl</td><td>10&ndash;20 lb S/ac</td><td class="tl" style="font-size:.7rem">Sandy soils, low OM, high rainfall. AMS (24% S) common source.</td></tr>
+  <tr><td><strong>S</strong></td><td class="tl">Soybeans, alfalfa, small grains</td><td>&lt;10 ppm</td><td>KCl</td><td>10&ndash;20 lb S/ac</td><td class="tl" style="font-size:.7rem">Sandy soils, low OM, high rainfall. AMS (24% S) common source. Note: soil S tests have poor predictive reliability — apply S on sandy/low-OM soils as insurance regardless of test result.</td></tr>
   <tr><td><strong>Zn</strong></td><td class="tl">Corn, beans, soybeans</td><td>&lt;0.5 ppm DTPA</td><td>DTPA</td><td>1&ndash;2 lb Zn/ac</td><td class="tl" style="font-size:.7rem">High pH (&gt;7.0), high P, cold wet spring. Corn &#8220;white bud.&#8221;</td></tr>
   <tr><td><strong>B</strong></td><td class="tl">Alfalfa, clover, sunflower</td><td>&lt;0.5 ppm</td><td>Hot water</td><td>0.5&ndash;1 lb B/ac</td><td class="tl" style="font-size:.7rem">Sandy soils, low OM. Toxic range narrow &mdash; do not over-apply.</td></tr>
   <tr><td><strong>Mn</strong></td><td class="tl">Soybeans, oats, wheat</td><td>&lt;5 ppm DTPA</td><td>DTPA</td><td>0.5&ndash;1 lb Mn foliar</td><td class="tl" style="font-size:.7rem">High pH (&gt;6.5), organic soils. Foliar preferred.</td></tr>
@@ -858,7 +862,7 @@ body { overflow-x: hidden; overflow-x: clip; width: 100%; }
   <tr class="tg"><td class="tl" colspan="5">Corn Pests</td></tr>
   <tr><td class="tl">Black Cutworm</td><td class="tl">Corn</td><td class="tl"><span class="sev-high">3 or more cut plants per 100</span></td><td class="tl">V1&ndash;V5</td><td class="tl" style="font-size:.7rem">Monitor after adult flights. Cut plants at/below growing point = dead plant.</td></tr>
   <tr><td class="tl">Corn Rootworm (adult)</td><td class="tl">Corn</td><td class="tl"><span class="sev-med">0.75 beetles per plant + silk clipping &lt;1/2"</span></td><td class="tl">VT&ndash;R1</td><td class="tl" style="font-size:.7rem">Silk clipping at pollination is the critical damage window.</td></tr>
-  <tr><td class="tl">European Corn Borer</td><td class="tl">Corn</td><td class="tl"><span class="sev-med">1 egg mass or 1 plant with fresh feeding per 5 plants</span></td><td class="tl">V8&ndash;VT</td><td class="tl" style="font-size:.7rem">Bt hybrids provide good control. Scout non-Bt refuge strips.</td></tr>
+  <tr><td class="tl">European Corn Borer</td><td class="tl">Corn</td><td class="tl"><span class="sev-med">~20% whorl infestation with live borers &mdash; non-Bt only</span></td><td class="tl">V8&ndash;VT</td><td class="tl" style="font-size:.7rem">Non-Bt hybrids: treat at ~20% infested plants with live borers (UW A3646). Bt hybrids provide good control &mdash; scout refuge strips only.</td></tr>
   <tr><td class="tl">Western Bean Cutworm</td><td class="tl">Corn</td><td class="tl"><span class="sev-med">8% egg mass infestation</span></td><td class="tl">Pre-tassel</td><td class="tl" style="font-size:.7rem">Targets ear tip and kernels. WBC maps at extension sites.</td></tr>
   <tr><td class="tl">Japanese Beetle</td><td class="tl">Corn</td><td class="tl"><span class="sev-med">3+ beetles/ear, silk &lt;1/2" with poor pollination</span></td><td class="tl">VT&ndash;R1</td><td class="tl" style="font-size:.7rem">Treat only during active pollination (4&ndash;5 days).</td></tr>
   <tr class="tg"><td class="tl" colspan="5">Soybean Pests</td></tr>
@@ -873,9 +877,9 @@ body { overflow-x: hidden; overflow-x: clip; width: 100%; }
 <thead><tr><th class="tl">MOA Group</th><th class="tl">Site of Action</th><th class="tl">Common AI / Products</th><th class="tl">Crops</th><th class="tl">Resistance Notes</th></tr></thead>
 <tbody>
   <tr><td class="tl"><span class="moa-badge moa-9">Group 9</span></td><td class="tl">EPSPS inhibitor</td><td class="tl">Glyphosate (Roundup)</td><td class="tl">RR corn &amp; soybean</td><td class="tl" style="font-size:.7rem;color:#e05c5c">Most common resistance in WI/MN &mdash; confirm weed ID before relying on glyphosate alone</td></tr>
-  <tr><td class="tl"><span class="moa-badge moa-2">Group 2</span></td><td class="tl">ALS inhibitor</td><td class="tl">Atrazine, Classic, FirstRate, Pursuit</td><td class="tl">Corn, soybean, others</td><td class="tl" style="font-size:.7rem;color:#e05c5c">Widespread resistance in waterhemp, horseweed, giant ragweed</td></tr>
+  <tr><td class="tl"><span class="moa-badge moa-2">Group 2</span></td><td class="tl">ALS inhibitor</td><td class="tl">Classic (chlorimuron), FirstRate (cloransulam), Pursuit (imazethapyr), Harmony GT (thifensulfuron)</td><td class="tl">Corn, soybean, others</td><td class="tl" style="font-size:.7rem;color:#e05c5c">Widespread resistance in waterhemp, horseweed, giant ragweed</td></tr>
   <tr><td class="tl"><span class="moa-badge moa-14">Group 14</span></td><td class="tl">PPO inhibitor</td><td class="tl">Flexstar, Ultra Blazer, Cobra, Authority</td><td class="tl">Soybean, corn (Authority)</td><td class="tl" style="font-size:.7rem;color:var(--gold)">Increasing waterhemp resistance &mdash; rotate with other MOAs</td></tr>
-  <tr><td class="tl"><span class="moa-badge moa-5">Group 5</span></td><td class="tl">PSII inhibitor</td><td class="tl">Atrazine, Aatrex</td><td class="tl">Corn only (primarily)</td><td class="tl" style="font-size:.7rem;color:var(--gold)">Some resistance; 1 lb ai/ac annual limit in WI</td></tr>
+  <tr><td class="tl"><span class="moa-badge moa-5">Group 5</span></td><td class="tl">PSII inhibitor</td><td class="tl">Atrazine, Aatrex, metribuzin</td><td class="tl">Corn primarily; metribuzin on soybeans</td><td class="tl" style="font-size:.7rem;color:var(--gold)">Some resistance; 1 lb ai/ac annual limit in WI</td></tr>
   <tr><td class="tl"><span class="moa-badge moa-1">Group 1</span></td><td class="tl">ACCase inhibitor</td><td class="tl">Select Max, Poast, Assure II</td><td class="tl">Broadleaf crops</td><td class="tl" style="font-size:.7rem">Controls grasses. Little resistance currently in WI/MN</td></tr>
   <tr><td class="tl"><span class="moa-badge moa-3">Group 3</span></td><td class="tl">Microtubule inhibitor</td><td class="tl">Treflan, Sonalan (trifluralin)</td><td class="tl">Soybean, corn</td><td class="tl" style="font-size:.7rem">Pre-emergent only. Incorporate into soil.</td></tr>
   <tr><td class="tl"><span class="moa-badge moa-4">Group 4</span></td><td class="tl">Synthetic auxin</td><td class="tl">2,4-D, dicamba, MCPA</td><td class="tl">Corn, small grains; Xtend soybeans</td><td class="tl" style="font-size:.7rem">Drift risk high. Strict label requirements. Watch vapor temp.</td></tr>
@@ -916,9 +920,9 @@ body { overflow-x: hidden; overflow-x: clip; width: 100%; }
     <div class="ff-row"><span class="ff-rl">Soybean dry @ 13.0%</span><span class="ff-rv dim">harvest wt &times; (100-moist)/87</span></div>
     <div class="ff-row"><span class="ff-rl">Shrink (corn 1% moisture)</span><span class="ff-rv">~1.2%</span></div>
     <div class="ff-row"><span class="ff-rl">Test weight corn (56 lb target)</span><span class="ff-rv dim">Low TW = dockage</span></div>
-    <div class="ff-row"><span class="ff-rl">Drying energy</span><span class="ff-rv">0.02 lb propane / lb water</span></div>
+    <div class="ff-row"><span class="ff-rl">Drying rule of thumb</span><span class="ff-rv dim">~0.02 gal propane / point / bu</span></div>
     <div class="ff-row"><span class="ff-rl">1 bushel propane</span><span class="ff-rv">4.24 lb</span></div>
-    <div class="ff-row"><span class="ff-rl">Corn 25% &rarr; 15.5%</span><span class="ff-rv">~0.02 gal propane/bu</span></div>
+    <div class="ff-row"><span class="ff-rl">Corn 25%&rarr;15.5% (9.5 pts)</span><span class="ff-rv">~0.19 gal propane/bu</span></div>
     <div class="ff-row"><span class="ff-rl">1 gal liquid propane</span><span class="ff-rv">4.24 lb / 91,500 BTU</span></div>
   </div>
   <div class="ff-card">
@@ -928,7 +932,7 @@ body { overflow-x: hidden; overflow-x: clip; width: 100%; }
     <div class="ff-row"><span class="ff-rl">1 ppm in soil</span><span class="ff-rv">~2 lb/acre &times; soil wt</span></div>
     <div class="ff-row"><span class="ff-rl">1 lb/gal</span><span class="ff-rv">119.8 g/L</span></div>
     <div class="ff-row"><span class="ff-rl">Nozzle output (oz/min)</span><span class="ff-rv dim">speed(mph)&times;spacing(in)/5940</span></div>
-    <div class="ff-row"><span class="ff-rl">Seeds per pound &mdash; corn</span><span class="ff-rv">~1,800&ndash;2,100</span></div>
+    <div class="ff-row"><span class="ff-rl">Seeds per pound &mdash; corn</span><span class="ff-rv">~1,400&ndash;1,900</span></div>
     <div class="ff-row"><span class="ff-rl">Seeds per pound &mdash; soybeans</span><span class="ff-rv">~2,400&ndash;3,000</span></div>
   </div>
   <div class="ff-card">
@@ -1018,74 +1022,88 @@ function loadFertPrices(){
     if(!data||!data.prices)return;
     var el=document.getElementById('fert-date');
     if(el&&data.updated){var d=new Date(data.updated+'T12:00:00');el.textContent='Updated '+d.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});}
+    // Name-based lookups — fertilizer.json uses product name field, not legacy symbol codes
+    var urea  =data.prices.find(function(p){return p.name==='Urea';});
+    var potash=data.prices.find(function(p){return p.name==='Potash';});
+    var mapS  =data.prices.find(function(p){return p.name==='MAP + Sulfur';});
+    var ams   =data.prices.find(function(p){return p.name==='Amm. Sulfate';});
+    var kmag  =data.prices.find(function(p){return p.name==='K-Mag Premium';});
+    var lime  =data.prices.find(function(p){return p.name==='Pell Lime';});
+    if(lime&&lime.price)PRICES['LIME']=lime.price;
     var wrap=document.getElementById('fert-pills');
     if(!wrap)return;
     wrap.innerHTML='';
-    data.prices.forEach(function(p){
-      if(p.symbol==='UREA'||p.symbol==='ANHY'||p.symbol==='DAP'||p.symbol==='UAN32'||p.symbol==='MOP'){
-        PRICES[p.symbol]=p.price;
-        var btn=document.createElement('button');
-        btn.className='fert-pill';
-        btn.setAttribute('type','button');
-        btn.setAttribute('aria-pressed','false');
-        btn.innerHTML='<span class="fert-pill-icon">'+p.icon+'</span>'
-          +'<span class="fert-pill-body"><span class="fert-pill-name">'+p.name+'</span>'
-          +'<span class="fert-pill-sym">'+p.symbol+'</span></span>'
-          +(p.price?'<span class="fert-pill-price">$'+p.price+'</span>':'');
-        btn.addEventListener('click',function(){
-          document.querySelectorAll('.fert-pill').forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false');});
-          btn.classList.add('active');btn.setAttribute('aria-pressed','true');
-          var pct=0;
-          if(p.symbol==='UREA')pct=46;
-          else if(p.symbol==='ANHY')pct=82;
-          else if(p.symbol==='UAN32')pct=32;
-          else if(p.symbol==='DAP')pct=18;
-          if(pct>0&&p.price){
-            var fertSel=document.getElementById('nc-fert');
-            if(fertSel){
-              for(var i=0;i<fertSel.options.length;i++){if(fertSel.options[i].value==pct){fertSel.value=pct;break;}}
-            }
-            var fpEl=document.getElementById('nc-fertprice');
-            if(fpEl)fpEl.value=p.price;
-            calcNC();
-          }
-        });
-        wrap.appendChild(btn);
-      }
+    // Pill display: N sources + K/P sources for side-by-side $/lb comparison
+    // KEY: MAP+S is 12-40-0-10S = 40% P2O5.  Do NOT use 0.46 (DAP rate) for MAP+S.
+    var pillDefs=[
+      {obj:urea,   pct:0.46, ncPct:'46', nutrient:'N',    label:'Urea 46%N'},
+      {obj:ams,    pct:0.21, ncPct:'21', nutrient:'N',    label:'AMS 21%N+S'},
+      {obj:potash, pct:0.60, ncPct:'',   nutrient:'K2O',  label:'Potash 60%K'},
+      {obj:mapS,   pct:0.40, ncPct:'',   nutrient:'P2O5', label:'MAP+S 40%P'},
+      {obj:kmag,   pct:0.20, ncPct:'',   nutrient:'K2O',  label:'K-Mag 20%K'},
+    ];
+    pillDefs.forEach(function(pd){
+      if(!pd.obj||!pd.obj.price)return;
+      var p=pd.obj;
+      var pplb=(p.price/2000/pd.pct).toFixed(3);
+      var btn=document.createElement('button');
+      btn.className='fert-pill';
+      btn.setAttribute('type','button');
+      btn.setAttribute('aria-pressed','false');
+      btn.setAttribute('aria-label',p.name+' $'+p.price+'/ton \u2014 $'+pplb+'/lb '+pd.nutrient);
+      btn.innerHTML='<span class="fert-pill-icon">'+(p.icon||'&#127806;')+'</span>'
+        +'<span class="fert-pill-body"><span class="fert-pill-name">'+p.name+'</span>'
+        +'<span class="fert-pill-sym">'+(p.symbol||pd.label)+'</span></span>'
+        +'<span class="fert-pill-price">$'+p.price+'</span>';
+      btn.addEventListener('click',function(){
+        document.querySelectorAll('.fert-pill').forEach(function(x){x.classList.remove('active');x.setAttribute('aria-pressed','false');});
+        btn.classList.add('active');btn.setAttribute('aria-pressed','true');
+        if(pd.nutrient==='N'&&pd.ncPct){
+          var fertSel=document.getElementById('nc-fert');
+          if(fertSel){for(var i=0;i<fertSel.options.length;i++){if(fertSel.options[i].value===pd.ncPct){fertSel.value=pd.ncPct;break;}}}
+          var fpEl=document.getElementById('nc-fertprice');if(fpEl)fpEl.value=p.price;
+          calcNC();
+        }
+      });
+      wrap.appendChild(btn);
     });
-    var urea=data.prices.find(function(p){return p.symbol==='UREA';});
+    // Auto-fill N:Corn ratio from urea (primary N source)
     if(urea&&urea.price){
-      var pplb=(urea.price/2000/0.46);
-      var el2=document.getElementById('nc-fertprice');if(el2)el2.value=urea.price;
+      var pplb=urea.price/2000/0.46;
+      var fpEl=document.getElementById('nc-fertprice');if(fpEl)fpEl.value=urea.price;
+      var fertSel=document.getElementById('nc-fert');
+      if(fertSel){for(var i=0;i<fertSel.options.length;i++){if(fertSel.options[i].value==='46'){fertSel.value='46';break;}}}
       loadNFertPrice(pplb,'Urea 46%',urea.price);
     }
-    var dap=data.prices.find(function(p){return p.symbol==='DAP';});
-    if(dap&&dap.price){
-      var dpplb=(dap.price/2000/0.46);
+    // P2O5 from MAP+S: 12-40-0-10S = 40% P2O5.  NEVER use 0.46 for this product.
+    if(mapS&&mapS.price){
+      var dpplb=mapS.price/2000/0.40;
       var ep=document.getElementById('eco-p-pplb');if(ep)ep.value=dpplb.toFixed(2);
-      var dp=document.getElementById('eco-dap-price');if(dp)dp.textContent='$'+dap.price;
-      var pcp=document.getElementById('pk-p-cost');
-      updateEcoCosts();
+      var dp=document.getElementById('eco-dap-price');if(dp)dp.textContent='$'+mapS.price+' MAP+S';
       PRICES['DAP_PPLB']=dpplb;
+      updateEcoCosts();
+      var mpp=document.getElementById('mv-p-price');if(mpp)mpp.value=dpplb.toFixed(2);
     }
-    var mop=data.prices.find(function(p){return p.symbol==='MOP';});
-    if(mop&&mop.price){
-      var kpplb=(mop.price/2000/0.60);
+    // K2O from Potash (0-0-60 = 60% K2O)
+    if(potash&&potash.price){
+      var kpplb=potash.price/2000/0.60;
       var ek=document.getElementById('eco-k-pplb');if(ek)ek.value=kpplb.toFixed(2);
-      var mp=document.getElementById('eco-mop-price');if(mp)mp.textContent='$'+mop.price;
+      var mp=document.getElementById('eco-mop-price');if(mp)mp.textContent='$'+potash.price;
       PRICES['MOP_PPLB']=kpplb;
       updateEcoCosts();
+      var mkp=document.getElementById('mv-k-price');if(mkp)mkp.value=kpplb.toFixed(2);
     }
+    if(urea&&urea.price){var eup=document.getElementById('eco-urea-price');if(eup)eup.textContent='$'+urea.price;}
+    // Manure value calc — live $/lb N from urea
     var mvNSrc=document.getElementById('mv-n-src');
     if(urea&&urea.price&&mvNSrc){
-      var mvnpplb=(urea.price/2000/0.46);
+      var mvnpplb=urea.price/2000/0.46;
       var mvni=document.getElementById('mv-n-price');if(mvni)mvni.value=mvnpplb.toFixed(2);
       mvNSrc.textContent='from fert.json (live)';
       var badge=document.getElementById('mv-live-badge');if(badge)badge.style.display='inline-flex';
     }
-    if(dap&&dap.price){var mpp=document.getElementById('mv-p-price');if(mpp)mpp.value=(dap.price/2000/0.46).toFixed(2);}
-    if(mop&&mop.price){var mkp=document.getElementById('mv-k-price');if(mkp)mkp.value=(mop.price/2000/0.60).toFixed(2);}
     updateMV();
+    calcLime();// refresh lime cost with live lime $/ton
   }).catch(function(){});
 }
 function loadNFertPrice(pplb,name,ton){
@@ -1103,16 +1121,16 @@ function loadGrainPrices(){
   fetch('/data/prices.json').then(function(r){return r.ok?r.json():null;}).then(function(data){
     if(!data||!data.quotes)return;
     var q=data.quotes;
-    function fmt(v){return v!=null?'$'+(parseFloat(v).toFixed(2)):'--';}
+    function fmtGrain(v){return v!=null?'$'+(parseFloat(v)/100).toFixed(2):'--';}
     var ecp=document.getElementById('eco-corn-price');var ncb=document.getElementById('nc-corn');
     if(q.corn&&q.corn.close){
-      if(ecp)ecp.textContent=fmt(q.corn.close);
-      if(ncb){ncb.value=parseFloat(q.corn.close).toFixed(2);calcNC();}
+      if(ecp)ecp.textContent=fmtGrain(q.corn.close);
+      if(ncb){ncb.value=(parseFloat(q.corn.close)/100).toFixed(2);calcNC();}
       var lb=document.getElementById('nc-live-badge');if(lb)lb.style.display='inline-flex';
       var elb=document.getElementById('eco-live-badge');if(elb)elb.style.display='inline-flex';
     }
-    var ebp=document.getElementById('eco-bean-price');if(q.soybeans&&q.soybeans.close&&ebp)ebp.textContent=fmt(q.soybeans.close);
-    var ewp=document.getElementById('eco-wheat-price');if(q.wheat&&q.wheat.close&&ewp)ewp.textContent=fmt(q.wheat.close);
+    var ebp=document.getElementById('eco-bean-price');if(q.soybeans&&q.soybeans.close&&ebp)ebp.textContent=fmtGrain(q.soybeans.close);
+    var ewp=document.getElementById('eco-wheat-price');if(q.wheat&&q.wheat.close&&ewp)ewp.textContent=fmtGrain(q.wheat.close);
     updateEcoCosts();
   }).catch(function(){});
 }
@@ -1138,7 +1156,7 @@ function calcNC(){
   document.getElementById('nc-col').textContent=col;
   document.getElementById('nc-interp').textContent=interp;
   ['nth-05','nth-10','nth-15','nth-20'].forEach(function(id){
-    var th=document.getElementById(id);if(th)th.classList.toggle('act',th.id==='nth-'+col.replace('.',''));
+    var th=document.getElementById(id);if(th)th.classList.toggle('act',th.id==='nth-'+col.replace('0.',''));
   });
 }
 ['nc-corn','nc-fert','nc-fertprice','nc-custom-pct'].forEach(function(id){
@@ -1368,6 +1386,17 @@ function calcLime(){
   else if(agTons===0)note='No lime needed for target pH';
   else note='Apply in fall for spring benefit. Disk in if possible.';
   s('lime-note',note);
+  var costEl=document.getElementById('lime-cost');
+  if(costEl){
+    if(PRICES['LIME']&&agTons>0){
+      costEl.textContent='$'+(agTons*PRICES['LIME']).toFixed(0)+'/ac at $'+PRICES['LIME']+'/ton pelletized';
+      costEl.style.color='var(--gold)';
+    } else if(agTons===0){
+      costEl.textContent='None needed';costEl.style.color='var(--text-muted)';
+    } else {
+      costEl.textContent='—';
+    }
+  }
 }
 ['lime-buf','lime-target','lime-cce','lime-cce-custom'].forEach(function(id){var el=document.getElementById(id);if(el)el.addEventListener('input',calcLime);});
 calcLime();
