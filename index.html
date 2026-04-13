@@ -430,12 +430,12 @@
             <div id="daily-sec-3" class="daily-sec" style="position:relative"><span id="daily-section-3-icon" class="daily-sec-icon">&#x26FD;</span><div><div class="daily-sec-label-row"><div id="daily-section-3-title" class="daily-sec-label">ENERGY &amp; INPUTS</div><span id="daily-section-3-conviction" class="daily-sec-conviction"></span></div><div id="daily-section-3-body" class="daily-sec-text"></div><div id="daily-section-3-bottomline" class="daily-sec-bottomline"></div><div id="daily-section-3-action" class="daily-sec-action"></div></div></div>
             <div id="daily-sec-4" class="daily-sec" style="position:relative"><span id="daily-section-4-icon" class="daily-sec-icon">&#x1F3DB;&#xFE0F;</span><div><div class="daily-sec-label-row"><div id="daily-section-4-title" class="daily-sec-label">MACRO &amp; TRADE</div><span id="daily-section-4-conviction" class="daily-sec-conviction"></span></div><div id="daily-section-4-body" class="daily-sec-text"></div><div id="daily-section-4-bottomline" class="daily-sec-bottomline"></div><div id="daily-section-4-action" class="daily-sec-action"></div></div></div>
           </div>
-          <div class="daily-sec" style="border-color:rgba(74,143,186,.20);background:linear-gradient(135deg,var(--surface) 0%,rgba(74,143,186,.03) 100%)"><span class="daily-sec-icon">&#x1F9E0;</span><div><div class="daily-sec-label" style="color:var(--blue)">THE MORE YOU KNOW</div><div class="daily-sec-text"><strong id="daily-tmyk-title"></strong><span id="daily-tmyk-body" style="display:block;margin-top:.25rem"></span></div></div></div>
+          <div class="daily-sec" id="daily-tmyk-wrap" style="border-color:rgba(74,143,186,.20);background:linear-gradient(135deg,var(--surface) 0%,rgba(74,143,186,.03) 100%);overflow:visible;min-height:0"><span class="daily-sec-icon">&#x1F9E0;</span><div style="flex:1;min-width:0"><div class="daily-sec-label" style="color:var(--blue)">THE MORE YOU KNOW</div><div class="daily-sec-text"><strong id="daily-tmyk-title"></strong><span id="daily-tmyk-body" style="display:block;margin-top:.25rem"></span></div></div></div>
         </div>
         <div class="hero-sidebar">
           <div class="s-card s-card--gold"><div class="s-card-label">&#x1F4CA; THE NUMBER</div><div id="daily-number-value" class="one-num">&mdash;</div><div id="daily-number-unit" class="one-num-unit"></div><div id="daily-number-context" class="one-num-ctx"></div></div>
           <div class="s-card"><div class="s-card-label">&#x1F4C5; TODAY'S WATCH LIST</div><ul id="daily-watch-list" class="watch-list" role="list"><li class="watch-item"><span class="watch-time">&mdash;</span><span class="watch-desc">Loading watch list&hellip;</span></li></ul></div>
-          <div class="s-card" style="border-color:rgba(218,165,32,.15)"><div class="s-card-label" style="color:var(--gold)">&#x1F4AC; DAILY QUOTE</div><blockquote style="margin:0;padding:0"><p id="daily-quote-text" style="font-size:.92rem;font-style:italic;color:var(--text-dim);line-height:1.65;margin-bottom:.4rem">"Loading&hellip;"</p><cite id="daily-quote-attr" style="font-size:.76rem;color:var(--text-muted);font-style:normal">&mdash; &hellip;</cite></blockquote></div>
+          <div class="s-card" style="border-color:rgba(218,165,32,.15)"><div class="s-card-label" style="color:var(--gold)">&#x1F4AC; DAILY QUOTE</div><blockquote style="margin:0;padding:0"><p id="daily-quote-text" style="font-size:.92rem;font-style:italic;color:var(--text-dim);line-height:1.65;margin-bottom:.4rem">"&mdash;"</p><cite id="daily-quote-attr" style="font-size:.76rem;color:var(--text-muted);font-style:normal">&mdash; &hellip;</cite></blockquote></div>
           <div style="font-size:.62rem;color:var(--text-muted);text-align:center;padding:.2rem 0"><span id="daily-source">USDA &middot; CME Group &middot; Open-Meteo</span></div>
         </div>
       </div>
@@ -859,11 +859,15 @@
     }
     var dateEl=document.getElementById('cot-date');
     if(dateEl&&data.report_date){
-      var rd=new Date(data.report_date+'T12:00:00');
-      var daysOld=Math.round((Date.now()-rd.getTime())/86400000);
-      var ageNote=daysOld<=3?'fresh':daysOld<=7?daysOld+'d old':'\u26a0\ufe0f '+daysOld+'d old';
-      dateEl.textContent='As of '+data.report_date+' ('+ageNote+') \u00b7 CFTC';
-      if(daysOld>7){dateEl.style.color='#f0913a';}
+      var _rds=String(data.report_date);
+      var rd=/^\d{4}-\d{2}-\d{2}$/.test(_rds)?new Date(_rds+'T12:00:00'):new Date(_rds);
+      var rdOk=rd&&!isNaN(rd.getTime());
+      var daysOld=rdOk?Math.round((Date.now()-rd.getTime())/86400000):null;
+      var _cmo=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+      var _cDisp=rdOk?_cmo[rd.getMonth()]+' '+rd.getDate()+', '+rd.getFullYear():_rds;
+      var ageNote=daysOld==null?'pending':daysOld<=3?'fresh':daysOld<=7?daysOld+'d old':'\u26a0\ufe0f '+daysOld+'d old';
+      dateEl.textContent='As of '+_cDisp+' ('+ageNote+') \u00b7 CFTC';
+      if(daysOld!=null&&daysOld>7){dateEl.style.color='#f0913a';}
     }
   }
   fetch('/data/cot.json').then(function(r){if(!r.ok)throw new Error('no-cot');return r.json();}).then(renderCOT).catch(function(){
@@ -1014,7 +1018,33 @@ fetch('/data/fertilizer.json')
   .catch(function(){var d=document.getElementById('fert-date');if(d)d.textContent='Price data unavailable';});
 })();
 </script>
-<script src="/components/sparklines.js" defer></script>
+<script>
+/* Inline micro-sparklines — replaces missing sparklines.js */
+(function(){
+  function drawSparkline(canvas,data,color){
+    var ctx=canvas.getContext('2d');
+    var w=canvas.width,h=canvas.height;
+    ctx.clearRect(0,0,w,h);
+    if(!data||data.length<2)return;
+    var mn=Math.min.apply(null,data),mx=Math.max.apply(null,data),rng=mx-mn||1;
+    ctx.strokeStyle=color||'rgba(230,176,66,.7)';
+    ctx.lineWidth=1.5;
+    ctx.lineJoin='round';
+    ctx.lineCap='round';
+    ctx.beginPath();
+    data.forEach(function(v,i){
+      var x=i/(data.length-1)*w,y=h-((v-mn)/rng*(h*0.75)+h*0.125);
+      i===0?ctx.moveTo(x,y):ctx.lineTo(x,y);
+    });
+    ctx.stroke();
+    // fill
+    ctx.lineTo(w,h);ctx.lineTo(0,h);ctx.closePath();
+    ctx.fillStyle=color?color.replace(')',', 0.08)').replace('rgb','rgba'):'rgba(230,176,66,.06)';
+    ctx.fill();
+  }
+  window.AGSIST_SPARKLINE=drawSparkline;
+})();
+</script>
 <script>
 (function(){
 'use strict';
@@ -1187,12 +1217,13 @@ window.hydrateDaily = function(data) {
   setText('site-greeting',greeting);
   if(dateStr){
     try{
-      var d=new Date(dateStr+'T12:00:00');
+      var d=/^\d{4}-\d{2}-\d{2}$/.test(dateStr)?new Date(dateStr+'T12:00:00'):new Date(dateStr);
+      var dOk=d&&!isNaN(d.getTime());
       var days=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
       var months=['January','February','March','April','May','June','July','August','September','October','November','December'];
-      var ds=days[d.getDay()]+', '+months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear();
+      var ds=dOk?days[d.getDay()]+', '+months[d.getMonth()]+' '+d.getDate()+', '+d.getFullYear():dateStr;
       setText('daily-date',ds);
-      setText('daily-teaser-date','\uD83D\uDCF0 AGSIST Daily \u2014 '+months[d.getMonth()]+' '+d.getDate());
+      setText('daily-teaser-date','\uD83D\uDCF0 AGSIST Daily \u2014 '+(dOk?months[d.getMonth()]+' '+d.getDate():dateStr));
     }catch(e){}
   }
   if(data.teaser)setText('daily-teaser-text',data.teaser);
@@ -1211,7 +1242,14 @@ window.hydrateDaily = function(data) {
       conv.className='daily-sec-conviction '+cls;conv.textContent=lbl;conv.style.display='inline-flex';
     }
   });
-  if(data.tmyk){setText('daily-tmyk-title',data.tmyk.title||'');setHTML('daily-tmyk-body',data.tmyk.body||'');}
+  if(data.tmyk&&(data.tmyk.title||data.tmyk.body)){
+    setText('daily-tmyk-title',data.tmyk.title||'');
+    setHTML('daily-tmyk-body',data.tmyk.body||'');
+  } else {
+    // Hide TMYK section gracefully if data not available
+    var tmykWrap=document.getElementById('daily-tmyk-wrap');
+    if(tmykWrap)tmykWrap.style.display='none';
+  }
   if(data.quote){setHTML('daily-quote-text','"'+(data.quote.text||'')+'"');setText('daily-quote-attr','\u2014 '+(data.quote.attribution||''));}
   if(data.watch_list){
     var wl=el('daily-watch-list');
@@ -1221,11 +1259,15 @@ window.hydrateDaily = function(data) {
       }).join('');
     }
   }
-  if(data.the_number){
-    var nv=el('daily-number-value'),nu=el('daily-number-unit'),nc=el('daily-number-context');
-    if(nv)nv.textContent=data.the_number.value||'\u2014';
-    if(nu)nu.textContent=data.the_number.unit||'';
-    if(nc)nc.textContent=data.the_number.context||'';
+  // FIX: support both 'the_number' and 'number' field names; show dash if absent
+  var _num=data.the_number||data.number||null;
+  var nv=el('daily-number-value'),nu=el('daily-number-unit'),nc=el('daily-number-context');
+  if(_num){
+    if(nv)nv.textContent=_num.value||'\u2014';
+    if(nu)nu.textContent=_num.unit||'';
+    if(nc)nc.textContent=_num.context||'';
+  } else {
+    if(nv)nv.textContent='\u2014';
   }
   var moodEl=el('daily-mood');
   if(moodEl&&data.mood){moodEl.textContent=data.mood;moodEl.style.display='inline-block';}
