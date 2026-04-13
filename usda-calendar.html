@@ -16,7 +16,7 @@
   <link rel="apple-touch-icon"                     href="/img/apple-touch-icon.png">
   <link rel="manifest"                             href="/manifest.json">
   <meta name="author" content="Sigurd Lindquist">
-  <meta name="robots" content="index, follow">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
   <link rel="canonical" href="https://agsist.com/usda-calendar">
 
   <title>USDA Report Calendar 2026 &mdash; WASDE &amp; Crop Dates | AGSIST</title>
@@ -55,22 +55,17 @@
   </script>
 
   <style>
-    /* usda-calendar v3 — AGSIST brand 2026-04-10 */
     *,*::before,*::after{box-sizing:border-box;}
     html { overflow-x: hidden; overflow-x: clip; width: 100%; }
     body { overflow-x: hidden; overflow-x: clip; width: 100%; }
     button,a,[role="button"]{touch-action:manipulation;}
     :root{--r8:8px;--r6:6px;--r20:20px;}
-
-    /* Hero */
     .cal-hero{background:linear-gradient(160deg,var(--bg)0%,var(--surface)100%);border-bottom:2px solid var(--border);padding:3rem 1.5rem 2.5rem;}
     .cal-hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 270px;gap:2rem;align-items:center;}
     .cal-eyebrow{display:inline-flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);background:rgba(218,165,32,.06);border:1px solid rgba(218,165,32,.18);border-radius:3px;padding:.25rem .7rem;margin-bottom:.75rem;}
     .cal-h1{font-family:'Oswald',sans-serif;font-size:clamp(1.8rem,4vw,3rem);font-weight:700;line-height:1.1;color:var(--text);text-transform:uppercase;letter-spacing:.01em;margin-bottom:.75rem;}
     .cal-h1 span{color:var(--gold);}
     .cal-sub{font-size:.95rem;line-height:1.75;color:var(--text-dim);max-width:500px;}
-
-    /* Countdown panel */
     .cal-countdown{background:var(--surface);border:2px solid rgba(218,165,32,.3);border-radius:var(--r8);padding:1.4rem;text-align:center;}
     .cal-cd-label{display:flex;align-items:center;justify-content:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.65rem;}
     .live-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--gold);animation:ldp 1.8s infinite;}
@@ -79,49 +74,35 @@
     .cal-cd-date{font-size:.72rem;color:var(--text-dim);margin-bottom:.85rem;line-height:1.5;}
     .cal-cd-num{font-family:'Oswald',sans-serif;font-size:3.2rem;font-weight:700;color:var(--gold);line-height:1;}
     .cal-cd-unit{font-family:'JetBrains Mono',monospace;font-size:.62rem;color:var(--text-muted);margin-top:.2rem;}
-
-    /* Main wrapper */
     .cal-main{max-width:1100px;margin:0 auto;padding:0 1rem 4rem;}
     .cal-bc{font-size:.82rem;color:var(--text-dim);padding-top:1rem;margin-bottom:.25rem;}
     .cal-bc a{color:var(--text-dim);text-decoration:none;}
     .cal-bc a:hover{color:var(--gold);}
-
-    /* Filter nav */
     .cal-nav{display:flex;gap:.5rem;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:.85rem 0 .75rem;}
     .cal-nav::-webkit-scrollbar{display:none;}
     .cal-filter{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:.42rem .85rem;border:2px solid var(--border);border-radius:var(--r20);background:var(--surface);color:var(--text-dim);cursor:pointer;white-space:nowrap;flex-shrink:0;min-height:44px;display:inline-flex;align-items:center;transition:all .15s;}
     .cal-filter.active{background:var(--gold);color:#000;border-color:var(--gold);}
     .cal-filter:hover:not(.active){border-color:var(--gold);color:var(--gold);}
-
-    /* Legend */
     .cal-legend{display:flex;flex-wrap:wrap;gap:.55rem;margin-bottom:1.1rem;}
     .leg-item{display:flex;align-items:center;gap:.4rem;font-size:.7rem;color:var(--text-dim);}
     .leg-dot{width:9px;height:9px;border-radius:2px;flex-shrink:0;}
-
-    /* Month card */
     .cal-month{background:var(--surface);border:2px solid var(--border);border-radius:var(--r8);margin-bottom:.85rem;overflow:hidden;}
     .cal-month.is-past{opacity:.62;}
     .cal-month-head{background:var(--bg);padding:.7rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
     .cal-mname{font-family:'Oswald',sans-serif;font-size:.95rem;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--text-dim);}
     .cal-mname.cur{color:var(--gold);}
     .cal-mcount{font-family:'JetBrains Mono',monospace;font-size:.6rem;font-weight:700;color:var(--text-muted);letter-spacing:.1em;text-transform:uppercase;}
-
-    /* Report row */
     .cal-row{display:flex;align-items:flex-start;gap:.85rem;padding:.7rem 1rem;border-bottom:1px solid var(--border);border-left:3px solid transparent;transition:background .12s;}
     .cal-row:last-child{border-bottom:none;}
     .cal-row:hover{background:rgba(255,255,255,.02);}
     .cal-row.is-past{opacity:.5;}
     .cal-row.is-today{background:rgba(218,165,32,.07);border-left-color:var(--gold);}
     .cal-row.is-next{background:rgba(218,165,32,.04);border-left-color:rgba(218,165,32,.45);}
-
-    /* Date block */
     .cal-date{flex-shrink:0;min-width:46px;text-align:center;background:var(--surface2);border-radius:var(--r6);padding:.35rem .4rem;}
     .cal-day{font-family:'Oswald',sans-serif;font-size:1.2rem;font-weight:700;color:var(--text);line-height:1;}
     .cal-dow{font-family:'JetBrains Mono',monospace;font-size:.58rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-top:1px;}
     .cal-date.is-today{background:var(--gold);}
     .cal-date.is-today .cal-day,.cal-date.is-today .cal-dow{color:#000;}
-
-    /* Report info */
     .cal-info{flex:1;min-width:0;}
     .cal-name-row{display:flex;align-items:center;gap:.45rem;flex-wrap:wrap;margin-bottom:.28rem;}
     .cal-rname{font-size:.88rem;font-weight:700;color:var(--text);}
@@ -134,13 +115,9 @@
     .tag-supply  {background:rgba(248,113,113,.12);color:#f87171;}
     .tag-outlook {background:rgba(34,211,238,.12); color:#22d3ee;}
     .tag-export  {background:rgba(74,222,128,.12); color:#4ade80;}
-
-    /* Meta row */
     .cal-meta-row{display:flex;align-items:center;gap:.75rem;flex-wrap:wrap;}
     .cal-time{font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text-muted);}
     .cal-desc{font-size:.72rem;color:var(--text-muted);margin-top:.18rem;line-height:1.5;}
-
-    /* Impact */
     .cal-impact{display:flex;align-items:center;gap:.38rem;}
     .imp-dots{display:flex;gap:2.5px;align-items:center;}
     .imp-dot{width:7px;height:7px;border-radius:50%;background:rgba(255,255,255,.08);flex-shrink:0;}
@@ -153,8 +130,6 @@
     .imp-lbl.high    {background:rgba(218,165,32,.1); color:var(--gold);}
     .imp-lbl.moderate{background:rgba(58,139,60,.1);  color:var(--green);}
     .imp-lbl.low     {background:rgba(255,255,255,.04);color:var(--text-muted);}
-
-    /* Explainer section */
     .cal-section-head{font-family:'JetBrains Mono',monospace;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);margin:1.75rem 0 .85rem;}
     .cal-exp-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:.85rem;}
     .cal-exp-card{background:var(--surface);border:2px solid var(--border);border-radius:var(--r8);padding:1.1rem;transition:border-color .15s;}
@@ -163,35 +138,13 @@
     .cal-exp-card p{font-size:.78rem;color:var(--text-dim);line-height:1.65;margin:0 0 .65rem;}
     .cal-exp-imp{display:flex;align-items:center;gap:.45rem;padding-top:.55rem;border-top:1px solid var(--border);}
     .cal-exp-imp-note{font-family:'JetBrains Mono',monospace;font-size:.6rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;}
-
-    /* Footer note */
     .cal-foot{font-size:.72rem;color:var(--text-muted);text-align:center;margin-top:1.25rem;line-height:1.6;}
     .cal-foot a{color:var(--gold);}
-
-    /* Responsive */
     @media(max-width:900px){.cal-hero-inner{grid-template-columns:1fr;}.cal-countdown{max-width:380px;}}
-    @media(max-width:640px){
-      .cal-hero{padding:2rem 1rem 1.5rem;}
-      .cal-main{padding:0 .75rem 3rem;}
-      .cal-rname{font-size:.82rem;}
-      .cal-row{padding:.6rem .75rem;gap:.6rem;}
-      .cal-month-head{padding:.6rem .75rem;}
-    }
-    @media(max-width:380px){
-      .cal-hero{padding:1.5rem .65rem;}
-      .cal-h1{font-size:1.6rem;}
-      .cal-cd-num{font-size:2.4rem;}
-      .cal-date{min-width:40px;padding:.3rem .35rem;}
-      .cal-day{font-size:1rem;}
-      .cal-row{padding:.5rem .6rem;gap:.5rem;}
-    }
+    @media(max-width:640px){.cal-hero{padding:2rem 1rem 1.5rem;}.cal-main{padding:0 .75rem 3rem;}.cal-rname{font-size:.82rem;}.cal-row{padding:.6rem .75rem;gap:.6rem;}.cal-month-head{padding:.6rem .75rem;}}
+    @media(max-width:380px){.cal-hero{padding:1.5rem .65rem;}.cal-h1{font-size:1.6rem;}.cal-cd-num{font-size:2.4rem;}.cal-date{min-width:40px;padding:.3rem .35rem;}.cal-day{font-size:1rem;}.cal-row{padding:.5rem .6rem;gap:.5rem;}}
     @media(prefers-reduced-motion:reduce){.live-dot{animation:none;}.cal-row,.cal-filter,.cal-exp-card{transition:none;}}
-    @media print{
-      .cal-hero,#site-header,#site-footer,.cal-nav,.cal-legend{display:none!important;}
-      .cal-month{border:1px solid #ccc;break-inside:avoid;margin-bottom:.5rem;}
-      body{color:#000;background:#fff;}
-      .cal-row.is-past{opacity:1;}
-    }
+    @media print{.cal-hero,#site-header,#site-footer,.cal-nav,.cal-legend{display:none!important;}.cal-month{border:1px solid #ccc;break-inside:avoid;margin-bottom:.5rem;}body{color:#000;background:#fff;}.cal-row.is-past{opacity:1;}}
   </style>
 </head>
 <body>
@@ -242,102 +195,60 @@
 
       <div class="cal-section-head">About These Reports</div>
       <div class="cal-exp-grid">
-
         <div class="cal-exp-card">
           <h4 style="color:#f87171">&#128202; WASDE Report</h4>
           <p>World Agricultural Supply and Demand Estimates. Monthly global crop and livestock supply/demand balance. Released around the 10th of each month at 12:00 PM ET.</p>
-          <div class="cal-exp-imp">
-            <div class="imp-dots"><div class="imp-dot f high"></div><div class="imp-dot f high"></div><div class="imp-dot f high"></div><div class="imp-dot f high"></div><div class="imp-dot"></div></div>
-            <span class="imp-lbl high">HIGH</span>
-            <span class="cal-exp-imp-note">&mdash; Moves corn/soy 10&ndash;40&cent;</span>
-          </div>
+          <div class="cal-exp-imp"><div class="imp-dots"><div class="imp-dot f high"></div><div class="imp-dot f high"></div><div class="imp-dot f high"></div><div class="imp-dot f high"></div><div class="imp-dot"></div></div><span class="imp-lbl high">HIGH</span><span class="cal-exp-imp-note">&mdash; Moves corn/soy 10&ndash;40&cent;</span></div>
         </div>
-
         <div class="cal-exp-card">
           <h4 style="color:#e6b042">&#127807; Prospective Plantings</h4>
           <p>Farmer survey of intended spring planting acres for corn, soybeans, and wheat. Released late March. Sets the tone for the entire marketing year ahead.</p>
-          <div class="cal-exp-imp">
-            <div class="imp-dots"><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div></div>
-            <span class="imp-lbl extreme">EXTREME</span>
-            <span class="cal-exp-imp-note">&mdash; Major price mover</span>
-          </div>
+          <div class="cal-exp-imp"><div class="imp-dots"><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div></div><span class="imp-lbl extreme">EXTREME</span><span class="cal-exp-imp-note">&mdash; Major price mover</span></div>
         </div>
-
         <div class="cal-exp-card">
           <h4 style="color:#e6b042">&#128208; Acreage Report</h4>
           <p>Actual planted and harvested acreage for major crops from the June 1 survey. Often the largest single-day price mover of the entire crop year.</p>
-          <div class="cal-exp-imp">
-            <div class="imp-dots"><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div></div>
-            <span class="imp-lbl extreme">EXTREME</span>
-            <span class="cal-exp-imp-note">&mdash; Biggest mover of crop year</span>
-          </div>
+          <div class="cal-exp-imp"><div class="imp-dots"><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div></div><span class="imp-lbl extreme">EXTREME</span><span class="cal-exp-imp-note">&mdash; Biggest mover of crop year</span></div>
         </div>
-
         <div class="cal-exp-card">
           <h4 style="color:#f87171">&#127806; Crop Production (Aug)</h4>
           <p>The August report delivers the first field-survey-based yield estimate for corn and soybeans, replacing model-based forecasts. Highest-impact supply report of the year.</p>
-          <div class="cal-exp-imp">
-            <div class="imp-dots"><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div></div>
-            <span class="imp-lbl extreme">EXTREME</span>
-            <span class="cal-exp-imp-note">&mdash; Most market-moving of year</span>
-          </div>
+          <div class="cal-exp-imp"><div class="imp-dots"><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div></div><span class="imp-lbl extreme">EXTREME</span><span class="cal-exp-imp-note">&mdash; Most market-moving of year</span></div>
         </div>
-
         <div class="cal-exp-card">
           <h4 style="color:#60a5fa">&#127959; Grain Stocks (Sep 1)</h4>
           <p>September 1 inventory is the most critical of the four quarterly grain stocks reports. Sets the baseline for beginning-of-year carry-out estimates and new-crop pricing direction.</p>
-          <div class="cal-exp-imp">
-            <div class="imp-dots"><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div></div>
-            <span class="imp-lbl extreme">EXTREME</span>
-            <span class="cal-exp-imp-note">&mdash; Critical carry-out signal</span>
-          </div>
+          <div class="cal-exp-imp"><div class="imp-dots"><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div><div class="imp-dot f extreme"></div></div><span class="imp-lbl extreme">EXTREME</span><span class="cal-exp-imp-note">&mdash; Critical carry-out signal</span></div>
         </div>
-
         <div class="cal-exp-card">
           <h4 style="color:#60a5fa">&#127959; Grain Stocks (Dec/Mar/Jun)</h4>
           <p>Quarterly inventory of corn, soybeans, wheat, sorghum, and oats on farms and in commercial facilities. December, March, and June reports track mid-marketing-year pace.</p>
-          <div class="cal-exp-imp">
-            <div class="imp-dots"><div class="imp-dot f high"></div><div class="imp-dot f high"></div><div class="imp-dot f high"></div><div class="imp-dot f high"></div><div class="imp-dot"></div></div>
-            <span class="imp-lbl high">HIGH</span>
-            <span class="cal-exp-imp-note">&mdash; Quarterly carry-out signal</span>
-          </div>
+          <div class="cal-exp-imp"><div class="imp-dots"><div class="imp-dot f high"></div><div class="imp-dot f high"></div><div class="imp-dot f high"></div><div class="imp-dot f high"></div><div class="imp-dot"></div></div><span class="imp-lbl high">HIGH</span><span class="cal-exp-imp-note">&mdash; Quarterly carry-out signal</span></div>
         </div>
-
         <div class="cal-exp-card">
           <h4 style="color:#4ade80">&#128200; Crop Progress</h4>
           <p>Weekly condition ratings (Excellent/Good/Fair/Poor/VP) and planting or harvest progress by state. Released Mondays at 4:00 PM ET from April through November.</p>
-          <div class="cal-exp-imp">
-            <div class="imp-dots"><div class="imp-dot f moderate"></div><div class="imp-dot f moderate"></div><div class="imp-dot f moderate"></div><div class="imp-dot"></div><div class="imp-dot"></div></div>
-            <span class="imp-lbl moderate">MODERATE</span>
-            <span class="cal-exp-imp-note">&mdash; G/E % moves prices</span>
-          </div>
+          <div class="cal-exp-imp"><div class="imp-dots"><div class="imp-dot f moderate"></div><div class="imp-dot f moderate"></div><div class="imp-dot f moderate"></div><div class="imp-dot"></div><div class="imp-dot"></div></div><span class="imp-lbl moderate">MODERATE</span><span class="cal-exp-imp-note">&mdash; G/E % moves prices</span></div>
         </div>
-
         <div class="cal-exp-card">
           <h4 style="color:#4ade80">&#128230; Export Sales</h4>
           <p>Weekly net sales of corn, soybeans, and wheat to foreign buyers. Released Thursdays at 8:30 AM ET by USDA FAS. Large China purchases routinely move futures at release.</p>
-          <div class="cal-exp-imp">
-            <div class="imp-dots"><div class="imp-dot f moderate"></div><div class="imp-dot f moderate"></div><div class="imp-dot f moderate"></div><div class="imp-dot"></div><div class="imp-dot"></div></div>
-            <span class="imp-lbl moderate">MODERATE</span>
-            <span class="cal-exp-imp-note">&mdash; China sales = high impact</span>
-          </div>
+          <div class="cal-exp-imp"><div class="imp-dots"><div class="imp-dot f moderate"></div><div class="imp-dot f moderate"></div><div class="imp-dot f moderate"></div><div class="imp-dot"></div><div class="imp-dot"></div></div><span class="imp-lbl moderate">MODERATE</span><span class="cal-exp-imp-note">&mdash; China sales = high impact</span></div>
         </div>
-
-      </div><!-- /.cal-exp-grid -->
+      </div>
 
       <div class="cal-foot">
         Release times are approximate. USDA may shift dates around holidays.
         Always verify at <a href="https://www.usda.gov/media/agency-reports" target="_blank" rel="noopener">usda.gov</a>.
         2026 dates marked &ldquo;est.&rdquo; are estimates based on prior-year patterns. All times Eastern.
       </div>
-    </div><!-- /.cal-main -->
+    </div>
   </main>
 
   <div id="site-footer"></div>
   <script src="/components/loader.js" defer></script>
   <script>
   const REPORTS = [
-    // \u2500\u2500 2025 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
     {date:'2025-01-10',name:'WASDE Report',type:'wasde',time:'12:00 PM ET',desc:'Monthly world supply/demand estimates for crops and livestock'},
     {date:'2025-01-10',name:'Crop Production Annual',type:'supply',time:'12:00 PM ET',desc:'Final 2024 crop production estimates'},
     {date:'2025-01-17',name:'Grain Stocks (Dec 1)',type:'stocks',time:'12:00 PM ET',desc:'Quarterly grain stocks \u2014 corn, soybeans, wheat, sorghum'},
@@ -362,7 +273,6 @@
     {date:'2025-11-12',name:'WASDE Report',type:'wasde',time:'12:00 PM ET',desc:'Monthly world supply/demand estimates'},
     {date:'2025-11-12',name:'Crop Production',type:'supply',time:'12:00 PM ET',desc:'November crop production estimates'},
     {date:'2025-12-10',name:'WASDE Report',type:'wasde',time:'12:00 PM ET',desc:'Monthly world supply/demand estimates'},
-    // \u2500\u2500 2026 \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
     {date:'2026-01-09',name:'WASDE Report',type:'wasde',time:'12:00 PM ET',desc:'Monthly world supply/demand estimates \u2014 est.'},
     {date:'2026-01-09',name:'Crop Production Annual',type:'supply',time:'12:00 PM ET',desc:'Final 2025 crop production estimates \u2014 est.'},
     {date:'2026-01-16',name:'Grain Stocks (Dec 1)',type:'stocks',time:'12:00 PM ET',desc:'Quarterly grain stocks \u2014 est.'},
@@ -390,18 +300,16 @@
     {date:'2026-12-10',name:'WASDE Report',type:'wasde',time:'12:00 PM ET',desc:'Monthly world supply/demand estimates \u2014 est.'},
   ];
 
-  // Weekly Export Sales \u2014 Thursdays year-round (8:30 AM ET)
   (function(){
-    const end = new Date('2026-12-31');
-    let cur = new Date('2025-01-02');
-    while(cur.getDay()!==4) cur.setDate(cur.getDate()+1);
+    const end=new Date('2026-12-31');
+    let cur=new Date('2025-01-02');
+    while(cur.getDay()!==4)cur.setDate(cur.getDate()+1);
     while(cur<=end){
       REPORTS.push({date:cur.toISOString().slice(0,10),name:'Export Sales Report',type:'export',time:'8:30 AM ET',desc:'Weekly net export sales \u2014 corn, soybeans, wheat \u2014 USDA FAS'});
       cur.setDate(cur.getDate()+7);
     }
   })();
 
-  // Weekly Crop Progress \u2014 Mondays April\u2013November
   (function(){
     const seasons=[{start:'2025-04-07',end:'2025-11-24'},{start:'2026-04-06',end:'2026-11-23'}];
     seasons.forEach(function(s){
@@ -417,7 +325,6 @@
     });
   })();
 
-  // \u2500\u2500 Helpers \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
   const today=new Date(); today.setHours(0,0,0,0);
   const DOW=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
   const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
@@ -428,14 +335,14 @@
     if(r.type==='supply'&&r.date.slice(5,7)==='08') return{level:'extreme',score:5,label:'EXTREME'};
     if(r.type==='stocks'&&r.date.slice(5,7)==='09') return{level:'extreme',score:5,label:'EXTREME'};
     const MAP={
-      wasde:   {level:'high',    score:4,label:'HIGH'},
-      supply:  {level:'high',    score:4,label:'HIGH'},
-      plantings:{level:'extreme',score:5,label:'EXTREME'},
-      stocks:  {level:'high',    score:4,label:'HIGH'},
-      export:  {level:'moderate',score:3,label:'MODERATE'},
-      croprog: {level:'low',     score:2,label:'LOW-MOD'},
-      outlook: {level:'low',     score:2,label:'LOW-MOD'},
-      census:  {level:'low',     score:1,label:'LOW'},
+      wasde:    {level:'high',    score:4,label:'HIGH'},
+      supply:   {level:'high',    score:4,label:'HIGH'},
+      plantings:{level:'extreme', score:5,label:'EXTREME'},
+      stocks:   {level:'high',    score:4,label:'HIGH'},
+      export:   {level:'moderate',score:3,label:'MODERATE'},
+      croprog:  {level:'low',     score:2,label:'LOW-MOD'},
+      outlook:  {level:'low',     score:2,label:'LOW-MOD'},
+      census:   {level:'low',     score:1,label:'LOW'},
     };
     return MAP[r.type]||{level:'moderate',score:3,label:'MOD'};
   }
@@ -459,7 +366,6 @@
     const groups=groupByMonth(filtered);
     const nowMo=today.getMonth(), nowYr=today.getFullYear();
 
-    // Next upcoming
     const sorted=[...REPORTS].sort((a,b)=>a.date.localeCompare(b.date));
     let next=null;
     for(const r of sorted){const d=new Date(r.date+'T12:00:00');if(d>=today){next=r;break;}}
@@ -473,7 +379,6 @@
     }
 
     const tagLabels={wasde:'WASDE',croprog:'Crop Progress',plantings:'Plantings',stocks:'Grain Stocks',census:'Census',supply:'Crop Production',outlook:'Outlook',export:'Export Sales'};
-
     let html='';
     Object.keys(groups).sort().forEach(key=>{
       const[yr,mo]=key.split('-').map(Number);
@@ -481,10 +386,8 @@
       const isPastMonth=new Date(yr,mo,0)<today;
       if(!showPast&&isPastMonth)return;
       const isCurMo=(yr===nowYr&&mo-1===nowMo);
-
       html+=`<div class="cal-month${isPastMonth?' is-past':''}" data-month="${key}">`;
       html+=`<div class="cal-month-head"><span class="cal-mname${isCurMo?' cur':''}">${MONTHS[mo-1]} ${yr}</span><span class="cal-mcount">${reps.length} ${reps.length===1?'REPORT':'REPORTS'}</span></div>`;
-
       reps.forEach(r=>{
         const d=new Date(r.date+'T12:00:00');
         const isPast=d<today;
@@ -494,7 +397,6 @@
         const dateCls=isToday?'is-today':'';
         const imp=getImpact(r);
         const showDesc=r.type!=='export'&&r.type!=='croprog';
-
         html+=`<div class="cal-row ${rowCls}" data-type="${r.type}">
   <div class="cal-date ${dateCls}">
     <div class="cal-day">${d.getDate()}</div>
