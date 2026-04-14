@@ -8,7 +8,13 @@
  *   3. Open-Meteo         — weather
  *   4. Nominatim OSM      — reverse geocoding
  *
- * AUDIT v12 — 2026-04-09
+ * AUDIT v13 — 2026-04-13
+ *   FIX: fetchWeather() now sets window.AGSIST_STATE.weather = {lat, lon}
+ *   so that waitForGeo() in index.html can resolve soil temp and planting
+ *   date logic. Previously only window.AGSIST_GEO was set, causing
+ *   waitForGeo to exhaust all retries silently.
+ *
+ * v12 — 2026-04-09
  *   FIX: fetchKalshiMarkets() in boot() now checks for data-markets-handled="true"
  *   on #kalshi-grid before running. Pages that manage their own market display
  *   (e.g. index.html, ag-odds.html) must set this attribute to prevent geo.js
@@ -126,6 +132,15 @@ function fetchWeather(lat, lon, label) {
 
   // Expose geo globally for bids-homepage.js and other scripts
   window.AGSIST_GEO = { lat: lat, lng: lon, city: '', state: '', zip: '' };
+
+  // ── FIX v13: Expose lat/lon on AGSIST_STATE.weather so that waitForGeo()
+  // in index.html can resolve. Previously only AGSIST_GEO was set here,
+  // causing soil temp and planting date logic to stall indefinitely.
+  // AGSIST_STATE is defined by state.js as a methods object — we safely
+  // add a .weather property without disturbing getState/setState/detectLocation.
+  if (window.AGSIST_STATE && typeof window.AGSIST_STATE === 'object') {
+    window.AGSIST_STATE.weather = { lat: lat, lon: lon };
+  }
 
   var wl = document.getElementById('wx-loading');
   var ze = document.getElementById('wx-zip-entry');
@@ -961,7 +976,7 @@ function loadDailyBriefing() {
         });
       }
 
-      el = document.getElementById('daily-source');  if (el) el.textContent = d.source_summary || d.source || 'USDA \u00b7 CME Group \u00b7 Open-Meteo';
+      el = document.getElementById('daily-source');  if (el) el.textContent = d.source_summary || d.source || 'USDA · CME Group · Open-Meteo';
       el = document.getElementById('daily-loading'); if (el) el.style.display = 'none';
       el = document.getElementById('daily-content'); if (el) el.style.display = 'block';
     })
