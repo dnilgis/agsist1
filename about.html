@@ -2,7 +2,7 @@
 <html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="theme-color" content="#111a0a">
 
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-6KXCTD5Z9H"></script>
@@ -31,10 +31,10 @@
   <meta name="twitter:description" content="Agricultural market intelligence built for farmers, not traders. Built by a crop insurance agent in Wisconsin — one person, nights and weekends.">
   <meta name="twitter:image"       content="https://agsist.com/img/og/about.jpg">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="preload" href="/components/styles.css" as="style">
-  <link rel="stylesheet"                          href="/components/styles.css">
+  <link rel="preload" href="/components/styles.css?v=10" as="style">
+  <link rel="stylesheet" href="/components/styles.css?v=10">
   <link rel="icon" type="image/x-icon"            href="/img/favicon.ico">
   <link rel="icon" type="image/png" sizes="32x32" href="/img/favicon-32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/img/favicon-16.png">
@@ -42,7 +42,6 @@
   <link rel="manifest"                            href="/manifest.json">
 
   <style>
-    /* v3: honest sustainability language, crop insurance CTA */
     button,a,[role="button"]{touch-action:manipulation;}
 
     .info-page {
@@ -145,15 +144,15 @@
     }
     .builder-links a:hover { opacity: .75; }
     .ins-cta {
-      background: rgba(58,139,60,.07);
-      border: 1px solid rgba(58,139,60,.3);
+      background: rgba(74,171,76,.07);
+      border: 1px solid rgba(74,171,76,.3);
       border-radius: 8px;
       padding: 1.4rem 1.5rem;
       margin: 1.25rem 0;
     }
     .ins-cta h3 {
       font-size: .95rem;
-      color: #3a8b3c;
+      color: var(--green);
       margin-bottom: .5rem;
       font-weight: 700;
     }
@@ -166,7 +165,7 @@
     .ins-cta .cta-link {
       display: inline-block;
       padding: .5rem 1.25rem;
-      background: #3a8b3c;
+      background: var(--green);
       color: #fff;
       border-radius: 6px;
       font-size: .85rem;
@@ -175,6 +174,15 @@
       transition: opacity .15s;
     }
     .ins-cta .cta-link:hover { opacity: .85; color: #fff; }
+    .sponsor-note {
+      background: var(--surface);
+      border: 1px solid var(--border-g);
+      border-radius: 8px;
+      padding: 1.1rem 1.3rem;
+      margin: 1.25rem 0;
+    }
+    .sponsor-note p { font-size: .88rem; margin: 0; color: var(--text-dim); line-height: 1.8; }
+    .sponsor-note a { color: var(--gold); }
     @media (max-width: 520px) {
       .info-page { padding: 1.5rem .9rem 3rem; }
       .info-page h1 { font-size: 1.6rem; }
@@ -191,7 +199,7 @@
     <div class="info-page">
 
       <h1>About AGSIST</h1>
-      <p class="sub">Agricultural market intelligence built for farmers, not traders. One person, one mission — give Upper Midwest grain producers the data tools they deserve.</p>
+      <p class="sub">Agricultural market intelligence built for farmers, not traders. One person, one mission — give grain producers the data tools they deserve.</p>
 
       <h2>What This Is</h2>
       <p>AGSIST is an agricultural intelligence dashboard. Live futures prices, local farm weather, spray conditions, urea volatilization risk, USDA reports, prediction markets, calculators, and a daily briefing — all in one place, no login required.</p>
@@ -205,39 +213,43 @@
           I'm a licensed crop insurance agent serving corn, soybean, and grain producers across Wisconsin and Minnesota. AGSIST started as a tool I wanted for myself and my clients, and grew into something I thought every farmer deserved access to. Every line of code on this site is mine — built personally, self-funded, no team, no investors. Just nights, weekends, and a strong opinion that this data should be more accessible.
         </p>
         <div class="builder-links">
-          <a href="tel:+17157972428">📞 715-797-2428</a>
-          <a href="https://farmers1st.com" target="_blank" rel="noopener">🌐 farmers1st.com</a>
-          <a href="/contact">✉ Contact</a>
+          <a href="tel:+17157972428">&#x1F4DE; 715-797-2428</a>
+          <a href="https://farmers1st.com" target="_blank" rel="noopener">&#x1F310; farmers1st.com</a>
+          <a href="/contact">&#x2709; Contact</a>
         </div>
       </div>
 
       <h2>How This Stays Running</h2>
-      <p>Honestly — it's self-funded. No investors, no sponsors, no business backing it. I built this on my own time and my own dime because I thought it needed to exist. Right now it runs on stubbornness more than anything else.</p>
-      <p>That has to change. Data costs are real — live market feeds, cash bid coverage, the AI that writes the daily briefing — and they grow as the platform grows. AGSIST needs to stand on its own financially. The path there runs through commercial widget licensing, premium features, and eventually paid tiers for the tools that cost the most to deliver.</p>
-      <p>Most tools are available at no charge for now. I'm not making promises about forever. If you want to support the project, use it, share it, and reach out if you're interested in commercial licensing or embedding a widget on your site.</p>
+      <p>Honestly — it's self-funded right now. No investors, no sponsors, no business backing it. I built this on my own time and my own dime because I thought it needed to exist.</p>
+      <p>That has to change. Data costs are real and they grow as the platform grows. The path there is the AGSIST Daily Briefing — a morning market email that goes out to grain producers every weekday. I'm looking for a founding sponsor for it. One ag company, one line per issue, in front of an audience that's already there because they want to be.</p>
+      <p>If that's something you'd want to talk about, <a href="/contact">reach out</a>. Most tools stay available at no charge for now. I'm not making promises about forever.</p>
+
+      <div class="sponsor-note">
+        <p>&#x1F4F0; <strong style="color:var(--text)">Interested in sponsoring the AGSIST Daily Briefing?</strong> It goes out every weekday morning to grain producers who signed up for it. I'm looking for one founding sponsor — an ag company that wants daily presence in front of active farmers. <a href="mailto:sig@farmers1st.com">sig@farmers1st.com</a> or <a href="tel:+17157972428">715-797-2428</a>.</p>
+      </div>
 
       <h2>Crop Insurance — Wisconsin &amp; Minnesota</h2>
       <div class="ins-cta">
-        <h3>🌽 I'm also a crop insurance agent</h3>
+        <h3>&#x1F33D; I'm also a crop insurance agent</h3>
         <p>Separate from AGSIST — I'm a licensed crop insurance agent at Farmers First Agri Service, serving corn, soybean, and small grain producers in Wisconsin and Minnesota. Same person, different hat. If you need coverage, you'd be working with an agent who reads the same WASDE reports and basis charts you do and built his own tools to track them.</p>
         <p>No pitch. If you want to talk coverage, call me.</p>
-        <a href="tel:+17157972428" class="cta-link">📞 715-797-2428</a>
+        <a href="tel:+17157972428" class="cta-link">&#x1F4DE; 715-797-2428</a>
       </div>
 
       <h2>The Farmers First Ag Index (FFAI)</h2>
       <p>The FFAI is a proprietary weekly composite scoring the current agricultural economic environment across six categories: commodity prices, input costs, weather risk, export demand, credit conditions, and policy outlook. Published every Monday through Farmers First Agri Service. <a href="https://farmers1st.com" target="_blank" rel="noopener">farmers1st.com →</a></p>
 
       <h2>What's Coming</h2>
-      <p>AGSIST is an active, evolving project. On the roadmap: a dedicated crop progress page, expanded USDA yield data tools, a broader cash bid network, and deeper daily briefing tiers with more granular market analysis. Commercial widget licensing for co-ops, extension offices, and ag media is available now — <a href="/contact">reach out</a>.</p>
+      <p>AGSIST is an active, evolving project. On the roadmap: a dedicated crop progress page, expanded USDA yield data tools, a broader cash bid network, and deeper daily briefing tiers with more granular market analysis. If something's broken or missing, <a href="/contact">tell me</a>.</p>
 
       <h2>Questions</h2>
       <p>Reach out directly. I read everything myself.</p>
       <div class="info-card">
         <h3>Sigurd Lindquist — Farmers First Agri Service</h3>
         <p>
-          📞 <a href="tel:+17157972428">715-797-2428</a><br>
-          🌐 <a href="https://farmers1st.com" target="_blank" rel="noopener">farmers1st.com</a><br>
-          ✉ <a href="/contact">Contact page</a>
+          &#x1F4DE; <a href="tel:+17157972428">715-797-2428</a><br>
+          &#x1F310; <a href="https://farmers1st.com" target="_blank" rel="noopener">farmers1st.com</a><br>
+          &#x2709; <a href="/contact">Contact page</a>
         </p>
       </div>
 
@@ -245,6 +257,6 @@
   </main>
 
   <div id="site-footer"></div>
-  <script src="/components/loader.js"></script>
+  <script src="/components/loader.js" defer></script>
 </body>
 </html>
