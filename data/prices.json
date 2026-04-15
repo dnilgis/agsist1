@@ -1,5 +1,5 @@
 {
-  "fetched": "2026-04-15T22:08:58Z",
+  "fetched": "2026-04-15T23:09:12Z",
   "ok": 21,
   "failed": 1,
   "quotes": {
@@ -113,37 +113,37 @@
     },
     "crude": {
       "ticker": "CL=F",
-      "close": 91.39,
+      "close": 91.02,
       "open": 90.94,
-      "netChange": 0.45,
-      "pctChange": 0.4948,
+      "netChange": 0.08,
+      "pctChange": 0.088,
       "wk52_hi": 119.48,
       "wk52_lo": 54.98
     },
     "natgas": {
       "ticker": "NG=F",
-      "close": 2.613,
+      "close": 2.6,
       "open": 2.589,
-      "netChange": 0.024,
-      "pctChange": 0.927,
+      "netChange": 0.011,
+      "pctChange": 0.4249,
       "wk52_hi": 7.827,
       "wk52_lo": 2.561
     },
     "gold": {
       "ticker": "GC=F",
-      "close": 4813.8999,
+      "close": 4829.5,
       "open": 4849.6001,
-      "netChange": -35.7002,
-      "pctChange": -0.7361,
+      "netChange": -20.1001,
+      "pctChange": -0.4145,
       "wk52_hi": 5586.2002,
       "wk52_lo": 3125.0
     },
     "silver": {
       "ticker": "SI=F",
-      "close": 79.11,
+      "close": 79.505,
       "open": 79.925,
-      "netChange": -0.815,
-      "pctChange": -1.0197,
+      "netChange": -0.42,
+      "pctChange": -0.5255,
       "wk52_hi": 121.3,
       "wk52_lo": 31.685
     },
@@ -174,28 +174,28 @@
     },
     "bitcoin": {
       "ticker": "BTC-USD",
-      "close": 74972.53125,
+      "close": 74789.25,
       "open": 74204.64844,
-      "netChange": 767.88281,
-      "pctChange": 1.0348,
+      "netChange": 584.60156,
+      "pctChange": 0.7878,
       "wk52_hi": 126198.0703,
       "wk52_lo": 60074.2031
     },
     "ripple": {
       "ticker": "XRP-USD",
-      "close": 1.3988,
+      "close": 1.3922,
       "open": 1.3623,
-      "netChange": 0.0365,
-      "pctChange": 2.6793,
+      "netChange": 0.0299,
+      "pctChange": 2.1948,
       "wk52_hi": 3.6502,
       "wk52_lo": 1.1335
     },
     "kaspa": {
       "ticker": "KAS-USD",
-      "close": 0.03328,
+      "close": 0.0331,
       "open": 0.03236,
-      "netChange": 0.00092,
-      "pctChange": 2.843,
+      "netChange": 0.00074,
+      "pctChange": 2.2868,
       "wk52_hi": 0.1308,
       "wk52_lo": 0.0139
     }
