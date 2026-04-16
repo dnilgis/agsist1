@@ -5,13 +5,28 @@
     <link>https://agsist.com/daily</link>
     <description>Free daily agricultural market briefing for corn, soybean, and grain producers. Overnight surprises, farmer actions, market analysis — every morning at 5 AM CT.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 15 Apr 2026 12:45:10 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 16 Apr 2026 12:48:35 +0000</lastBuildDate>
     <atom:link href="https://agsist.com/feed.xml" rel="self" type="application/rss+xml"/>
     <image>
       <url>https://agsist.com/img/og/daily.jpg</url>
       <title>AGSIST Daily — Morning Agricultural Intelligence Briefing</title>
       <link>https://agsist.com/daily</link>
     </image>
+    <item>
+      <title>MILK CRASHES 5% AS GRAINS STAY STEADY</title>
+      <link>https://agsist.com/daily/2026-04-16</link>
+      <guid isPermaLink="true">https://agsist.com/daily/2026-04-16</guid>
+      <pubDate>Thu, 16 Apr 2026 05:00:00 -0600</pubDate>
+      <description>Class III milk crashed to $17.34 overnight, down a brutal 5.1% in a stark reminder of dairy's volatility problem we discussed yesterday. Meanwhile, corn barely budged at $4.51 per bushel and soybeans held $11.65 as planting season begins in earnest across the Corn Belt.
+Dairy producers face reality check while corn and beans hold pattern through early planting.
+• Grains Hold Steady
+  → Keep weather radars open and pricing fingers ready — any significant rain threats could spark quick rallies to move remaining old crop.
+• Dairy Reality Check
+  → Dairy producers should reassess risk management strategies immediately — this volatility demands active hedging, not hope.
+• Energy Inputs Slip
+  → Lock remaining diesel needs this week — planting season demand concentration can override broader crude weakness.
+Read more: https://agsist.com/daily/2026-04-16</description>
+    </item>
     <item>
       <title>GRAINS INCH HIGHER AS PLANTING BEGINS</title>
       <link>https://agsist.com/daily/2026-04-15</link>
@@ -446,21 +461,6 @@ Corn and beans follow with modest gains while milk crashes on oversupply concern
 • ENERGY &amp; INPUTS
   → No immediate action — diesel savings help but won't change planting decisions already made.
 Read more: https://agsist.com/daily/2026-03-11</description>
-    </item>
-    <item>
-      <title>CRUDE OIL CRASHES 24% — GRAINS FOLLOW DEEPER</title>
-      <link>https://agsist.com/daily/2026-03-10</link>
-      <guid isPermaLink="true">https://agsist.com/daily/2026-03-10</guid>
-      <pubDate>Tue, 10 Mar 2026 05:00:00 -0600</pubDate>
-      <description>Crude oil's 24% overnight crash triggered a broad commodity selloff, with corn losing 21¢ to $4.53 and wheat plunging 35¢ to $6.03. The energy collapse is pulling down input costs but also crushing the entire commodity risk appetite. This isn't just an oil story — it's a liquidity event hitting everything from grain to cattle.
-Corn drops 21¢ and wheat collapses 35¢ as energy rout ripples through commodity complex.
-• GRAINS &amp; OILSEEDS
-  → Don't panic-sell stored grain on this energy-driven selloff — fundamentals remain supportive.
-• LIVESTOCK &amp; DAIRY
-  → Calculate new feed cost ratios — today's grain drop may have improved your livestock margins.
-• ENERGY &amp; INPUTS
-  → Reassess fertilizer purchasing — energy crash may have created buying opportunities for spring application.
-Read more: https://agsist.com/daily/2026-03-10</description>
     </item>
   </channel>
 </rss>
