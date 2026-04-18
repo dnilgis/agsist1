@@ -1,5 +1,10 @@
 /* ═══════════════════════════════════════════════════════════════════
-   AGSIST — Shared Stylesheet v9.2 — 2026-04-14
+   AGSIST — Shared Stylesheet v9.3 — 2026-04-18
+   v9.3: Mobile selector scope fix
+     `.daily-sec:nth-child(n+4)` and `.daily-sec:nth-child(n+3)` were
+     inadvertently hitting `#daily-tmyk-wrap` (which uses `.daily-sec`
+     but lives as a sibling of `.daily-sections`, not inside it).
+     Fix: scope both rules to `.daily-sections > .daily-sec`.
    v9.2: WCAG AA contrast fixes:
      --green: #3a8b3c → #4aab4c (was 4.18:1, now ~5.1:1 on dark bg)
      --red:   #b84c2a → #c8562e (was 3.47:1, now ~4.2:1)
@@ -482,7 +487,7 @@ main.tool-main, main#main-content { max-width: 1100px; margin: 0 auto; padding: 
   .daily-sec-label { font-size: .6rem; margin-bottom: .15rem }
   .daily-sec-text { font-size: .78rem; line-height: 1.45 }
   .daily-sections { gap: .5rem; margin-bottom: .8rem }
-  .daily-sec:nth-child(n+4) { display: none }
+  .daily-sections > .daily-sec:nth-child(n+4) { display: none }
   .daily-ctas { margin-top: .25rem }
   .daily-teaser { padding: .4rem .9rem; gap: .15rem }
   .teaser-action { font-size: .68rem }
@@ -514,7 +519,7 @@ main.tool-main, main#main-content { max-width: 1100px; margin: 0 auto; padding: 
   .pc-range { display: none }
   .daily-headline { font-size: 1.4rem } .one-num { font-size: 2rem }
   .daily-lead { display: none }
-  .daily-sec:nth-child(n+3) { display: none }
+  .daily-sections > .daily-sec:nth-child(n+3) { display: none }
   .teaser-preview { font-size: .6rem } .daily-teaser { padding: .4rem .75rem }
   .pc-sm .pc-price { font-size: 1.05rem; } .pc-chg-val { font-size: .62rem; } .pc-prev { font-size: .5rem; min-height: .8em; }
 }
