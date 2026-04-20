@@ -508,7 +508,7 @@ button,a,[role="button"],input,select{touch-action:manipulation}
 // Barchart API key is held server-side by the Cloudflare Worker proxy.
 // Worker source: /components/worker.js (deployed to Cloudflare Workers).
 // If proxy is unreachable, bids list shows an error state — never a raw key.
-var BASE_URL='https://agsist-barchart.YOUR-SUBDOMAIN.workers.dev/barchart/getGrainBids';
+var BASE_URL='https://agsist-barchart.dnilgis.workers.dev/barchart/getGrainBids';
 var currentBids=[],currentElevators=[],currentFilter='all',currentSort='distance',pinnedKeys=[],wtdComm='corn';
 var hasSearched=false,detectedLabel='',preFilter='all',lastFetchTime=null;
 var radiusTimer=null;
