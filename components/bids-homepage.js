@@ -1,19 +1,30 @@
 // ═══════════════════════════════════════════════════════════════════
 // bids-homepage.js — Homepage Cash Bids Preview
-// Uses Barchart OnDemand API directly (same as /cash-bids page).
+//
+// Barchart API key is held server-side by the Cloudflare Worker proxy.
+// Worker source: /worker/worker.js (deployed to Cloudflare Workers).
+// If the proxy is unreachable, the bids list shows an error state —
+// the raw API key is NEVER exposed to the client.
+//
 // Groups results by elevator, shows top 3 nearest with commodity rows.
 //
 // Called by geo.js after ZIP resolves via propagateLocation():
 //   window.loadHomepageBids(lat, lng, label, zip)
 //
 // DEPLOY: /components/bids-homepage.js
+//
+// ⚠️ BEFORE DEPLOYING: replace the PROXY_URL placeholder below with your
+// actual Cloudflare Worker URL (from the Cloudflare dashboard after the
+// worker is deployed). See DEPLOY-CLOUDFLARE-WORKER.md.
 // ═══════════════════════════════════════════════════════════════════
 
 (function(){
   'use strict';
 
-  var API_KEY = 'd3f0e9bd96636187a70426233ec41b59';
-  var BASE_URL = 'https://ondemand.websol.barchart.com/getGrainBids.json';
+  // ⚠️ REPLACE with your Cloudflare Worker URL after deployment.
+  // Format: https://<worker-name>.<your-account>.workers.dev/barchart/getGrainBids
+  var PROXY_URL = 'https://agsist-barchart.YOUR-SUBDOMAIN.workers.dev/barchart/getGrainBids';
+
   var MAX_ELEVATORS = 3;
   var MAX_BIDS_PER_COMMODITY = 3;
 
@@ -200,8 +211,9 @@
       + '<div style="height:36px;background:var(--surface2);border-radius:6px;opacity:.3"></div>'
       + '</div>';
 
-    var url = BASE_URL + '?apikey=' + API_KEY
-      + '&zipCode=' + encodeURIComponent(zip)
+    // ── Proxy request (no API key in query — server-side only) ─────
+    var url = PROXY_URL
+      + '?zipCode=' + encodeURIComponent(zip)
       + '&maxDistance=50&getAllBids=1';
 
     fetch(url)
@@ -225,8 +237,9 @@
         var totalElevators = elevators.length;
 
         // Column labels
+        // FIX: .65rem font-size for readability (was .5rem — too small)
         var html = '<div style="display:grid;grid-template-columns:1fr auto auto;gap:.1rem .45rem;padding:0 .15rem .15rem;'
-          + 'font-family:\'JetBrains Mono\',monospace;font-size:.5rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);opacity:.65">'
+          + 'font-family:\'JetBrains Mono\',monospace;font-size:.65rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);opacity:.75">'
           + '<span>Delivery</span><span style="text-align:right">Cash</span><span style="text-align:right">Basis</span></div>';
 
         top.forEach(function(elev){
