@@ -40,6 +40,8 @@ OPTIONAL_TOP_LEVEL = [
     "market_closed",
     "market_status_reason",
     "prices",
+    "chart_series",        # v3.6: {corn, soybeans, wheat} rolling arrays
+    "locked_prices",       # v3.6: {corn, beans, wheat, ...} today's closes
 ]
 
 # Deprecated field names — if present, validation warns but does not fail.
@@ -69,6 +71,8 @@ QUOTE_REQUIRED = ["text", "attribution"]
 
 WATCH_ITEM_REQUIRED = ["desc"]  # time is optional
 
+CHART_SERIES_KEYS = {"corn", "soybeans", "wheat"}
+
 
 def validate(data: dict) -> tuple[bool, list[str], list[str]]:
     """Return (is_valid, errors, warnings)."""
@@ -79,6 +83,13 @@ def validate(data: dict) -> tuple[bool, list[str], list[str]]:
     for field in REQUIRED_TOP_LEVEL:
         if field not in data:
             errors.append(f"Missing required top-level field: {field}")
+            continue
+        v = data[field]
+        # Also catch blank/whitespace-only strings — an empty headline or date
+        # would otherwise silently pass and ship. Mirrors the section-level
+        # check; list/dict fields get type-aware validation further down.
+        if isinstance(v, str) and not v.strip():
+            errors.append(f"Required top-level field '{field}' is empty")
 
     # Deprecated aliases — warn so we catch drift early
     for old, new in DEPRECATED_ALIASES.items():
@@ -158,6 +169,39 @@ def validate(data: dict) -> tuple[bool, list[str], list[str]]:
                     if f not in item or not item[f]:
                         errors.append(f"watch_list[{i}] missing '{f}'")
 
+    # chart_series (optional — but if present, must be well-formed)
+    cs = data.get("chart_series")
+    if cs is not None:
+        if not isinstance(cs, dict):
+            errors.append("'chart_series' must be an object")
+        else:
+            unknown = set(cs.keys()) - CHART_SERIES_KEYS
+            if unknown:
+                warnings.append(
+                    f"chart_series has unknown keys: {sorted(unknown)} "
+                    f"(expected subset of {sorted(CHART_SERIES_KEYS)})"
+                )
+            for key, series in cs.items():
+                if not isinstance(series, list):
+                    errors.append(f"chart_series.{key} must be a list")
+                    continue
+                if len(series) < 2:
+                    warnings.append(
+                        f"chart_series.{key} has only {len(series)} point(s) — "
+                        "sparkline will not render (needs 2+)"
+                    )
+                for j, v in enumerate(series):
+                    if not isinstance(v, (int, float)):
+                        errors.append(
+                            f"chart_series.{key}[{j}] is not numeric ({v!r})"
+                        )
+                        break
+
+    # locked_prices (optional, shape-only check — generator owns the contract)
+    lp = data.get("locked_prices")
+    if lp is not None and not isinstance(lp, dict):
+        errors.append("'locked_prices' must be an object")
+
     # Em-dash detection — optional, informational
     prose_fields = [data.get("lead", ""), data.get("subheadline", "")]
     for s in data.get("sections") or []:
@@ -198,8 +242,10 @@ def main() -> int:
         print(f"ERROR {e}")
 
     if ok:
+        cs = data.get("chart_series") or {}
+        cs_note = f", chart_series={list(cs.keys())}" if cs else ""
         print(f"OK    {path} — {len(data.get('sections', []))} sections, "
-              f"{len(warnings)} warning(s)")
+              f"{len(warnings)} warning(s){cs_note}")
         return 0
     return 1
 
