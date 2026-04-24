@@ -100,6 +100,39 @@
   .wx-extra-lbl{font-size:.58rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.15rem;}
   .wx-extra-val{font-family:'JetBrains Mono',monospace;font-size:.92rem;font-weight:700;color:var(--text);}
   .wx-extra-ctx{font-size:.62rem;color:var(--text-dim);margin-top:.08rem;}
+  /* Historical chart expandable (GDU + Precip) */
+  .wx-extra-stat.with-chart{cursor:pointer;transition:background .15s;}
+  .wx-extra-stat.with-chart:hover{background:var(--surface3,#2a2a2a);}
+  .wx-extra-stat .wx-chart-toggle{font-size:.58rem;color:var(--gold);margin-top:.2rem;letter-spacing:.05em;display:flex;align-items:center;gap:.2rem;font-weight:600;}
+  .wx-chart-panel{display:none;padding:.55rem .4rem .3rem;background:var(--surface2);border-radius:6px;margin-top:.4rem;overflow-x:hidden;overflow-x:clip;}
+  .wx-chart-panel.expanded{display:block;}
+  .wx-chart-title{font-size:.62rem;color:var(--text-muted);font-weight:600;letter-spacing:.08em;text-transform:uppercase;margin-bottom:.3rem;}
+  .wx-chart-legend{display:flex;gap:.85rem;font-size:.6rem;color:var(--text-dim);margin-top:.25rem;flex-wrap:wrap;}
+  .wx-chart-legend-sw{display:inline-block;width:.55rem;height:.55rem;border-radius:2px;margin-right:.25rem;vertical-align:middle;}
+  /* 7-day forecast strip */
+  .wx-7day-strip{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.25rem;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;padding:.15rem 0;}
+  .wx-7day-cell{background:var(--surface2);border-radius:6px;padding:.4rem .3rem;text-align:center;display:flex;flex-direction:column;align-items:center;gap:.1rem;min-width:0;}
+  .wx-7day-name{font-size:.62rem;font-weight:700;color:var(--text-muted);letter-spacing:.05em;text-transform:uppercase;}
+  .wx-7day-icon{font-size:1.1rem;line-height:1;margin:.1rem 0;}
+  .wx-7day-temps{font-family:'Oswald',sans-serif;font-size:.78rem;font-weight:700;color:var(--text);}
+  .wx-7day-temps .hi{color:var(--text);}
+  .wx-7day-temps .lo{color:var(--text-muted);margin-left:.25rem;}
+  .wx-7day-meta{font-size:.62rem;font-family:'JetBrains Mono',monospace;color:var(--text-dim);margin-top:.1rem;line-height:1.25;}
+  .wx-7day-meta .rain-hi{color:#5ba3e0;}
+  .wx-7day-meta .wind-hi{color:var(--gold);}
+  /* Hourly collapsible */
+  .wx-hourly-toggle{background:none;border:1px solid rgba(255,255,255,.1);color:var(--text-muted);font-size:.68rem;font-weight:600;cursor:pointer;padding:.5rem .85rem;border-radius:6px;margin-top:.55rem;width:100%;display:flex;align-items:center;justify-content:center;gap:.3rem;min-height:44px;transition:background .15s,border-color .15s;}
+  .wx-hourly-toggle:hover{background:var(--surface2);border-color:rgba(218,165,32,.35);color:var(--text);}
+  .wx-hourly-panel{display:none;margin-top:.55rem;background:var(--surface2);border-radius:8px;padding:.5rem .3rem;overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;}
+  .wx-hourly-panel.expanded{display:block;}
+  .wx-hourly-strip{display:flex;gap:.2rem;min-width:max-content;}
+  .wx-hourly-cell{display:flex;flex-direction:column;align-items:center;gap:.12rem;padding:.3rem .22rem;background:var(--surface3,rgba(255,255,255,.02));border-radius:4px;min-width:42px;}
+  .wx-hourly-cell.now{background:rgba(218,165,32,.12);border:1px solid rgba(218,165,32,.35);}
+  .wx-hourly-hr{font-size:.58rem;color:var(--text-muted);font-weight:600;letter-spacing:.03em;}
+  .wx-hourly-icon{font-size:.92rem;line-height:1;}
+  .wx-hourly-temp{font-family:'Oswald',sans-serif;font-size:.78rem;font-weight:700;color:var(--text);}
+  .wx-hourly-precip{font-size:.56rem;color:#5ba3e0;font-family:'JetBrains Mono',monospace;}
+  .wx-hourly-wind{font-size:.56rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;}
   /* Planting dates in Quick Tools */
   .plant-dates-panel{background:rgba(34,197,94,.04);border:1px solid rgba(34,197,94,.18);border-radius:8px;padding:.55rem .7rem;margin-bottom:.5rem;}
   .plant-dates-loc{font-size:.6rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.35rem;}
@@ -516,16 +549,33 @@
             <span class="soil-temp-ctx" id="soil-temp-ctx">--</span>
           </div>
           <div class="wx-data-extra">
-            <div class="wx-extra-stat" id="gdu-stat"><div class="wx-extra-lbl">&#x1F321;&#xFE0F; GDU Since Apr 1</div><div class="wx-extra-val" id="gdu-val">--</div><div class="wx-extra-ctx" id="gdu-ctx">Growing degree units</div></div>
-            <div class="wx-extra-stat" id="precip-stat"><div class="wx-extra-lbl">&#x1F327;&#xFE0F; 30-Day Precip</div><div class="wx-extra-val" id="precip-val">--</div><div class="wx-extra-ctx" id="precip-ctx">vs. Corn Belt April normal</div></div>
+            <div class="wx-extra-stat with-chart" id="gdu-stat" role="button" tabindex="0" aria-expanded="false" aria-controls="gdu-chart-panel"><div class="wx-extra-lbl">&#x1F321;&#xFE0F; GDU Since Apr 1</div><div class="wx-extra-val" id="gdu-val">--</div><div class="wx-extra-ctx" id="gdu-ctx">Growing degree units</div><div class="wx-chart-toggle" id="gdu-chart-toggle">&#x25BC; Show 5-yr history</div></div>
+            <div class="wx-extra-stat with-chart" id="precip-stat" role="button" tabindex="0" aria-expanded="false" aria-controls="precip-chart-panel"><div class="wx-extra-lbl">&#x1F327;&#xFE0F; 30-Day Precip</div><div class="wx-extra-val" id="precip-val">--</div><div class="wx-extra-ctx" id="precip-ctx">Trailing 30 days</div><div class="wx-chart-toggle" id="precip-chart-toggle">&#x25BC; Show monthly history</div></div>
+          </div>
+          <div class="wx-chart-panel" id="gdu-chart-panel" role="region" aria-label="5-year GDU monthly history">
+            <div class="wx-chart-title" id="gdu-chart-title">GDU by month &middot; Apr&ndash;Oct &middot; 5-yr avg vs this year</div>
+            <div id="gdu-chart-svg"></div>
+            <div class="wx-chart-legend"><span><span class="wx-chart-legend-sw" style="background:rgba(58,139,60,.45)"></span>5-yr avg</span><span><span class="wx-chart-legend-sw" style="background:var(--gold)"></span>This year</span></div>
+          </div>
+          <div class="wx-chart-panel" id="precip-chart-panel" role="region" aria-label="5-year precipitation monthly history">
+            <div class="wx-chart-title" id="precip-chart-title">Precip by month &middot; Jan&ndash;Dec &middot; 5-yr avg vs this year</div>
+            <div id="precip-chart-svg"></div>
+            <div class="wx-chart-legend"><span><span class="wx-chart-legend-sw" style="background:rgba(58,139,60,.45)"></span>5-yr avg</span><span><span class="wx-chart-legend-sw" style="background:var(--gold)"></span>This year</span></div>
           </div>
           <div class="wx-summary-card" style="margin-top:.85rem">
-            <div class="wx-summary-title">&#x1F4C5; 4-Day Forecast</div>
-            <div id="wx-forecast-full" class="wx-forecast-row">
-              <div class="wx-day"><div class="wx-day-name">Today</div><div class="wx-day-icon">&#x26C5;</div><div class="wx-day-hi">--&deg;</div><div class="wx-day-lo">--&deg;</div></div>
-              <div class="wx-day"><div class="wx-day-name">&mdash;</div><div class="wx-day-icon">&#x1F327;&#xFE0F;</div><div class="wx-day-hi">--&deg;</div><div class="wx-day-lo">--&deg;</div></div>
-              <div class="wx-day"><div class="wx-day-name">&mdash;</div><div class="wx-day-icon">&#x2601;&#xFE0F;</div><div class="wx-day-hi">--&deg;</div><div class="wx-day-lo">--&deg;</div></div>
-              <div class="wx-day"><div class="wx-day-name">&mdash;</div><div class="wx-day-icon">&#x1F324;&#xFE0F;</div><div class="wx-day-hi">--&deg;</div><div class="wx-day-lo">--&deg;</div></div>
+            <div class="wx-summary-title">&#x1F4C5; 7-Day Forecast</div>
+            <div id="wx-forecast-7day" class="wx-7day-strip">
+              <div class="wx-7day-cell"><div class="wx-7day-name">Today</div><div class="wx-7day-icon">&#x26C5;</div><div class="wx-7day-temps"><span class="hi">--&deg;</span><span class="lo">--&deg;</span></div><div class="wx-7day-meta">--</div></div>
+              <div class="wx-7day-cell"><div class="wx-7day-name">&mdash;</div><div class="wx-7day-icon">&#x26C5;</div><div class="wx-7day-temps"><span class="hi">--&deg;</span><span class="lo">--&deg;</span></div><div class="wx-7day-meta">--</div></div>
+              <div class="wx-7day-cell"><div class="wx-7day-name">&mdash;</div><div class="wx-7day-icon">&#x26C5;</div><div class="wx-7day-temps"><span class="hi">--&deg;</span><span class="lo">--&deg;</span></div><div class="wx-7day-meta">--</div></div>
+              <div class="wx-7day-cell"><div class="wx-7day-name">&mdash;</div><div class="wx-7day-icon">&#x26C5;</div><div class="wx-7day-temps"><span class="hi">--&deg;</span><span class="lo">--&deg;</span></div><div class="wx-7day-meta">--</div></div>
+              <div class="wx-7day-cell"><div class="wx-7day-name">&mdash;</div><div class="wx-7day-icon">&#x26C5;</div><div class="wx-7day-temps"><span class="hi">--&deg;</span><span class="lo">--&deg;</span></div><div class="wx-7day-meta">--</div></div>
+              <div class="wx-7day-cell"><div class="wx-7day-name">&mdash;</div><div class="wx-7day-icon">&#x26C5;</div><div class="wx-7day-temps"><span class="hi">--&deg;</span><span class="lo">--&deg;</span></div><div class="wx-7day-meta">--</div></div>
+              <div class="wx-7day-cell"><div class="wx-7day-name">&mdash;</div><div class="wx-7day-icon">&#x26C5;</div><div class="wx-7day-temps"><span class="hi">--&deg;</span><span class="lo">--&deg;</span></div><div class="wx-7day-meta">--</div></div>
+            </div>
+            <button class="wx-hourly-toggle" id="wx-hourly-toggle" aria-expanded="false" aria-controls="wx-hourly-panel">&#x25BC; Show hourly forecast</button>
+            <div class="wx-hourly-panel" id="wx-hourly-panel" role="region" aria-label="24-hour hourly forecast">
+              <div class="wx-hourly-strip" id="wx-hourly-strip"></div>
             </div>
             <div style="margin-top:.5rem;font-size:.72rem;color:var(--text-muted);text-align:center">&#x1F4CD; <span id="wx-loc-label">Set location above</span></div>
           </div>
@@ -543,11 +593,11 @@
         <div class="plant-dates-panel" id="plant-dates-panel">
           <div class="plant-dates-loc" id="plant-dates-loc">&#x1F4CD; RMA Final Planting Dates</div>
           <div class="plant-dates-row">
-            <span class="plant-dates-label">&#x1F33D; Corn (May 31)</span>
+            <span class="plant-dates-label" id="qt-corn-label">&#x1F33D; Corn (May 31)</span>
             <span class="plant-dates-val" id="qt-corn-days">--</span>
           </div>
           <div class="plant-dates-row">
-            <span class="plant-dates-label">&#x1FAD8; Soybeans (Jun 20)</span>
+            <span class="plant-dates-label" id="qt-bean-label">&#x1FAD8; Soybeans (Jun 20)</span>
             <span class="plant-dates-val" id="qt-bean-days">--</span>
           </div>
         </div>
@@ -1387,45 +1437,314 @@ window.hydrateDaily = function(data) {
 <script>
 (function(){
 'use strict';
-var RMA_DATES={corn:{insurance_final:'2026-05-31',description:'Final planting date for corn APH/RP policies (most Corn Belt counties)'},soybeans:{insurance_final:'2026-06-20',description:'Final planting date for soybean APH/RP policies (most Corn Belt counties)'}};
+// RMA final planting dates — most-common per-state value. County specifics vary.
+// Sources: vinevestnorth.com, dtnpf.com/ProAg, farmprogress.com (2025 planting season articles).
+var RMA_STATE_DATES={
+  'ND':{corn:'2026-05-25',cornLabel:'May 25',beans:'2026-06-10',beansLabel:'Jun 10'},
+  'SD':{corn:'2026-05-25',cornLabel:'May 25',beans:'2026-06-10',beansLabel:'Jun 10'},
+  'MN':{corn:'2026-05-31',cornLabel:'May 31',beans:'2026-06-10',beansLabel:'Jun 10'},
+  'WI':{corn:'2026-05-31',cornLabel:'May 31',beans:'2026-06-10',beansLabel:'Jun 10'},
+  'IA':{corn:'2026-05-31',cornLabel:'May 31',beans:'2026-06-15',beansLabel:'Jun 15'},
+  'NE':{corn:'2026-05-25',cornLabel:'May 25',beans:'2026-06-10',beansLabel:'Jun 10'},
+  'MO':{corn:'2026-05-31',cornLabel:'May 31',beans:'2026-06-20',beansLabel:'Jun 20'},
+  'KS':{corn:'2026-05-25',cornLabel:'May 25',beans:'2026-06-25',beansLabel:'Jun 25'},
+  'IL':{corn:'2026-06-05',cornLabel:'Jun 5',beans:'2026-06-20',beansLabel:'Jun 20'},
+  'IN':{corn:'2026-06-05',cornLabel:'Jun 5',beans:'2026-06-20',beansLabel:'Jun 20'},
+  'OH':{corn:'2026-06-05',cornLabel:'Jun 5',beans:'2026-06-20',beansLabel:'Jun 20'},
+  'MI':{corn:'2026-06-05',cornLabel:'Jun 5',beans:'2026-06-15',beansLabel:'Jun 15'},
+  'KY':{corn:'2026-05-31',cornLabel:'May 31',beans:'2026-06-20',beansLabel:'Jun 20'},
+  'TN':{corn:'2026-05-31',cornLabel:'May 31',beans:'2026-06-25',beansLabel:'Jun 25'},
+  'AR':{corn:'2026-05-25',cornLabel:'May 25',beans:'2026-06-25',beansLabel:'Jun 25'}
+};
+// Fallback if state not detected: national "most Corn Belt" values (what was previously hardcoded)
+var RMA_DEFAULT={corn:'2026-05-31',cornLabel:'May 31',beans:'2026-06-20',beansLabel:'Jun 20'};
+// Rough lat/lon bounding boxes for primary ag states. Border accuracy is ±1 county.
+function stateFromLatLon(lat,lon){
+  if(lat==null||lon==null||isNaN(+lat)||isNaN(+lon))return null;
+  var boxes=[
+    ['WI',42.5,47.1,-92.9,-86.8],['MN',43.5,49.4,-97.2,-89.5],['IA',40.4,43.5,-96.6,-90.1],
+    ['ND',45.9,49.0,-104.1,-96.6],['SD',42.5,45.9,-104.1,-96.4],['NE',40.0,43.0,-104.1,-95.3],
+    ['KS',37.0,40.0,-102.1,-94.6],['MO',36.0,40.6,-95.8,-89.1],['IL',37.0,42.5,-91.5,-87.5],
+    ['IN',37.8,41.8,-88.1,-84.8],['OH',38.4,42.0,-84.8,-80.5],['MI',41.7,48.3,-90.5,-82.4],
+    ['KY',36.5,39.2,-89.6,-81.9],['TN',35.0,36.7,-90.3,-81.6],['AR',33.0,36.5,-94.6,-89.6]
+  ];
+  for(var i=0;i<boxes.length;i++){var b=boxes[i];if(+lat>=b[1]&&+lat<=b[2]&&+lon>=b[3]&&+lon<=b[4])return b[0];}
+  return null;
+}
+function applyPlantingDates(lat,lon){
+  // Fast sync pass: render state-level (or national) defaults instantly
+  var st=stateFromLatLon(lat,lon);
+  var dates=(st&&RMA_STATE_DATES[st])||RMA_DEFAULT;
+  renderPlantingDates(dates,null,st);
+  // Slow async pass: upgrade to county-level dates from /data/rma-planting-dates.json
+  if(lat!=null&&lon!=null&&!isNaN(+lat)&&!isNaN(+lon)){
+    Promise.all([loadRmaCountyData(),waitForGeoCounty()]).then(function(res){
+      var rma=res[0],loc=res[1];
+      if(!rma||!loc||!loc.state||!loc.county)return;
+      var key=loc.state+'|'+normalizeCountyName(loc.county);
+      var entry=rma.index[key];
+      if(!entry){console.info('[AGSIST] county not in RMA dataset:',loc.county,loc.state,'(key:',key+')');return;}
+      renderPlantingDates({corn:entry.corn,cornLabel:entry.cornLabel,beans:entry.beans,beansLabel:entry.beansLabel},entry.countyName,entry.state);
+    }).catch(function(e){console.warn('[AGSIST] county RMA lookup failed:',e);});
+  }
+  return st;
+}
+function renderPlantingDates(dates,countyName,state){
+  var qtCorn=document.getElementById('qt-corn-days'),qtBean=document.getElementById('qt-bean-days');
+  var qtCornLbl=document.getElementById('qt-corn-label'),qtBeanLbl=document.getElementById('qt-bean-label');
+  if(qtCornLbl)qtCornLbl.innerHTML='\uD83C\uDF3D Corn ('+dates.cornLabel+')';
+  if(qtBeanLbl)qtBeanLbl.innerHTML='\uD83E\uDED8 Soybeans ('+dates.beansLabel+')';
+  var cornDays=daysUntil(dates.corn),beanDays=daysUntil(dates.beans);
+  if(qtCorn){qtCorn.textContent=formatCountdown(cornDays);qtCorn.classList.toggle('urgent',cornDays!=null&&cornDays<14);}
+  if(qtBean){qtBean.textContent=formatCountdown(beanDays);qtBean.classList.toggle('urgent',beanDays!=null&&beanDays<14);}
+  if(countyName&&state){
+    var locLabel=document.getElementById('plant-dates-loc');
+    if(locLabel){
+      var _st=window.AGSIST_STATE,_city=_st&&_st.weather&&_st.weather.city;
+      // Show city (if available) + County, ST — eg "Chetek · Barron County, WI"
+      locLabel.textContent='\uD83D\uDCCD '+(_city?_city+' \u00B7 ':'')+countyName+' County, '+state;
+    }
+  }
+}
+// County-level RMA data: fetched once per page, cached, indexed by state+normalized-county-name.
+var _rmaDataPromise=null;
+function loadRmaCountyData(){
+  if(_rmaDataPromise)return _rmaDataPromise;
+  _rmaDataPromise=fetch('/data/rma-planting-dates.json').then(function(r){
+    if(!r.ok)throw new Error('rma fetch '+r.status);
+    return r.json();
+  }).then(function(data){
+    var counties=(data&&data.counties)||{},idx={};
+    for(var fips in counties){
+      var e=counties[fips];if(!e||!e.state||!e.county)continue;
+      idx[e.state+'|'+normalizeCountyName(e.county)]={
+        corn:parseMonthDayIso(e.corn),cornLabel:e.corn,
+        beans:parseMonthDayIso(e.soybeans),beansLabel:e.soybeans,
+        fips:fips,countyName:e.county,state:e.state,source:e.source
+      };
+    }
+    return {data:data,index:idx};
+  }).catch(function(err){console.warn('[AGSIST] RMA county data load failed:',err);_rmaDataPromise=null;return null;});
+  return _rmaDataPromise;
+}
+function normalizeCountyName(n){
+  return String(n||'').toLowerCase()
+    .replace(/\s+county$/,'').replace(/\s+parish$/,'').replace(/\s+city$/,'')
+    .replace(/^saint\s+/,'st ').replace(/\bst\.\s*/g,'st ')
+    .replace(/\./g,'').replace(/[^a-z0-9 ]/g,'').replace(/\s+/g,' ').trim();
+}
+function parseMonthDayIso(s){
+  // "May 31" → "2026-05-31". Uses current year for comparison-to-today math.
+  var m=String(s||'').match(/^(\w+)\s+(\d+)$/);if(!m)return null;
+  var MO={jan:1,feb:2,mar:3,apr:4,may:5,jun:6,jul:7,aug:8,sep:9,oct:10,nov:11,dec:12};
+  var mon=MO[m[1].toLowerCase().slice(0,3)];if(!mon)return null;
+  var day=+m[2],yr=new Date().getFullYear();
+  return yr+'-'+(mon<10?'0':'')+mon+'-'+(day<10?'0':'')+day;
+}
+// v2: geo.js populates window.AGSIST_STATE.weather.{state,county} after its own
+// Nominatim reverse-geocode resolves (~1–2s after geo). We poll briefly rather
+// than fire a second reverse-geocode. Matches the existing waitForGeo pattern
+// used elsewhere in this file.
+function waitForGeoCounty(timeoutMs){
+  timeoutMs=timeoutMs||6000;
+  return new Promise(function(resolve){
+    var deadline=Date.now()+timeoutMs;
+    (function check(){
+      var w=window.AGSIST_STATE&&window.AGSIST_STATE.weather;
+      if(w&&w.state&&w.county){resolve({state:w.state,county:w.county});return;}
+      if(Date.now()>deadline){console.info('[AGSIST] geo.js did not populate state+county within '+timeoutMs+'ms — county-level RMA dates unavailable');resolve(null);return;}
+      setTimeout(check,200);
+    })();
+  });
+}
 var GDU_BASE_MAX=86,GDU_BASE_MIN=50;
 function calcGDU(tMaxC,tMinC){var tMaxF=(tMaxC*9/5)+32,tMinF=(tMinC*9/5)+32;var hi=Math.min(tMaxF,GDU_BASE_MAX),lo=Math.max(tMinF,GDU_BASE_MIN);return Math.max(0,(hi+lo)/2-GDU_BASE_MIN);}
 function daysUntil(iso){if(!iso)return null;var t=new Date(iso+'T12:00:00').getTime()-Date.now();return Math.ceil(t/86400000);}
 function formatCountdown(days){if(days==null)return'\u2014';if(days<0)return'Past';if(days===0)return'Today';return days+' day'+(days===1?'':'s');}
 function waitForGeo(cb,retries){retries=retries||0;if(retries>20)return;var st=window.AGSIST_STATE;if(st&&st.weather&&st.weather.lat!=null){cb(st);}else{setTimeout(function(){waitForGeo(cb,retries+1);},400);}}
+
+// ---------- Monthly aggregation from Open-Meteo archive ----------
+function aggregateArchive(dailyHist){
+  // dailyHist = {time:[], temperature_2m_max:[], temperature_2m_min:[], precipitation_sum:[]}
+  // Returns {byYearMonth: {year:{month:{gdu,precip}}}, dailyLookup: {isoDate:{max,min,precip}}}
+  var times=(dailyHist&&dailyHist.time)||[];
+  var maxT=(dailyHist&&dailyHist.temperature_2m_max)||[];
+  var minT=(dailyHist&&dailyHist.temperature_2m_min)||[];
+  var pr=(dailyHist&&dailyHist.precipitation_sum)||[];
+  var byYM={},daily={};
+  for(var i=0;i<times.length;i++){
+    var iso=times[i];if(!iso)continue;
+    var parts=iso.split('-');
+    var y=+parts[0],m=+parts[1]-1; // 0-indexed month
+    if(isNaN(y)||isNaN(m))continue;
+    if(!byYM[y])byYM[y]={};
+    if(!byYM[y][m])byYM[y][m]={gdu:0,precip:0,nDays:0};
+    var hi=maxT[i],lo=minT[i],p=pr[i];
+    if(hi!=null&&lo!=null){
+      var hc=Math.min(hi,86),lc=Math.max(lo,50);
+      byYM[y][m].gdu+=Math.max(0,(hc+lc)/2-50);
+    }
+    if(p!=null)byYM[y][m].precip+=p;
+    byYM[y][m].nDays++;
+    daily[iso]={max:hi,min:lo,precip:p};
+  }
+  return {byYearMonth:byYM,daily:daily};
+}
+// ---------- YTD comparison helpers ----------
+function ytdGDU(dailyMap,year,fromIso,toIso){
+  // Sum GDU from fromIso (YYYY-MM-DD) to toIso inclusive
+  var sum=0;
+  for(var iso in dailyMap){
+    if(iso<fromIso||iso>toIso)continue;
+    var d=dailyMap[iso];
+    if(d.max!=null&&d.min!=null){
+      var hi=Math.min(d.max,86),lo=Math.max(d.min,50);
+      sum+=Math.max(0,(hi+lo)/2-50);
+    }
+  }
+  return sum;
+}
+function ytdPrecip(dailyMap,fromIso,toIso){
+  var sum=0;
+  for(var iso in dailyMap){
+    if(iso<fromIso||iso>toIso)continue;
+    if(dailyMap[iso].precip!=null)sum+=dailyMap[iso].precip;
+  }
+  return sum;
+}
+function padIso(y,m,d){
+  return y+'-'+(m<10?'0':'')+m+'-'+(d<10?'0':'')+d;
+}
+// ---------- SVG monthly bar chart (paired bars: avg + current) ----------
+function monthlyChartSvg(current,avg,monthLabels,fmtFn){
+  var mx=0;
+  for(var i=0;i<monthLabels.length;i++){
+    if(current[i]>mx)mx=current[i];
+    if(avg[i]>mx)mx=avg[i];
+  }
+  if(mx<0.01)mx=1; // avoid divide-by-zero
+  var W=320,H=96,PL=22,PR=4,PT=10,PB=18;
+  var cw=W-PL-PR,ch=H-PT-PB;
+  var gw=cw/monthLabels.length;
+  var bw=Math.max(3,Math.min(9,gw*0.34));
+  var gap=1.2;
+  var out='<svg viewBox="0 0 '+W+' '+H+'" style="width:100%;height:auto;display:block" role="img" aria-label="Monthly comparison chart">';
+  // baseline
+  out+='<line x1="'+PL+'" y1="'+(PT+ch)+'" x2="'+(W-PR)+'" y2="'+(PT+ch)+'" stroke="#333" stroke-width="0.5"/>';
+  // y-axis max label
+  out+='<text x="2" y="'+(PT+4)+'" font-size="7" fill="#666" font-family="JetBrains Mono,monospace">'+fmtFn(mx)+'</text>';
+  out+='<text x="2" y="'+(PT+ch)+'" font-size="7" fill="#666" font-family="JetBrains Mono,monospace">0</text>';
+  for(var j=0;j<monthLabels.length;j++){
+    var gx=PL+gw*j+gw/2;
+    var aH=(avg[j]/mx)*ch,aY=PT+ch-aH;
+    var aX=gx-bw-gap/2;
+    out+='<rect x="'+aX.toFixed(1)+'" y="'+aY.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+Math.max(0.5,aH).toFixed(1)+'" fill="#3a8b3c" fill-opacity="0.45" rx="1"/>';
+    if(current[j]>0){
+      var cH=(current[j]/mx)*ch,cY=PT+ch-cH;
+      var cX=gx+gap/2;
+      out+='<rect x="'+cX.toFixed(1)+'" y="'+cY.toFixed(1)+'" width="'+bw.toFixed(1)+'" height="'+Math.max(0.5,cH).toFixed(1)+'" fill="#daa520" rx="1"/>';
+    }
+    out+='<text x="'+gx.toFixed(1)+'" y="'+(H-6)+'" font-size="7.5" fill="#888" text-anchor="middle" font-family="JetBrains Mono,monospace">'+monthLabels[j]+'</text>';
+  }
+  out+='</svg>';
+  return out;
+}
+// ---------- Chart toggle wiring ----------
+function wireChartToggle(statId,panelId,toggleId){
+  var stat=document.getElementById(statId),panel=document.getElementById(panelId),tog=document.getElementById(toggleId);
+  if(!stat||!panel||!tog)return;
+  function togglePanel(e){
+    if(e)e.stopPropagation();
+    var open=panel.classList.toggle('expanded');
+    stat.setAttribute('aria-expanded',open?'true':'false');
+    tog.innerHTML=(open?'\u25B2 Hide ':'\u25BC Show ')+(statId==='gdu-stat'?'5-yr history':'monthly history');
+  }
+  stat.addEventListener('click',togglePanel);
+  stat.addEventListener('keydown',function(ev){if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();togglePanel(ev);}});
+}
+function wireHourlyToggle(){
+  var btn=document.getElementById('wx-hourly-toggle'),panel=document.getElementById('wx-hourly-panel');
+  if(!btn||!panel)return;
+  btn.addEventListener('click',function(){
+    var open=panel.classList.toggle('expanded');
+    btn.setAttribute('aria-expanded',open?'true':'false');
+    btn.innerHTML=(open?'\u25B2 Hide ':'\u25BC Show ')+'hourly forecast';
+    // auto-scroll "now" cell into view when opening
+    if(open){var nowCell=panel.querySelector('.wx-hourly-cell.now');if(nowCell&&nowCell.scrollIntoView){try{nowCell.scrollIntoView({behavior:'smooth',inline:'center',block:'nearest'});}catch(e){}}}
+  });
+}
+// ---------- Weather code -> icon (Open-Meteo WMO codes) ----------
+function wxIcon(code,isDay){
+  if(code==null)return '\u26C5';
+  if(code===0)return isDay?'\u2600\uFE0F':'\uD83C\uDF19'; // clear
+  if(code===1||code===2)return '\u26C5'; // partly cloudy
+  if(code===3)return '\u2601\uFE0F'; // overcast
+  if(code===45||code===48)return '\uD83C\uDF2B\uFE0F'; // fog
+  if(code>=51&&code<=57)return '\uD83C\uDF26\uFE0F'; // drizzle
+  if(code>=61&&code<=67)return '\uD83C\uDF27\uFE0F'; // rain
+  if(code>=71&&code<=77)return '\u2744\uFE0F'; // snow
+  if(code>=80&&code<=82)return '\uD83C\uDF26\uFE0F'; // showers
+  if(code===85||code===86)return '\u2744\uFE0F'; // snow showers
+  if(code>=95)return '\u26C8\uFE0F'; // thunderstorm
+  return '\u26C5';
+}
+// ---------- Wind direction: degrees to compass ----------
+function windDir(deg){
+  if(deg==null||isNaN(+deg))return '';
+  var dirs=['N','NNE','NE','ENE','E','ESE','SE','SSE','S','SSW','SW','WSW','W','WNW','NW','NNW'];
+  return dirs[Math.round((+deg%360)/22.5)%16];
+}
 function loadWeatherEnhancements(state){
   var wx=state.weather||{},lat=wx.lat,lon=wx.lon;
   if(lat==null||lon==null||isNaN(+lat)||isNaN(+lon))return;
-  var today=new Date(),apr1=new Date(today.getFullYear(),3,1);
-  var d1=apr1.toISOString().split('T')[0];
+  var today=new Date();
+  var thisApr1=new Date(today.getFullYear(),3,1);
+  var d_apr1=thisApr1.toISOString().split('T')[0];
   // Use yesterday as archive end_date — today's data is often not yet available
   var yesterday=new Date(today);yesterday.setDate(yesterday.getDate()-1);
-  var d2=yesterday.toISOString().split('T')[0];
-  var soilUrl='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,windspeed_10m_max,relativehumidity_2m_mean&hourly=soil_temperature_6cm&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=7';
-  var histUrl='https://archive-api.open-meteo.com/v1/archive?latitude='+lat+'&longitude='+lon+'&start_date='+d1+'&end_date='+d2+'&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=auto';
+  var d_yest=yesterday.toISOString().split('T')[0];
+  // Extend archive back 5 full years (Jan 1 of year-5) for monthly comparisons
+  var fiveYrsAgo=new Date(today.getFullYear()-5,0,1);
+  var d_5yr=fiveYrsAgo.toISOString().split('T')[0];
+  var soilUrl='https://api.open-meteo.com/v1/forecast?latitude='+lat+'&longitude='+lon+'&daily=temperature_2m_max,temperature_2m_min,precipitation_sum,precipitation_probability_max,windspeed_10m_max,winddirection_10m_dominant,relative_humidity_2m_mean,weathercode&hourly=temperature_2m,precipitation,precipitation_probability,wind_speed_10m,wind_direction_10m,weathercode,soil_temperature_6cm&temperature_unit=fahrenheit&wind_speed_unit=mph&precipitation_unit=inch&timezone=auto&forecast_days=7';
+  var histUrl='https://archive-api.open-meteo.com/v1/archive?latitude='+lat+'&longitude='+lon+'&start_date='+d_5yr+'&end_date='+d_yest+'&daily=temperature_2m_max,temperature_2m_min,precipitation_sum&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=auto';
   // Fetch independently — archive failure must not kill forecast/soil temp
-  var fcastPromise=fetch(soilUrl).then(function(r){return r.json();}).catch(function(){return null;});
-  var histPromise=fetch(histUrl).then(function(r){return r.json();}).catch(function(){return null;});
+  var fcastPromise=fetch(soilUrl).then(function(r){return r.json();}).then(function(d){
+    if(d&&d.error){console.warn('[AGSIST] Open-Meteo forecast error:',d.reason||d.error);return null;}
+    return d;
+  }).catch(function(e){console.warn('[AGSIST] forecast fetch failed',e);return null;});
+  var histPromise=fetch(histUrl).then(function(r){return r.json();}).then(function(d){
+    if(d&&d.error){console.warn('[AGSIST] Open-Meteo archive error:',d.reason||d.error);return null;}
+    return d;
+  }).catch(function(e){console.warn('[AGSIST] archive fetch failed',e);return null;});
   Promise.all([fcastPromise,histPromise]).then(function(results){
     var forecast=results[0]||{},history=results[1]||{};
     var dailyF=forecast.daily||{},dailyH=history.daily||{};
-    var maxTemps=dailyH.temperature_2m_max||[],minTemps=dailyH.temperature_2m_min||[];
-    var gdu=0;
-    for(var i=0;i<maxTemps.length;i++){if(maxTemps[i]!=null&&minTemps[i]!=null){var hi=Math.min(maxTemps[i],86),lo=Math.max(minTemps[i],50);gdu+=Math.max(0,(hi+lo)/2-50);}}
-    gdu=Math.round(gdu);
-    var precipArr=dailyH.precipitation_sum||[];
-    var precip30=0;precipArr.slice(-30).forEach(function(v){if(v!=null)precip30+=v;});precip30=Math.round(precip30*10)/10;
-    // Soil temp — use actual Open-Meteo soil_temperature_6cm (hourly), not air temp estimate
+    // GDU + precip30 scalars removed — computed via aggregateArchive+ytdGDU/ytdPrecip below for 5-yr comparison
+    // Soil temp — use current local hour from time array; fall back to nearest non-null, then daily average
     var soilEstF=null;
     var hourSoilArr=(forecast.hourly&&forecast.hourly.soil_temperature_6cm)||[];
-    if(hourSoilArr.length>=13&&hourSoilArr[12]!=null){
-      soilEstF=Math.round(hourSoilArr[12]); // today at noon local time
-    } else {
-      // fallback: average today's available hourly values
-      var ss=0,sc=0;
-      for(var si=0;si<Math.min(24,hourSoilArr.length);si++){if(hourSoilArr[si]!=null){ss+=hourSoilArr[si];sc++;}}
-      if(sc>0)soilEstF=Math.round(ss/sc);
+    var hourTimeArr=(forecast.hourly&&forecast.hourly.time)||[];
+    if(hourSoilArr.length>0){
+      var nowMs=Date.now();
+      var bestIdx=-1,bestDiff=Infinity;
+      for(var hi=0;hi<hourTimeArr.length;hi++){
+        if(hourSoilArr[hi]==null)continue;
+        var hT=new Date(hourTimeArr[hi]).getTime();
+        if(isNaN(hT))continue;
+        var diff=Math.abs(nowMs-hT);
+        if(diff<bestDiff){bestIdx=hi;bestDiff=diff;}
+      }
+      if(bestIdx>=0){
+        soilEstF=Math.round(hourSoilArr[bestIdx]);
+      } else {
+        // fallback: average today's available hourly values
+        var ss=0,sc=0;
+        for(var si=0;si<Math.min(24,hourSoilArr.length);si++){if(hourSoilArr[si]!=null){ss+=hourSoilArr[si];sc++;}}
+        if(sc>0)soilEstF=Math.round(ss/sc);
+      }
     }
+    if(soilEstF==null){console.warn('[AGSIST] soil temp unavailable — hourly keys:',Object.keys((forecast&&forecast.hourly)||{}),'arr len:',hourSoilArr.length);}
     var soilClass='warn',soilCtx='';
     if(soilEstF!=null){
       if(soilEstF<32){soilClass='cold';soilCtx='Too cold for field work';}
@@ -1440,20 +1759,105 @@ function loadWeatherEnhancements(state){
     if(stv){stv.textContent=soilDisplay;stv.className='soil-temp-val '+soilClass;}
     var stc=document.getElementById('soil-temp-ctx');if(stc)stc.textContent=soilCtx;
     var str=document.getElementById('soil-temp-row');if(str)str.classList.add('loaded');
-    var gduEl=document.getElementById('gdu-val');if(gduEl)gduEl.textContent=gdu+' GDU';
     var gduStat=document.getElementById('gdu-stat');if(gduStat)gduStat.classList.add('loaded');
-    var precipEl=document.getElementById('precip-val');if(precipEl)precipEl.textContent=precip30+'"';
     var precipStat=document.getElementById('precip-stat');if(precipStat)precipStat.classList.add('loaded');
-    // Update Quick Tools planting dates location label with detected city
+    // gdu-val and precip-val text set by INTEGRATION block after YTD calc
+    // Update Quick Tools planting dates location label with detected city + state-aware dates
+    var detectedState=applyPlantingDates(lat,lon);
     var _wxSt=state.weather||{};
     var _locLabel=document.getElementById('plant-dates-loc');
-    if(_locLabel&&(_wxSt.city||_wxSt.zip)){
-      var _locTxt=_wxSt.city?'\uD83D\uDCCD RMA Dates \u2014 '+_wxSt.city:'\uD83D\uDCCD RMA Dates \u2014 ZIP '+_wxSt.zip;
-      _locLabel.textContent=_locTxt;
+    if(_locLabel){
+      var _locBase=_wxSt.city?_wxSt.city:(_wxSt.zip?'ZIP '+_wxSt.zip:'');
+      var _locSuffix=detectedState?(_locBase?_locBase+', '+detectedState:detectedState):_locBase;
+      _locLabel.textContent=_locSuffix?'\uD83D\uDCCD RMA Dates \u2014 '+_locSuffix:'\uD83D\uDCCD RMA Final Planting Dates';
     }
+    // ========== HISTORICAL CHARTS (GDU + precip, 5-yr monthly) ==========
+    var agg=aggregateArchive(dailyH);
+    var curYear=today.getFullYear();
+    var pastYears=[];
+    for(var yy=curYear-5;yy<curYear;yy++)pastYears.push(yy);
+    var gduMonths=[3,4,5,6,7,8,9]; // Apr..Oct
+    var gduCurrent=[],gduAvg=[],gduLabels=['Apr','May','Jun','Jul','Aug','Sep','Oct'];
+    for(var gi=0;gi<gduMonths.length;gi++){
+      var mi=gduMonths[gi];
+      var curV=(agg.byYearMonth[curYear]&&agg.byYearMonth[curYear][mi])?agg.byYearMonth[curYear][mi].gdu:0;
+      var sum=0,cnt=0;
+      for(var py=0;py<pastYears.length;py++){
+        var yym=agg.byYearMonth[pastYears[py]];
+        if(yym&&yym[mi]){sum+=yym[mi].gdu;cnt++;}
+      }
+      gduCurrent.push(Math.round(curV));
+      gduAvg.push(cnt>0?Math.round(sum/cnt):0);
+    }
+    var gduSvgEl=document.getElementById('gdu-chart-svg');
+    if(gduSvgEl)gduSvgEl.innerHTML=monthlyChartSvg(gduCurrent,gduAvg,gduLabels,function(v){return Math.round(v);});
+    // Precip: full 12-month
+    var prCurrent=[],prAvg=[];
+    var moLabels=['J','F','M','A','M','J','J','A','S','O','N','D'];
+    for(var mo=0;mo<12;mo++){
+      var cV=(agg.byYearMonth[curYear]&&agg.byYearMonth[curYear][mo])?agg.byYearMonth[curYear][mo].precip:0;
+      var sP=0,cP=0;
+      for(var py2=0;py2<pastYears.length;py2++){
+        var yym2=agg.byYearMonth[pastYears[py2]];
+        if(yym2&&yym2[mo]){sP+=yym2[mo].precip;cP++;}
+      }
+      prCurrent.push(Math.round(cV*10)/10);
+      prAvg.push(cP>0?Math.round((sP/cP)*10)/10:0);
+    }
+    var prSvgEl=document.getElementById('precip-chart-svg');
+    if(prSvgEl)prSvgEl.innerHTML=monthlyChartSvg(prCurrent,prAvg,moLabels,function(v){return (Math.round(v*10)/10)+'"';});
+    // ========== YTD STATS — % vs 5-yr same-period avg ==========
+    // GDU YTD: Apr 1 current year → yesterday. Compare to same (Apr 1 → same month/day) for past 5 years.
+    var todayIso=d_yest; // same window end as archive
+    var thisApr1Iso=d_apr1;
+    var curGDU=ytdGDU(agg.daily,curYear,thisApr1Iso,todayIso);
+    var pastGDUs=[];
+    var yToday=yesterday; // Date obj
+    for(var py3=0;py3<pastYears.length;py3++){
+      var y=pastYears[py3];
+      var fromI=y+'-04-01';
+      var toI=padIso(y,yToday.getMonth()+1,yToday.getDate());
+      pastGDUs.push(ytdGDU(agg.daily,y,fromI,toI));
+    }
+    var gduAvg5=pastGDUs.length?pastGDUs.reduce(function(a,b){return a+b;},0)/pastGDUs.length:0;
+    var gduPct=gduAvg5>10?Math.round(((curGDU-gduAvg5)/gduAvg5)*100):null;
+    var gduCtxEl=document.getElementById('gdu-ctx');
+    if(gduCtxEl&&gduPct!=null){
+      var sign=gduPct>0?'+':'';
+      var cls=Math.abs(gduPct)<5?'':(gduPct>0?'warm':'cool');
+      gduCtxEl.innerHTML='vs 5-yr avg: <span style="font-weight:700;color:'+(cls==='warm'?'#e6b042':cls==='cool'?'#5ba3e0':'var(--text)')+'">'+sign+gduPct+'%</span>';
+    } else if(gduCtxEl){
+      gduCtxEl.textContent='Growing degree units';
+    }
+    // Precip: trailing 30 days vs same 30-day window avg of past 5 years
+    var win=new Date(yesterday);win.setDate(win.getDate()-29);
+    var winStartIso=win.toISOString().split('T')[0];
+    var curPrecip=ytdPrecip(agg.daily,winStartIso,todayIso);
+    var pastPrecips=[];
+    for(var py4=0;py4<pastYears.length;py4++){
+      var y2=pastYears[py4];
+      // same 30-day calendar window in past year
+      var pEnd=new Date(y2,yesterday.getMonth(),yesterday.getDate());
+      var pStart=new Date(pEnd);pStart.setDate(pStart.getDate()-29);
+      var fI=pStart.toISOString().split('T')[0],tI=pEnd.toISOString().split('T')[0];
+      pastPrecips.push(ytdPrecip(agg.daily,fI,tI));
+    }
+    var prAvg5=pastPrecips.length?pastPrecips.reduce(function(a,b){return a+b;},0)/pastPrecips.length:0;
+    var prPct=prAvg5>0.1?Math.round(((curPrecip-prAvg5)/prAvg5)*100):null;
+    var prCtxEl=document.getElementById('precip-ctx');
+    if(prCtxEl&&prPct!=null){
+      var prSign=prPct>0?'+':'';
+      var prCls=Math.abs(prPct)<10?'':(prPct>0?'wet':'dry');
+      prCtxEl.innerHTML='vs 5-yr avg: <span style="font-weight:700;color:'+(prCls==='wet'?'#5ba3e0':prCls==='dry'?'#e6b042':'var(--text)')+'">'+prSign+prPct+'%</span>';
+    } else if(prCtxEl){
+      prCtxEl.textContent='Trailing 30 days';
+    }
+    // Override the basic values with cleaner display (already set earlier in loop above)
+    var gduEl2=document.getElementById('gdu-val');if(gduEl2)gduEl2.textContent=Math.round(curGDU)+' GDU';
+    var prEl2=document.getElementById('precip-val');if(prEl2)prEl2.textContent=(Math.round(curPrecip*10)/10)+'"';
     var forecastMaxArr=dailyF.temperature_2m_max||[],forecastMinArr=dailyF.temperature_2m_min||[];
     var forecastPrecipArr=dailyF.precipitation_sum||[],forecastWindArr=dailyF.windspeed_10m_max||[];
-    var forecastHumidArr=dailyF.relativehumidity_2m_mean||[];
+    var forecastHumidArr=dailyF.relative_humidity_2m_mean||[];
     var SPRAY_ICONS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
     var todayDay=new Date().getDay();
     var sprayDays=document.getElementById('spray-days-strip');
@@ -1478,32 +1882,93 @@ function loadWeatherEnhancements(state){
       }).join('');
       var sprayW=document.getElementById('spray-windows');if(sprayW)sprayW.classList.add('loaded');
     }
-    // 4-day forecast — populate wx-forecast-full
-    var fcastEl=document.getElementById('wx-forecast-full');
-    if(fcastEl&&forecastMaxArr.length>=4){
-      var dayNames=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-      var todayDow=new Date().getDay();
-      var wxDayEls=fcastEl.querySelectorAll('.wx-day');
-      for(var fd=0;fd<Math.min(4,wxDayEls.length);fd++){
-        var fMax=forecastMaxArr[fd],fMin=forecastMinArr[fd];
-        var fPr=forecastPrecipArr[fd]||0,fWd=forecastWindArr[fd]||0;
-        var fIcon=fPr>0.3?'\uD83C\uDF27\uFE0F':fPr>0.05?'\uD83C\uDF26\uFE0F':fWd>20?'\uD83D\uDCA8':fMax!=null&&fMax>82?'\u2600\uFE0F':'\u26C5';
-        var fName=fd===0?'Today':fd===1?'Tomorrow':dayNames[(todayDow+fd)%7];
-        var wd=wxDayEls[fd];
-        var nmEl=wd.querySelector('.wx-day-name'),icEl=wd.querySelector('.wx-day-icon');
-        var hiEl=wd.querySelector('.wx-day-hi'),loEl=wd.querySelector('.wx-day-lo');
-        if(nmEl)nmEl.textContent=fName;
-        if(icEl)icEl.textContent=fIcon;
-        if(hiEl)hiEl.textContent=(fMax!=null?Math.round(fMax):'--')+'\u00b0';
-        if(loEl)loEl.textContent=(fMin!=null?Math.round(fMin):'--')+'\u00b0';
+
+    // ========== 7-DAY FORECAST ==========
+    var forecastWcodeArr=dailyF.weathercode||[];
+    var forecastPrPctArr=dailyF.precipitation_probability_max||[];
+    var forecastWdirArr=dailyF.winddirection_10m_dominant||[];
+    var sevenEl=document.getElementById('wx-forecast-7day');
+    if(sevenEl&&forecastMaxArr.length>=1){
+      var dayNames7=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      var todayDow7=new Date().getDay();
+      var cells7=sevenEl.querySelectorAll('.wx-7day-cell');
+      for(var fd2=0;fd2<Math.min(7,cells7.length,forecastMaxArr.length);fd2++){
+        var mx2=forecastMaxArr[fd2],mn2=forecastMinArr[fd2];
+        var pr2=forecastPrecipArr[fd2],prPct=forecastPrPctArr[fd2];
+        var wd2=forecastWindArr[fd2],wdir=forecastWdirArr[fd2];
+        var wc2=forecastWcodeArr[fd2];
+        var ic2=wxIcon(wc2,true);
+        var nm2=fd2===0?'Today':fd2===1?'Tom':dayNames7[(todayDow7+fd2)%7];
+        var cell=cells7[fd2];
+        var nmE=cell.querySelector('.wx-7day-name'),icE=cell.querySelector('.wx-7day-icon');
+        var tmE=cell.querySelector('.wx-7day-temps'),mtE=cell.querySelector('.wx-7day-meta');
+        if(nmE)nmE.textContent=nm2;
+        if(icE)icE.textContent=ic2;
+        if(tmE)tmE.innerHTML='<span class="hi">'+(mx2!=null?Math.round(mx2):'--')+'\u00B0</span><span class="lo">'+(mn2!=null?Math.round(mn2):'--')+'\u00B0</span>';
+        if(mtE){
+          var prTxt=(pr2!=null&&pr2>0)?(Math.round(pr2*100)/100)+'"':(prPct!=null&&prPct>20?prPct+'%':'0"');
+          var prCls=(pr2!=null&&pr2>0.15)||(prPct!=null&&prPct>50)?'rain-hi':'';
+          var wdTxt=wd2!=null?Math.round(wd2)+'mph':'--';
+          var wdCls=wd2!=null&&wd2>15?'wind-hi':'';
+          var dirTxt=windDir(wdir);
+          mtE.innerHTML='<div class="'+prCls+'">\uD83C\uDF27\uFE0F '+prTxt+'</div><div class="'+wdCls+'">\uD83D\uDCA8 '+(dirTxt?dirTxt+' ':'')+wdTxt+'</div>';
+        }
       }
-      // Update location label under forecast
-      var locLabelEl=document.getElementById('wx-loc-label');
-      if(locLabelEl){
-        var _st=window.AGSIST_STATE;
-        if(_st&&_st.weather&&_st.weather.city)locLabelEl.textContent=_st.weather.city;
-        else if(_st&&_st.weather&&_st.weather.zip)locLabelEl.textContent='ZIP '+_st.weather.zip;
+      var locLabelEl2=document.getElementById('wx-loc-label');
+      if(locLabelEl2){
+        var _st2=window.AGSIST_STATE;
+        if(_st2&&_st2.weather&&_st2.weather.city)locLabelEl2.textContent=_st2.weather.city;
+        else if(_st2&&_st2.weather&&_st2.weather.zip)locLabelEl2.textContent='ZIP '+_st2.weather.zip;
       }
+    }
+    // ========== HOURLY (next 24 hours from now) ==========
+    var hTime=(forecast.hourly&&forecast.hourly.time)||[];
+    var hTemp=(forecast.hourly&&forecast.hourly.temperature_2m)||[];
+    var hPrecip=(forecast.hourly&&forecast.hourly.precipitation)||[];
+    var hWind=(forecast.hourly&&forecast.hourly.wind_speed_10m)||[];
+    var hWdir=(forecast.hourly&&forecast.hourly.wind_direction_10m)||[];
+    var hWcode=(forecast.hourly&&forecast.hourly.weathercode)||[];
+    var hourStrip=document.getElementById('wx-hourly-strip');
+    if(hourStrip&&hTime.length>0){
+      var nowMs2=Date.now();
+      // Find the hour closest to now to mark as .now
+      var nowIdx=0,nowDiff=Infinity;
+      for(var hi2=0;hi2<hTime.length;hi2++){
+        var hMs=new Date(hTime[hi2]).getTime();
+        var df=Math.abs(nowMs2-hMs);
+        if(df<nowDiff){nowDiff=df;nowIdx=hi2;}
+      }
+      // Show 24 hours starting from now
+      var startI=Math.max(0,nowIdx);
+      var endI=Math.min(hTime.length,startI+24);
+      var cellsHtml='';
+      for(var hxi=startI;hxi<endI;hxi++){
+        var hd=new Date(hTime[hxi]);
+        if(isNaN(hd))continue;
+        var hh=hd.getHours();
+        var hlbl=hh===0?'12a':hh<12?hh+'a':hh===12?'12p':(hh-12)+'p';
+        var ht=hTemp[hxi]!=null?Math.round(hTemp[hxi])+'\u00B0':'--';
+        var hp=hPrecip[hxi]!=null&&hPrecip[hxi]>0?(Math.round(hPrecip[hxi]*100)/100)+'"':'';
+        var hw=hWind[hxi]!=null?Math.round(hWind[hxi])+'':'';
+        var hwd=windDir(hWdir[hxi]);
+        var hic=wxIcon(hWcode[hxi],hh>=6&&hh<20);
+        var cls='wx-hourly-cell'+(hxi===nowIdx?' now':'');
+        cellsHtml+='<div class="'+cls+'">'
+          +'<div class="wx-hourly-hr">'+hlbl+'</div>'
+          +'<div class="wx-hourly-icon">'+hic+'</div>'
+          +'<div class="wx-hourly-temp">'+ht+'</div>'
+          +'<div class="wx-hourly-precip">'+(hp||'&nbsp;')+'</div>'
+          +'<div class="wx-hourly-wind">'+(hwd||'')+(hw?' '+hw:'')+'</div>'
+          +'</div>';
+      }
+      hourStrip.innerHTML=cellsHtml;
+    }
+    // Wire the toggles (idempotent — guarded inside wireChartToggle/wireHourlyToggle)
+    if(!window._agsist_toggles_wired){
+      wireChartToggle('gdu-stat','gdu-chart-panel','gdu-chart-toggle');
+      wireChartToggle('precip-stat','precip-chart-panel','precip-chart-toggle');
+      wireHourlyToggle();
+      window._agsist_toggles_wired=true;
     }
   }).catch(function(){});
 }
@@ -1524,12 +1989,7 @@ setTimeout(function(){
     {timeout:8000,maximumAge:300000}
   );
 },3500);
-// Planting dates — pure date math, render immediately into Quick Tools panel
-(function(){
-  var cornDays=daysUntil(RMA_DATES.corn.insurance_final),beanDays=daysUntil(RMA_DATES.soybeans.insurance_final);
-  var qtCorn=document.getElementById('qt-corn-days'),qtBean=document.getElementById('qt-bean-days');
-  if(qtCorn){qtCorn.textContent=formatCountdown(cornDays);if(cornDays!=null&&cornDays<14)qtCorn.classList.add('urgent');}
-  if(qtBean){qtBean.textContent=formatCountdown(beanDays);if(beanDays!=null&&beanDays<14)qtBean.classList.add('urgent');}
-})();
+// Planting dates — render immediately with national default; loadWeatherEnhancements overrides with state-specific once geo resolves
+(function(){applyPlantingDates(null,null);})();
 })();
 </script>
