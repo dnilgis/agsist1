@@ -282,7 +282,7 @@ function fetchWeather(lat, lon, label) {
 // window.AGSIST_STATE.weather (primary, read by homepage RMA date lookup
 // and other pages that need refined location without another fetch).
 function propagateLocation(lat, lon, label) {
-  fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json&zoom=10&addressdetails=1')
+  fetch('https://nominatim.openstreetmap.org/reverse?lat='+lat+'&lon='+lon+'&format=json&zoom=18&addressdetails=1')
     .then(function(r) { return r.json(); })
     .then(function(geo) {
       var addr = (geo && geo.address) || {};
@@ -299,7 +299,7 @@ function propagateLocation(lat, lon, label) {
         var iso = String(addr['ISO3166-2-lvl4']).split('-');
         if (iso.length > 1) st = iso[1].toUpperCase();
       }
-      var zip = addr.postcode || '';
+      var zip = ((addr.postcode || '').toString().match(/\d{5}/) || [''])[0];
       var name = city + (st ? ', '+st : '');
 
       if (window.AGSIST_GEO) {
