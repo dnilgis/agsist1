@@ -5,13 +5,26 @@
     <link>https://agsist.com/daily</link>
     <description>Free daily agricultural market briefing for corn, soybean, and grain producers. Overnight surprises, farmer actions, market analysis — every morning at 5 AM CT.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 25 Apr 2026 11:41:59 +0000</lastBuildDate>
+    <lastBuildDate>Sun, 26 Apr 2026 11:42:39 +0000</lastBuildDate>
     <atom:link href="https://agsist.com/feed.xml" rel="self" type="application/rss+xml"/>
     <image>
       <url>https://agsist.com/img/og/daily.jpg</url>
       <title>AGSIST Daily — Morning Agricultural Intelligence Briefing</title>
       <link>https://agsist.com/daily</link>
     </image>
+    <item>
+      <title>MIXED SIGNALS AHEAD OF CRITICAL PLANTING WEEK</title>
+      <link>https://agsist.com/daily/2026-04-26</link>
+      <guid isPermaLink="true">https://agsist.com/daily/2026-04-26</guid>
+      <pubDate>Sun, 26 Apr 2026 05:00:00 -0600</pubDate>
+      <description>Commodity markets enter a pivotal week with mixed signals across the board. Corn held flat at $4.63 as of Friday's close while December contracts edged higher to $4.84, suggesting cautious optimism despite planting pressure. With optimal planting windows narrowing and weather forecasts becoming the primary driver, producers face tough decisions on pricing and risk management.
+Grains steady, cattle strong, energy weak as weather takes command.
+• Week Ahead Setup
+• Cattle Momentum Continues
+  → Price remaining fed cattle if live futures hold above $245 through Wednesday's close.
+• Energy Divergence
+Read more: https://agsist.com/daily/2026-04-26</description>
+    </item>
     <item>
       <title>PLANTING PRESSURE BUILDS AS GRAINS SLIDE</title>
       <link>https://agsist.com/daily/2026-04-25</link>
@@ -429,21 +442,6 @@ Silver surged 7.1% overnight as corn barely budged ahead of planting intentions.
 • Energy Retreats
   → Lock diesel prices for spring operations if offered fixed contracts — this dip may not last.
 Read more: https://agsist.com/daily/2026-03-25</description>
-    </item>
-    <item>
-      <title>CRUDE OIL CRATERS 10% — GRAIN COMPLEX FOLLOWS</title>
-      <link>https://agsist.com/daily/2026-03-24</link>
-      <guid isPermaLink="true">https://agsist.com/daily/2026-03-24</guid>
-      <pubDate>Tue, 24 Mar 2026 05:00:00 -0600</pubDate>
-      <description>Crude oil's stunning 10.3% overnight collapse triggered a sell-off across grains, with corn down 9½¢ and wheat off 13¾¢. The energy crash signals potential relief for diesel and fertilizer costs, but also raises recession fears that could crush export demand. With Prospective Plantings looming, this volatility hits at the worst possible time for spring planning decisions.
-Energy collapse drags corn and wheat lower as input cost relief battles demand destruction fears.
-• GRAINS &amp; OILSEEDS
-  → Hold off on major pricing decisions until energy markets stabilize — volatility this extreme rarely lasts.
-• LIVESTOCK &amp; DAIRY
-  → Cattle feeders should consider locking in feed costs if this grain weakness holds through the week.
-• ENERGY &amp; INPUTS
-  → Don't rush into fertilizer purchases — let dealers adjust prices first, but start having conversations about locking lower rates.
-Read more: https://agsist.com/daily/2026-03-24</description>
     </item>
   </channel>
 </rss>

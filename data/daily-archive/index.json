@@ -1,6 +1,17 @@
 {
   "briefings": [
     {
+      "date": "2026-04-26",
+      "date_display": "Sunday, April 26, 2026",
+      "headline": "MIXED SIGNALS AHEAD OF CRITICAL PLANTING WEEK",
+      "teaser": "Weather takes the wheel as planting deadlines loom and markets show divergent signals.",
+      "market_mood": "mixed",
+      "surprise_count": 0,
+      "sections": 3,
+      "url": "/daily/2026-04-26",
+      "market_closed": true
+    },
+    {
       "date": "2026-04-25",
       "date_display": "Saturday, April 25, 2026",
       "headline": "PLANTING PRESSURE BUILDS AS GRAINS SLIDE",
@@ -462,6 +473,6 @@
       "url": "/daily/2026-03-04"
     }
   ],
-  "updated": "2026-04-25T11:41:59.409305+00:00",
-  "count": 44
+  "updated": "2026-04-26T11:42:39.148192+00:00",
+  "count": 45
 }
