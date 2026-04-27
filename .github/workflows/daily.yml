@@ -39,11 +39,36 @@ jobs:
           ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
         run: python scripts/generate_daily.py
 
+      # v4.0: Critic pass — runs after generate, before schema validation.
+      # Sends the briefing back to Claude as the editor, scores 1-10 on each
+      # of 13 rules (8 IMPACT + voice, forward test, thread coherence + spread
+      # quality + YC honesty). If 2+ rules score below 7 OR voice<5 OR forward
+      # test<5, rewrites the weakest target and re-saves daily.json + archive HTML.
+      #
+      # continue-on-error: true means a critic API failure (network, bad response,
+      # rate limit) does NOT block the briefing from shipping. The original
+      # generator output is what gets validated and committed.
+      #
+      # First few days: consider adding `--dry-run` to the run command to see
+      # what the critic flags before letting it rewrite anything. Remove the
+      # flag once you trust the scoring calibration.
+      - name: Run critic pass
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        continue-on-error: true
+        run: python scripts/critique_briefing.py
+
       - name: Validate schema
         # Fails the workflow if daily.json drifts from canonical field
         # names or contains filler content like "Unknown" attributions.
         # On failure, yesterday's briefing stays live until the next
         # successful run. GitHub emails the workflow owner on failure.
+        #
+        # NOTE (v4.0): daily.json now has new top-level fields:
+        #   yesterdays_call, spread_to_watch, weekly_thread, critic_pass
+        # If daily_schema.py is strict about field names, it will need
+        # to be updated to know about these. See INDEX_HTML_EDITS.md and
+        # HANDOFF_v40.md for the new schema shape.
         run: python scripts/daily_schema.py data/daily.json
 
       - name: Generate RSS feed
