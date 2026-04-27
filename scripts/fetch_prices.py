@@ -4,6 +4,15 @@ fetch_prices.py — fetches commodity/futures/index/crypto prices via yfinance
 Writes to data/prices.json. Run by GitHub Actions every 30min on weekdays.
 All free, no API key needed.
 
+v3.1 — 2026-04-26 (afternoon)
+  yfinance fast_info can return float('nan') for missing fields
+  (e.g. previous_close on a thin-volume crypto). The old `... or ...`
+  fallback and `if prev else close` checks both treat NaN as truthy,
+  so NaN flowed through net/pctChange and into prices.json. Browsers
+  refuse to parse JSON with bare NaN literals — every price card on
+  the homepage went blank. Now sanitized via _num() and json.dump is
+  invoked with allow_nan=False as a fail-fast backstop.
+
 v3 — 2026-04-26
   Added 19 grain forward-curve contracts (corn, beans, wheat) with year-explicit
   keys. Wheat now has 6 deferred contracts (previously had none — forward curve
@@ -44,9 +53,28 @@ v2 — 2026-03-24
 """
 
 import json
+import math
 import sys
 from datetime import datetime, timezone
 import yfinance as yf
+
+
+def _num(v):
+    """
+    yfinance fast_info returns float('nan') for missing fields. NaN is truthy
+    in Python, so `x or fallback` and `if x` both let it through. This helper
+    coerces None / NaN / +/-inf / non-numeric values to None — the rest of the
+    code can then test `if v is None` and the math stays clean.
+    """
+    if v is None:
+        return None
+    try:
+        f = float(v)
+    except (TypeError, ValueError):
+        return None
+    if math.isnan(f) or math.isinf(f):
+        return None
+    return f
 
 # Map our internal keys → Yahoo Finance ticker symbols
 SYMBOLS = {
@@ -114,29 +142,41 @@ def fetch_quote(key, ticker):
         t = yf.Ticker(ticker)
         info = t.fast_info
 
-        close  = getattr(info, 'last_price', None) or getattr(info, 'regular_market_price', None)
-        prev   = getattr(info, 'previous_close', None) or getattr(info, 'regular_market_previous_close', None)
+        # _num() short-circuits None/NaN/inf to None so downstream math
+        # never sees a poisoned value. Two-step fallback (instead of `a or b`)
+        # is needed because a legitimate 0.0 close should not trigger fallback.
+        close = _num(getattr(info, 'last_price', None))
+        if close is None:
+            close = _num(getattr(info, 'regular_market_price', None))
+        prev = _num(getattr(info, 'previous_close', None))
+        if prev is None:
+            prev = _num(getattr(info, 'regular_market_previous_close', None))
         # 52-week range — available on fast_info, no slow .info() call needed
-        wk52_hi = getattr(info, 'year_high', None)
-        wk52_lo = getattr(info, 'year_low', None)
+        wk52_hi = _num(getattr(info, 'year_high', None))
+        wk52_lo = _num(getattr(info, 'year_low', None))
 
         if close is None:
             # fallback: last 2 days of history
             hist = t.history(period="2d", interval="1d")
             if len(hist) >= 1:
-                close = float(hist['Close'].iloc[-1])
-                prev  = float(hist['Close'].iloc[-2]) if len(hist) >= 2 else close
+                close = _num(hist['Close'].iloc[-1])
+                if close is not None and len(hist) >= 2:
+                    prev = _num(hist['Close'].iloc[-2])
 
         if close is None:
             print(f"  SKIP {key} ({ticker}) — no price data")
             return None
 
-        close   = round(float(close), 5)
-        prev    = round(float(prev), 5) if prev else close
+        # If we have close but no prev, treat as flat day so net/pct = 0.
+        if prev is None:
+            prev = close
+
+        close   = round(close, 5)
+        prev    = round(prev, 5)
         net     = round(close - prev, 5)
         pct     = round((net / prev * 100) if prev else 0, 4)
-        wk52_hi = round(float(wk52_hi), 4) if wk52_hi else None
-        wk52_lo = round(float(wk52_lo), 4) if wk52_lo else None
+        wk52_hi = round(wk52_hi, 4) if wk52_hi is not None else None
+        wk52_lo = round(wk52_lo, 4) if wk52_lo is not None else None
 
         range_str = f"  52wk: {wk52_lo}–{wk52_hi}" if wk52_hi and wk52_lo else "  52wk: n/a"
         print(f"  OK   {key:14s} ({ticker:14s})  {close:>12.4f}  {net:+.4f}  {pct:+.2f}%{range_str}")
@@ -190,8 +230,11 @@ def main():
         "quotes":  quotes
     }
 
+    # allow_nan=False raises ValueError if any NaN/inf slipped past _num().
+    # Better to fail the workflow run loudly than write invalid JSON
+    # that breaks the homepage silently.
     with open("data/prices.json", "w") as f:
-        json.dump(output, f, indent=2)
+        json.dump(output, f, indent=2, allow_nan=False)
 
     print(f"\nDone: {ok} fetched, {fail} failed → data/prices.json updated")
     if ok == 0:
