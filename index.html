@@ -406,7 +406,18 @@
   .daily-byline strong{color:var(--text);font-weight:700}
   .daily-byline a{color:var(--gold);text-decoration:none}
   .daily-byline a:hover{text-decoration:underline}
-  /* v4.0 share strip — sits between hero-grid and dismiss row */
+  /* v4.0 sponsor block — paid sponsor when data.sponsor present, founding-sponsor CTA otherwise */
+  .daily-sponsor{margin:1rem auto 0;max-width:1400px;padding:.85rem 1.1rem;background:linear-gradient(135deg,var(--surface) 0%,rgba(218,165,32,.04) 100%);border:1px solid rgba(218,165,32,.25);border-left:3px solid var(--gold);border-radius:8px}
+  .daily-hero.dismissed .daily-sponsor{display:none}
+  .daily-sponsor-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;display:flex;align-items:center;gap:.35rem}
+  .daily-sponsor-body{font-size:.92rem;line-height:1.65;color:var(--text-dim);margin-bottom:.55rem}
+  .daily-sponsor-body strong{color:var(--text);font-weight:700}
+  .daily-sponsor-cta{display:inline-flex;align-items:center;gap:.3rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--gold);text-decoration:none;padding:.45rem .85rem;border:1px solid rgba(218,165,32,.3);border-radius:6px;transition:border-color .15s,background .15s,color .15s;min-height:36px}
+  .daily-sponsor-cta:hover{border-color:var(--gold);background:rgba(218,165,32,.08);color:var(--text)}
+  /* Empty state — softer presentation for founding-sponsor CTA */
+  .daily-sponsor.empty{border-color:rgba(218,165,32,.18);border-left-color:rgba(218,165,32,.55);background:linear-gradient(135deg,var(--surface) 0%,rgba(218,165,32,.02) 100%)}
+  .daily-sponsor.empty .daily-sponsor-label{color:var(--text-muted)}
+  @media(max-width:520px){.daily-sponsor{margin-left:0;margin-right:0;padding:.7rem .9rem}.daily-sponsor-body{font-size:.82rem;line-height:1.55}.daily-sponsor-cta{font-size:.62rem;padding:.4rem .7rem}}
   .daily-share{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;padding:.85rem var(--sp-lg,1.5rem);border-top:1px solid var(--border);max-width:1400px;margin:0 auto}
   .daily-hero.dismissed .daily-share{display:none}
   .daily-share-lbl{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);margin-right:.3rem}
@@ -535,6 +546,11 @@
           <div class="s-card" style="border-color:rgba(218,165,32,.15)"><div class="s-card-label" style="color:var(--gold)">&#x1F4AC; DAILY QUOTE</div><blockquote style="margin:0;padding:0"><p id="daily-quote-text" style="font-size:.92rem;font-style:italic;color:var(--text-dim);line-height:1.65;margin-bottom:.4rem">"&mdash;"</p><cite id="daily-quote-attr" style="font-size:.76rem;color:var(--text-muted);font-style:normal"></cite></blockquote></div>
           <div style="font-size:.62rem;color:var(--text-muted);text-align:center;padding:.2rem 0"><span id="daily-source">USDA &middot; CME Group &middot; Open-Meteo</span></div>
         </div>
+      </div>
+      <div class="daily-sponsor empty" id="daily-sponsor" role="region" aria-label="Today's sponsor">
+        <div class="daily-sponsor-label" id="daily-sponsor-label">&#x1F4F0; Today&rsquo;s Briefing</div>
+        <div class="daily-sponsor-body" id="daily-sponsor-body">This briefing reaches grain producers across the country every weekday morning. <strong>Looking for a founding sponsor</strong> &mdash; one ag company, one line per issue. If you sell to farmers, get in front of an audience that already opted in.</div>
+        <a class="daily-sponsor-cta" id="daily-sponsor-cta" href="mailto:sig@farmers1st.com?subject=AGSIST%20Daily%20Founding%20Sponsor">&#x1F4DE; Get in touch &rarr;</a>
       </div>
       <div class="daily-share" id="daily-share" role="region" aria-label="Share today's briefing">
         <span class="daily-share-lbl">&#x1F4E2; Share</span>
@@ -1570,6 +1586,37 @@ window.hydrateDaily = function(data) {
       if(bsB)bsB.innerHTML=bs.body;
       bsEl.style.display='block';
     } else { bsEl.style.display='none'; }
+  }
+
+  // v4.0: sponsor block — paid sponsor when data.sponsor populated, founding-sponsor CTA otherwise.
+  // States: data.sponsor === false → hide entirely; object with name/tagline → paid sponsor; null/undefined → empty CTA (default HTML).
+  var sp=data.sponsor,spEl=el('daily-sponsor');
+  if(spEl){
+    if(sp===false){
+      spEl.style.display='none';
+    } else if(sp&&(sp.tagline||sp.name)){
+      spEl.style.display='';
+      spEl.classList.remove('empty');
+      var spLbl=el('daily-sponsor-label'),spBody=el('daily-sponsor-body'),spCta=el('daily-sponsor-cta');
+      if(spLbl)spLbl.innerHTML='\uD83D\uDCF0 Today\u2019s Sponsor';
+      if(spBody){
+        var spName=sp.name||'',spTag=sp.tagline||'';
+        spBody.innerHTML=spName?'<strong>'+spName+'</strong>'+(spTag?' \u2014 '+spTag:''):spTag;
+      }
+      if(spCta){
+        if(sp.url){
+          spCta.href=sp.url;spCta.target='_blank';spCta.rel='noopener';
+        } else {
+          spCta.removeAttribute('target');spCta.removeAttribute('rel');
+          spCta.href='mailto:sig@farmers1st.com';
+        }
+        spCta.textContent=sp.cta_text||(sp.name?'Visit '+sp.name+' \u2192':'Visit \u2192');
+      }
+    } else {
+      // No sponsor data — keep empty-state CTA visible (HTML default)
+      spEl.style.display='';
+      spEl.classList.add('empty');
+    }
   }
 };
 (function(){
