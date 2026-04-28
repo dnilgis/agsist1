@@ -406,18 +406,57 @@
   .daily-byline strong{color:var(--text);font-weight:700}
   .daily-byline a{color:var(--gold);text-decoration:none}
   .daily-byline a:hover{text-decoration:underline}
-  /* v4.0 sponsor block — paid sponsor when data.sponsor present, founding-sponsor CTA otherwise */
-  .daily-sponsor{margin:1rem auto 0;max-width:1400px;padding:.85rem 1.1rem;background:linear-gradient(135deg,var(--surface) 0%,rgba(218,165,32,.04) 100%);border:1px solid rgba(218,165,32,.25);border-left:3px solid var(--gold);border-radius:8px}
+  /* v4.1 sponsor block — billboard for empty state, restrained for paid sponsor */
+  .daily-sponsor{position:relative;margin:1.5rem auto 0;max-width:1400px;padding:1.5rem 1.75rem;background:linear-gradient(135deg,rgba(218,165,32,.10) 0%,rgba(218,165,32,.02) 50%,var(--surface) 100%);border:2px solid var(--gold);border-radius:12px;box-shadow:0 0 0 1px rgba(218,165,32,.15),0 8px 24px rgba(0,0,0,.25)}
   .daily-hero.dismissed .daily-sponsor{display:none}
-  .daily-sponsor-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.4rem;display:flex;align-items:center;gap:.35rem}
-  .daily-sponsor-body{font-size:.92rem;line-height:1.65;color:var(--text-dim);margin-bottom:.55rem}
-  .daily-sponsor-body strong{color:var(--text);font-weight:700}
-  .daily-sponsor-cta{display:inline-flex;align-items:center;gap:.3rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--gold);text-decoration:none;padding:.45rem .85rem;border:1px solid rgba(218,165,32,.3);border-radius:6px;transition:border-color .15s,background .15s,color .15s;min-height:36px}
-  .daily-sponsor-cta:hover{border-color:var(--gold);background:rgba(218,165,32,.08);color:var(--text)}
-  /* Empty state — softer presentation for founding-sponsor CTA */
-  .daily-sponsor.empty{border-color:rgba(218,165,32,.18);border-left-color:rgba(218,165,32,.55);background:linear-gradient(135deg,var(--surface) 0%,rgba(218,165,32,.02) 100%)}
-  .daily-sponsor.empty .daily-sponsor-label{color:var(--text-muted)}
-  @media(max-width:520px){.daily-sponsor{margin-left:0;margin-right:0;padding:.7rem .9rem}.daily-sponsor-body{font-size:.82rem;line-height:1.55}.daily-sponsor-cta{font-size:.62rem;padding:.4rem .7rem}}
+  .dsp-empty,.dsp-filled{display:block}
+  /* Empty state — billboard treatment */
+  .dsp-tags{display:flex;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap;align-items:center}
+  .dsp-tag{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;padding:.4rem .75rem;border-radius:4px;display:inline-flex;align-items:center;gap:.35rem;line-height:1}
+  .dsp-tag-available{background:var(--gold);color:#0d1117;position:relative;z-index:1}
+  .dsp-tag-available::before{content:'';position:absolute;inset:-4px;border:2px solid var(--gold);border-radius:7px;opacity:0;animation:dsp-pulse 2.6s ease-in-out infinite;z-index:-1;pointer-events:none}
+  @keyframes dsp-pulse{0%,100%{opacity:0;transform:scale(1)}50%{opacity:.45;transform:scale(1.06)}}
+  .dsp-tag-founding{background:rgba(218,165,32,.10);color:var(--gold);border:1px solid rgba(218,165,32,.4)}
+  .dsp-headline{font-family:'Oswald',sans-serif;font-size:1.95rem;font-weight:600;letter-spacing:.005em;color:var(--text);margin-bottom:.7rem;line-height:1.1}
+  .dsp-pitch{font-size:.95rem;line-height:1.65;color:var(--text-dim);margin-bottom:1.25rem;max-width:58rem}
+  .dsp-pitch strong{color:var(--text);font-weight:700}
+  .dsp-actions{margin-bottom:.85rem}
+  .dsp-cta-primary{display:inline-flex;align-items:center;gap:.45rem;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:var(--gold);color:#0d1117;text-decoration:none;padding:.85rem 1.5rem;border:2px solid var(--gold);border-radius:6px;transition:background .15s,transform .1s,box-shadow .15s,border-color .15s;min-height:44px;box-shadow:0 4px 12px rgba(218,165,32,.22)}
+  .dsp-cta-primary:hover{background:#f0c84a;border-color:#f0c84a;transform:translateY(-1px);box-shadow:0 6px 18px rgba(218,165,32,.38)}
+  .dsp-contact{font-family:'JetBrains Mono',monospace;font-size:.72rem;color:var(--text-muted);letter-spacing:.03em}
+  .dsp-contact a{color:var(--gold);text-decoration:none}
+  .dsp-contact a:hover{text-decoration:underline}
+  .dsp-contact-sep{margin:0 .55rem;opacity:.5}
+  /* Filled state — subdued so sponsor brand can breathe */
+  .daily-sponsor.filled{border-width:1px;border-color:rgba(218,165,32,.3);border-left:3px solid var(--gold);background:linear-gradient(135deg,var(--surface) 0%,rgba(218,165,32,.04) 100%);box-shadow:none;padding:1.1rem 1.4rem}
+  .dsp-label{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:.5rem;display:flex;align-items:center;gap:.35rem}
+  .dsp-sponsor-name{font-family:'Oswald',sans-serif;font-size:1.5rem;font-weight:600;color:var(--text);margin-bottom:.3rem;line-height:1.15}
+  .dsp-sponsor-tag{font-size:.92rem;line-height:1.55;color:var(--text-dim);margin-bottom:.9rem;max-width:54rem}
+  .dsp-sponsor-cta{display:inline-flex;align-items:center;gap:.35rem;font-family:'JetBrains Mono',monospace;font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);text-decoration:none;padding:.55rem 1rem;border:1px solid var(--gold);border-radius:6px;transition:background .15s,color .15s;min-height:36px}
+  .dsp-sponsor-cta:hover{background:var(--gold);color:#0d1117}
+  /* Mobile */
+  @media(max-width:520px){
+    .daily-sponsor{margin:1rem 0 0;padding:1.15rem 1rem;border-radius:8px;border-width:2px}
+    .dsp-headline{font-size:1.45rem}
+    .dsp-pitch{font-size:.85rem;line-height:1.55;margin-bottom:1rem}
+    .dsp-tag{font-size:.6rem;padding:.32rem .6rem;letter-spacing:.1em}
+    .dsp-cta-primary{font-size:.7rem;padding:.7rem 1.1rem;letter-spacing:.07em}
+    .dsp-contact{font-size:.66rem}
+    .dsp-contact-sep{display:none}
+    .dsp-contact a{display:block;margin-top:.25rem}
+    .daily-sponsor.filled{padding:.95rem 1rem}
+    .dsp-sponsor-name{font-size:1.25rem}
+    .dsp-sponsor-tag{font-size:.82rem}
+    .dsp-sponsor-cta{font-size:.66rem;padding:.45rem .8rem}
+  }
+  /* v4.1 collapsed-state teaser sponsor — tiny inline element on the collapsed bar */
+  .teaser-sponsor{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--gold);text-decoration:none;padding:.22rem .55rem;border:1px solid rgba(218,165,32,.25);border-radius:4px;white-space:nowrap;transition:border-color .15s,background .15s,color .15s,opacity .15s;margin:0 .55rem 0 auto;flex-shrink:0;line-height:1.2}
+  .teaser-sponsor:hover{border-color:var(--gold);background:rgba(218,165,32,.08)}
+  .teaser-sponsor.empty-state{opacity:.7;color:var(--text-muted);border-color:var(--border)}
+  .teaser-sponsor.empty-state:hover{opacity:1;color:var(--gold);border-color:rgba(218,165,32,.45);background:rgba(218,165,32,.06)}
+  .teaser-sponsor.has-sponsor{opacity:.9}
+  @media(max-width:520px){.teaser-sponsor{font-size:.56rem;padding:.18rem .45rem;letter-spacing:.03em;margin:0 .4rem 0 auto}}
+  @media(max-width:380px){.teaser-sponsor{display:none}}
   .daily-share{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;padding:.85rem var(--sp-lg,1.5rem);border-top:1px solid var(--border);max-width:1400px;margin:0 auto}
   .daily-hero.dismissed .daily-share{display:none}
   .daily-share-lbl{font-family:'JetBrains Mono',monospace;font-size:.62rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--text-muted);margin-right:.3rem}
@@ -501,7 +540,7 @@
 </style>
 <section class="daily-hero" id="daily-hero" aria-label="AGSIST Daily Briefing" aria-expanded="false">
   <div class="daily-teaser" id="daily-teaser" role="button" tabindex="0" aria-label="Expand AGSIST Daily briefing" aria-controls="daily-full">
-    <div class="teaser-line1"><div class="teaser-left"><span class="teaser-badge" id="daily-teaser-date">&#x1F4F0; AGSIST Daily</span></div><span class="teaser-action">Read Today's Briefing &#x2193;</span></div>
+    <div class="teaser-line1"><div class="teaser-left"><span class="teaser-badge" id="daily-teaser-date">&#x1F4F0; AGSIST Daily</span></div><a class="teaser-sponsor empty-state" id="daily-teaser-sponsor" href="mailto:sig@farmers1st.com?subject=AGSIST%20Daily%20Founding%20Sponsor" onclick="event.stopPropagation()">Sponsor this &rarr;</a><span class="teaser-action">Read Today's Briefing &#x2193;</span></div>
     <span class="teaser-preview" id="daily-teaser-text">Today's ag market briefing &mdash; click to read</span>
   </div>
   <div class="daily-full" id="daily-full">
@@ -547,10 +586,31 @@
           <div style="font-size:.62rem;color:var(--text-muted);text-align:center;padding:.2rem 0"><span id="daily-source">USDA &middot; CME Group &middot; Open-Meteo</span></div>
         </div>
       </div>
-      <div class="daily-sponsor empty" id="daily-sponsor" role="region" aria-label="Today's sponsor">
-        <div class="daily-sponsor-label" id="daily-sponsor-label">&#x1F4F0; Today&rsquo;s Briefing</div>
-        <div class="daily-sponsor-body" id="daily-sponsor-body">This briefing reaches grain producers across the country every weekday morning. <strong>Looking for a founding sponsor</strong> &mdash; one ag company, one line per issue. If you sell to farmers, get in front of an audience that already opted in.</div>
-        <a class="daily-sponsor-cta" id="daily-sponsor-cta" href="mailto:sig@farmers1st.com?subject=AGSIST%20Daily%20Founding%20Sponsor">&#x1F4DE; Get in touch &rarr;</a>
+      <div class="daily-sponsor" id="daily-sponsor" role="region" aria-label="Sponsor slot">
+        <!-- Empty state: billboard for finding the founding sponsor -->
+        <div class="dsp-empty" id="dsp-empty">
+          <div class="dsp-tags">
+            <span class="dsp-tag dsp-tag-available">&#x26A1; Available</span>
+            <span class="dsp-tag dsp-tag-founding">Founding Sponsor &middot; 1 Slot</span>
+          </div>
+          <h2 class="dsp-headline">Sponsor the AGSIST Daily Briefing.</h2>
+          <p class="dsp-pitch">One ag company per issue. Your message in front of grain producers reading this every weekday morning. <strong>Founding-sponsor pricing locked in for the first sponsor.</strong></p>
+          <div class="dsp-actions">
+            <a class="dsp-cta-primary" href="mailto:sig@farmers1st.com?subject=AGSIST%20Daily%20Founding%20Sponsor">&#x1F4DE; Become the founding sponsor &rarr;</a>
+          </div>
+          <div class="dsp-contact">
+            <a href="mailto:sig@farmers1st.com" aria-label="Email Sigurd at sig@farmers1st.com">sig@farmers1st.com</a>
+            <span class="dsp-contact-sep">&middot;</span>
+            <a href="tel:+17157972428" aria-label="Call Sigurd at 715-797-2428">715-797-2428</a>
+          </div>
+        </div>
+        <!-- Filled state: shown when data.sponsor is populated -->
+        <div class="dsp-filled" id="dsp-filled" style="display:none">
+          <div class="dsp-label" id="dsp-filled-label">&#x1F4F0; Today&rsquo;s Sponsor</div>
+          <div class="dsp-sponsor-name" id="dsp-filled-name"></div>
+          <div class="dsp-sponsor-tag" id="dsp-filled-tag"></div>
+          <a class="dsp-sponsor-cta" id="dsp-filled-cta" href="mailto:sig@farmers1st.com">Visit sponsor &rarr;</a>
+        </div>
       </div>
       <div class="daily-share" id="daily-share" role="region" aria-label="Share today's briefing">
         <span class="daily-share-lbl">&#x1F4E2; Share</span>
@@ -1588,34 +1648,48 @@ window.hydrateDaily = function(data) {
     } else { bsEl.style.display='none'; }
   }
 
-  // v4.0: sponsor block — paid sponsor when data.sponsor populated, founding-sponsor CTA otherwise.
-  // States: data.sponsor === false → hide entirely; object with name/tagline → paid sponsor; null/undefined → empty CTA (default HTML).
-  var sp=data.sponsor,spEl=el('daily-sponsor');
+  // v4.1: sponsor block — billboard empty state, subdued filled state, plus collapsed teaser pill.
+  // States: data.sponsor === false → hide both; object with name/tagline → filled; null/undefined → empty (default).
+  var sp=data.sponsor,spEl=el('daily-sponsor'),spEmpty=el('dsp-empty'),spFilled=el('dsp-filled'),spTeaser=el('daily-teaser-sponsor');
   if(spEl){
     if(sp===false){
       spEl.style.display='none';
+      if(spTeaser)spTeaser.style.display='none';
     } else if(sp&&(sp.tagline||sp.name)){
+      // Filled state — paid sponsor placement
       spEl.style.display='';
-      spEl.classList.remove('empty');
-      var spLbl=el('daily-sponsor-label'),spBody=el('daily-sponsor-body'),spCta=el('daily-sponsor-cta');
-      if(spLbl)spLbl.innerHTML='\uD83D\uDCF0 Today\u2019s Sponsor';
-      if(spBody){
-        var spName=sp.name||'',spTag=sp.tagline||'';
-        spBody.innerHTML=spName?'<strong>'+spName+'</strong>'+(spTag?' \u2014 '+spTag:''):spTag;
-      }
+      spEl.classList.add('filled');
+      if(spEmpty)spEmpty.style.display='none';
+      if(spFilled)spFilled.style.display='block';
+      var spName=el('dsp-filled-name'),spTag=el('dsp-filled-tag'),spCta=el('dsp-filled-cta');
+      if(spName)spName.textContent=sp.name||'';
+      if(spTag)spTag.textContent=sp.tagline||'';
       if(spCta){
-        if(sp.url){
-          spCta.href=sp.url;spCta.target='_blank';spCta.rel='noopener';
-        } else {
-          spCta.removeAttribute('target');spCta.removeAttribute('rel');
-          spCta.href='mailto:sig@farmers1st.com';
-        }
+        if(sp.url){spCta.href=sp.url;spCta.target='_blank';spCta.rel='noopener';}
+        else{spCta.removeAttribute('target');spCta.removeAttribute('rel');spCta.href='mailto:sig@farmers1st.com';}
         spCta.textContent=sp.cta_text||(sp.name?'Visit '+sp.name+' \u2192':'Visit \u2192');
       }
+      // Collapsed teaser sponsor — quiet attribution
+      if(spTeaser){
+        spTeaser.style.display='';
+        spTeaser.classList.remove('empty-state');
+        spTeaser.classList.add('has-sponsor');
+        spTeaser.textContent='Sponsored by '+(sp.name||'partner');
+        if(sp.url){spTeaser.href=sp.url;spTeaser.target='_blank';spTeaser.rel='noopener';}
+        else{spTeaser.removeAttribute('target');spTeaser.removeAttribute('rel');spTeaser.href='mailto:sig@farmers1st.com';}
+      }
     } else {
-      // No sponsor data — keep empty-state CTA visible (HTML default)
+      // Empty state — billboard CTA (default HTML)
       spEl.style.display='';
-      spEl.classList.add('empty');
+      spEl.classList.remove('filled');
+      if(spEmpty)spEmpty.style.display='block';
+      if(spFilled)spFilled.style.display='none';
+      if(spTeaser){
+        spTeaser.style.display='';
+        spTeaser.classList.remove('has-sponsor');
+        spTeaser.classList.add('empty-state');
+        // Keep default HTML href + textContent ("Sponsor this →") — no JS update needed
+      }
     }
   }
 };
