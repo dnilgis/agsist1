@@ -1,0 +1,36 @@
+name: Morning brief — email Sigurd
+
+# Sends the daily forwarding email to sig@farmers1st.com.
+# Sigurd manually forwards the EMAIL block to subscribers and copies
+# the SMS block into a group text. ~60 seconds of human work per day.
+#
+# Cron timing notes:
+#   12:00 UTC = 7 AM CDT (summer) / 6 AM CST (winter)
+#   Should run AFTER generate_daily.py finishes — adjust if your daily
+#   generation cron moves. If you want to combine the two workflows,
+#   just add the "Send brief" step to your existing daily workflow
+#   instead of running this separately.
+
+on:
+  schedule:
+    - cron: '0 12 * * 1-5'   # 12:00 UTC, weekdays only
+  workflow_dispatch:           # manual trigger button in Actions UI
+
+jobs:
+  send-brief:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Send brief to Sigurd
+        env:
+          GMAIL_USER:     ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASS: ${{ secrets.GMAIL_APP_PASS }}
+          # Force send on manual triggers (overrides weekend skip)
+          FORCE_SEND:     ${{ github.event_name == 'workflow_dispatch' && '1' || '' }}
+        run: python scripts/send_morning_brief.py
