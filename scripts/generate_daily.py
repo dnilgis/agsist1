@@ -943,6 +943,15 @@ def generate_archive_html(briefing, date_iso):
     gen_at = briefing.get("generated_at", "")
     issue_num = briefing.get("issue_number", 0)
 
+    # v15: "Published Xh ago" live ticking timer in the date row.
+    # Renders only if generated_at is set (legacy briefings without it stay clean).
+    # Mode "since" — JavaScript timer module ticks every 30s, no refresh needed.
+    publish_timer_html = (
+        f'<span class="dv3-publish-age" data-agsist-timer data-mode="since" '
+        f'data-target="{html_esc(gen_at)}" data-label="Published" data-show-next="false"></span>'
+        if gen_at else ""
+    )
+
     og_image_url = og_image_for(date_iso)
     og_description_raw = briefing.get("teaser") or briefing.get("lead") or briefing.get("subheadline") or "AGSIST Daily morning market briefing"
     og_description = html_esc(og_description_raw[:180])
@@ -1157,7 +1166,9 @@ html,body{{overflow-x:hidden;overflow-x:clip;width:100%;}}
 .dv3-header{{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:2px solid var(--border)}}
 .dv3-eyebrow{{display:inline-flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:.75rem;padding:.3rem .75rem;background:rgba(74,171,76,.06);border:1px solid rgba(74,171,76,.18);border-radius:3px}}
 .dv3-eyebrow-dot{{width:7px;height:7px;border-radius:50%;background:var(--text-muted)}}
-.dv3-date{{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text-muted);letter-spacing:.08em;margin-bottom:.6rem;text-transform:uppercase}}
+.dv3-date{{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase}}
+.dv3-date-row{{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:.5rem 1rem;margin-bottom:.6rem}}
+.dv3-publish-age{{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-muted);letter-spacing:.04em;opacity:.75}}
 .dv3-headline{{font-family:'Oswald',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;line-height:1.15;color:var(--text);margin-bottom:.6rem;letter-spacing:-.01em;text-transform:uppercase}}
 .dv3-subheadline{{font-size:.92rem;color:var(--gold);font-weight:600;margin-bottom:.75rem}}
 .dv3-lead{{font-size:1.05rem;line-height:1.75;color:var(--text-dim);max-width:720px}}
@@ -1284,7 +1295,10 @@ html,body{{overflow-x:hidden;overflow-x:clip;width:100%;}}
         {mood_html}
         {weekend_badge}
       </div>
-      <div class="dv3-date">{html_esc(date_display)}</div>
+      <div class="dv3-date-row">
+        <span class="dv3-date">{html_esc(date_display)}</span>
+        {publish_timer_html}
+      </div>
       <h1 class="dv3-headline">{headline}</h1>
       {"<p class='dv3-subheadline'>" + subheadline + "</p>" if subheadline else ""}
       {thread_html}
@@ -1317,7 +1331,7 @@ html,body{{overflow-x:hidden;overflow-x:clip;width:100%;}}
 </div>
 </main>
 <div id="site-footer"></div>
-<script src="/components/loader.js" defer></script>
+<script src="/components/loader.js?v=2" defer></script>
 <script>
 (function(){{
   fetch('/data/daily-archive/index.json',{{cache:'no-store'}}).then(function(r){{return r.ok?r.json():null;}}).then(function(idx){{
