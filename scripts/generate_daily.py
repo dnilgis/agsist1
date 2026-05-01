@@ -495,7 +495,7 @@ Examples of strong weekly questions:
 Set weekly_thread.day = 1, weekly_thread.question = (your question), weekly_thread.status_text = (1-2 sentence setup explaining why this is the week's question).
 """
 
-    return f"""You are the voice of AGSIST Daily, a trusted morning agricultural intelligence briefing read every weekday by US grain and livestock producers.
+    return f"""You are the voice of AGSIST Daily, a trusted morning agricultural intelligence briefing read every day by US producers across grain, livestock, dairy, and specialty operations.
 
 ══ THE VOICE ══
 
@@ -745,12 +745,12 @@ def validate_briefing(briefing, locked_prices):
 SPONSOR_OVERRIDE = None
 
 SPONSOR_HOUSE_AD = {
-    "active": False, "label": "SPONSORED", "advertiser": "AGSIST",
-    "headline": "This slot reaches US grain producers at 6 AM CT — before the open.",
-    "body": "AGSIST Daily lands in the inbox of working US grain and livestock farmers every weekday morning, before the first call to the elevator. One sponsor per briefing. No retargeting. No programmatic auctions. Just your message, the morning routine of producers who actually move the markets we cover.",
-    "cta_text": "Inquire about sponsorship",
-    "cta_url": "mailto:sig@farmers1st.com?subject=AGSIST%20Daily%20sponsorship%20inquiry",
-    "disclosure": "Single placement. Contact for pricing and availability.",
+    "active": False, "label": "FOUNDING SPONSOR \u00b7 1 SLOT", "advertiser": "AGSIST",
+    "headline": "Sponsor the AGSIST Daily Briefing \u2014 $150/week.",
+    "body": "One ag company per issue. Your message reaches working US producers across grain, cattle, dairy, and specialty operations \u2014 read every morning before the open. Founding rate locked in for 12 months from start date. Six-week minimum commitment ($900). After that, week-to-week.",
+    "cta_text": "Become the founding sponsor",
+    "cta_url": "mailto:sig@farmers1st.com?subject=AGSIST%20Daily%20founding%20sponsor%20inquiry",
+    "disclosure": "One sponsor, one issue. No retargeting. No programmatic auctions. Reply or call 715-797-2428.",
     "is_house_ad": True,
 }
 
@@ -871,6 +871,28 @@ def render_byline_block_html():
             '</div>')
 
 
+def render_sponsor_attribution_html(sponsor):
+    """Tiny single-line sponsor attribution that sits between the date and
+    the headline. Renders 'Today's sponsor: [Name] \u2192' when paid, or
+    'Sponsor this slot \u2192' when house-ad. Click-through goes to the same
+    cta_url the main sponsor block uses."""
+    if not sponsor: return ""
+    is_house = sponsor.get("is_house_ad", False)
+    cta_url = html_esc(sponsor.get("cta_url", "#"))
+    target = ' target="_blank"' if cta_url.startswith('http') else ''
+    rel_attr = ' rel="sponsored noopener"' if not is_house else ''
+    if is_house:
+        text = "&#x1F7E1; Sponsor this slot &rarr;"
+        cls = "dv3-spattr dv3-spattr--house"
+    else:
+        advertiser = html_esc(sponsor.get("advertiser", "")).strip()
+        if not advertiser: return ""
+        text = f"&#x1F7E1; Today's sponsor: <strong>{advertiser}</strong> &rarr;"
+        cls = "dv3-spattr dv3-spattr--paid"
+    return (f'<a class="{cls}" href="{cta_url}"{target}{rel_attr} aria-label="Sponsor information">'
+            f'{text}</a>')
+
+
 def render_yesterdays_call_block_html(yc, market_closed=False):
     """yc is briefing.get('yesterdays_call') dict. Skip on weekends/holidays
     or when summary is empty (no prior call to thread)."""
@@ -942,15 +964,6 @@ def generate_archive_html(briefing, date_iso):
     is_weekend_brief = briefing.get("market_closed", False)
     gen_at = briefing.get("generated_at", "")
     issue_num = briefing.get("issue_number", 0)
-
-    # v15: "Published Xh ago" live ticking timer in the date row.
-    # Renders only if generated_at is set (legacy briefings without it stay clean).
-    # Mode "since" — JavaScript timer module ticks every 30s, no refresh needed.
-    publish_timer_html = (
-        f'<span class="dv3-publish-age" data-agsist-timer data-mode="since" '
-        f'data-target="{html_esc(gen_at)}" data-label="Published" data-show-next="false"></span>'
-        if gen_at else ""
-    )
 
     og_image_url = og_image_for(date_iso)
     og_description_raw = briefing.get("teaser") or briefing.get("lead") or briefing.get("subheadline") or "AGSIST Daily morning market briefing"
@@ -1087,6 +1100,7 @@ def generate_archive_html(briefing, date_iso):
     yc_html = render_yesterdays_call_block_html(briefing.get("yesterdays_call"), is_weekend_brief)
     spread_html = render_spread_block_html(briefing.get("spread_to_watch"), is_weekend_brief)
     thread_html = render_thread_marker_html(briefing.get("weekly_thread"), is_weekend_brief)
+    sponsor_attr_html = render_sponsor_attribution_html(sponsor)
 
     share_html = (
         '<div class="dv3-share" role="group" aria-label="Share this briefing">'
@@ -1166,9 +1180,12 @@ html,body{{overflow-x:hidden;overflow-x:clip;width:100%;}}
 .dv3-header{{margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:2px solid var(--border)}}
 .dv3-eyebrow{{display:inline-flex;align-items:center;gap:.5rem;font-family:'JetBrains Mono',monospace;font-size:.68rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:.75rem;padding:.3rem .75rem;background:rgba(74,171,76,.06);border:1px solid rgba(74,171,76,.18);border-radius:3px}}
 .dv3-eyebrow-dot{{width:7px;height:7px;border-radius:50%;background:var(--text-muted)}}
-.dv3-date{{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase}}
-.dv3-date-row{{display:flex;align-items:baseline;justify-content:space-between;flex-wrap:wrap;gap:.5rem 1rem;margin-bottom:.6rem}}
-.dv3-publish-age{{font-family:'JetBrains Mono',monospace;font-size:.68rem;color:var(--text-muted);letter-spacing:.04em;opacity:.75}}
+.dv3-date{{font-family:'JetBrains Mono',monospace;font-size:.78rem;color:var(--text-muted);letter-spacing:.08em;margin-bottom:.6rem;text-transform:uppercase}}
+.dv3-spattr{{display:inline-flex;align-items:center;gap:.35rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.04em;color:var(--gold);text-decoration:none;padding:.3rem .65rem;border:1px solid rgba(218,165,32,.25);border-radius:4px;background:rgba(218,165,32,.04);margin-bottom:.85rem;transition:border-color .15s,background .15s,color .15s}}
+.dv3-spattr:hover{{border-color:var(--gold);background:rgba(218,165,32,.10);color:var(--gold)}}
+.dv3-spattr--house{{opacity:.75;color:var(--text-muted);border-color:var(--border)}}
+.dv3-spattr--house:hover{{opacity:1;color:var(--gold);border-color:rgba(218,165,32,.4)}}
+.dv3-spattr strong{{color:var(--text);font-weight:700}}
 .dv3-headline{{font-family:'Oswald',sans-serif;font-size:clamp(2rem,4vw,3rem);font-weight:700;line-height:1.15;color:var(--text);margin-bottom:.6rem;letter-spacing:-.01em;text-transform:uppercase}}
 .dv3-subheadline{{font-size:.92rem;color:var(--gold);font-weight:600;margin-bottom:.75rem}}
 .dv3-lead{{font-size:1.05rem;line-height:1.75;color:var(--text-dim);max-width:720px}}
@@ -1295,10 +1312,8 @@ html,body{{overflow-x:hidden;overflow-x:clip;width:100%;}}
         {mood_html}
         {weekend_badge}
       </div>
-      <div class="dv3-date-row">
-        <span class="dv3-date">{html_esc(date_display)}</span>
-        {publish_timer_html}
-      </div>
+      <div class="dv3-date">{html_esc(date_display)}</div>
+      {sponsor_attr_html}
       <h1 class="dv3-headline">{headline}</h1>
       {"<p class='dv3-subheadline'>" + subheadline + "</p>" if subheadline else ""}
       {thread_html}
@@ -1331,7 +1346,7 @@ html,body{{overflow-x:hidden;overflow-x:clip;width:100%;}}
 </div>
 </main>
 <div id="site-footer"></div>
-<script src="/components/loader.js?v=2" defer></script>
+<script src="/components/loader.js" defer></script>
 <script>
 (function(){{
   fetch('/data/daily-archive/index.json',{{cache:'no-store'}}).then(function(r){{return r.ok?r.json():null;}}).then(function(idx){{
