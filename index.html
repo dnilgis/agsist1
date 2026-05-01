@@ -379,6 +379,11 @@
   @media(max-width:480px){.fert-widget{padding:.75rem .85rem;}.fert-grid{grid-template-columns:1fr 1fr;}}
   @media(max-width:560px){.ratio-body{flex-wrap:wrap!important;}.ratio-right{min-width:100%;}.ratio-big{font-size:2rem;}}
   /* v4.0 daily-hero blocks ── thread marker / yesterday's call / spread / basis / byline */
+  .daily-spattr{display:inline-flex;align-items:center;gap:.35rem;font-family:'JetBrains Mono',monospace;font-size:.7rem;font-weight:600;letter-spacing:.04em;color:var(--gold);text-decoration:none;padding:.3rem .65rem;border:1px solid rgba(218,165,32,.25);border-radius:4px;background:rgba(218,165,32,.04);margin-bottom:.85rem;transition:border-color .15s,background .15s,color .15s;max-width:fit-content}
+  .daily-spattr:hover{border-color:var(--gold);background:rgba(218,165,32,.10);color:var(--gold)}
+  .daily-spattr--house{opacity:.75;color:var(--text-muted);border-color:var(--border)}
+  .daily-spattr--house:hover{opacity:1;color:var(--gold);border-color:rgba(218,165,32,.4)}
+  .daily-spattr strong{color:var(--text);font-weight:700}
   .daily-thread-marker{display:none;align-items:center;gap:.5rem;margin-bottom:.45rem;padding:.32rem .7rem;background:rgba(91,163,224,.06);border:1px solid rgba(91,163,224,.22);border-radius:20px;font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--blue);max-width:fit-content}
   .daily-thread-marker .dtm-day{color:var(--blue);font-weight:800}
   .daily-thread-marker .dtm-q{color:var(--text-dim);text-transform:none;letter-spacing:0;font-weight:600}
@@ -551,6 +556,7 @@
           <div style="display:flex;align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:.9rem"><div class="daily-eyebrow"><span class="daily-eyebrow-dot"></span> AGSIST DAILY</div><span id="daily-mood" class="daily-mood" style="display:none"></span></div>
           <div id="daily-date" class="daily-date"></div>
           <div class="daily-snapshot-note" aria-label="Briefing snapshot context" style="font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.1em;margin:-.4rem 0 .8rem;line-height:1.5">Snapshot at briefing publish &middot; <span style="color:var(--gold)">live ticker above shows current prices</span></div>
+          <a class="daily-spattr daily-spattr--house" id="daily-spattr" href="mailto:sig@farmers1st.com?subject=AGSIST%20Daily%20founding%20sponsor%20inquiry" aria-label="Sponsor information">&#x1F7E1; Sponsor this slot &rarr;</a>
           <div id="site-greeting" class="daily-greeting">Good Morning</div>
           <div id="daily-thread-marker" class="daily-thread-marker"><span class="dtm-day">Day <span id="daily-thread-day">--</span>/5</span><span class="dtm-q" id="daily-thread-q"></span></div>
           <h1 id="daily-headline" class="daily-headline">Loading Today's Briefing&hellip;</h1>
@@ -591,12 +597,12 @@
         <div class="dsp-empty" id="dsp-empty">
           <div class="dsp-tags">
             <span class="dsp-tag dsp-tag-available">&#x26A1; Available</span>
-            <span class="dsp-tag dsp-tag-founding">Founding Sponsor &middot; 1 Slot</span>
+            <span class="dsp-tag dsp-tag-founding">Founding Sponsor &middot; 1 Slot &middot; $150/week</span>
           </div>
           <h2 class="dsp-headline">Sponsor the AGSIST Daily Briefing.</h2>
-          <p class="dsp-pitch">One ag company per issue. Your message in front of grain producers reading this every weekday morning. <strong>Founding-sponsor pricing locked in for the first sponsor.</strong></p>
+          <p class="dsp-pitch">One ag company per issue. Your message reaches working US producers across grain, cattle, dairy, and specialty operations &mdash; read every morning before the open. <strong>Founding rate locked in for 12 months. Six-week minimum ($900).</strong></p>
           <div class="dsp-actions">
-            <a class="dsp-cta-primary" href="mailto:sig@farmers1st.com?subject=AGSIST%20Daily%20Founding%20Sponsor">&#x1F4DE; Become the founding sponsor &rarr;</a>
+            <a class="dsp-cta-primary" href="mailto:sig@farmers1st.com?subject=AGSIST%20Daily%20founding%20sponsor%20inquiry">&#x1F4DE; Become the founding sponsor &rarr;</a>
           </div>
           <div class="dsp-contact">
             <a href="mailto:sig@farmers1st.com" aria-label="Email Sigurd at sig@farmers1st.com">sig@farmers1st.com</a>
@@ -777,7 +783,7 @@
     </div>
   </div>
   <div class="price-cards-section fade-up" id="f-prices">
-    <div class="sec-head"><div class="sec-title">&#x1F4C8; Market Prices</div><div style="display:flex;align-items:center;gap:.75rem"><span id="prices-age" data-agsist-timer data-mode="live" data-interval="30" data-label="Markets" data-show-next="false" style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text-muted)">Updated every 30 min</span><a href="/corn-futures-prices" class="sec-all">All Charts &rarr;</a></div></div>
+    <div class="sec-head"><div class="sec-title">&#x1F4C8; Market Prices</div><div style="display:flex;align-items:center;gap:.75rem"><span id="prices-age" style="font-family:'JetBrains Mono',monospace;font-size:.65rem;color:var(--text-muted)">Updated every 30 min</span><a href="/corn-futures-prices" class="sec-all">All Charts &rarr;</a></div></div>
     <div class="pc-section-lbl">&#x1F33D; Grains &mdash; Key Contracts</div>
     <div class="price-cards-grid">
       <div class="pc pc--highlight" data-spark="corn"><div class="pc-head"><span class="pc-name"><span class="pc-name-icon">&#x1F33D;</span>Corn</span><span class="pc-contract">Front Month</span></div><div class="pc-price" id="pcp-corn-near">--</div><div class="pc-change"><span class="pc-chg-val nc" id="pcc-corn-near">--</span></div><div class="pc-prev" id="pcprev-corn-near"></div><div class="pc-range"><div class="pc-range-labels"><span id="pcrl-corn-lo">$3.69</span><span>52-Wk Range</span><span id="pcrl-corn-hi">$4.81</span></div><div class="pc-range-track"><div class="pc-range-fill" id="pcrf-corn" style="width:84.8%"></div><div class="pc-range-dot" id="pcrd-corn" style="left:84.8%"></div></div></div></div>
@@ -974,7 +980,7 @@
   </div>
 </div>
 <div id="site-footer"></div>
-<script src="/components/loader.js?v=2" defer></script>
+<script src="/components/loader.js" defer></script>
 <script src="/components/geo.js" defer></script>
 <script src="/components/bids-homepage.js" defer></script>
 <script>
@@ -1050,20 +1056,13 @@
       var _qc=document.getElementById('ffai-score-compact');if(_qc)_qc.textContent=_qs;
       var _qi=document.getElementById('ffai-interp');if(_qi)_qi.textContent='Mixed signals. Updated quarterly.';
     }
-    // v15: Wire #prices-age to live ticking timer. Auto-degrades to gold STALE
-    // at 1.5× interval (45m) and red OFFLINE at 3× (90m). Falls back to original
-    // frozen single-shot calc if loader.js timer module didn't load.
+    // Update "prices-age" label with actual fetch time
     if(data.fetched){
       var _pa=document.getElementById('prices-age');
       if(_pa){
-        if(window.agsistTimer){
-          window.agsistTimer.set(_pa,{mode:'live',fetched:data.fetched,interval:30,label:'Markets',showNext:false});
-          _pa.style.color='';
-        }else{
-          var _mins=Math.round((Date.now()-new Date(data.fetched).getTime())/60000);
-          _pa.textContent=_mins<2?'• Live now':'• Updated '+_mins+' min ago';
-          _pa.style.color=_mins>60?'#f0913a':_mins>30?'var(--gold)':'var(--text-muted)';
-        }
+        var _mins=Math.round((Date.now()-new Date(data.fetched).getTime())/60000);
+        _pa.textContent=_mins<2?'• Live now':'• Updated '+_mins+' min ago';
+        _pa.style.color=_mins>60?'#f0913a':_mins>30?'var(--gold)':'var(--text-muted)';
       }
     }
     // Wire sparklines if geo.js hasn't already — REMOVED (sparklines disabled)
@@ -1658,10 +1657,13 @@ window.hydrateDaily = function(data) {
   // v4.1: sponsor block — billboard empty state, subdued filled state, plus collapsed teaser pill.
   // States: data.sponsor === false → hide both; object with name/tagline → filled; null/undefined → empty (default).
   var sp=data.sponsor,spEl=el('daily-sponsor'),spEmpty=el('dsp-empty'),spFilled=el('dsp-filled'),spTeaser=el('daily-teaser-sponsor');
+  // v4.2: inline sponsor attribution above the greeting — second touchpoint (block + teaser + this line)
+  var spAttr=el('daily-spattr');
   if(spEl){
     if(sp===false){
       spEl.style.display='none';
       if(spTeaser)spTeaser.style.display='none';
+      if(spAttr)spAttr.style.display='none';
     } else if(sp&&(sp.tagline||sp.name)){
       // Filled state — paid sponsor placement
       spEl.style.display='';
@@ -1685,6 +1687,15 @@ window.hydrateDaily = function(data) {
         if(sp.url){spTeaser.href=sp.url;spTeaser.target='_blank';spTeaser.rel='noopener';}
         else{spTeaser.removeAttribute('target');spTeaser.removeAttribute('rel');spTeaser.href='mailto:sig@farmers1st.com';}
       }
+      // Inline attribution above greeting — paid state
+      if(spAttr&&sp.name){
+        spAttr.style.display='inline-flex';
+        spAttr.classList.remove('daily-spattr--house');
+        spAttr.classList.add('daily-spattr--paid');
+        spAttr.innerHTML='\uD83D\uDFE1 Today\u2019s sponsor: <strong>'+(sp.name||'')+'</strong> \u2192';
+        if(sp.url){spAttr.href=sp.url;spAttr.target='_blank';spAttr.rel='sponsored noopener';}
+        else{spAttr.removeAttribute('target');spAttr.rel='sponsored';spAttr.href='mailto:sig@farmers1st.com';}
+      }
     } else {
       // Empty state — billboard CTA (default HTML)
       spEl.style.display='';
@@ -1696,6 +1707,12 @@ window.hydrateDaily = function(data) {
         spTeaser.classList.remove('has-sponsor');
         spTeaser.classList.add('empty-state');
         // Keep default HTML href + textContent ("Sponsor this →") — no JS update needed
+      }
+      // Inline attribution above greeting — empty state (default HTML already has the right content)
+      if(spAttr){
+        spAttr.style.display='inline-flex';
+        spAttr.classList.remove('daily-spattr--paid');
+        spAttr.classList.add('daily-spattr--house');
       }
     }
   }
