@@ -1,81 +1,74 @@
 {
-  "headline": "HOGS CRASH NINE PERCENT AS WEEK ENDS MIXED",
-  "subheadline": "Cattle breakout stalls while energy reverses Friday's crude selloff.",
-  "lead": "Lean hogs crashed 9.2% to $92.83 Friday, the worst single-day drop in eight weeks and a brutal end to what started as cattle's breakout week. The livestock complex is splitting: cattle still holding above $250 but momentum's gone, hogs getting hammered on seasonal pressure, and dairy marking time at $17.08. Friday's close says the commodity rally that started Monday is running out of conviction.",
-  "teaser": "Hogs crashed 9.2% while cattle's breakout momentum fades at week's end.",
+  "headline": "HOGS CRASH 9% AS CATTLE BREAKOUT STALLS",
+  "subheadline": "Energy complex unwound Friday's gains while grains stayed range-bound.",
+  "lead": "Lean hogs crashed 9.2% to $92.83 Friday, the biggest single-day drop since January, as the weekly cutout report finally caught up with reality. Live cattle gave back ground to $253.00, testing whether last week's breakout above $252 has real conviction or just momentum money looking for an exit. The week that started with cattle hitting 52-week highs ended with livestock selling and nowhere to hide.",
+  "teaser": "Hogs crashed 9% while cattle's breakout faces its first real test.",
   "one_number": {
-    "value": "9.2%",
-    "unit": "hog selloff Friday",
-    "context": "Lean hogs posted their worst single-day decline in eight weeks, wiping out half of April's gains in one session. The crash came on seasonal pressure as spring farrowing numbers suggest larger supplies heading into summer. Fund positioning was already light coming into the week."
+    "value": "$92.83",
+    "unit": "lean hogs Friday close",
+    "context": "The 9.2% crash wiped out two weeks of gains in one session. Weekly cutout data showed the cash market wasn't following the futures rally, and when the disconnect got too wide, the correction came fast. This is what Hemingway meant about going bankrupt gradually, then suddenly."
   },
   "yesterdays_call": {},
   "sections": [
     {
-      "title": "Livestock Complex Splits",
+      "title": "Livestock Correction",
       "icon": "🐄",
-      "body": "Cattle closed Friday at $253.00, down just 0.4% but the breakout momentum that started Monday is clearly fading. The funds got their test above $250 but aren't adding conviction — <strong>open interest is flat this week while price marked time</strong>. Feeders dropped 0.6% to $371.40, tracking the front month lower. Hogs are the disaster story: $92.83 represents a complete reversal from Monday's optimism and puts the contract back near April lows. Spring farrowing data is starting to bite, and the seasonal pressure into summer is real.",
-      "bottom_line": "Cattle holding but not advancing, hogs collapsing on seasonal reality.",
+      "body": "Lean hogs led the livestock selloff with a <strong>9.2% crash to $92.83</strong>, the biggest drop since January. The weekly cutout report showed cash hogs lagging futures by the widest margin in six weeks — when that spread gets stretched, it snaps back hard. Live cattle dropped to <strong>$253.00, down 0.4%</strong>, testing the $252 breakout level that looked bulletproof three days ago. Feeder cattle fell 0.6% to $371.40. The momentum money that drove last week's rally is taking profits, not adding positions.",
+      "bottom_line": "Livestock correction was overdue; hogs led, cattle following.",
       "conviction_level": "medium",
       "overnight_surprise": false,
-      "farmer_action": "Cattle above $250: momentum's gone but support holds. Hogs below $95: seasonal pressure accelerating."
+      "farmer_action": "Watch $252 in cattle — break closes the breakout story."
     },
     {
-      "title": "Grains Mark Time Again",
-      "icon": "🌽",
-      "body": "Corn closed the week at $4.68, down 2.0% Friday and giving back most of Wednesday's weather premium. December corn at $4.99 held better, up 0.3% as new crop carries a 31-cent premium to old crop — <strong>carry's working but the board's not pricing any spring planting stress</strong>. Soybeans fell 1.2% to $11.88 while November beans gained 0.3% to $11.83, an unusual inverse that says demand for old crop is thin. Wheat dropped 2.8% to $6.25 on export disappointment. The grain complex is back to marking time while planting season peaks.",
-      "bottom_line": "Carry spreads working but weather premium evaporating fast.",
+      "title": "Energy Gives Back",
+      "icon": "🛢️",
+      "body": "WTI crude gave back <strong>3.3% to $101.94</strong>, unwinding most of Thursday's 4% spike as the Middle East premium faded without fresh headlines. Natural gas stayed flat at $2.78, still trapped near the bottom of its 52-week range. The energy complex is acting like the geopolitical catalyst was temporary, not structural. When crude moves 4% up one day and 3% down the next, that's volatility without direction.",
+      "bottom_line": "Energy volatility without conviction; geopolitical premium fading.",
       "conviction_level": "low",
       "overnight_surprise": false
     },
     {
-      "title": "Energy Whipsaws",
-      "icon": "⚡",
-      "body": "Crude reversed Thursday's 4.4% crash with a 3.3% decline to $101.94 Friday, proving the energy complex can't find direction. The $95-$105 range that's held since March is still intact but <strong>the whipsaw action says nobody's convinced about direction</strong>. Natural gas barely moved at $2.78, still trapped near the 52-week low as storage builds continue. The energy complex that exploded Monday and crashed Thursday finished the week exactly where it started — confused and directionless.",
-      "bottom_line": "Energy range-bound and confused after the week's whipsaw moves.",
+      "title": "Grains Mark Time",
+      "icon": "🌽",
+      "body": "Corn dropped 2.0% to <strong>$4.68</strong> as May expired and the market rolled to July without drama. December corn held firmer, up 0.3% to $4.99, keeping the carry structure intact. Soybeans eased 1.2% to <strong>$11.88</strong> while November beans gained 0.3% to $11.83. Chicago wheat fell 2.8% to $6.25. The grain complex is pricing planting progress, not weather risk — yet. With soybeans at peak planting season, the market's waiting for a reason to care.",
+      "bottom_line": "Grains consolidating in planting season; no weather premium yet.",
       "conviction_level": "low",
       "overnight_surprise": false
     }
   ],
-  "spread_to_watch": {
-    "label": "December corn / July corn carry",
-    "level": "31 cents carrying, steady",
-    "commentary": "The carry spread is holding steady while the board marks time, which tells you storage economics are working even if weather premium isn't sticking. When corn carry holds above 25 cents through planting season, it usually means the market's not worried about acres or early-season conditions."
-  },
-  "basis": {
-    "headline": "",
-    "body": ""
-  },
+  "spread_to_watch": {},
+  "basis": {},
   "weekly_thread": {},
   "the_more_you_know": {
-    "title": "Why Single-Day Crashes Reset Sentiment",
-    "body": "Friday's 9.2% hog crash demonstrates how one brutal session can undo weeks of building momentum. When a commodity drops more than 5% in a single day, it typically takes three to five sessions for buyers to re-emerge, regardless of fundamentals. The psychological impact of watching $8,000 disappear from a standard contract changes trader behavior immediately. Studies show that single-day crashes above 7% reset fund positioning for at least a full week, which explains why livestock momentum stalled so completely after Monday's optimism."
+    "title": "The Cash-Futures Disconnect: When Reality Checks In",
+    "body": "Lean hogs' 9.2% crash Friday started with a number: the weekly cutout report showed cash hogs trading $8 under the futures close, the widest discount in six weeks. Futures can ignore cash for a while — momentum, fund flow, technical levels all matter. But eventually, cash is the truth teller. When lean hog futures hit $102 two weeks ago while cash hogs stayed stuck at $94, that $8 gap was borrowing from the future. Friday was payback day. The bigger the disconnect, the harder the snap-back. Watch this dynamic across all commodities: when futures get too far ahead of cash, the correction comes fast."
   },
   "watch_list": [
     {
       "time": "Monday morning",
-      "desc": "Cattle above $250 on the open confirms support holds despite fading momentum"
+      "desc": "Live cattle futures at $252 — break invalidates the breakout"
     },
     {
-      "time": "Tuesday 2:00 PM",
-      "desc": "USDA Crop Progress Report: corn planting above 60% would be ahead of schedule"
+      "time": "Tuesday",
+      "desc": "USDA Crop Progress report; corn planting above 60% removes weather premium"
     },
     {
       "time": "Wednesday",
-      "desc": "Weekly petroleum inventories: crude draw above 3M barrels needed to break range"
+      "desc": "Weekly petroleum inventories; crude needs bullish data to restart rally"
     },
     {
-      "time": "Friday morning",
-      "desc": "Hogs below $90 would test April lows and confirm seasonal pressure accelerating"
+      "time": "This week",
+      "desc": "May prevent plant deadline approaching for corn in northern Belt"
     }
   ],
   "daily_quote": {
-    "text": "You can't eat potential.",
-    "attribution": "Norman Borlaug"
+    "text": "Risk comes from not knowing what you're doing.",
+    "attribution": "Warren Buffett"
   },
-  "source_summary": "CME Group, NYMEX, COMEX market data",
+  "source_summary": "CME Group, USDA, EIA, various exchanges",
   "date": "Saturday, May 2, 2026",
   "meta": {
-    "market_mood": "mixed",
+    "market_mood": "cautious",
     "heat_section": 0,
     "overnight_surprises_count": 0
   },
@@ -98,7 +91,7 @@
     "silver": 75.951,
     "dollar": 100.0,
     "sp500": 7230.12012,
-    "bitcoin": 78143.07812
+    "bitcoin": 78580.11719
   },
   "chart_series": {
     "corn": [
@@ -146,9 +139,9 @@
     "disclosure": "One sponsor, one issue. No retargeting. No programmatic auctions. Reply or call 715-797-2428.",
     "is_house_ad": true
   },
-  "issue_number": 51,
-  "generated_at": "2026-05-02T11:50:03.349446+00:00",
-  "generator_version": "4.1",
+  "issue_number": 52,
+  "generated_at": "2026-05-02T22:35:05.718129+00:00",
+  "generator_version": "4.2",
   "surprise_count": 0,
   "surprises": [],
   "price_validation_clean": false,
