@@ -1,6 +1,18 @@
 {
   "briefings": [
     {
+      "date": "2026-05-04",
+      "date_display": "Monday, May 4, 2026",
+      "headline": "CATTLE BREAK $252 AS OIL SURGES 3%",
+      "teaser": "Cattle crash through key support while oil spikes 3% on supply fears.",
+      "market_mood": "bearish",
+      "surprise_count": 2,
+      "sections": 3,
+      "url": "/daily/2026-05-04",
+      "market_closed": false,
+      "yc_outcome": "didnt"
+    },
+    {
       "date": "2026-05-03",
       "date_display": "Sunday, May 3, 2026",
       "headline": "WEEK AHEAD: CATTLE TEST $250 FLOOR",
@@ -554,6 +566,6 @@
       "url": "/daily/2026-03-04"
     }
   ],
-  "updated": "2026-05-03T11:48:10.438920+00:00",
-  "count": 52
+  "updated": "2026-05-04T12:22:55.495703+00:00",
+  "count": 53
 }

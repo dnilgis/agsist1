@@ -5,13 +5,26 @@
     <link>https://agsist.com/daily</link>
     <description>Free daily agricultural market briefing for corn, soybean, and grain producers. Overnight surprises, farmer actions, market analysis — every morning at 5 AM CT.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 03 May 2026 11:48:15 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 04 May 2026 12:23:00 +0000</lastBuildDate>
     <atom:link href="https://agsist.com/feed.xml" rel="self" type="application/rss+xml"/>
     <image>
       <url>https://agsist.com/img/og/daily.jpg</url>
       <title>AGSIST Daily — Morning Agricultural Intelligence Briefing</title>
       <link>https://agsist.com/daily</link>
     </image>
+    <item>
+      <title>CATTLE BREAK $252 AS OIL SURGES 3%</title>
+      <link>https://agsist.com/daily/2026-05-04</link>
+      <guid isPermaLink="true">https://agsist.com/daily/2026-05-04</guid>
+      <pubDate>Mon, 04 May 2026 05:00:00 -0600</pubDate>
+      <description>Live cattle closed $253.00, down 98 cents and decisively below the $252 floor that was supposed to hold the breakout story together. The break happened with volume and conviction — not the drift we've been watching, but actual selling. Friday's call on holding pricing discipline above $252 didn't make it through the weekend. The breakout thesis is off the table.
+Live cattle crashed through Friday's floor while crude oil spiked on supply concerns.
+• Cattle Break Support
+  → Lock remaining cattle above $250 — next support isn't until $245.
+• Oil Spike Pressures Costs
+• Grains Hold Pattern
+Read more: https://agsist.com/daily/2026-05-04</description>
+    </item>
     <item>
       <title>WEEK AHEAD: CATTLE TEST $250 FLOOR</title>
       <link>https://agsist.com/daily/2026-05-03</link>
@@ -411,21 +424,6 @@ Crude's 7% surge cools but leaves input costs elevated as planting season intens
 • MONDAY WATCH LIST: INPUT COSTS
   → Lock remaining diesel needs now — current levels are workable but vulnerable to geopolitical spikes during driving season.
 Read more: https://agsist.com/daily/2026-04-05</description>
-    </item>
-    <item>
-      <title>CRUDE EXPLODES 7% — GRAINS SLIP ON PROFIT-TAKING</title>
-      <link>https://agsist.com/daily/2026-04-03</link>
-      <guid isPermaLink="true">https://agsist.com/daily/2026-04-03</guid>
-      <pubDate>Fri, 03 Apr 2026 05:00:00 -0600</pubDate>
-      <description>Crude oil exploded 7% higher to $112.06 overnight, the biggest energy move in months, while grains retreated modestly with corn down 5¢ to $4.52 and soybeans off 9¼¢ to $11.63. The energy spike threatens to add $15-20 per acre to diesel and fertilizer costs just as corn planting begins across the upper Midwest. Meanwhile, grains are taking a breather after strong March gains, with December corn still holding above $4.81 despite today's pullback.
-Energy surge adds $15/acre to input costs while corn and beans ease after recent rally.
-• Grains Pause Rally
-  → Hold current positions — this looks like profit-taking, not trend change. Watch Monday for buying interest on the dip.
-• Livestock Mixed Signals
-  → Cattle feeders should price protection on current positions — feed cost inflation accelerating.
-• Energy Shock
-  → Lock diesel prices now if you haven't already — this energy spike has legs and spring demand is about to peak.
-Read more: https://agsist.com/daily/2026-04-03</description>
     </item>
   </channel>
 </rss>
