@@ -16,6 +16,11 @@
 <link rel="apple-touch-icon"                    href="/img/apple-touch-icon.png">
 <link rel="manifest"                            href="/manifest.json">
 <meta name="theme-color" content="#111a0a">
+<!-- PWA: iOS standalone mode meta tags (added v1, May 4 2026) -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="AGSIST">
+<meta name="mobile-web-app-capable" content="yes">
 <title>Corn, Soybean &amp; Wheat Prices Today &#8212; Farm Dashboard | AGSIST</title>
 <meta name="description" content="Live corn, soybean, and wheat futures updated every 30 min. Farm dashboard with spray advisory, urea risk, cash grain bids, USDA reports, and daily briefing.">
 <meta name="keywords" content="corn futures prices today, soybean futures prices today, wheat futures price today, grain prices today, farm weather, spray advisory, urea volatilization risk, cash grain bids near me, USDA reports, agricultural market dashboard, farm break even calculator, grain elevator prices, CBOT corn, crop insurance, grain elevator prices near me">
@@ -488,6 +493,24 @@
   .daily-share-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--green);color:#fff;padding:.65rem 1.25rem;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;z-index:9999;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;box-shadow:0 4px 16px rgba(0,0,0,.3)}
   .daily-share-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   @media(max-width:520px){.daily-share{padding:.65rem .9rem;gap:.4rem}.daily-share-lbl{display:none}.daily-share-btn{padding:.4rem .65rem;font-size:.62rem;gap:.3rem}}
+  /* PWA install hint banner — slim bottom prompt (added v1, May 4 2026) */
+  .pwa-hint{position:fixed;bottom:0;left:0;right:0;z-index:1000;background:linear-gradient(180deg,rgba(58,139,60,.96) 0%,rgba(38,90,40,.98) 100%);border-top:2px solid var(--gold);padding:.85rem 1rem;padding-bottom:max(.85rem,env(safe-area-inset-bottom));display:none;align-items:center;gap:.75rem;flex-wrap:wrap;box-shadow:0 -6px 20px rgba(0,0,0,.4);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#fff}
+  .pwa-hint.show{display:flex;animation:pwa-slide-up .35s ease-out}
+  @keyframes pwa-slide-up{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
+  .pwa-hint-icon{font-size:1.55rem;line-height:1;flex-shrink:0}
+  .pwa-hint-body{flex:1;min-width:0;font-size:.82rem;line-height:1.45}
+  .pwa-hint-body strong{color:#fff;font-weight:700;display:block;margin-bottom:.12rem;font-size:.92rem}
+  .pwa-hint-body em{color:rgba(255,255,255,.88);font-style:normal}
+  .pwa-hint-body kbd{display:inline-block;padding:.05rem .42rem;background:rgba(255,255,255,.2);border-radius:4px;font-family:inherit;font-size:.82rem;font-weight:700;color:#fff;border:1px solid rgba(255,255,255,.32);margin:0 .15rem;vertical-align:baseline}
+  .pwa-hint-actions{display:flex;gap:.45rem;flex-shrink:0}
+  .pwa-hint-btn{padding:.55rem 1.05rem;border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer;border:none;font-family:inherit;min-height:38px;transition:background .15s,transform .1s;letter-spacing:.02em}
+  .pwa-hint-btn--primary{background:#daa520;color:#0a1a0a}
+  .pwa-hint-btn--primary:hover{background:#f0c84a}
+  .pwa-hint-btn--primary:active{transform:scale(.97)}
+  .pwa-hint-close{background:none;border:none;color:rgba(255,255,255,.75);font-size:1.2rem;cursor:pointer;padding:.25rem .45rem;line-height:1;border-radius:4px;flex-shrink:0;min-height:38px;min-width:38px;font-family:inherit}
+  .pwa-hint-close:hover{color:#fff;background:rgba(255,255,255,.12)}
+  @media(max-width:540px){.pwa-hint{padding:.7rem .85rem;gap:.5rem;align-items:flex-start}.pwa-hint-icon{margin-top:.15rem}.pwa-hint-body{font-size:.76rem;flex-basis:calc(100% - 5rem);order:2}.pwa-hint-body strong{font-size:.84rem}.pwa-hint-close{order:3;margin-left:auto}.pwa-hint-actions{order:4;flex-basis:100%;justify-content:flex-end;margin-top:.2rem}}
+  @media all and (display-mode:standalone){.pwa-hint{display:none!important}}
 </style>
 </head>
 <body>
@@ -1001,6 +1024,18 @@
     <span style="color:var(--border)">|</span>
     <a href="/privacy" style="color:var(--gold);text-decoration:underline;">Privacy Policy</a>
   </div>
+</div>
+<!-- PWA install hint banner (added v1, May 4 2026) -->
+<div class="pwa-hint" id="pwa-hint" role="dialog" aria-label="Install AGSIST to home screen" aria-live="polite">
+  <span class="pwa-hint-icon" aria-hidden="true">&#x1F4F2;</span>
+  <div class="pwa-hint-body">
+    <strong id="pwa-hint-title">Add AGSIST to your home screen</strong>
+    <em id="pwa-hint-text">Tap to install &mdash; opens like a real app, no app store needed.</em>
+  </div>
+  <div class="pwa-hint-actions" id="pwa-hint-actions">
+    <button class="pwa-hint-btn pwa-hint-btn--primary" id="pwa-install-btn" type="button" style="display:none">Install</button>
+  </div>
+  <button class="pwa-hint-close" id="pwa-hint-close" type="button" aria-label="Dismiss install hint">&#x2715;</button>
 </div>
 <div id="site-footer"></div>
 <script src="/components/loader.js" defer></script>
@@ -2390,6 +2425,93 @@ setTimeout(function(){
 },3500);
 // Planting dates — render immediately with national default; loadWeatherEnhancements overrides with state-specific once geo resolves
 (function(){applyPlantingDates(null,null);})();
+})();
+</script>
+<script>
+/* PWA: register service worker + show install hint banner (added v1, May 4 2026) */
+(function(){
+  'use strict';
+  // Register service worker (sw.js exists at repo root with cache-versioning logic)
+  if('serviceWorker' in navigator){
+    window.addEventListener('load', function(){
+      navigator.serviceWorker.register('/sw.js').catch(function(err){
+        console.warn('[AGSIST] service worker registration failed:', err);
+      });
+    });
+  }
+  // Install hint banner — iOS shows manual instructions, Android captures beforeinstallprompt
+  var hint = document.getElementById('pwa-hint');
+  if(!hint) return;
+  // Bail if already running as installed PWA
+  var standalone = (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches);
+  var iosStandalone = (window.navigator && window.navigator.standalone === true);
+  if(standalone || iosStandalone) return;
+  // Bail if user previously dismissed
+  try{ if(localStorage.getItem('agsist_pwa_dismissed') === '1') return; }catch(e){}
+  // Visit-count gate — don't pester first-time visitors
+  var visits = 0;
+  try{ visits = parseInt(localStorage.getItem('agsist_visits') || '0', 10); }catch(e){}
+  if(visits < 2) return;
+  // Don't compete with the daily briefing on first read
+  var dailyDismissed = false;
+  try{ if(window.TODAY_KEY) dailyDismissed = (localStorage.getItem(window.TODAY_KEY) === '1'); }catch(e){}
+  var ua = navigator.userAgent || '';
+  var isIOS = /iPad|iPhone|iPod/.test(ua) && !window.MSStream;
+  var isAndroid = /Android/.test(ua);
+  var isSafari = /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
+  var isIOSSafari = isIOS && isSafari;
+  // Skip non-mobile entirely (PWA install on desktop is uncommon and noisy for content sites)
+  if(!isIOS && !isAndroid) return;
+  var hintTitle = document.getElementById('pwa-hint-title');
+  var hintText = document.getElementById('pwa-hint-text');
+  var installBtn = document.getElementById('pwa-install-btn');
+  var closeBtn = document.getElementById('pwa-hint-close');
+  function showHint(){ hint.classList.add('show'); }
+  function hideHint(){ hint.classList.remove('show'); }
+  function dismissHint(persist){
+    hideHint();
+    if(persist !== false){
+      try{ localStorage.setItem('agsist_pwa_dismissed','1'); }catch(e){}
+    }
+    if(window.gtag) try{ window.gtag('event','pwa_hint_dismiss',{event_category:'engagement'}); }catch(e){}
+  }
+  if(closeBtn) closeBtn.addEventListener('click', function(){ dismissHint(true); });
+  // ANDROID (Chrome/Edge): capture beforeinstallprompt and offer one-tap install
+  var deferredPrompt = null;
+  window.addEventListener('beforeinstallprompt', function(e){
+    e.preventDefault();
+    deferredPrompt = e;
+    if(hintTitle) hintTitle.textContent = 'Install AGSIST as an app';
+    if(hintText) hintText.textContent = 'Faster access, opens like a real app \u2014 no Play Store needed.';
+    if(installBtn){
+      installBtn.style.display = 'inline-flex';
+      installBtn.addEventListener('click', function(){
+        if(!deferredPrompt) return;
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then(function(choice){
+          if(window.gtag) try{ window.gtag('event','pwa_install_choice',{event_category:'engagement',event_label:choice && choice.outcome}); }catch(e){}
+          if(choice && choice.outcome === 'accepted') dismissHint(true);
+          deferredPrompt = null;
+        });
+      });
+    }
+    var delay = dailyDismissed ? 4000 : 12000;
+    setTimeout(showHint, delay);
+  });
+  // iOS SAFARI: no programmatic install — show manual "Add to Home Screen" instructions
+  if(isIOSSafari){
+    if(hintTitle) hintTitle.textContent = 'Add AGSIST to your iPhone';
+    if(hintText){
+      hintText.innerHTML = 'Tap <kbd>&#x2B06;</kbd> below, then <strong style="color:#fff;font-weight:700">Add to Home Screen</strong>.';
+    }
+    var iosDelay = dailyDismissed ? 6000 : 18000;
+    setTimeout(showHint, iosDelay);
+  }
+  // If installed mid-session, hide silently
+  window.addEventListener('appinstalled', function(){
+    dismissHint(false);
+    if(window.gtag) try{ window.gtag('event','pwa_installed',{event_category:'engagement'}); }catch(e){}
+  });
 })();
 </script>
 </body>
