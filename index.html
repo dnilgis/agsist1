@@ -493,7 +493,7 @@
   .daily-share-toast{position:fixed;bottom:1.5rem;left:50%;transform:translateX(-50%) translateY(20px);background:var(--green);color:#fff;padding:.65rem 1.25rem;border-radius:6px;font-family:'JetBrains Mono',monospace;font-size:.78rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;z-index:9999;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;box-shadow:0 4px 16px rgba(0,0,0,.3)}
   .daily-share-toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
   @media(max-width:520px){.daily-share{padding:.65rem .9rem;gap:.4rem}.daily-share-lbl{display:none}.daily-share-btn{padding:.4rem .65rem;font-size:.62rem;gap:.3rem}}
-  /* PWA install hint banner — slim bottom prompt (added v1, May 4 2026) */
+  /* PWA install hint — banner + visual modal (v2, May 4 2026) */
   .pwa-hint{position:fixed;bottom:0;left:0;right:0;z-index:1000;background:linear-gradient(180deg,rgba(58,139,60,.96) 0%,rgba(38,90,40,.98) 100%);border-top:2px solid var(--gold);padding:.85rem 1rem;padding-bottom:max(.85rem,env(safe-area-inset-bottom));display:none;align-items:center;gap:.75rem;flex-wrap:wrap;box-shadow:0 -6px 20px rgba(0,0,0,.4);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;color:#fff}
   .pwa-hint.show{display:flex;animation:pwa-slide-up .35s ease-out}
   @keyframes pwa-slide-up{from{transform:translateY(100%);opacity:0}to{transform:translateY(0);opacity:1}}
@@ -501,7 +501,6 @@
   .pwa-hint-body{flex:1;min-width:0;font-size:.82rem;line-height:1.45}
   .pwa-hint-body strong{color:#fff;font-weight:700;display:block;margin-bottom:.12rem;font-size:.92rem}
   .pwa-hint-body em{color:rgba(255,255,255,.88);font-style:normal}
-  .pwa-hint-body kbd{display:inline-block;padding:.05rem .42rem;background:rgba(255,255,255,.2);border-radius:4px;font-family:inherit;font-size:.82rem;font-weight:700;color:#fff;border:1px solid rgba(255,255,255,.32);margin:0 .15rem;vertical-align:baseline}
   .pwa-hint-actions{display:flex;gap:.45rem;flex-shrink:0}
   .pwa-hint-btn{padding:.55rem 1.05rem;border-radius:6px;font-size:.78rem;font-weight:700;cursor:pointer;border:none;font-family:inherit;min-height:38px;transition:background .15s,transform .1s;letter-spacing:.02em}
   .pwa-hint-btn--primary{background:#daa520;color:#0a1a0a}
@@ -509,8 +508,49 @@
   .pwa-hint-btn--primary:active{transform:scale(.97)}
   .pwa-hint-close{background:none;border:none;color:rgba(255,255,255,.75);font-size:1.2rem;cursor:pointer;padding:.25rem .45rem;line-height:1;border-radius:4px;flex-shrink:0;min-height:38px;min-width:38px;font-family:inherit}
   .pwa-hint-close:hover{color:#fff;background:rgba(255,255,255,.12)}
-  @media(max-width:540px){.pwa-hint{padding:.7rem .85rem;gap:.5rem;align-items:flex-start}.pwa-hint-icon{margin-top:.15rem}.pwa-hint-body{font-size:.76rem;flex-basis:calc(100% - 5rem);order:2}.pwa-hint-body strong{font-size:.84rem}.pwa-hint-close{order:3;margin-left:auto}.pwa-hint-actions{order:4;flex-basis:100%;justify-content:flex-end;margin-top:.2rem}}
-  @media all and (display-mode:standalone){.pwa-hint{display:none!important}}
+  @media(max-width:540px){.pwa-hint{padding:.7rem .85rem;gap:.5rem;align-items:flex-start}.pwa-hint-icon{margin-top:.15rem}.pwa-hint-body{flex-basis:calc(100% - 5rem);font-size:.78rem;order:2}.pwa-hint-body strong{font-size:.86rem}.pwa-hint-close{order:3;margin-left:auto}.pwa-hint-actions{order:4;flex-basis:100%;justify-content:stretch;margin-top:.3rem}.pwa-hint-btn--primary{flex:1;text-align:center;justify-content:center}}
+  @media all and (display-mode:standalone){.pwa-hint{display:none!important}.pwa-modal{display:none!important}}
+  /* Visual instruction modal */
+  .pwa-modal{position:fixed;inset:0;z-index:10000;display:none;align-items:center;justify-content:center;padding:1rem;background:rgba(0,0,0,.78);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);overflow-y:auto;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  .pwa-modal.show{display:flex;animation:pwa-fade-in .25s ease-out}
+  @keyframes pwa-fade-in{from{opacity:0}to{opacity:1}}
+  .pwa-modal-card{position:relative;background:#0a1a0a;border:1px solid rgba(218,165,32,.45);border-radius:14px;max-width:430px;width:100%;max-height:calc(100vh - 2rem);overflow-y:auto;box-shadow:0 20px 50px rgba(0,0,0,.6);color:#fff}
+  .pwa-modal-close{position:absolute;top:.6rem;right:.6rem;background:rgba(255,255,255,.1);border:none;width:36px;height:36px;border-radius:50%;color:#fff;font-size:1.1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;transition:background .15s}
+  .pwa-modal-close:hover{background:rgba(255,255,255,.22)}
+  .pwa-modal-head{padding:1.4rem 1.4rem 1rem;border-bottom:1px solid rgba(218,165,32,.18);text-align:center}
+  .pwa-modal-head h3{margin:0 0 .35rem;font-family:'Oswald',sans-serif;font-size:1.4rem;font-weight:700;letter-spacing:.005em;color:#fff}
+  .pwa-modal-head p{margin:0;font-size:.85rem;color:rgba(255,255,255,.78);line-height:1.5}
+  .pwa-modal-body{padding:1rem 1.2rem 1.4rem}
+  /* Step-by-step blocks */
+  .pwa-step{display:flex;gap:.85rem;padding:.85rem 0;border-bottom:1px solid rgba(255,255,255,.06)}
+  .pwa-step:last-child{border-bottom:none}
+  .pwa-step-num{flex-shrink:0;width:30px;height:30px;border-radius:50%;background:#daa520;color:#0a1a0a;font-family:'Oswald',sans-serif;font-size:1.05rem;font-weight:700;display:flex;align-items:center;justify-content:center;line-height:1}
+  .pwa-step-content{flex:1;min-width:0}
+  .pwa-step-title{font-size:.96rem;font-weight:700;color:#fff;margin-bottom:.25rem;line-height:1.35}
+  .pwa-step-desc{font-size:.82rem;color:rgba(255,255,255,.78);line-height:1.55}
+  .pwa-step-desc strong{color:#fff;font-weight:600}
+  .pwa-step-desc kbd{display:inline-block;padding:.05rem .42rem;margin:0 .12rem;background:rgba(218,165,32,.18);border:1px solid rgba(218,165,32,.35);border-radius:4px;font-family:inherit;font-size:.82rem;font-weight:700;color:#daa520;vertical-align:baseline}
+  /* Visual diagrams (inline SVG) */
+  .pwa-visual{margin:.7rem 0 .2rem;background:#1a2510;border:1px solid rgba(218,165,32,.18);border-radius:8px;padding:.7rem;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .pwa-visual svg{display:block;max-width:100%;height:auto}
+  /* Pulsing finger / arrow indicator on the diagram */
+  @keyframes pwa-pulse-tap{0%,100%{transform:translate(0,0);opacity:1}50%{transform:translate(0,3px);opacity:.55}}
+  @keyframes pwa-pulse-glow{0%,100%{filter:drop-shadow(0 0 0 rgba(218,165,32,.9))}50%{filter:drop-shadow(0 0 6px rgba(218,165,32,.95))}}
+  .pwa-arrow-anim{animation:pwa-pulse-tap 1.4s ease-in-out infinite,pwa-pulse-glow 1.4s ease-in-out infinite;transform-origin:center;transform-box:fill-box}
+  .pwa-modal-footer{padding:.85rem 1.2rem 1.2rem;text-align:center;border-top:1px solid rgba(255,255,255,.06);background:rgba(0,0,0,.25)}
+  .pwa-modal-footer-text{font-size:.78rem;color:rgba(255,255,255,.62);line-height:1.5}
+  .pwa-modal-footer-text strong{color:#daa520;font-weight:600}
+  /* Mobile tweaks */
+  @media(max-width:480px){
+    .pwa-modal{padding:.5rem;align-items:flex-end}
+    .pwa-modal-card{max-height:calc(100vh - 1rem);border-bottom-left-radius:0;border-bottom-right-radius:0}
+    .pwa-modal-head h3{font-size:1.2rem}
+    .pwa-modal-body{padding:.85rem 1rem 1.1rem}
+    .pwa-step{padding:.75rem 0}
+    .pwa-step-title{font-size:.9rem}
+    .pwa-step-desc{font-size:.78rem}
+    .pwa-visual{padding:.5rem}
+  }
 </style>
 </head>
 <body>
@@ -1025,17 +1065,225 @@
     <a href="/privacy" style="color:var(--gold);text-decoration:underline;">Privacy Policy</a>
   </div>
 </div>
-<!-- PWA install hint banner (added v1, May 4 2026) -->
+<!-- PWA install hint banner + visual instruction modal (v2, May 4 2026) -->
 <div class="pwa-hint" id="pwa-hint" role="dialog" aria-label="Install AGSIST to home screen" aria-live="polite">
   <span class="pwa-hint-icon" aria-hidden="true">&#x1F4F2;</span>
   <div class="pwa-hint-body">
     <strong id="pwa-hint-title">Add AGSIST to your home screen</strong>
-    <em id="pwa-hint-text">Tap to install &mdash; opens like a real app, no app store needed.</em>
+    <em id="pwa-hint-text">Open like a real app &mdash; faster, no browser bar.</em>
   </div>
   <div class="pwa-hint-actions" id="pwa-hint-actions">
-    <button class="pwa-hint-btn pwa-hint-btn--primary" id="pwa-install-btn" type="button" style="display:none">Install</button>
+    <button class="pwa-hint-btn pwa-hint-btn--primary" id="pwa-install-btn" type="button">Show Me How</button>
   </div>
   <button class="pwa-hint-close" id="pwa-hint-close" type="button" aria-label="Dismiss install hint">&#x2715;</button>
+</div>
+<!-- iOS instruction modal -->
+<div class="pwa-modal" id="pwa-modal-ios" role="dialog" aria-modal="true" aria-labelledby="pwa-modal-ios-title" aria-hidden="true">
+  <div class="pwa-modal-card" role="document">
+    <button class="pwa-modal-close" id="pwa-modal-ios-close" type="button" aria-label="Close instructions">&#x2715;</button>
+    <div class="pwa-modal-head">
+      <h3 id="pwa-modal-ios-title">Add AGSIST to Your iPhone</h3>
+      <p>Three quick taps and AGSIST opens like an app from your home screen &mdash; no browser bar, no app store.</p>
+    </div>
+    <div class="pwa-modal-body">
+      <div class="pwa-step">
+        <div class="pwa-step-num">1</div>
+        <div class="pwa-step-content">
+          <div class="pwa-step-title">Tap the Share button below</div>
+          <div class="pwa-step-desc">Look at the bottom of your screen. Find the <strong>square with an arrow pointing up</strong>. It&rsquo;s in Safari&rsquo;s toolbar between the back/forward arrows and the bookmarks icon.</div>
+          <div class="pwa-visual" aria-hidden="true">
+            <!-- iPhone mockup with Safari toolbar at bottom, arrow pointing at share icon -->
+            <svg viewBox="0 0 360 200" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram showing the Share button location in Safari's bottom toolbar">
+              <!-- iPhone frame -->
+              <rect x="40" y="10" width="280" height="180" rx="22" fill="#0d0d0d" stroke="#3a3a3a" stroke-width="2"/>
+              <!-- Screen background -->
+              <rect x="48" y="22" width="264" height="156" rx="14" fill="#1a1a1a"/>
+              <!-- Page content stripes -->
+              <rect x="60" y="34" width="240" height="6" rx="2" fill="#2a3520"/>
+              <rect x="60" y="46" width="180" height="4" rx="2" fill="#252525"/>
+              <rect x="60" y="56" width="220" height="4" rx="2" fill="#252525"/>
+              <rect x="60" y="66" width="160" height="4" rx="2" fill="#252525"/>
+              <rect x="60" y="80" width="240" height="40" rx="6" fill="#1f2818"/>
+              <rect x="60" y="128" width="200" height="4" rx="2" fill="#252525"/>
+              <rect x="60" y="138" width="220" height="4" rx="2" fill="#252525"/>
+              <!-- Bottom Safari toolbar -->
+              <rect x="48" y="156" width="264" height="22" rx="0" fill="#2a2a2a"/>
+              <line x1="48" y1="156" x2="312" y2="156" stroke="#3a3a3a" stroke-width="1"/>
+              <!-- Toolbar icons: back, forward, SHARE, bookmark, tabs -->
+              <!-- Back arrow -->
+              <path d="M70 167 L66 170 L70 173" stroke="#888" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- Forward arrow -->
+              <path d="M105 167 L109 170 L105 173" stroke="#666" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              <!-- SHARE icon (highlighted) -->
+              <g transform="translate(170 167)">
+                <rect x="-7" y="-1" width="14" height="11" rx="1.5" fill="none" stroke="#daa520" stroke-width="1.6"/>
+                <line x1="0" y1="-7" x2="0" y2="4" stroke="#daa520" stroke-width="1.6" stroke-linecap="round"/>
+                <path d="M-3 -4 L0 -7 L3 -4" stroke="#daa520" stroke-width="1.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+              <!-- Bookmarks icon -->
+              <path d="M225 164 L225 174 L228 172 L231 174 L231 164 Z" fill="none" stroke="#888" stroke-width="1.4"/>
+              <!-- Tabs icon -->
+              <rect x="265" y="164" width="9" height="9" rx="1" fill="none" stroke="#888" stroke-width="1.4"/>
+              <rect x="269" y="167" width="9" height="9" rx="1" fill="none" stroke="#888" stroke-width="1.4"/>
+              <!-- Animated arrow pointing at share button -->
+              <g class="pwa-arrow-anim">
+                <path d="M170 195 L170 184 L165 184 M170 184 L175 184" stroke="#daa520" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <text x="170" y="208" text-anchor="middle" fill="#daa520" font-family="Oswald,sans-serif" font-size="11" font-weight="700">TAP HERE</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="pwa-step">
+        <div class="pwa-step-num">2</div>
+        <div class="pwa-step-content">
+          <div class="pwa-step-title">Scroll down, tap "Add to Home Screen"</div>
+          <div class="pwa-step-desc">A menu slides up. Scroll past the row of app icons (Messages, Mail, etc.) until you see <strong>Add to Home Screen</strong> with a <kbd>&plus;</kbd> icon. Tap it.</div>
+          <div class="pwa-visual" aria-hidden="true">
+            <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram showing the Add to Home Screen menu option">
+              <!-- Share sheet panel -->
+              <rect x="20" y="10" width="320" height="160" rx="12" fill="#222" stroke="#3a3a3a" stroke-width="1"/>
+              <!-- Drag handle -->
+              <rect x="167" y="16" width="26" height="3" rx="1.5" fill="#555"/>
+              <!-- Top app icons row -->
+              <circle cx="50" cy="40" r="11" fill="#34c759"/>
+              <circle cx="84" cy="40" r="11" fill="#007aff"/>
+              <circle cx="118" cy="40" r="11" fill="#5856d6"/>
+              <circle cx="152" cy="40" r="11" fill="#ff3b30"/>
+              <circle cx="186" cy="40" r="11" fill="#ff9500"/>
+              <circle cx="220" cy="40" r="11" fill="#af52de"/>
+              <text x="50" y="60" text-anchor="middle" fill="#666" font-family="-apple-system,sans-serif" font-size="6">Msgs</text>
+              <text x="84" y="60" text-anchor="middle" fill="#666" font-family="-apple-system,sans-serif" font-size="6">Mail</text>
+              <text x="118" y="60" text-anchor="middle" fill="#666" font-family="-apple-system,sans-serif" font-size="6">Notes</text>
+              <text x="152" y="60" text-anchor="middle" fill="#666" font-family="-apple-system,sans-serif" font-size="6">Reminders</text>
+              <text x="186" y="60" text-anchor="middle" fill="#666" font-family="-apple-system,sans-serif" font-size="6">Maps</text>
+              <text x="220" y="60" text-anchor="middle" fill="#666" font-family="-apple-system,sans-serif" font-size="6">Contacts</text>
+              <!-- Action rows -->
+              <line x1="30" y1="76" x2="330" y2="76" stroke="#3a3a3a" stroke-width="1"/>
+              <text x="40" y="92" fill="#888" font-family="-apple-system,sans-serif" font-size="11">Copy</text>
+              <text x="320" y="92" text-anchor="end" fill="#666" font-family="-apple-system,sans-serif" font-size="14">&#128203;</text>
+              <line x1="30" y1="102" x2="330" y2="102" stroke="#3a3a3a" stroke-width="1"/>
+              <text x="40" y="118" fill="#888" font-family="-apple-system,sans-serif" font-size="11">Add to Reading List</text>
+              <text x="320" y="118" text-anchor="end" fill="#666" font-family="-apple-system,sans-serif" font-size="14">&#128214;</text>
+              <line x1="30" y1="128" x2="330" y2="128" stroke="#3a3a3a" stroke-width="1"/>
+              <!-- HIGHLIGHTED ROW -->
+              <rect x="22" y="130" width="316" height="28" rx="4" fill="rgba(218,165,32,0.15)" stroke="#daa520" stroke-width="1.5"/>
+              <text x="40" y="148" fill="#daa520" font-family="-apple-system,sans-serif" font-size="11.5" font-weight="600">Add to Home Screen</text>
+              <g transform="translate(316 144)">
+                <rect x="-9" y="-9" width="18" height="18" rx="3.5" fill="none" stroke="#daa520" stroke-width="1.5"/>
+                <line x1="-4" y1="0" x2="4" y2="0" stroke="#daa520" stroke-width="1.6"/>
+                <line x1="0" y1="-4" x2="0" y2="4" stroke="#daa520" stroke-width="1.6"/>
+              </g>
+              <!-- Animated arrow pointing at the highlighted row -->
+              <g class="pwa-arrow-anim">
+                <path d="M260 144 L246 144 M250 140 L246 144 L250 148" stroke="#daa520" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="pwa-step">
+        <div class="pwa-step-num">3</div>
+        <div class="pwa-step-content">
+          <div class="pwa-step-title">Tap "Add" in the top corner</div>
+          <div class="pwa-step-desc">A confirmation screen pops up with &ldquo;AGSIST&rdquo; pre-filled. Tap <strong>Add</strong> in the top-right corner. The icon will appear on your home screen instantly.</div>
+        </div>
+      </div>
+    </div>
+    <div class="pwa-modal-footer">
+      <div class="pwa-modal-footer-text">Once installed, tap the <strong>AGSIST icon</strong> on your home screen any time. Opens like an app, no browser. Works offline for content you&rsquo;ve already viewed.</div>
+    </div>
+  </div>
+</div>
+<!-- Android instruction modal (only shown if Chrome's native install prompt is unavailable) -->
+<div class="pwa-modal" id="pwa-modal-android" role="dialog" aria-modal="true" aria-labelledby="pwa-modal-android-title" aria-hidden="true">
+  <div class="pwa-modal-card" role="document">
+    <button class="pwa-modal-close" id="pwa-modal-android-close" type="button" aria-label="Close instructions">&#x2715;</button>
+    <div class="pwa-modal-head">
+      <h3 id="pwa-modal-android-title">Install AGSIST on Android</h3>
+      <p>Quick install through Chrome&rsquo;s menu &mdash; no Play Store needed.</p>
+    </div>
+    <div class="pwa-modal-body">
+      <div class="pwa-step">
+        <div class="pwa-step-num">1</div>
+        <div class="pwa-step-content">
+          <div class="pwa-step-title">Tap the menu button</div>
+          <div class="pwa-step-desc">In Chrome&rsquo;s top-right corner, tap the <strong>three vertical dots</strong> (&#x22EE;) to open the menu.</div>
+          <div class="pwa-visual" aria-hidden="true">
+            <svg viewBox="0 0 360 110" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram showing the three-dot menu in Chrome's top-right">
+              <!-- Browser top bar -->
+              <rect x="20" y="20" width="320" height="42" rx="6" fill="#202124" stroke="#3a3a3a" stroke-width="1"/>
+              <!-- Tabs strip suggestion -->
+              <rect x="30" y="28" width="50" height="6" rx="3" fill="#3a3a3a"/>
+              <!-- Address bar -->
+              <rect x="40" y="42" width="220" height="14" rx="7" fill="#3a3a3a"/>
+              <text x="50" y="52" fill="#888" font-family="-apple-system,sans-serif" font-size="8">agsist.com</text>
+              <!-- Tabs icon -->
+              <rect x="278" y="44" width="12" height="12" rx="2" fill="none" stroke="#888" stroke-width="1.4"/>
+              <text x="284" y="53" text-anchor="middle" fill="#888" font-family="-apple-system,sans-serif" font-size="7">3</text>
+              <!-- Three-dot menu (highlighted) -->
+              <g transform="translate(310 49)">
+                <circle cx="0" cy="-7" r="2.2" fill="#daa520"/>
+                <circle cx="0" cy="0" r="2.2" fill="#daa520"/>
+                <circle cx="0" cy="7" r="2.2" fill="#daa520"/>
+              </g>
+              <!-- Animated arrow -->
+              <g class="pwa-arrow-anim">
+                <path d="M310 90 L310 75 M305 80 L310 75 L315 80" stroke="#daa520" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <text x="310" y="103" text-anchor="middle" fill="#daa520" font-family="Oswald,sans-serif" font-size="10" font-weight="700">TAP HERE</text>
+              </g>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="pwa-step">
+        <div class="pwa-step-num">2</div>
+        <div class="pwa-step-content">
+          <div class="pwa-step-title">Tap "Install app" or "Add to Home screen"</div>
+          <div class="pwa-step-desc">Scroll the menu list. Look for <strong>Install app</strong> (newer Chrome) or <strong>Add to Home screen</strong> (older Chrome). Tap it.</div>
+          <div class="pwa-visual" aria-hidden="true">
+            <svg viewBox="0 0 360 180" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Diagram showing the Install app option in Chrome's menu">
+              <!-- Menu panel -->
+              <rect x="120" y="10" width="220" height="160" rx="6" fill="#2a2a2a" stroke="#3a3a3a" stroke-width="1"/>
+              <!-- Menu items -->
+              <text x="135" y="32" fill="#aaa" font-family="-apple-system,sans-serif" font-size="11">New tab</text>
+              <line x1="125" y1="42" x2="335" y2="42" stroke="#3a3a3a" stroke-width="0.5"/>
+              <text x="135" y="58" fill="#aaa" font-family="-apple-system,sans-serif" font-size="11">New incognito tab</text>
+              <line x1="125" y1="68" x2="335" y2="68" stroke="#3a3a3a" stroke-width="0.5"/>
+              <text x="135" y="84" fill="#aaa" font-family="-apple-system,sans-serif" font-size="11">Bookmarks</text>
+              <line x1="125" y1="94" x2="335" y2="94" stroke="#3a3a3a" stroke-width="0.5"/>
+              <text x="135" y="110" fill="#aaa" font-family="-apple-system,sans-serif" font-size="11">Recent tabs</text>
+              <line x1="125" y1="120" x2="335" y2="120" stroke="#3a3a3a" stroke-width="0.5"/>
+              <!-- HIGHLIGHTED Install app -->
+              <rect x="122" y="124" width="216" height="26" rx="4" fill="rgba(218,165,32,0.15)" stroke="#daa520" stroke-width="1.5"/>
+              <text x="135" y="142" fill="#daa520" font-family="-apple-system,sans-serif" font-size="11.5" font-weight="600">Install app</text>
+              <g transform="translate(322 137)">
+                <path d="M-5 -2 L0 3 L5 -2" stroke="#daa520" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+                <line x1="0" y1="-5" x2="0" y2="3" stroke="#daa520" stroke-width="1.5" stroke-linecap="round"/>
+              </g>
+              <!-- Animated arrow -->
+              <g class="pwa-arrow-anim">
+                <path d="M95 137 L115 137 M111 132 L115 137 L111 142" stroke="#daa520" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+              </g>
+              <!-- Settings (below highlighted item) -->
+              <line x1="125" y1="156" x2="335" y2="156" stroke="#3a3a3a" stroke-width="0.5"/>
+              <text x="135" y="170" fill="#aaa" font-family="-apple-system,sans-serif" font-size="11">Settings</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="pwa-step">
+        <div class="pwa-step-num">3</div>
+        <div class="pwa-step-content">
+          <div class="pwa-step-title">Confirm install</div>
+          <div class="pwa-step-desc">Chrome shows a confirmation dialog. Tap <strong>Install</strong> (or <strong>Add</strong>). The AGSIST icon appears on your home screen / app drawer instantly.</div>
+        </div>
+      </div>
+    </div>
+    <div class="pwa-modal-footer">
+      <div class="pwa-modal-footer-text">Once installed, tap the <strong>AGSIST icon</strong> any time. Opens like a real app, no browser bar.</div>
+    </div>
+  </div>
 </div>
 <div id="site-footer"></div>
 <script src="/components/loader.js" defer></script>
@@ -2428,10 +2676,10 @@ setTimeout(function(){
 })();
 </script>
 <script>
-/* PWA: register service worker + show install hint banner (added v1, May 4 2026) */
+/* PWA: register service worker + show install hint with visual modal (v2, May 4 2026) */
 (function(){
   'use strict';
-  // Register service worker (sw.js exists at repo root with cache-versioning logic)
+  // Register existing sw.js
   if('serviceWorker' in navigator){
     window.addEventListener('load', function(){
       navigator.serviceWorker.register('/sw.js').catch(function(err){
@@ -2439,7 +2687,6 @@ setTimeout(function(){
       });
     });
   }
-  // Install hint banner — iOS shows manual instructions, Android captures beforeinstallprompt
   var hint = document.getElementById('pwa-hint');
   if(!hint) return;
   // Bail if already running as installed PWA
@@ -2460,12 +2707,16 @@ setTimeout(function(){
   var isAndroid = /Android/.test(ua);
   var isSafari = /Safari/.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/.test(ua);
   var isIOSSafari = isIOS && isSafari;
-  // Skip non-mobile entirely (PWA install on desktop is uncommon and noisy for content sites)
+  // Only show on mobile — PWA install on desktop is uncommon
   if(!isIOS && !isAndroid) return;
   var hintTitle = document.getElementById('pwa-hint-title');
   var hintText = document.getElementById('pwa-hint-text');
   var installBtn = document.getElementById('pwa-install-btn');
   var closeBtn = document.getElementById('pwa-hint-close');
+  var modalIos = document.getElementById('pwa-modal-ios');
+  var modalAndroid = document.getElementById('pwa-modal-android');
+  var modalIosClose = document.getElementById('pwa-modal-ios-close');
+  var modalAndroidClose = document.getElementById('pwa-modal-android-close');
   function showHint(){ hint.classList.add('show'); }
   function hideHint(){ hint.classList.remove('show'); }
   function dismissHint(persist){
@@ -2475,38 +2726,71 @@ setTimeout(function(){
     }
     if(window.gtag) try{ window.gtag('event','pwa_hint_dismiss',{event_category:'engagement'}); }catch(e){}
   }
+  function openModal(modalEl){
+    if(!modalEl) return;
+    modalEl.classList.add('show');
+    modalEl.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+    if(window.gtag) try{ window.gtag('event','pwa_modal_open',{event_category:'engagement',event_label: modalEl.id}); }catch(e){}
+  }
+  function closeModal(modalEl){
+    if(!modalEl) return;
+    modalEl.classList.remove('show');
+    modalEl.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+  }
+  // Wire up close handlers — clicking outside the card OR on the X both close
+  function wireModalClose(modalEl, closeBtn){
+    if(closeBtn) closeBtn.addEventListener('click', function(){ closeModal(modalEl); });
+    if(modalEl) modalEl.addEventListener('click', function(e){
+      if(e.target === modalEl) closeModal(modalEl);
+    });
+  }
+  wireModalClose(modalIos, modalIosClose);
+  wireModalClose(modalAndroid, modalAndroidClose);
+  // ESC key closes any open modal
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape'){
+      if(modalIos && modalIos.classList.contains('show')) closeModal(modalIos);
+      if(modalAndroid && modalAndroid.classList.contains('show')) closeModal(modalAndroid);
+    }
+  });
   if(closeBtn) closeBtn.addEventListener('click', function(){ dismissHint(true); });
-  // ANDROID (Chrome/Edge): capture beforeinstallprompt and offer one-tap install
+  // ANDROID (Chrome/Edge): capture beforeinstallprompt for native one-tap install
   var deferredPrompt = null;
+  var androidUseNative = false;
   window.addEventListener('beforeinstallprompt', function(e){
     e.preventDefault();
     deferredPrompt = e;
+    androidUseNative = true;
     if(hintTitle) hintTitle.textContent = 'Install AGSIST as an app';
     if(hintText) hintText.textContent = 'Faster access, opens like a real app \u2014 no Play Store needed.';
-    if(installBtn){
-      installBtn.style.display = 'inline-flex';
-      installBtn.addEventListener('click', function(){
-        if(!deferredPrompt) return;
+    if(installBtn) installBtn.textContent = 'Install';
+  });
+  // Install button click — branches by platform
+  if(installBtn){
+    installBtn.addEventListener('click', function(){
+      if(window.gtag) try{ window.gtag('event','pwa_install_click',{event_category:'engagement'}); }catch(e){}
+      if(isAndroid && androidUseNative && deferredPrompt){
+        // Native install dialog
         deferredPrompt.prompt();
         deferredPrompt.userChoice.then(function(choice){
           if(window.gtag) try{ window.gtag('event','pwa_install_choice',{event_category:'engagement',event_label:choice && choice.outcome}); }catch(e){}
           if(choice && choice.outcome === 'accepted') dismissHint(true);
           deferredPrompt = null;
         });
-      });
-    }
-    var delay = dailyDismissed ? 4000 : 12000;
-    setTimeout(showHint, delay);
-  });
-  // iOS SAFARI: no programmatic install — show manual "Add to Home Screen" instructions
-  if(isIOSSafari){
-    if(hintTitle) hintTitle.textContent = 'Add AGSIST to your iPhone';
-    if(hintText){
-      hintText.innerHTML = 'Tap <kbd>&#x2B06;</kbd> below, then <strong style="color:#fff;font-weight:700">Add to Home Screen</strong>.';
-    }
-    var iosDelay = dailyDismissed ? 6000 : 18000;
-    setTimeout(showHint, iosDelay);
+      } else if(isIOS){
+        // iOS — show visual instructions modal
+        openModal(modalIos);
+      } else if(isAndroid){
+        // Android without beforeinstallprompt — show manual instructions
+        openModal(modalAndroid);
+      }
+    });
   }
+  // Show the banner after a delay
+  var bannerDelay = dailyDismissed ? 5000 : 14000;
+  setTimeout(showHint, bannerDelay);
   // If installed mid-session, hide silently
   window.addEventListener('appinstalled', function(){
     dismissHint(false);
