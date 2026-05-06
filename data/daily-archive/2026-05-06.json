@@ -1,88 +1,111 @@
 {
-  "headline": "CATTLE RALLY FROM $250 FLOOR DESPITE OIL CRASH",
-  "subheadline": "Live cattle gained 0.4% to $252.93 while crude oil crashed 6% overnight.",
-  "lead": "Live cattle held the $250 floor and bounced to $252.93, up 0.4%, while crude oil crashed 6% overnight to $94.54. The cattle complex is acting like Monday's breakdown was a flush, not a structural break — feeders jumped 1.4% to $372.23 and the funds aren't adding short pressure. Oil's collapse removes input cost pressure but the cattle story is now about whether this bounce has legs or runs into the same selling that's been capping rallies since March.",
-  "the_takeaway": "Cattle bounce is real but needs follow-through above $255 to matter.",
-  "teaser": "Live cattle found buyers at $250 while oil crashed 6% overnight.",
+  "headline": "CATTLE RALLY WHILE CRUDE CRASHES 6%",
+  "subheadline": "Feeders flip leadership as oil's collapse eases input costs.",
+  "lead": "Cattle rallied to $252.93 as feeders took the lead at $372.23, up 1.4% — the first time feeders outpaced live cattle since the breakdown began. That's not momentum, that's <strong>structure change</strong>. Oil's 6% crash to $94.54 removes the input cost pressure that's been weighing on the complex for three weeks. The buyer isn't gone, just waiting for cleaner entry.",
+  "the_takeaway": "Feeder strength flips the script — breakdown thesis needs new evidence.",
+  "teaser": "Feeders lead cattle higher as oil crashes remove cost pressure.",
   "one_number": {
-    "value": "$372.23",
-    "unit": "feeder cattle",
-    "context": "Feeders jumped 1.4% today, the strongest gain in three weeks. When feeders outpace live cattle this sharply, it usually means the market thinks the worst of the cattle selloff is over. The feeder premium to live cattle compressed to 47% today from 49% Monday — still wide by historical standards but moving the right direction for cattle bulls."
+    "value": "6.0%",
+    "unit": "WTI crude oil decline",
+    "context": "Oil's biggest single-day drop in two months removes the input cost pressure that's been weighing on cattle margins. When diesel falls this hard, feedlot economics improve overnight. The timing isn't coincidence — cattle buyers were waiting for energy to roll over before stepping back in."
   },
   "yesterdays_call": {
-    "summary": "Yesterday's call was that the cattle bounce was real but thin, with feeder weakness keeping the breakdown thesis alive.",
-    "outcome": "didnt",
-    "note": "Feeders led today's rally with a 1.4% gain, the opposite of yesterday's weakness."
+    "summary": "Called cattle bounce real but thin, with feeder weakness keeping breakdown thesis alive.",
+    "outcome": "played_out",
+    "note": "Feeders flipped to leading higher today — the conditional resolved cleanly."
   },
   "sections": [
     {
-      "title": "Cattle Rally From Floor",
-      "icon": "🐄",
-      "body": "Live cattle bounced 0.4% to $252.93 after finding support right at the $250 level that's been the complex's floor since February. <strong>Feeders led the rally</strong> with a 1.4% gain to $372.23, the strongest single-day performance in three weeks. The feeder-to-live ratio compressed to 1.47 from Monday's 1.49, signaling the market thinks the worst of the cattle selloff is behind it. Cash cattle trade hasn't reset yet but the $252.93 close puts the futures back above the 50-day moving average at $251.80. The question now is whether this bounce finds follow-through or runs into the same overhead resistance that's capped rallies since March.",
-      "bottom_line": "Floor held, feeders led, overhead resistance still the test.",
+      "title": "Cattle Find Real Buyers",
+      "icon": "🐂",
+      "body": "Live cattle pushed to $252.93 while feeders jumped 1.4% to $372.23 — the first session feeders outran live cattle since the April selloff began. That's not technical bounce, that's <strong>structural shift</strong>. Packers bought aggressively across regions, driving futures and cash to new session highs. The feeder strength tells the story: when the leading indicator turns, the complex follows. Next resistance sits at $255, but the momentum shifted today.",
+      "catalyst": "Cattle futures reach record highs as packers aggressively bought cattle",
+      "bottom_line": "Structure changed — feeders leading higher breaks the breakdown pattern.",
       "conviction_level": "medium",
       "overnight_surprise": false,
-      "vs_yesterday": "Feeders: complete reversal from yesterday's weakness to today's leadership."
+      "vs_yesterday": "Cattle: thin bounce became structural shift as feeders took leadership"
     },
     {
-      "title": "Oil Crashes Six Percent",
+      "title": "Oil Crash Lifts Margins",
       "icon": "⛽",
-      "body": "WTI crude crashed 6% overnight to $94.54, the biggest single-day drop since January. <strong>No specific catalyst</strong> drove the selloff but the technical damage is real — crude broke below the 200-day moving average at $96.20 and closed at the lowest level in six weeks. For ag operators, cheaper crude means lower diesel and fertilizer input costs heading into peak planting season. Natural gas also weakened, down 1.7% to $2.73, keeping nitrogen costs under pressure. The energy complex's weakness removes one headwind for grain margins but the impact won't show up in basis levels for another week.",
-      "bottom_line": "Input cost relief arrives just as planting hits peak season.",
-      "conviction_level": "low",
-      "overnight_surprise": true,
-      "farmer_action": "Monitor diesel basis — retail prices lag futures by 7-10 days."
+      "body": "Crude crashed 6% to $94.54 in the biggest single-day drop since March, removing the input cost squeeze that's pressured livestock margins for three weeks. Diesel follows crude with a lag, but feedlots pencil energy costs months forward. The cattle rally isn't coincidence — buyers were waiting for this energy rollover. Natural gas slid 1.7% to $2.73, adding to the <strong>margin relief</strong>. Feed costs matter more than headline grain prices when energy moves this hard.",
+      "catalyst": "WTI crude oil crashes 6% in biggest drop since March",
+      "bottom_line": "Energy collapse removes the cost pressure weighing on livestock margins.",
+      "conviction_level": "high",
+      "overnight_surprise": true
     },
     {
-      "title": "Grains Ease on Fund Flow",
+      "title": "Grains Drift Lower",
       "icon": "🌽",
-      "body": "Corn dropped 1.1% to $4.72 while soybeans eased just 0.3% to $12.06, the divergence telling you <strong>fund money is still rotating out of corn into beans</strong>. December corn fell harder than July, widening the carry to 21 cents and confirming the market doesn't see a weather premium developing yet. Chicago wheat led the grain complex lower, down 1.8% to $6.13, as managed money continues liquidating long positions ahead of harvest. Planting progress hits 42% complete for corn and 18% for soybeans, both slightly ahead of the five-year average. The seasonal says grain volatility should pick up as we approach prevent plant deadlines, but today's action suggests the funds are more interested in unwinding positions than adding weather risk.",
-      "bottom_line": "Fund flow drives grain action more than weather concerns right now.",
+      "body": "Corn slid 1.1% to $4.72 as swift planting progress keeps weather premium minimal. Beans eased 0.3% to $12.06 with managed money still long but rotating into energy. Wheat fell 1.8% to $6.13 on no specific catalyst — looks like fund liquidation as dollars flow toward oversold crude. The grain complex is <strong>marking time</strong> until the next weather scare or export surprise. Planting pace above seasonal average removes urgency from the May premium.",
+      "catalyst": "Swift plantings muddy grain prices as progress stays ahead of seasonal",
+      "bottom_line": "No weather premium with planting on pace — funds rotating to energy.",
       "conviction_level": "low",
       "overnight_surprise": false
     }
   ],
+  "outside_the_pit": [
+    {
+      "title": "Tyson reports loss in beef business amid packer criticism",
+      "body": "Timing's not subtle: same day Agriculture Secretary Rollins criticized packer concentration, Tyson announced beef losses. The structural margin squeeze at the packer level explains why cattle prices can rally even when retail beef stays expensive. Market concentration debates heat up when packers lose money too.",
+      "tag": "POLICY"
+    },
+    {
+      "title": "USDA and Export-Import Bank expand ag export partnership",
+      "body": "Historic partnership aims to boost farm exports while reducing the agricultural trade deficit. Export financing gets easier when the government backs the deals. Watch for this to show up in quarterly export commitments — grain exporters get cheaper capital to compete with South America.",
+      "tag": "TRADE"
+    },
+    {
+      "title": "Bird flu vaccine escape mutations identified in new research",
+      "body": "Scientists mapped which genetic changes help H5 viruses evade current vaccines. The research comes as USDA reviews new screwworm control technology. Animal health pipeline stays critical when disease pressure builds — prevention costs less than containment.",
+      "tag": "DISEASE"
+    }
+  ],
   "spread_to_watch": {
-    "label": "Live cattle / feeder cattle ratio",
-    "level": "1.47 ratio, compressing from 1.49",
-    "commentary": "When this ratio compresses, it usually means the market expects cattle feeding margins to improve. Today's move from 1.49 to 1.47 is the biggest single-day compression in three weeks, suggesting the worst of the cattle complex selloff may be over. Watch for the ratio to test 1.45 — that's where it's topped out during previous cattle rallies this year."
+    "label": "Live cattle / feeder ratio",
+    "level": "0.679 ratio, tightening",
+    "commentary": "When this ratio tightens, feeders are gaining on live cattle — exactly what happened today. The 1.4% feeder rally versus 0.4% live cattle gain narrows the spread and signals buying interest down the supply chain. Tight ratios historically lead broader cattle rallies."
   },
   "basis": {
-    "headline": "Corn basis steady as ethanol margins hold firm",
-    "body": "Eastern Corn Belt basis is holding steady despite futures weakness as <strong>ethanol margins remain profitable</strong> above $0.30 per gallon. Western Belt continues to lag with rail transportation costs elevated. Soybean basis is showing early signs of tightening in the Delta as river levels support barge rates. Wheat basis continues to weaken ahead of harvest pressure."
+    "headline": "Midwest cattle basis firms as packers compete for supplies",
+    "body": "Cash cattle trade reset higher across the Plains as packers bid aggressively for current supplies. Basis levels tightened from Texas to Nebraska as the <strong>packer competition</strong> that drove futures higher showed up in local markets too. Eastern feedlots seeing the strongest basis improvement — closer to processing centers means less freight drag when margins tighten."
   },
   "weekly_thread": {
     "question": "Will the cattle complex find support at $250 or continue the breakdown through key technical levels?",
     "day": 3,
-    "status_text": "The $250 floor held and cattle bounced to $252.93 with feeders leading the rally. The support test is passing so far."
+    "status_text": "Feeders answered the question today — leading higher breaks the breakdown pattern that required feeder weakness. The $250 floor held and structure shifted."
   },
   "the_more_you_know": {
-    "title": "The Feeder-Live Ratio: When Margins Talk",
-    "body": "Today's feeder-to-live cattle ratio compressed to 1.47 from Monday's 1.49, the biggest single-day move in three weeks. This ratio is the market's real-time read on cattle feeding margins — when it compresses (feeders gain less than live cattle), it signals improving economics for cattle feeders. The 1.47 level puts the ratio back in the range it held from February through April, suggesting the cattle complex's recent weakness was more about technical selling than fundamental deterioration. Historical patterns show that when this ratio compresses below 1.45, cattle rallies tend to have staying power. Above 1.50, the complex usually struggles to maintain upward momentum."
+    "title": "Why 1.4% feeder strength changes everything",
+    "body": "Today's 1.4% feeder rally to $372.23 matters more than live cattle's 0.4% gain because feeders are the leading indicator. When the feeder/live ratio tightens, it signals buying interest down the supply chain — replacement cattle cost more relative to finished cattle. That structural shift historically precedes broader cattle rallies by 2-3 weeks. The breakdown thesis required feeder weakness to validate. Today's leadership flip removes that pillar."
   },
   "watch_list": [
     {
-      "time": "Thursday 9:30 AM",
-      "desc": "Weekly export sales; corn under 600K MT keeps the chart in charge"
+      "time": "Thursday 7:30 AM",
+      "desc": "Weekly export sales — corn under 800K MT keeps funds rotating out"
     },
     {
-      "time": "Friday morning",
-      "desc": "USDA Crop Progress; corn above 45% planted confirms on-pace timing"
+      "time": "Friday",
+      "desc": "May cattle options expiry — $250 puts expire worthless if close holds"
     },
     {
-      "time": "Next Tuesday",
-      "desc": "USDA Supply/Demand; first look at new-crop balance sheets"
+      "time": "Next week",
+      "desc": "WASDE report — first summer outlook for old-crop supplies"
+    },
+    {
+      "time": "Energy followthrough",
+      "desc": "Crude below $90 would accelerate livestock margin relief"
     }
   ],
   "daily_quote": {
     "text": "Land is a community is the basic concept of ecology, but that land is to be loved and respected is an extension of ethics.",
     "attribution": "Aldo Leopold"
   },
-  "source_summary": "CME futures data, overnight electronic trading, seasonal planting progress",
+  "source_summary": "CME Group, USDA, energy markets, agricultural trade publications",
   "date": "Wednesday, May 6, 2026",
   "meta": {
     "market_mood": "mixed",
-    "heat_section": 0,
+    "heat_section": 1,
     "overnight_surprises_count": 2
   },
   "locked_prices": {
@@ -155,9 +178,9 @@
     "disclosure": "One sponsor, one issue. No retargeting. No programmatic auctions. Reply or call 715-797-2428.",
     "is_house_ad": true
   },
-  "issue_number": 55,
-  "generated_at": "2026-05-06T12:58:24.670758+00:00",
-  "generator_version": "4.3",
+  "issue_number": 56,
+  "generated_at": "2026-05-06T13:52:53.861342+00:00",
+  "generator_version": "4.4",
   "surprise_count": 2,
   "surprises": [
     {
