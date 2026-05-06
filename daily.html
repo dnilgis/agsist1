@@ -190,6 +190,22 @@ body{overflow-x:hidden;overflow-x:clip;width:100%;}
 .dv3-sec-vs{display:flex;align-items:center;gap:.4rem;font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--text-muted);margin:.4rem 0 .55rem;padding:.3rem .55rem;background:rgba(74,143,186,.04);border-left:2px solid rgba(74,143,186,.32);border-radius:0 4px 4px 0;}
 .dv3-sec-vs-icon{color:#5aa0d2;font-size:.72rem;flex-shrink:0;}
 .dv3-sec-vs-text{font-weight:600;letter-spacing:.01em;line-height:1.4;}
+/* v4.4: per-section catalyst (driver) chip */
+.dv3-sec-catalyst{display:flex;align-items:center;gap:.45rem;font-family:'JetBrains Mono',monospace;font-size:.66rem;color:var(--text-dim);margin:.4rem 0 .55rem;padding:.35rem .6rem;background:rgba(218,165,32,.05);border-left:2px solid rgba(218,165,32,.4);border-radius:0 4px 4px 0;flex-wrap:wrap;}
+.dv3-sec-catalyst-icon{color:var(--gold);font-size:.72rem;flex-shrink:0;}
+.dv3-sec-catalyst-label{color:var(--gold);font-weight:700;letter-spacing:.12em;text-transform:uppercase;font-size:.6rem;flex-shrink:0;}
+.dv3-sec-catalyst-text{font-weight:500;letter-spacing:.01em;line-height:1.4;}
+/* v4.4: outside_the_pit — news in the calculus, not in today's prices */
+.dv3-otp{background:var(--surface);border:1px solid var(--border);border-left:3px solid var(--gold);border-radius:8px;padding:1.1rem 1.3rem;margin-bottom:1.5rem;}
+.dv3-otp-header{display:flex;flex-direction:column;gap:.25rem;margin-bottom:.95rem;padding-bottom:.75rem;border-bottom:1px solid var(--border);}
+.dv3-otp-label{font-family:'JetBrains Mono',monospace;font-size:.66rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);}
+.dv3-otp-sub{font-size:.72rem;color:var(--text-muted);font-style:italic;}
+.dv3-otp-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:.85rem;}
+@media(min-width:640px){.dv3-otp-grid{grid-template-columns:repeat(3,minmax(0,1fr));}}
+.dv3-otp-item{padding:.8rem .95rem;background:rgba(218,165,32,.03);border:1px solid rgba(218,165,32,.12);border-radius:6px;display:flex;flex-direction:column;gap:.4rem;}
+.dv3-otp-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:.56rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--gold);background:rgba(218,165,32,.08);padding:.18rem .5rem;border-radius:3px;align-self:flex-start;border:1px solid rgba(218,165,32,.22);}
+.dv3-otp-title{font-size:.88rem;font-weight:700;color:var(--text);line-height:1.35;}
+.dv3-otp-body{font-size:.8rem;line-height:1.55;color:var(--text-dim);}
 /* v4.3: cash-bids inline conversion footer (weekday only) */
 .dv3-cashbids-cta{display:flex;align-items:center;gap:.65rem;padding:.85rem 1.15rem;background:rgba(74,171,76,.06);border:1px solid rgba(74,171,76,.22);border-radius:8px;margin:.85rem 0 .55rem;text-decoration:none;color:var(--text);transition:border-color .15s,background .15s;min-height:44px;}
 .dv3-cashbids-cta:hover{border-color:var(--green);background:rgba(74,171,76,.10);}
@@ -430,6 +446,12 @@ function renderToday(data){
   var iso=dateOnly(data.date);
   var permalink='https://agsist.com/daily'+(iso?'/'+iso:'');
 
+  // v4.4: hoist marketClosed to the top so all subsequent code reads it
+  // correctly. Previously declared at line ~691, which left earlier blocks
+  // (vs_yesterday chips, cashbids, catalyst chips) reading undefined →
+  // !undefined === true → incorrectly treating closed markets as open.
+  var marketClosed=data.market_closed===true;
+
   // Header block
   var mood=(data.meta && data.meta.market_mood) || '';
   var header=
@@ -572,12 +594,18 @@ function renderToday(data){
       var vsHtml=(vsY && !marketClosed)
         ? '<div class="dv3-sec-vs"><span class="dv3-sec-vs-icon">\u21BA</span><span class="dv3-sec-vs-text">'+escHtml(vsY)+'</span></div>'
         : '';
+      // v4.4: catalyst chip (per-section, optional, weekday only) — names the news/data driving this move
+      var catTxt=(sec.catalyst||'').trim();
+      var catHtml=(catTxt && !marketClosed)
+        ? '<div class="dv3-sec-catalyst"><span class="dv3-sec-catalyst-icon">\u{1F4E1}</span><span class="dv3-sec-catalyst-label">DRIVER</span><span class="dv3-sec-catalyst-text">'+escHtml(catTxt)+'</span></div>'
+        : '';
       sections+='<div class="'+classes.join(' ')+'">'+
         '<div class="dv3-sec-header">'+
           (sec.icon?'<span class="dv3-sec-icon">'+escHtml(sec.icon)+'</span>':'')+
           '<span class="dv3-sec-title">'+escHtml(sec.title||'')+'</span>'+
           (cnv?'<span class="dv3-sec-cnv dv3-sec-cnv--'+cnvCls+'">'+escHtml(cnv)+' CONVICTION</span>':'')+
         '</div>'+
+        catHtml+
         vsHtml+
         (sec.body?'<div class="dv3-sec-body">'+escHtml(sec.body)+'</div>':'')+
         (sec.bottom_line?'<div class="dv3-sec-bottomline">'+escHtml(sec.bottom_line)+'</div>':'')+
@@ -625,6 +653,35 @@ function renderToday(data){
     '</a>';
   }
 
+  // v4.4: outside_the_pit — ag news in the calculus, not in today's prices
+  var outsidePit='';
+  var otpItems=Array.isArray(data.outside_the_pit)?data.outside_the_pit:[];
+  if(otpItems.length){
+    var otpRendered=[];
+    for(var i=0;i<otpItems.length;i++){
+      var it=otpItems[i]||{};
+      var otpTitle=(it.title||'').trim();
+      var otpBody=(it.body||'').trim();
+      var otpTag=(it.tag||'').trim().toUpperCase();
+      if(!otpTitle && !otpBody)continue;
+      var tagH=otpTag?'<span class="dv3-otp-tag">'+escHtml(otpTag)+'</span>':'';
+      var titleH=otpTitle?'<div class="dv3-otp-title">'+escHtml(otpTitle)+'</div>':'';
+      var bodyH=otpBody?'<div class="dv3-otp-body">'+escHtml(otpBody).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')+'</div>':'';
+      otpRendered.push('<div class="dv3-otp-item">'+tagH+titleH+bodyH+'</div>');
+    }
+    if(otpRendered.length){
+      var otpLabel=marketClosed?'WEEK AHEAD IN AG':'OUTSIDE THE PIT';
+      var otpSub=marketClosed?'What\u2019s brewing for next week.':'News not moving prices today but in the calculus.';
+      outsidePit='<div class="dv3-otp" aria-label="'+otpLabel+'">'+
+        '<div class="dv3-otp-header">'+
+          '<span class="dv3-otp-label">\u{1F4F0} '+otpLabel+'</span>'+
+          '<span class="dv3-otp-sub">'+otpSub+'</span>'+
+        '</div>'+
+        '<div class="dv3-otp-grid">'+otpRendered.join('')+'</div>'+
+      '</div>';
+    }
+  }
+
   // Share row
   var share='<div class="dv3-share" role="group" aria-label="Share this briefing">'+
     '<span class="dv3-share-label">Share</span>'+
@@ -635,9 +692,6 @@ function renderToday(data){
     '<button class="dv3-share-btn" data-share="copy" type="button" aria-label="Copy link to this briefing">\u{1F517} Copy link</button>'+
     '<button class="dv3-share-btn" data-share="email" type="button" aria-label="Email this briefing">\u2709 Email</button>'+
   '</div>';
-
-  // Market closed flag — used by thread/yc/spread/basis blocks below
-  var marketClosed=data.market_closed===true;
 
   // Weekly thread chapter marker (above lead)
   var thread='';
@@ -755,7 +809,7 @@ function renderToday(data){
   var src='<div class="dv3-source">CME futures &middot; EIA energy data &middot; USDA crop data &middot; Auto-compiled at 6:02 AM CT</div>';
   var perm=iso?'<div class="dv3-perm"><a href="/daily/'+escHtml(iso)+'">Permalink to this briefing \u2192</a></div>':'';
 
-  el.innerHTML=header+attribution+thread+ticker+surprise+lead+takeaway+topbar+sponsor+yc+sparks+sections+spread+basis+tmyk+watch+byline+cashbids+forward+share+src+perm;
+  el.innerHTML=header+attribution+thread+ticker+surprise+lead+takeaway+topbar+sponsor+yc+sparks+sections+spread+basis+tmyk+watch+outsidePit+byline+cashbids+forward+share+src+perm;
 
   // Wire share buttons
   var btns=el.querySelectorAll('.dv3-share-btn');
